@@ -17,7 +17,7 @@ public class CameraHandler : MonoBehaviour
         {
             Vector3 newPos = transform.position;
             newPos.x = target.position.x;
-            newPos.y = target.position.y;
+            //newPos.y = target.position.y;
 
 
             if (Input.GetAxis("Horizontal")<0)
@@ -30,7 +30,7 @@ public class CameraHandler : MonoBehaviour
                 // right
                 newPos.x += offset;
             }
-
+            /*
             if (Input.GetAxis("Vertical") <0)
             {
                 //lower
@@ -41,7 +41,7 @@ public class CameraHandler : MonoBehaviour
             {
                 // upper
                 newPos.y += offset;
-            }
+            }*/
 
             transform.position = Vector3.Lerp(transform.position, newPos, cameraSpeed * Time.deltaTime);
         }
