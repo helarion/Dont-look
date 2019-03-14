@@ -15,14 +15,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform lightTransform;
     [SerializeField] float moveSpeed;
     [SerializeField] float sizeSpeed;
-    [SerializeField] bool controllMouse=false;
+    [SerializeField] bool controllMouse = false;
     [SerializeField] bool controllEye = true;
+    [SerializeField] bool controllGamePad = false;
 
     void Start()
     {
         lt = GetComponentInChildren<Light>();
         al = GetComponentInChildren<AuraLight>();
         lt.type = LightType.Spot;
+        LightEnabled(true);
+        Cursor.visible = false;
     }
 
     void Update()
@@ -45,8 +48,8 @@ public class PlayerController : MonoBehaviour
 
         if (controllMouse && (xMouse !=0 || yMouse !=0))
         {
-            // lt.spotAngle += xMouse;
-            //Vector3 pos = Input.mousePosition;
+            if (Input.GetAxis("CloseEyes") > 0) ClosedEyes(true);
+            else ClosedEyes(false);
             Vector3 pos = Input.mousePosition;
             pos.z = 7;
             pos = GameManager.instance.mainCamera.ScreenToWorldPoint(pos);
@@ -55,12 +58,24 @@ public class PlayerController : MonoBehaviour
         }
         else if(controllEye)
         {
+            if (!TobiiAPI.GetGazePoint().IsRecent())
+            {
+                ClosedEyes(true);
+            }
+            else
+            {
+                ClosedEyes(false);
+            }
+           
             Vector3 pos = gazePoint;
-            //print(gazePoint);
             pos.z = 7;
             pos = GameManager.instance.mainCamera.ScreenToWorldPoint(pos);
             pos.z = 7;
             lightTransform.LookAt(pos);
+        }
+        else if(controllGamePad)
+        {
+
         }
 
         float range = Input.GetAxisRaw("LightRange")*sizeSpeed;
@@ -69,11 +84,26 @@ public class PlayerController : MonoBehaviour
             lt.spotAngle += range;
             //lt.range += range;
         }
+
     }
 
     public void LightEnabled(bool isEnabled)
     {
         lt.enabled = isEnabled;
         al.enabled = isEnabled;
+    }
+
+    private void ClosedEyes(bool isClosed)
+    {
+        LightEnabled(!isClosed);
+        if (isClosed)
+        {
+            print("tes yeux sont fermés");
+
+        }
+        else
+        {
+            print("tes yeux sont ouverts");
+        }
     }
 }
