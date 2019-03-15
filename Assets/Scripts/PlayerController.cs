@@ -36,9 +36,18 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
 
         cursorPos = TobiiAPI.GetGazePoint().Screen;
-        cursorPos.z = 7;
-        cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
-        cursorPos.z = 7;
+        if (!float.IsNaN(cursorPos.x))
+        {
+            cursorPos.z = 7;
+            cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
+            cursorPos.z = 7;
+        }
+        else
+        {
+            SwitchControl(2);
+            cursorPos = Vector3.zero;
+        }
+        
     }
 
     void Update()
@@ -175,5 +184,15 @@ public class PlayerController : MonoBehaviour
                 controllGamePad = true;
                 break;
         }
+    }
+
+    public Vector3 getCursorPos()
+    {
+        return cursorPos;
+    }
+
+    public Vector3 getPlayerPos()
+    {
+        return transform.position;
     }
 }

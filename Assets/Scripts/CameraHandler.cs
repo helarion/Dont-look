@@ -10,9 +10,25 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] float offset=1;
     [SerializeField] float cursorLookBias=1;
     [SerializeField] bool moveCamera = true;
-    
+
     void Update()
     {
+        if (target && moveCamera)
+        {
+            Vector3 cursorPos = target.GetComponent<PlayerController>().getCursorPos();
+            Vector3 diffCameraCursor = cursorPos - transform.position;
+            transform.position = new Vector3 (diffCameraCursor.x, diffCameraCursor.y, 1.516556f);
+            Vector3 diffCameraPlayer = transform.position - target.position;
+            if (diffCameraPlayer.magnitude > 1.5f)
+            {
+                Vector3 newPosition = target.position + diffCameraPlayer.normalized * 1.5f;
+                newPosition.z = 1.516556f;
+                transform.position = newPosition;
+            }
+            return;
+        }
+    }
+    /*
         if(target && moveCamera)
         {
             Vector3 newPos = transform.position;
@@ -43,13 +59,12 @@ public class CameraHandler : MonoBehaviour
                 newPos.y += offset;
             }*/
 
-            transform.position = Vector3.Lerp(transform.position, newPos, cameraSpeed * Time.deltaTime);
+            /*transform.position = Vector3.Lerp(transform.position, newPos, cameraSpeed * Time.deltaTime);
         }
         
        Vector3 v3 = Input.mousePosition;
         //v3.z = 7f;
         v3 = GameManager.instance.mainCamera.ScreenToWorldPoint(v3);
         transform.position = Vector3.Lerp(transform.position, v3, cursorLookBias);
-     }
-
+     }*/
 }
