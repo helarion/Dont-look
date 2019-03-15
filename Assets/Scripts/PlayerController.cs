@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
             Vector2 filteredPoint;
             Vector2 gazePoint = TobiiAPI.GetGazePoint().Screen;
             filteredPoint = Smoothify(gazePoint);
-            cursorPos = filteredPoint;
+            cursorPos = gazePoint;
             cursorPos.z = 7;
             cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
             cursorPos.z = 7;
