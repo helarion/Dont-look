@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3352230726995187375}
   - component: {fileID: 3352230726995187374}
-  - component: {fileID: 1075270112}
+  - component: {fileID: 116328416}
   m_Layer: 0
   m_Name: Spot Light (1)
   m_TagString: Untagged
@@ -45,7 +45,7 @@ Light:
   m_Color: {r: 0.9529412, g: 0.9254902, b: 0.8039216, a: 1}
   m_Intensity: 3
   m_Range: 6
-  m_SpotAngle: 60
+  m_SpotAngle: 45
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -70,7 +70,7 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &1075270112
+--- !u!114 &116328416
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82,10 +82,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01d29d88278f45458d99e6b5199e920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 2
+  strength: 1
   scatteringBias: 0
   overrideColor: 0
-  overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
+  overridingColor: {r: 1, g: 1, b: 1, a: 1}
   useShadow: 1
   shadowMapRenderTexture: {fileID: 0}
   useCookie: 1

@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
         cursorPos.z = 7;
         cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
         cursorPos.z = 7;
+        LightEnabled(true);
     }
 
     void Update()
@@ -54,7 +55,6 @@ public class PlayerController : MonoBehaviour
         // JUMP
         if (Input.GetButtonDown("Jump"))
         {
-            print("test");
             rb.AddForce(Vector3.up * jumpSpeed *10000 * Time.deltaTime);
         }
 
@@ -73,6 +73,7 @@ public class PlayerController : MonoBehaviour
             Vector2 filteredPoint;
             Vector2 gazePoint = TobiiAPI.GetGazePoint().Screen;
             filteredPoint = Smoothify(gazePoint);
+
             cursorPos = gazePoint;
             cursorPos.z = 7;
             cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
@@ -82,8 +83,14 @@ public class PlayerController : MonoBehaviour
         else
         {
             // CHECK DU BOUTON POUR FERMER LES YEUX SI L'EYE TRACKER N'EST PAS ACTIVÉ
-            if (Input.GetButton("CloseEyes")) ClosedEyes(true);
-            else ClosedEyes(false);
+            if (Input.GetAxisRaw("CloseEyes") != 0)
+            {
+                ClosedEyes(true);
+            }
+            else
+            {
+                ClosedEyes(false);
+            }
 
             // MOUSE OPTION
             if (controllMouse)

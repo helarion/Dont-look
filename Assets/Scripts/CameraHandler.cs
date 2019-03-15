@@ -19,7 +19,6 @@ public class CameraHandler : MonoBehaviour
             newPos.x = target.position.x;
             //newPos.y = target.position.y;
 
-
             if (Input.GetAxis("Horizontal")<0)
             {
                 // left
