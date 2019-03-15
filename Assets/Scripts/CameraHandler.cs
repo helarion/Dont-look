@@ -11,19 +11,39 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] float cursorLookBias=1;
     [SerializeField] bool moveCamera = true;
 
+    Vector3 targetPosition;
+
+    void Start()
+    {
+        transform.position = target.position;
+    }
+
     void Update()
     {
         if (target && moveCamera)
         {
             Vector3 cursorPos = target.GetComponent<PlayerController>().getCursorPos();
             Vector3 diffCameraCursor = cursorPos - transform.position;
-            transform.position = new Vector3 (diffCameraCursor.x, diffCameraCursor.y, 1.516556f);
-            Vector3 diffCameraPlayer = transform.position - target.position;
-            if (diffCameraPlayer.magnitude > 1.5f)
+            diffCameraCursor.z = 1.516556f;
+            if (diffCameraCursor.y < 0.5f)
             {
-                Vector3 newPosition = target.position + diffCameraPlayer.normalized * 1.5f;
+                diffCameraCursor.y = 0.5f;
+            }
+            transform.position = diffCameraCursor;
+            Vector3 diffCameraPlayer = transform.position - target.position;
+            if (diffCameraPlayer.magnitude > 2f)
+            {
+                Vector3 newPosition = target.position + diffCameraPlayer.normalized * 2f;
+                if (newPosition.y < 0.5f)
+                {
+                    newPosition.y = 0.5f;
+                }
                 newPosition.z = 1.516556f;
                 transform.position = newPosition;
+            }
+            else
+            {
+                transform.position = diffCameraCursor;
             }
             return;
         }
