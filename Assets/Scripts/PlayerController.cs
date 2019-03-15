@@ -6,24 +6,21 @@ using Aura2API;
 
 public class PlayerController : MonoBehaviour
 {
-    float minAngle = 10;
-    float maxAngle = 90;
-
     Light lt;
     AuraLight al;
     Rigidbody rb;
     Vector3 cursorPos;
+    Transform lightTransform;
 
     private bool _hasHistoricPoint;
     private Vector3 _historicPoint;
     [Range(0.1f, 1.0f), Tooltip("How heavy filtering to apply to gaze point bubble movements. 0.1f is most responsive, 1.0f is least responsive.")]
     public float FilterSmoothingFactor = 0.15f;
 
-    [SerializeField] Transform lightTransform;
-    [SerializeField] float moveSpeed;
-    [SerializeField] float jumpSpeed;
-    [SerializeField] float sizeSpeed;
-    [SerializeField] float stickSpeed;
+    [SerializeField] float moveSpeed = 3;
+    [SerializeField] float jumpSpeed = 1.5f;
+    [SerializeField] float sizeSpeed = 5;
+    [SerializeField] float stickSpeed = 3;
     [SerializeField] bool controllMouse = false;
     [SerializeField] bool controllEye = true;
     [SerializeField] bool controllGamePad = false;
@@ -32,6 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         lt = GetComponentInChildren<Light>();
+        lightTransform = lt.transform;
         al = GetComponentInChildren<AuraLight>();
         lt.type = LightType.Spot;
         LightEnabled(true);
@@ -48,10 +46,6 @@ public class PlayerController : MonoBehaviour
         float hMove = Input.GetAxis("Horizontal");
         float vMove = Input.GetAxis("Vertical");
 
-        Vector2 filteredPoint;
-        Vector2 gazePoint = TobiiAPI.GetGazePoint().Screen;
-        filteredPoint = Smoothify(gazePoint);
-
         // MOVEMENT
         if (hMove!=0)
         {
@@ -61,7 +55,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             print("test");
-            rb.AddForce(Vector3.up * jumpSpeed *1000 * Time.deltaTime);
+            rb.AddForce(Vector3.up * jumpSpeed *10000 * Time.deltaTime);
         }
 
         // LIGHT AIM CONTROL
@@ -76,7 +70,9 @@ public class PlayerController : MonoBehaviour
                 ClosedEyes(false);
             }
 
-            //cursorPos = gazePoint;
+            Vector2 filteredPoint;
+            Vector2 gazePoint = TobiiAPI.GetGazePoint().Screen;
+            filteredPoint = Smoothify(gazePoint);
             cursorPos = filteredPoint;
             cursorPos.z = 7;
             cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
@@ -115,11 +111,15 @@ public class PlayerController : MonoBehaviour
         }
 
         // TAILLE DE LA FLASHLIGHT
-        float range = Input.GetAxisRaw("LightRange")*sizeSpeed;
+        float range = Input.GetAxisRaw("LightRange")*sizeSpeed*100*Time.deltaTime;
         if (range!=0)
         {
             lt.spotAngle += range;
         }
+
+        if (Input.GetKeyDown(KeyCode.F1)) SwitchControl(1);
+        else if (Input.GetKeyDown(KeyCode.F2)) SwitchControl(2);
+        else if (Input.GetKeyDown(KeyCode.F3)) SwitchControl(3);
 
     }
 
@@ -144,19 +144,36 @@ public class PlayerController : MonoBehaviour
     private void ClosedEyes(bool isClosed)
     {
         LightEnabled(!isClosed);
-        if (isClosed)
-        {
-            print("tes yeux sont fermés");
-        }
-        else
-        {
-            print("tes yeux sont ouverts");
-        }
     }
 
     public void LightEnabled(bool isEnabled)
     {
         lt.enabled = isEnabled;
         al.enabled = isEnabled;
+    }
+
+    public void SwitchControl(int num)
+    {
+        switch(num)
+        {
+            case 1:
+                print("Eye tracker activated");
+                controllEye = true;
+                controllMouse = false;
+                controllGamePad = false;
+                break;
+            case 2:
+                print("Mouse activated");
+                controllEye = false;
+                controllMouse = true;
+                controllGamePad = false;
+                break;
+            case 3:
+                print("GamePad activated");
+                controllEye = false;
+                controllMouse = false;
+                controllGamePad = true;
+                break;
+        }
     }
 }

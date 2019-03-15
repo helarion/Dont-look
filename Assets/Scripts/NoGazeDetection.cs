@@ -35,14 +35,5 @@ public class NoGazeDetection : MonoBehaviour
     private void ClosedEyes(bool isClosed)
     {
         pc.LightEnabled(!isClosed);
-        if (isClosed)
-        {
-            print("tes yeux sont fermés");
-            
-        }
-        else
-        {
-            print("tes yeux sont ouverts");
-        }
     }
 }
