@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SpiderBehavior : MonoBehaviour
+public class SpiderBehavior : Enemy
 {
     [SerializeField] float moveSpeed = 1;
+    [SerializeField] float bonusSpeed = 1;
 
     [SerializeField] float delaySpot=1;
     [SerializeField] float delayChase = 3;
-    float countSpot = 0;
+    float countLook = 0;
     float countChase = 0;
 
     [SerializeField] bool isSleeping = true;
@@ -23,14 +24,19 @@ public class SpiderBehavior : MonoBehaviour
     Vector3 SpawnZone;
     NavMeshAgent agent;
 
+    [SerializeField] bool MeshVisibleSystem=false;
+    MeshRenderer meshRenderer;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        meshRenderer = GetComponent<MeshRenderer>();
         SpawnZone = transform.position;
         agent.speed = moveSpeed;
 
         countChase = 0;
-        countSpot = 0;
+        countLook = 0;
+        isVisible(false);
     }
 
     void Update()
@@ -51,7 +57,6 @@ public class SpiderBehavior : MonoBehaviour
     {
         if (isLooked) return;
         isLooked = true;
-
     }
 
     public void StopLook()
@@ -61,17 +66,13 @@ public class SpiderBehavior : MonoBehaviour
 
     }
 
-    IEnumerator CountSpot()
+    IEnumerator CountLook()
     {
-        while (countSpot<delaySpot)
+        while (countLook<delaySpot)
         {
             yield return new WaitForSeconds(0.1f);
-            if (!isLooked)
-            {
-                countSpot = 0;
-                yield return null;
-            }
-            delaySpot+=0.1f;
+            countLook+=0.1f;
+            print(countLook);
         }
         Chase();
         yield return null;
@@ -82,12 +83,6 @@ public class SpiderBehavior : MonoBehaviour
         while(countChase<delayChase)
         {
             yield return new WaitForSeconds(0.5f);
-            if (canSeePlayer)
-            {
-                countChase = 0;
-                //print("break");
-                yield return null;
-            }
             countChase+=0.5f;
             //print(countChase);
         }
@@ -109,12 +104,39 @@ public class SpiderBehavior : MonoBehaviour
     {
         agent.isStopped = false;
         isChasing = true;
-        countSpot = 0;
+        countLook = 0;
     }
 
-    public void DetectPlayer(bool b)
+    public override void DetectPlayer(bool b)
     {
         canSeePlayer = b;
-        if (b) Chase(); // EN ATTENDANT LE DETECTION PAR LA LUMIERE
+        if (!b)
+        {
+            StopCoroutine("CountChase");
+            chaseCoroutine = false;
+        }
+    }
+
+    public override void isLit(bool b)
+    {
+        agent.speed = moveSpeed;
+        if (b)
+        {
+            StartCoroutine("CountLook");
+            isVisible(true);
+            agent.speed += bonusSpeed;
+            Looked();
+        }
+        else
+        {
+            StopCoroutine("CountLook");
+            countLook = 0;
+            isVisible(false);
+        }
+    }
+
+    public override void isVisible(bool b)
+    {
+        if(MeshVisibleSystem) meshRenderer.enabled = b;
     }
 }

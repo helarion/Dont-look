@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DetectZone : MonoBehaviour
+public class EnemyDetectZone : MonoBehaviour
 {
-    [SerializeField] SpiderBehavior spider=null;
+    [SerializeField] Enemy e=null;
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.GetComponent<PlayerController>()!=null)
         {
-            spider.DetectPlayer(true);
+            e.DetectPlayer(true);
         }
     }
 
@@ -18,7 +18,7 @@ public class DetectZone : MonoBehaviour
     {
         if (other.GetComponent<PlayerController>() != null)
         {
-            spider.DetectPlayer(false);
+            e.DetectPlayer(false);
         }
     }
 }
