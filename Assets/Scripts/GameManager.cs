@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public Camera mainCamera;
+    public Camera mainCamera;
+    public PlayerController player;
 
     public static GameManager instance = null;
 

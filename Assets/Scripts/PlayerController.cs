@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool controllEye = true;
     [SerializeField] bool controllGamePad = false;
 
+    public bool lightOn = true;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -35,27 +37,13 @@ public class PlayerController : MonoBehaviour
         LightEnabled(true);
         Cursor.visible = false;
 
-        cursorPos = TobiiAPI.GetGazePoint().Screen;
-        cursorPos.z = 7;
-        cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
-        cursorPos.z = 7;
+        cursorPos = Input.mousePosition;
     }
 
     void Update()
     {
         float hMove = Input.GetAxis("Horizontal");
         float vMove = Input.GetAxis("Vertical");
-
-        // MOVEMENT
-        if (hMove!=0)
-        {
-            transform.Translate(Vector3.right * hMove * moveSpeed * Time.deltaTime);
-        }
-        // JUMP
-        if (Input.GetButtonDown("Jump"))
-        {
-            rb.AddForce(Vector3.up * jumpSpeed *10000 * Time.deltaTime);
-        }
 
         // LIGHT AIM CONTROL
         if (controllEye) // EYE TRACKER OPTION
@@ -96,14 +84,11 @@ public class PlayerController : MonoBehaviour
                 float xMouse = Input.GetAxis("Mouse X");
                 float yMouse = Input.GetAxis("Mouse Y");
 
-                if (xMouse != 0 || yMouse != 0)
-                {
-                    cursorPos = Input.mousePosition;
-                    cursorPos.z = 7;
-                    cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
-                    cursorPos.z = 7;
-                    lightTransform.LookAt(cursorPos);
-                }
+                cursorPos = Input.mousePosition;
+                cursorPos.z = 7;
+                cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
+                cursorPos.z = 7;
+                lightTransform.LookAt(cursorPos);
             }
             // GAMEPADE OPTION
             else if (controllGamePad)
@@ -113,6 +98,19 @@ public class PlayerController : MonoBehaviour
                 cursorPos.y += Input.GetAxis("Stick Y") * stickSpeed *100 * Time.deltaTime;
                 lightTransform.LookAt(cursorPos);
             }
+        }
+
+        // MOVEMENT
+        if (hMove != 0)
+        {
+            transform.Translate(Vector3.right * hMove * moveSpeed * Time.deltaTime);
+            cursorPos.x += hMove * moveSpeed * Time.deltaTime;
+            lightTransform.LookAt(cursorPos);
+        }
+        // JUMP
+        if (Input.GetButtonDown("Jump"))
+        {
+            rb.AddForce(Vector3.up * jumpSpeed * 10000 * Time.deltaTime);
         }
 
         // TAILLE DE LA FLASHLIGHT
@@ -155,6 +153,7 @@ public class PlayerController : MonoBehaviour
     {
         lt.enabled = isEnabled;
         al.enabled = isEnabled;
+        lightOn = isEnabled;
     }
 
     public void SwitchControl(int num)
