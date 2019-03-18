@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpSpeed = 1.5f;
     [SerializeField] float sizeSpeed = 5;
     [SerializeField] float stickSpeed = 3;
+    [SerializeField] float lightSpeed = 1;
     [SerializeField] bool controllMouse = false;
     [SerializeField] bool controllEye = true;
     [SerializeField] bool controllGamePad = false;
@@ -64,7 +65,10 @@ public class PlayerController : MonoBehaviour
             cursorPos.z = 7;
             cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
             cursorPos.z = 7;
-            lightTransform.LookAt(cursorPos);
+
+            Vector3 direction = cursorPos - lightTransform.position;
+
+            lightTransform.rotation = Quaternion.RotateTowards(lightTransform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * lightSpeed *100);
         }
         else
         {
@@ -104,8 +108,10 @@ public class PlayerController : MonoBehaviour
         if (hMove != 0)
         {
             transform.Translate(Vector3.right * hMove * moveSpeed * Time.deltaTime);
-            cursorPos.x += hMove * moveSpeed * Time.deltaTime;
-            lightTransform.LookAt(cursorPos);
+        }
+        if(vMove !=0)
+        {
+            transform.Translate(Vector3.back * vMove * moveSpeed * Time.deltaTime);
         }
         // JUMP
         if (Input.GetButtonDown("Jump"))
@@ -184,6 +190,11 @@ public class PlayerController : MonoBehaviour
     public Vector3 getCursorPos()
     {
         return cursorPos;
+    }
+
+    public float getLightSpeed()
+    {
+        return lightSpeed;
     }
 
     public Vector3 getPlayerPos()

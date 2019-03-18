@@ -130,7 +130,7 @@ public class SpiderBehavior : Enemy
         else
         {
             StopCoroutine("CountLook");
-            countLook = 0;
+            //countLook = 0; // A UTILISER SI ON VEUT QUE LE TEMPS DE SPOT SE RESET
             isVisible(false);
         }
     }
