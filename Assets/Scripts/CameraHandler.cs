@@ -7,7 +7,6 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] Transform target=null;
     [SerializeField] float cameraSpeed=1;
     [SerializeField] float offset=1;
-    [SerializeField] bool moveCamera = true;
     [SerializeField] float minYCamera = 1;
     [SerializeField] float yOffset = 1;
 

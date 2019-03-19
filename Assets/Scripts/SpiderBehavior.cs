@@ -13,7 +13,6 @@ public class SpiderBehavior : Enemy
     float countLook = 0;
     float countChase = 0;
 
-    [SerializeField] bool isSleeping = true;
     [SerializeField]  bool isChasing = false;
 
     bool isLooked = false;
@@ -24,13 +23,9 @@ public class SpiderBehavior : Enemy
     Vector3 SpawnZone;
     NavMeshAgent agent;
 
-    [SerializeField] bool MeshVisibleSystem=false;
-    MeshRenderer meshRenderer;
-
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        meshRenderer = GetComponent<MeshRenderer>();
         SpawnZone = transform.position;
         agent.speed = moveSpeed;
 
@@ -44,7 +39,6 @@ public class SpiderBehavior : Enemy
         if(isChasing)
         {
             agent.SetDestination(GameManager.instance.player.transform.position);
-            //if(detectZone.)
             if (!canSeePlayer && !GameManager.instance.player.lightOn)
             {
                 if(!chaseCoroutine) StartCoroutine("CountChase");
@@ -96,7 +90,6 @@ public class SpiderBehavior : Enemy
         transform.position = SpawnZone;
         agent.isStopped=true;
         isChasing = false;
-        isSleeping = true;
         countChase = 0;
     }
 
@@ -123,7 +116,6 @@ public class SpiderBehavior : Enemy
         if (b)
         {
             StartCoroutine("CountLook");
-            isVisible(true);
             agent.speed += bonusSpeed;
             Looked();
         }
@@ -133,10 +125,5 @@ public class SpiderBehavior : Enemy
             //countLook = 0; // A UTILISER SI ON VEUT QUE LE TEMPS DE SPOT SE RESET
             isVisible(false);
         }
-    }
-
-    public override void isVisible(bool b)
-    {
-        if(MeshVisibleSystem) meshRenderer.enabled = b;
     }
 }

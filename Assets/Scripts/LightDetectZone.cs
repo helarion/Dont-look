@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class LightDetectZone : MonoBehaviour
 {
-    SphereCollider collider;
+    SphereCollider sCollider;
 
     private void Start()
     {
-        collider = GetComponent<SphereCollider>();
+        sCollider = GetComponent<SphereCollider>();
     }
 
-    private void Update()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
         Enemy e = other.GetComponent<Enemy>();

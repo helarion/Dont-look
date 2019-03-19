@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public PlayerController player;
 
     public static GameManager instance = null;
+    [SerializeField] Checkpoint lastCheckpoint = null;
 
     void Awake()
     {
@@ -22,9 +23,27 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Death()
     {
+        UIManager.instance.FadeIn(true);
+        StartCoroutine("DeathCoroutine");
+    }
 
+    private void Respawn()
+    {
+        player.transform.position = lastCheckpoint.transform.position;
+    }
+
+    IEnumerator DeathCoroutine()
+    {
+        while (UIManager.instance.isFading)
+            yield return new WaitForSeconds(0.1f);
+        Respawn();
+        UIManager.instance.FadeIn(false);
+    }
+
+    public void SetNewCheckpoint(Checkpoint c)
+    {
+        lastCheckpoint = c;
     }
 }

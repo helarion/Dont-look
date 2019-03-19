@@ -2,20 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Tobii.Gaming;
-using Aura2API;
 
 public class PlayerController : MonoBehaviour
 {
     Light lt;
-    AuraLight al;
     Rigidbody rb;
     Vector3 cursorPos;
     Transform lightTransform;
-
-    private bool _hasHistoricPoint;
-    private Vector3 _historicPoint;
-    [Range(0.1f, 1.0f), Tooltip("How heavy filtering to apply to gaze point bubble movements. 0.1f is most responsive, 1.0f is least responsive.")]
-    public float FilterSmoothingFactor = 0.15f;
 
     [SerializeField] float moveSpeed = 3;
     [SerializeField] float jumpSpeed = 1.5f;
@@ -33,7 +26,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         lt = GetComponentInChildren<Light>();
         lightTransform = lt.transform;
-        al = GetComponentInChildren<AuraLight>();
         lt.type = LightType.Spot;
         LightEnabled(true);
         Cursor.visible = false;
@@ -58,9 +50,7 @@ public class PlayerController : MonoBehaviour
                 ClosedEyes(false);
             }
 
-            Vector2 filteredPoint;
             Vector2 gazePoint = TobiiAPI.GetGazePoint().Screen;
-            filteredPoint = Smoothify(gazePoint);
             cursorPos = gazePoint;
             cursorPos.z = 7;
             cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
@@ -132,24 +122,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private Vector3 Smoothify(Vector3 point)
-    {
-        if (!_hasHistoricPoint)
-        {
-            _historicPoint = point;
-            _hasHistoricPoint = true;
-        }
-
-        var smoothedPoint = new Vector3(
-            point.x * (1.0f - FilterSmoothingFactor) + _historicPoint.x * FilterSmoothingFactor,
-            point.y * (1.0f - FilterSmoothingFactor) + _historicPoint.y * FilterSmoothingFactor,
-            point.z * (1.0f - FilterSmoothingFactor) + _historicPoint.z * FilterSmoothingFactor);
-
-        _historicPoint = smoothedPoint;
-
-        return smoothedPoint;
-    }
-
     private void ClosedEyes(bool isClosed)
     {
         LightEnabled(!isClosed);
@@ -158,7 +130,6 @@ public class PlayerController : MonoBehaviour
     public void LightEnabled(bool isEnabled)
     {
         lt.enabled = isEnabled;
-        al.enabled = isEnabled;
         lightOn = isEnabled;
     }
 
