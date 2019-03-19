@@ -284,6 +284,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 23987564}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &65247987
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'FlashLight : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_DepthFormat: 0
+  m_ColorFormat: 11
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1001 &73834003
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -301,11 +333,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ddaae974f07a3514c9a6ed292550a0f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.049
+      value: 0.121
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ddaae974f07a3514c9a6ed292550a0f3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.231
+      value: -3.23
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ddaae974f07a3514c9a6ed292550a0f3, type: 3}
       propertyPath: m_LocalRotation.x
@@ -388,7 +420,7 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 1, g: 1, b: 1, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 1073930895}
+  shadowMapRenderTexture: {fileID: 541704447}
   useCookie: 1
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
@@ -412,8 +444,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 0
-  m_Color: {r: 0.4198113, g: 0.92696214, b: 1, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.68293875, g: 0.93462765, b: 0.9716981, a: 1}
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 88.68873
   m_CookieSize: 10
@@ -447,13 +479,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77210284}
-  m_LocalRotation: {x: 0.67468756, y: 0.21165234, z: 0.21165241, w: 0.6746875}
-  m_LocalPosition: {x: -16.54, y: 5.2, z: 4.81}
+  m_LocalRotation: {x: 0.62645924, y: 0.3279463, z: 0.3279463, w: 0.62645936}
+  m_LocalPosition: {x: -16.86, y: 5.25, z: 5.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 124.834, y: -90, z: -90}
+  m_LocalEulerAnglesHint: {x: 145.263, y: -90, z: -90}
 --- !u!1 &128881693
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,8 +513,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 128881693}
   m_LocalRotation: {x: -0.7071068, y: -0.7071068, z: -0, w: 0}
-  m_LocalPosition: {x: 21.833, y: 0.28, z: 3.09}
-  m_LocalScale: {x: 0.5, y: 5.2452583, z: 6.5771885}
+  m_LocalPosition: {x: 23.555, y: 0.28, z: 3.131}
+  m_LocalScale: {x: 0.5, y: 8.686148, z: 6.491685}
   m_Children: []
   m_Father: {fileID: 1627392757}
   m_RootOrder: 2
@@ -675,16 +707,16 @@ MonoBehaviour:
   m_Name: New Aura Base Settings
   m_EditorClassIdentifier: 
   useDensity: 1
-  density: 0.25
+  density: 0.2
   useScattering: 1
-  scattering: 0.5
-  useAmbientLighting: 1
+  scattering: 0.51
+  useAmbientLighting: 0
   ambientLightingStrength: 1
-  useColor: 0
-  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
-  colorStrength: 1
+  useColor: 1
+  color: {r: 0.5, g: 0.17210788, b: 0.44296435, a: 1}
+  colorStrength: 0.1
   useExtinction: 0
-  extinction: 0.75
+  extinction: 0.44
 --- !u!1 &175197595
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,8 +851,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0.6208625, b: 0.5235849, a: 1}
-  m_Intensity: 0.8
-  m_Range: 10
+  m_Intensity: 1
+  m_Range: 6
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -833,7 +865,7 @@ Light:
     m_NearPlane: 0.1
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
-  m_Flare: {fileID: 0}
+  m_Flare: {fileID: 12100000, guid: 51e9e94bd0b2a4b96a5d00f9441133a7, type: 2}
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
@@ -863,7 +895,7 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 1, g: 1, b: 1, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 1764181451}
+  shadowMapRenderTexture: {fileID: 1764725152}
   useCookie: 1
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
@@ -983,6 +1015,38 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 771317143}
   m_PrefabAsset: {fileID: 0}
+--- !u!84 &541704447
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Aura Spot Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_DepthFormat: 0
+  m_ColorFormat: 11
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &599010529
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,8 +1424,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 890808984}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.4669998, y: -1.26, z: 3.188}
-  m_LocalScale: {x: 53.97182, y: 0.8716507, z: 6.5102167}
+  m_LocalPosition: {x: -0.69, y: -1.26, z: 3.213}
+  m_LocalScale: {x: 57.53396, y: 0.8716507, z: 6.562299}
   m_Children: []
   m_Father: {fileID: 1055497860}
   m_RootOrder: 0
@@ -1560,38 +1624,6 @@ MonoBehaviour:
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: 20d36f03cc210564389a30d345a729a2, type: 2}
---- !u!84 &1073930895
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Aura Spot Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_DepthFormat: 0
-  m_ColorFormat: 11
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!4 &1160415905 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 640bfda82c7de8f4faee4178cf0023c9,
@@ -2036,8 +2068,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1454665796}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.319, y: 1.668, z: -0.059999943}
-  m_LocalScale: {x: 48.32671, y: 0.2598272, z: 4.920744}
+  m_LocalPosition: {x: -3.019, y: 1.67, z: 0.06}
+  m_LocalScale: {x: 54.995796, y: 0.2598272, z: 4.920744}
   m_Children: []
   m_Father: {fileID: 722415962}
   m_RootOrder: 0
@@ -2100,38 +2132,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1454665796}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1455667925
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'FlashLight : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_DepthFormat: 0
-  m_ColorFormat: 11
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1469200087
 GameObject:
   m_ObjectHideFlags: 0
@@ -2556,7 +2556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 812e03e711ba65b4dad066e81c1b8d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!84 &1764181451
+--- !u!84 &1764725152
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2615,8 +2615,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1849272300}
   m_LocalRotation: {x: -0.7071068, y: -0.7071068, z: -0, w: 0}
-  m_LocalPosition: {x: 3.428, y: 0.28, z: 3.095}
-  m_LocalScale: {x: 0.5, y: 28.111998, z: 6.6857257}
+  m_LocalPosition: {x: -5.735, y: 0.28, z: 3.095}
+  m_LocalScale: {x: 0.5, y: 46.441017, z: 6.6857257}
   m_Children: []
   m_Father: {fileID: 1627392757}
   m_RootOrder: 1
@@ -2796,7 +2796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volumeTrigger: {fileID: 0}
+  volumeTrigger: {fileID: 1897840729}
   volumeLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -2903,8 +2903,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1925528962}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 2.95, y: 1.68, z: 3}
-  m_LocalScale: {x: 0.15460145, y: 5.011816, z: 6.525961}
+  m_LocalPosition: {x: 2.95, y: 0.055, z: 3}
+  m_LocalScale: {x: 3.9794333, y: 5.011816, z: 6.525961}
   m_Children: []
   m_Father: {fileID: 225670461}
   m_RootOrder: 0
@@ -2922,8 +2922,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: -1372625422
-  m_StartPoint: {x: 0.027240753, y: -1.624326, z: -0.0000000047677986}
-  m_EndPoint: {x: 0.7685528, y: -2.5342774, z: -0.0000000047677986}
+  m_StartPoint: {x: 1.9728413, y: -1.624326, z: 0.00000008583129}
+  m_EndPoint: {x: 2.7953644, y: -2.5342774, z: 0.00000008583129}
   m_Width: 7
   m_CostModifier: -1
   m_Bidirectional: 1
@@ -3000,8 +3000,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: -1372625422
-  m_StartPoint: {x: 0.065402985, y: 1.4797951, z: -0.0000000047677986}
-  m_EndPoint: {x: 0.5484619, y: 1.94325, z: -0.0000000047677986}
+  m_StartPoint: {x: 1.8486652, y: 1.4797951, z: 0.00000008583129}
+  m_EndPoint: {x: 2.4582882, y: 1.94325, z: 0.00000008583129}
   m_Width: 7
   m_CostModifier: -1
   m_Bidirectional: 1
@@ -3119,7 +3119,7 @@ MonoBehaviour:
       yNegativeCylinderFade: 0.25
       yPositiveCylinderFade: 0.25
       distanceSphereFade: 0.5
-  useAsLightProbesProxyVolume: 1
+  useAsLightProbesProxyVolume: 0
   lightProbesMultiplier: 1
   texture2DMask:
     enable: 0
@@ -3148,16 +3148,16 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0}
       scale: {x: 10, y: 10, z: 10}
   densityInjection:
-    enable: 1
-    strength: 3
+    enable: 0
+    strength: 1.5
     useNoiseMask: 1
-    useNoiseMaskLevels: 0
+    useNoiseMaskLevels: 1
     noiseMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: 0
+      levelLowThreshold: 0.36507937
+      levelHiThreshold: 0.68253946
+      outputLowValue: 0.5
       outputHiValue: 1
-      contrast: 1
+      contrast: 10
     useTexture2DMask: 1
     useTexture2DMaskLevels: 0
     texture2DMaskLevelParameters:
@@ -3175,7 +3175,7 @@ MonoBehaviour:
       outputHiValue: 1
       contrast: 1
   scatteringInjection:
-    enable: 1
+    enable: 0
     strength: 0.5
     useNoiseMask: 1
     useNoiseMaskLevels: 1
@@ -3204,7 +3204,7 @@ MonoBehaviour:
   lightInjection:
     injectionParameters:
       enable: 1
-      strength: 0.09
+      strength: 0
       useNoiseMask: 1
       useNoiseMaskLevels: 0
       noiseMaskLevelParameters:
@@ -3233,7 +3233,7 @@ MonoBehaviour:
   ambientInjection:
     enable: 1
     strength: 1
-    useNoiseMask: 1
+    useNoiseMask: 0
     useNoiseMaskLevels: 0
     noiseMaskLevelParameters:
       levelLowThreshold: 0
@@ -3375,7 +3375,7 @@ MonoBehaviour:
   m_Name: Default Aura Quality Settings
   m_EditorClassIdentifier: 
   displayVolumetricLightingBuffer: 0
-  frustumGridResolution: {x: 160, y: 88, z: 128}
+  frustumGridResolution: {x: 320, y: 168, z: 256}
   enableAutomaticStereoResizing: 1
   farClipPlaneDistance: 128
   depthBiasCoefficient: 0.35
@@ -8330,7 +8330,7 @@ PrefabInstance:
     - target: {fileID: 4194574732181831087, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.02
+      value: 3.43
       objectReference: {fileID: 0}
     - target: {fileID: 4194574732181831087, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
         type: 3}
