@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     [SerializeField] Checkpoint lastCheckpoint = null;
 
+    List<Enemy> enemyList;
+
     void Awake()
     {
         if (instance == null)
@@ -23,27 +25,50 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        enemyList = new List<Enemy>();
+        Enemy[] temp = FindObjectsOfType<Enemy>();
+        foreach(Enemy e in temp)
+        {
+            enemyList.Add(e);
+        }
+    }
+
+    void RespawnEnemies()
+    {
+        foreach(Enemy e in enemyList)
+        {
+            e.Respawn();
+        }
+    }
+
     public void Death()
     {
+        player.SetIsAlive(false);
         UIManager.instance.FadeIn(true);
         StartCoroutine("DeathCoroutine");
     }
 
-    private void Respawn()
+    private void RespawnPlayer()
     {
         player.transform.position = lastCheckpoint.transform.position;
+        player.SetIsAlive(true);
     }
 
     IEnumerator DeathCoroutine()
     {
         while (UIManager.instance.isFading)
             yield return new WaitForSeconds(0.1f);
-        Respawn();
+        RespawnEnemies();
+        RespawnPlayer();
         UIManager.instance.FadeIn(false);
     }
 
     public void SetNewCheckpoint(Checkpoint c)
     {
+        if (c == lastCheckpoint) return; // pas sur que ça marche ?
         lastCheckpoint = c;
+        print("New Checkpoint activated");
     }
 }

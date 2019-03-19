@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Checkpoint : MonoBehaviour
+public class KillZone : MonoBehaviour
 {
-    // a reflechir s'il y a besoin d'autres informations liés à un checkpoint ?
+    Enemy e;
+
+    void Start()
+    {
+        e = GetComponentInParent<Enemy>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
-        GameManager.instance.SetNewCheckpoint(this);
+        GameManager.instance.Death();
     }
 }

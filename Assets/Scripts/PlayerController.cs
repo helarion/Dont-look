@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool controllGamePad = false;
 
     public bool lightOn = true;
+    bool isAlive = true;
 
     void Start()
     {
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (!isAlive) return;
         float hMove = Input.GetAxis("Horizontal");
         float vMove = Input.GetAxis("Vertical");
 
@@ -158,18 +160,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public Vector3 getCursorPos()
+    public Vector3 GetCursorPos()
     {
         return cursorPos;
     }
 
-    public float getLightSpeed()
+    public float GetLightSpeed()
     {
         return lightSpeed;
     }
 
-    public Vector3 getPlayerPos()
+    public Vector3 GetPlayerPos()
     {
         return transform.position;
+    }
+
+    public void SetIsAlive(bool b)
+    {
+        isAlive = b;
     }
 }

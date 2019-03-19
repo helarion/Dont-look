@@ -5,33 +5,25 @@ using UnityEngine.AI;
 
 public class SpiderBehavior : Enemy
 {
-    [SerializeField] float moveSpeed = 1;
     [SerializeField] float bonusSpeed = 1;
 
     [SerializeField] float delaySpot=1;
     [SerializeField] float delayChase = 3;
+
     float countLook = 0;
     float countChase = 0;
 
-    [SerializeField]  bool isChasing = false;
-
+    bool isChasing = false;
     bool isLooked = false;
     bool canSeePlayer = false;
 
     bool chaseCoroutine = false;
 
-    Vector3 SpawnZone;
-    NavMeshAgent agent;
-
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        SpawnZone = transform.position;
-        agent.speed = moveSpeed;
-
+        Initialize();
         countChase = 0;
         countLook = 0;
-        isVisible(false);
     }
 
     void Update()
@@ -66,7 +58,7 @@ public class SpiderBehavior : Enemy
         {
             yield return new WaitForSeconds(0.1f);
             countLook+=0.1f;
-            print(countLook);
+            //print(countLook);
         }
         Chase();
         yield return null;
@@ -85,12 +77,18 @@ public class SpiderBehavior : Enemy
         yield return null;
     }
 
-    void StopChase()
+    public override void Respawn()
     {
-        transform.position = SpawnZone;
-        agent.isStopped=true;
+        base.Respawn();
+        agent.isStopped = true;
         isChasing = false;
         countChase = 0;
+        countLook = 0;
+    }
+
+    void StopChase()
+    {
+        Respawn();
     }
 
     void Chase()
@@ -123,7 +121,6 @@ public class SpiderBehavior : Enemy
         {
             StopCoroutine("CountLook");
             //countLook = 0; // A UTILISER SI ON VEUT QUE LE TEMPS DE SPOT SE RESET
-            isVisible(false);
         }
     }
 }

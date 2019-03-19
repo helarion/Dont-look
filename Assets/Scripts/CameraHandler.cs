@@ -27,7 +27,7 @@ public class CameraHandler : MonoBehaviour
     void Update()
     {
         if (!target) return;
-        Vector3 cursorPos = target.GetComponent<PlayerController>().getCursorPos();
+        Vector3 cursorPos = target.GetComponent<PlayerController>().GetCursorPos();
         Vector3 diffCameraCursor = cursorPos - transform.position;
         diffCameraCursor.z = zStartPosition;
         diffCameraCursor.y += yOffset;

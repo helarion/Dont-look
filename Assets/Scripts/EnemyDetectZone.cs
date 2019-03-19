@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class EnemyDetectZone : MonoBehaviour
 {
-    [SerializeField] Enemy e=null;
+    Enemy e;
+
+    private void Start()
+    {
+        e = GetComponentInParent<Enemy>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {

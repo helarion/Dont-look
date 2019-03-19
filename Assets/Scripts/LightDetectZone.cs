@@ -17,7 +17,7 @@ public class LightDetectZone : MonoBehaviour
         if (e!=null)
         {
             e.isLit(true);
-            print("looking at enemy");
+            //print("looking at enemy");
         }
     }
 
@@ -27,7 +27,7 @@ public class LightDetectZone : MonoBehaviour
         if (e != null)
         {
             e.isLit(false);
-            print("stopped looking at enemy");
+            //print("stopped looking at enemy");
         }
     }
 }
