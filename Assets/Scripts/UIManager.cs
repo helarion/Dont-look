@@ -25,6 +25,21 @@ public class UIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        fadeImg.color = new Color(0, 0, 0, 1);
+        GameManager.instance.player.SetIsAlive(false);
+        StartCoroutine("FadeImage", false);
+        StartCoroutine("StartCoroutine");
+    }
+
+    IEnumerator StartCoroutine()
+    {
+        while (UIManager.instance.isFading)
+            yield return new WaitForSeconds(0.1f);
+        GameManager.instance.player.SetIsAlive(true);
+    }
+
     IEnumerator FadeImage(bool inout)
     {
         // fade from transparent to opaque
@@ -44,6 +59,7 @@ public class UIManager : MonoBehaviour
         // fade from opaque to transparent
         else
         {
+            isFading = true;
             yield return new WaitForSeconds(1);
             // loop over 1 second backwards
             for (float i = 1; i > 0; i -= Time.deltaTime * fadeTime)
@@ -53,7 +69,7 @@ public class UIManager : MonoBehaviour
                 yield return null;
             }
             fadeImg.color = new Color(0, 0, 0, 0);
-            //isFading = false;
+            isFading = false;
         }
     }
 

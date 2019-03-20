@@ -258,15 +258,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 812e03e711ba65b4dad066e81c1b8d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FilterSmoothingFactor: 0.3
-  moveSpeed: 3
+  runSpeed: 3
+  walkSpeed: 1
   jumpSpeed: 1.5
   sizeSpeed: 5
   stickSpeed: 3
   lightSpeed: 2.7
-  controllMouse: 1
-  controllEye: 0
-  controllGamePad: 0
   lightOn: 1
 --- !u!54 &4194574732181831121
 Rigidbody:
@@ -411,7 +408,8 @@ PrefabInstance:
       propertyPath: m_UseColorTemperature
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 116328416, guid: 8574542227f87dd4b92c5ebe482bc9fa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8574542227f87dd4b92c5ebe482bc9fa, type: 3}
 --- !u!1 &4194574731613762954 stripped
 GameObject:
