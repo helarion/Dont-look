@@ -11,6 +11,8 @@ public class Intro : MonoBehaviour
     [SerializeField] SpriteRenderer cnam;
     [SerializeField] SpriteRenderer magelis;
     [SerializeField] SpriteRenderer poitiers;
+    [SerializeField] Transform scene;
+    [SerializeField] Canvas logos;
 
     Color cnamColor;
     Color magelisColor;
@@ -38,7 +40,10 @@ public class Intro : MonoBehaviour
 
     private void Update()
     {
-        cam.orthographicSize -= Time.deltaTime * zoomSpeed;
+        Vector3 newPos = logos.transform.position;
+        newPos.z -= Time.deltaTime * zoomSpeed;
+        logos.transform.position = newPos;
+        scene.position = Vector3.Lerp(scene.position, scene.position + Vector3.back, 0.5f);
     }
 
     IEnumerator FadeInImage()

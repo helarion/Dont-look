@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
             cursorPos = gazePoint;
             cursorPos.z = 7;
             cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
-            cursorPos.z = 7;
+            cursorPos.z = transform.position.z+3;
 
             Vector3 direction = cursorPos - lightTransform.position;
 
