@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Intro : MonoBehaviour
 {
     [SerializeField] float fadeTime = 0.5f;
-    [SerializeField] float zoomTime = 0.1f;
+    [SerializeField] float zoomSpeed = 0.1f;
     [SerializeField] SpriteRenderer cnam;
     [SerializeField] SpriteRenderer magelis;
     [SerializeField] SpriteRenderer poitiers;
@@ -16,11 +16,12 @@ public class Intro : MonoBehaviour
     Color magelisColor;
     Color poitiersColor;
 
-
+    Camera cam;
 
     // Start is called before the first frame update
     void Start()
     {
+        cam = GetComponent<Camera>();
         cnamColor = cnam.color;
         magelisColor = magelis.color;
         poitiersColor = poitiers.color;
@@ -37,21 +38,7 @@ public class Intro : MonoBehaviour
 
     private void Update()
     {
-        Vector2 cnamSize = cnam.transform.localScale;
-        cnamSize.x += Time.deltaTime * zoomTime;
-        cnamSize.y += Time.deltaTime * zoomTime;
-
-        Vector2 poitiersSize = poitiers.transform.localScale;
-        poitiersSize.x += Time.deltaTime * zoomTime * 0.3f;
-        poitiersSize.y += Time.deltaTime * zoomTime * 0.3f;
-
-        Vector2 magelisSize = magelis.transform.localScale;
-        magelisSize.x += Time.deltaTime * zoomTime;
-        magelisSize.y += Time.deltaTime * zoomTime;
-
-        cnam.transform.localScale = cnamSize;
-        poitiers.transform.localScale = poitiersSize;
-        magelis.transform.localScale = magelisSize;
+        cam.orthographicSize -= Time.deltaTime * zoomSpeed;
     }
 
     IEnumerator FadeInImage()
