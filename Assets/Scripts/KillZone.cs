@@ -14,7 +14,7 @@ public class KillZone : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
-        if (player == null) return;
+        if (player == null || !e.isChasing) return;
         GameManager.instance.Death();
     }
 }

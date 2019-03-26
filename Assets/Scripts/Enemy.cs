@@ -6,8 +6,12 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] public float moveSpeed = 1;
-    Vector3 SpawnZone;
     [HideInInspector] public NavMeshAgent agent;
+    [SerializeField] GameObject spawnZones;
+
+    public bool isChasing = false;
+
+    List<Transform> listSpawnZones;
 
     private void Start()
     {
@@ -17,8 +21,19 @@ public class Enemy : MonoBehaviour
     public void Initialize()
     {
         agent = GetComponent<NavMeshAgent>();
-        SpawnZone = transform.position;
         agent.speed = moveSpeed;
+
+        listSpawnZones = new List<Transform>();
+        Transform[] temp = spawnZones.GetComponentsInChildren<Transform>();
+        int a = 0;
+        foreach (Transform t in temp)
+        {
+            if(a!=0) listSpawnZones.Add(t);
+            a++;
+        }
+        print(listSpawnZones.Count);
+
+        Respawn();
     }
 
     public virtual void DetectPlayer(bool b)
@@ -33,7 +48,15 @@ public class Enemy : MonoBehaviour
 
     public virtual void Respawn()
     {
-        // AJOUTER LE SPAWN ALEATOIRE DANS UNE ZONE
-        transform.position = SpawnZone;
+        Vector3 pos = RandomSpawn();
+        transform.position = pos;
+        //agent.SetDestination(pos);
+    }
+
+    public Vector3 RandomSpawn()
+    {
+        int max = listSpawnZones.Count;
+        int rand = Random.Range(0, max);
+        return (listSpawnZones[rand].position);
     }
 }

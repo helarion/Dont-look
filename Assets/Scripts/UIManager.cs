@@ -26,11 +26,14 @@ public class UIManager : MonoBehaviour
     }
 
     private void Start()
-    {
-        fadeImg.color = new Color(0, 0, 0, 1);
-        GameManager.instance.player.SetIsAlive(false);
-        StartCoroutine("FadeImage", false);
-        StartCoroutine("StartCoroutine");
+    { 
+        if(!GameManager.instance.isTesting)
+        {
+            fadeImg.color = new Color(0, 0, 0, 1);
+            GameManager.instance.player.SetIsAlive(false);
+            StartCoroutine("FadeImage", false);
+            StartCoroutine("StartCoroutine");
+        }
     }
 
     IEnumerator StartCoroutine()

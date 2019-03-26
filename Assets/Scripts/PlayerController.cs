@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float stickSpeed = 3;
     [SerializeField] float lightSpeed = 1;
 
+    [SerializeField] Transform raycastPosition;
+
     float moveSpeed;
 
     public bool lightOn = true;
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private Player controls; // The Rewired Player
 
     bool isTrackerOn = false;
+    bool isGrounded = false;
 
     void Start()
     {
@@ -57,6 +60,7 @@ public class PlayerController : MonoBehaviour
         {
             lt.spotAngle += range;
         }
+        isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, 0.02f);
     }
 
     void LightAim()
@@ -134,7 +138,7 @@ public class PlayerController : MonoBehaviour
             transform.Translate(Vector3.back* -1 * vMove * moveSpeed * Time.deltaTime);
         }
         // JUMP
-        if (controls.GetButtonDown("Jump"))
+        if (controls.GetButtonDown("Jump") && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpSpeed * 10000 * Time.deltaTime);
         }
@@ -169,5 +173,10 @@ public class PlayerController : MonoBehaviour
     public void SetIsAlive(bool b)
     {
         isAlive = b;
+    }
+
+    public bool getIsAlive()
+    {
+        return isAlive;
     }
 }

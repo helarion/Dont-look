@@ -13,7 +13,6 @@ public class SpiderBehavior : Enemy
     float countLook = 0;
     float countChase = 0;
 
-    bool isChasing = false;
     bool isLooked = false;
     bool canSeePlayer = false;
 

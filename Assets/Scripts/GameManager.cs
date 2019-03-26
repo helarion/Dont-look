@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance = null;
     [SerializeField] Checkpoint lastCheckpoint = null;
+    [SerializeField] public bool isTesting = false;
 
     List<Enemy> enemyList;
 
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     public void Death()
     {
+        if (!player.getIsAlive()) return;
         player.SetIsAlive(false);
         UIManager.instance.FadeIn(true);
         StartCoroutine("DeathCoroutine");
