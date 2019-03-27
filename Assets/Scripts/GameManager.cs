@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour
         {
             enemyList.Add(e);
         }
+
+        
+        //AkSoundEngine.PostEvent("Play_Blend_Amb_Bunker1", instance.gameObject);
     }
 
     void RespawnEnemies()
