@@ -39,6 +39,7 @@ public class SpiderBehavior : Enemy
         if (Input.GetMouseButtonDown(0))
         {
             agent.SetDestination(GameManager.instance.player.GetLookAt());
+            print("Agent sent to " + GameManager.instance.player.GetLookAt());
         }
     }
 
