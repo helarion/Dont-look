@@ -5,6 +5,12 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
     // a stocker plus tard : les puzzles déja faits pour ne pas les réinitaliser, ou l'inverse : les puzzles à réini
+    float z;
+
+    private void Start()
+    {
+        z = GameManager.instance.mainCamera.transform.position.z+2;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,10 +27,10 @@ public class Checkpoint : MonoBehaviour
         Gizmos.color = Color.yellow;
         float wHalf = (bCollider.size.x * .5f);
         float hHalf = (bCollider.size.y * .5f);
-        Vector3 topLeftCorner = new Vector3(pos.x - wHalf, pos.y + hHalf, 1f);
-        Vector3 topRightCorner = new Vector3(pos.x + wHalf, pos.y + hHalf, 1f);
-        Vector3 bottomLeftCorner = new Vector3(pos.x - wHalf, pos.y - hHalf, 1f);
-        Vector3 bottomRightCorner = new Vector3(pos.x + wHalf, pos.y - hHalf, 1f);
+        Vector3 topLeftCorner = new Vector3(pos.x - wHalf, pos.y + hHalf, z);
+        Vector3 topRightCorner = new Vector3(pos.x + wHalf, pos.y + hHalf, z);
+        Vector3 bottomLeftCorner = new Vector3(pos.x - wHalf, pos.y - hHalf, z);
+        Vector3 bottomRightCorner = new Vector3(pos.x + wHalf, pos.y - hHalf, z);
         Gizmos.DrawLine(topLeftCorner, topRightCorner);
         Gizmos.DrawLine(topRightCorner, bottomRightCorner);
         Gizmos.DrawLine(bottomRightCorner, bottomLeftCorner);

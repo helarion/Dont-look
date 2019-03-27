@@ -7,13 +7,22 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public PlayerController player;
 
-    public static GameManager instance = null;
+    [HideInInspector]public static GameManager instance = null;
+    List<Enemy> enemyList;
+
+    [SerializeField] float cameraSpeed=3;
+
+    [Header("Debug")]
     [SerializeField] Checkpoint lastCheckpoint = null;
     [SerializeField] public bool isTesting = false;
 
-    List<Enemy> enemyList;
+    [Header("ScreenShake")]
+    [SerializeField] float shakeDuration = 0f;
+    [SerializeField] float shakeAmount = 0.7f;
+    [SerializeField] float decreaseFactor = 1.0f;
+    [SerializeField] float maxValue = 0.1f;
 
-    CameraShake shake;
+    Vector3 originalPos;
 
     void Awake()
     {
@@ -30,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        shake = mainCamera.GetComponent<CameraShake>();
+        originalPos = mainCamera.transform.localPosition;
 
         Cursor.visible = false;
         enemyList = new List<Enemy>();
@@ -38,6 +47,21 @@ public class GameManager : MonoBehaviour
         foreach(Enemy e in temp)
         {
             enemyList.Add(e);
+        }
+    }
+
+    private void Update()
+    {
+        if (shakeDuration > 0)
+        {
+            mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
+
+            shakeDuration -= Time.deltaTime * decreaseFactor;
+        }
+        else
+        {
+            shakeDuration = 0f;
+            mainCamera.transform.localPosition = originalPos;
         }
     }
 
@@ -74,13 +98,39 @@ public class GameManager : MonoBehaviour
 
     public void SetNewCheckpoint(Checkpoint c)
     {
-        if (c == lastCheckpoint) return; // pas sur que ça marche ?
+        if (c == lastCheckpoint) return;
         lastCheckpoint = c;
         print("New Checkpoint activated");
     }
 
     public void ShakeScreen(float duration)
     {
-        shake.shakeDuration = duration;
+        shakeDuration = duration;
+    }
+
+    public void ProgressiveShake(float duration)
+    {
+        float savedAmount = shakeAmount;
+        shakeAmount = 0;
+        ShakeScreen(duration);
+        StartCoroutine("ShakeCoroutine", duration);
+        shakeAmount = savedAmount;
+    }
+
+    IEnumerator ShakeCoroutine(float maxTime)
+    {
+        float time = 0;
+        float update = maxValue *(0.01f*maxTime);
+        while (time<maxTime)
+        {
+            if (shakeAmount < maxValue) shakeAmount += update;
+            yield return new WaitForSeconds(0.01f);
+        }
+        yield return null;
+    }
+    
+    public void MoveCamera(Vector3 newPos)
+    {
+        originalPos = Vector3.Lerp(originalPos, newPos, cameraSpeed);
     }
 }
