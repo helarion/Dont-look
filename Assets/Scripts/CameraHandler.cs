@@ -13,14 +13,16 @@ public class CameraHandler : MonoBehaviour
 
     Vector3 targetPosition;
     float zStartPosition;
+    CameraShake shakeController;
 
     void Start()
     {
+        shakeController = GetComponent<CameraShake>();
         Vector3 StartPosition = target.position;
         zStartPosition = transform.position.z;
         StartPosition.z = target.position.z+zOffSet;
         StartPosition.y += yOffset;
-        transform.position = StartPosition;
+        shakeController.originalPos = StartPosition;
     }
 
     void Update()
@@ -38,7 +40,7 @@ public class CameraHandler : MonoBehaviour
         Vector3 newPosition = target.position + diffCameraPlayer.normalized * offset + diffCameraCursor;
         newPosition.z = zStartPosition;
 
-        transform.position = Vector3.Lerp(transform.position, newPosition, cameraSpeed);
+        shakeController.originalPos = Vector3.Lerp(shakeController.originalPos, newPosition, cameraSpeed);
     }
 }
  

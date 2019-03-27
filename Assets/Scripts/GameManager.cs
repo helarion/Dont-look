@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
 
     List<Enemy> enemyList;
 
+    CameraShake shake;
+
     void Awake()
     {
         if (instance == null)
@@ -28,6 +30,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        shake = mainCamera.GetComponent<CameraShake>();
+
         Cursor.visible = false;
         enemyList = new List<Enemy>();
         Enemy[] temp = FindObjectsOfType<Enemy>();
@@ -73,5 +77,10 @@ public class GameManager : MonoBehaviour
         if (c == lastCheckpoint) return; // pas sur que ça marche ?
         lastCheckpoint = c;
         print("New Checkpoint activated");
+    }
+
+    public void ShakeScreen(float duration)
+    {
+        shake.shakeDuration = duration;
     }
 }

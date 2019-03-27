@@ -36,6 +36,10 @@ public class SpiderBehavior : Enemy
                 chaseCoroutine = true;
             }
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            agent.SetDestination(GameManager.instance.player.GetLookAt());
+        }
     }
 
     public void Looked()

@@ -11,18 +11,22 @@ public class PlayerController : MonoBehaviour
     Vector3 cursorPos;
     Transform lightTransform;
 
+    [Header("Movement")]
     [SerializeField] float runSpeed = 3;
     [SerializeField] float walkSpeed = 1;
     [SerializeField] float jumpSpeed = 1.5f;
+    [SerializeField] float rayCastLength = 0.1f;
+
+    [Header("Light")]
     [SerializeField] float sizeSpeed = 5;
     [SerializeField] float stickSpeed = 3;
     [SerializeField] float lightSpeed = 1;
-    [SerializeField] float zOffset = 3;
-    [SerializeField] float div = 5;
-    [SerializeField] bool disableTracker = false;
     [SerializeField] private LayerMask walls;
 
+    [Header("Debug")]
+    [SerializeField] bool disableTracker = false;
     [SerializeField] Transform raycastPosition;
+    [SerializeField] bool isGrounded = false;
 
     float moveSpeed;
 
@@ -33,7 +37,6 @@ public class PlayerController : MonoBehaviour
     private Player controls; // The Rewired Player
 
     bool isTrackerOn = false;
-    bool isGrounded = false;
 
     Vector3 lookAt;
 
@@ -49,9 +52,6 @@ public class PlayerController : MonoBehaviour
         moveSpeed = walkSpeed;
 
         cursorPos = Input.mousePosition;
-        cursorPos.z = 7;
-        cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
-        cursorPos.z = 7;
     }
 
     void Update()
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         {
             lt.spotAngle += range;
         }
-        isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, 0.02f);
+        isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, rayCastLength);
     }
 
     void LightAim()
