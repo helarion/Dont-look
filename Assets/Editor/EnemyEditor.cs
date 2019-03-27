@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(Enemy),true)]
-public class EnemyEditior : Editor
+public class EnemyEditor : Editor
 {
     public override void OnInspectorGUI()
     {

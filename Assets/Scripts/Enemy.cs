@@ -31,7 +31,6 @@ public class Enemy : MonoBehaviour
             if(a!=0) listSpawnZones.Add(t);
             a++;
         }
-        print(listSpawnZones.Count);
 
         Respawn();
     }

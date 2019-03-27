@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = false;
         enemyList = new List<Enemy>();
         Enemy[] temp = FindObjectsOfType<Enemy>();
         foreach(Enemy e in temp)

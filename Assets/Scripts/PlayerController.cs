@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float sizeSpeed = 5;
     [SerializeField] float stickSpeed = 3;
     [SerializeField] float lightSpeed = 1;
+    [SerializeField] float zOffset = 3;
+    [SerializeField] float div = 5;
+    [SerializeField] bool disableTracker = false;
+    [SerializeField] private LayerMask walls;
 
     [SerializeField] Transform raycastPosition;
 
@@ -30,6 +34,8 @@ public class PlayerController : MonoBehaviour
 
     bool isTrackerOn = false;
     bool isGrounded = false;
+
+    Vector3 lookAt;
 
     void Start()
     {
@@ -66,7 +72,7 @@ public class PlayerController : MonoBehaviour
     void LightAim()
     {
         // LIGHT AIM CONTROL
-        if (TobiiAPI.IsConnected) // EYE TRACKER OPTION
+        if (TobiiAPI.IsConnected && !disableTracker) // EYE TRACKER OPTION
         {
             isTrackerOn = true;
             if (!TobiiAPI.GetGazePoint().IsRecent())
@@ -80,13 +86,16 @@ public class PlayerController : MonoBehaviour
 
             Vector2 gazePoint = TobiiAPI.GetGazePoint().Screen;
             cursorPos = gazePoint;
-            cursorPos.z = 7;
-            cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
-            cursorPos.z = transform.position.z+3;
 
-            Vector3 direction = cursorPos - lightTransform.position;
+            RaycastHit hit;
+            Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
 
-            lightTransform.rotation = Quaternion.RotateTowards(lightTransform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * lightSpeed * 100);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, walls))
+            {
+                lookAt = hit.point;
+            }
+            lightTransform.LookAt(lookAt);
+            //lightTransform.rotation = Quaternion.RotateTowards(lightTransform.rotation, Quaternion.LookRotation(lookAt), Time.deltaTime * lightSpeed * 100);
         }
         else
         {
@@ -100,23 +109,25 @@ public class PlayerController : MonoBehaviour
                 ClosedEyes(false);
             }
 
-
             float xLight = controls.GetAxis("Light Horizontal");
             float yLight = controls.GetAxis("Light Vertical");
 
             if(Input.GetAxis("Mouse X")!=0 || Input.GetAxis("Mouse Y")!=0)
             {
                 cursorPos = Input.mousePosition;
-                cursorPos.z = 7;
-                cursorPos = GameManager.instance.mainCamera.ScreenToWorldPoint(cursorPos);
-                cursorPos.z = 7;
             }
 
-            cursorPos.z = 7;
             cursorPos.x += xLight * stickSpeed * 100 * Time.deltaTime;
             cursorPos.y += yLight * stickSpeed * 100 * Time.deltaTime;
-            lightTransform.LookAt(cursorPos);
 
+            RaycastHit hit;
+            Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, walls))
+            {
+                lookAt = hit.point;
+            }
+            lightTransform.LookAt(lookAt);
         }
     }
 
@@ -155,9 +166,9 @@ public class PlayerController : MonoBehaviour
         lightOn = isEnabled;
     }
 
-    public Vector3 GetCursorPos()
+    public Vector3 GetLookAt()
     {
-        return cursorPos;
+        return lookAt;
     }
 
     public float GetLightSpeed()

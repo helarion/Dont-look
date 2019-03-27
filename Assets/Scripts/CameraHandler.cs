@@ -9,26 +9,25 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] float offset=1;
     [SerializeField] float minYCamera = 1;
     [SerializeField] float yOffset = 1;
+    [SerializeField] float zOffSet = 3;
 
     Vector3 targetPosition;
     float zStartPosition;
 
     void Start()
     {
-        zStartPosition = transform.position.z;
         Vector3 StartPosition = target.position;
-        StartPosition.z = zStartPosition;
+        zStartPosition = transform.position.z;
+        StartPosition.z = target.position.z+zOffSet;
         StartPosition.y += yOffset;
         transform.position = StartPosition;
-
-        //cameraSpeed = GameManager.instance.player.getLightSpeed();
     }
 
     void Update()
     {
         if (!target) return;
-        Vector3 cursorPos = target.GetComponent<PlayerController>().GetCursorPos();
-        Vector3 diffCameraCursor = cursorPos - transform.position;
+        Vector3 cursorPos = target.GetComponent<PlayerController>().GetLookAt();
+        Vector3 diffCameraCursor = (cursorPos - transform.position);
         diffCameraCursor.z = zStartPosition;
         diffCameraCursor.y += yOffset;
 
