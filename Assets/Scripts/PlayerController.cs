@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     Light lt;
     Rigidbody rb;
     Vector3 cursorPos;
-    Transform lightTransform;
 
     [Header("Movement")]
     [SerializeField] float runSpeed = 3;
@@ -22,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float stickSpeed = 3;
     [SerializeField] float lightSpeed = 1;
     [SerializeField] private LayerMask walls;
+    [SerializeField] Transform lightTransform;
 
     [Header("Debug")]
     [SerializeField] bool disableTracker = false;
@@ -44,8 +44,7 @@ public class PlayerController : MonoBehaviour
     {
         controls = ReInput.players.GetPlayer(0);
         rb = GetComponent<Rigidbody>();
-        lt = GetComponentInChildren<Light>();
-        lightTransform = lt.transform;
+        lt = lightTransform.GetComponentInChildren<Light>();
         lt.type = LightType.Spot;
         LightEnabled(true);
         Cursor.visible = false;
@@ -94,8 +93,6 @@ public class PlayerController : MonoBehaviour
             {
                 lookAt = hit.point;
             }
-            lightTransform.LookAt(lookAt);
-            //lightTransform.rotation = Quaternion.RotateTowards(lightTransform.rotation, Quaternion.LookRotation(lookAt), Time.deltaTime * lightSpeed * 100);
         }
         else
         {
@@ -127,8 +124,8 @@ public class PlayerController : MonoBehaviour
             {
                 lookAt = hit.point;
             }
-            lightTransform.LookAt(lookAt);
         }
+        lightTransform.rotation = Quaternion.Slerp(lightTransform.rotation, Quaternion.LookRotation(lookAt - lightTransform.position), Time.deltaTime * lightSpeed * 100);
     }
 
     void Movement()
