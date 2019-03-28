@@ -7,8 +7,10 @@ public class SpiderBehavior : Enemy
 {
     [SerializeField] float bonusSpeed = 1;
 
-    [SerializeField] float delaySpot=1;
+    [SerializeField] float delaySpot = 1;
     [SerializeField] float delayChase = 3;
+
+    [SerializeField] bool clickToSetDestination = false;
 
     float countLook = 0;
     float countChase = 0;
@@ -38,13 +40,12 @@ public class SpiderBehavior : Enemy
                 chaseCoroutine = true;
             }
         }
-        /*if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && clickToSetDestination)
         {
-            //agent.SetDestination(GameManager.instance.player.GetLookAt());
             agent.destination = GameManager.instance.player.GetLookAt();
             agent.isStopped = false;
             print("Agent sent to " + GameManager.instance.player.GetLookAt());
-        }*/
+        }
     }
 
     public void Looked()

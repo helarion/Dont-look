@@ -36,9 +36,9 @@ public class PlayerController : MonoBehaviour
 
     private Player controls; // The Rewired Player
 
-    bool isTrackerOn = false;
+    bool isTrackerOn = false; // Is the eye tracker activated ?
 
-    Vector3 lookAt;
+    Vector3 lookAt; // Point exact où le joueur
 
     void Start()
     {
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         lt = lightTransform.GetComponentInChildren<Light>();
         lt.type = LightType.Spot;
-        LightEnabled(true);
+        ClosedEyes(false);
         Cursor.visible = false;
         moveSpeed = walkSpeed;
 
@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
         }
         isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, rayCastLength);
     }
+
 
     void LightAim()
     {
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
         lightTransform.rotation = Quaternion.Slerp(lightTransform.rotation, Quaternion.LookRotation(lookAt - lightTransform.position), Time.deltaTime * lightSpeed * 100);
     }
 
+    // CHECK LES INPUTS DE MOVEMENT
     void Movement()
     {
         float hMove = controls.GetAxis("Move Horizontal");
@@ -152,37 +154,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
-        LightEnabled(!isClosed);
+        lt.enabled = !isClosed;
+        lightOn = !isClosed;
     }
 
-    public void LightEnabled(bool isEnabled)
-    {
-        lt.enabled = isEnabled;
-        lightOn = isEnabled;
-    }
-
+    // RENVOIE LE POINT DANS LE MONDE QUE LE JOUEUR VISE
     public Vector3 GetLookAt()
     {
         return lookAt;
     }
 
-    public float GetLightSpeed()
-    {
-        return lightSpeed;
-    }
-
+    // RENVOIE LA POSITION ACTUELLE DU JOUER
     public Vector3 GetPlayerPos()
     {
         return transform.position;
     }
 
+    // ACTIVE OU DESACTIVE LES CONTROLES DU JOUEUR LORSQU IL EST VIVANT OU MORT
     public void SetIsAlive(bool b)
     {
         isAlive = b;
     }
 
+    // RENVOIE LA VALEUR VRAI OU FAUX DE SI LE JOUEUR EST VIVANT OU NON
     public bool getIsAlive()
     {
         return isAlive;

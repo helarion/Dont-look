@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // RESPAWN CHAQUE ENNEMI
     void RespawnEnemies()
     {
         foreach(Enemy e in enemyList)
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // TUE LE JOUEUR
     public void Death()
     {
         if (!player.getIsAlive()) return;
@@ -83,12 +85,14 @@ public class GameManager : MonoBehaviour
         StartCoroutine("DeathCoroutine");
     }
 
+    // RESPAWN LE JOUEUR
     private void RespawnPlayer()
     {
         player.transform.position = lastCheckpoint.transform.position;
         player.SetIsAlive(true);
     }
 
+    // COROUTINE DE FADE OUT / IN DE LA MORT
     IEnumerator DeathCoroutine()
     {
         while (UIManager.instance.isFading)
@@ -98,6 +102,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.FadeIn(false);
     }
 
+    // SAUVEGARDE LE NOUVEAU CHECKPOINT : POINT DE RESPAWN POUR LE JOUEUR 
     public void SetNewCheckpoint(Checkpoint c)
     {
         if (c == lastCheckpoint) return;
@@ -105,11 +110,13 @@ public class GameManager : MonoBehaviour
         print("New Checkpoint activated");
     }
 
+    // SHAKESCREEN POUR LA DUREE ENTREE
     public void ShakeScreen(float duration)
     {
         shakeDuration = duration;
     }
 
+    // SHAKESCREEN A VALEUR PROGRESSIVE /// PAS ENCORE FONCTIONNEL
     public void ProgressiveShake(float duration)
     {
         float savedAmount = shakeAmount;
@@ -119,6 +126,7 @@ public class GameManager : MonoBehaviour
         shakeAmount = savedAmount;
     }
 
+    // SHAKESCREEN PROGRESSIF COROUTINE /// PAS ENCORE FONCTIONNEL
     IEnumerator ShakeCoroutine(float maxTime)
     {
         float time = 0;
@@ -131,6 +139,7 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
     
+    // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
         originalPos = Vector3.Lerp(originalPos, newPos, cameraSpeed);

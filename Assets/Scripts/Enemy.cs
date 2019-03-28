@@ -5,12 +5,17 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Movement Variables")]
     [SerializeField] public float moveSpeed = 1;
-    [HideInInspector] public NavMeshAgent agent;
+
+    [Header("Chase Variables")]
+    [SerializeField] public bool isChasing = false;
+
+    [Header("Debug")]
     [SerializeField] GameObject spawnZones;
 
-    public bool isChasing = false;
 
+    [HideInInspector] public NavMeshAgent agent;
     List<Transform> listSpawnZones;
 
     private void Start()
@@ -49,7 +54,8 @@ public class Enemy : MonoBehaviour
     {
         Vector3 pos = RandomSpawn();
         transform.position = pos;
-        //agent.SetDestination(pos);
+        agent.destination=pos;
+        agent.isStopped = false;
     }
 
     public Vector3 RandomSpawn()
