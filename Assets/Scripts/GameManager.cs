@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] float decreaseFactor = 1.0f;
     [SerializeField] float maxValue = 0.1f;
 
+    [Header("Layers")]
+    [SerializeField] LayerMask wallsAndMobsLayer;
+
     Vector3 originalPos;
 
     void Awake()
@@ -143,5 +146,10 @@ public class GameManager : MonoBehaviour
     public void MoveCamera(Vector3 newPos)
     {
         originalPos = Vector3.Lerp(originalPos, newPos, cameraSpeed);
+    }
+
+    public LayerMask getWallsAndMobsLayer()
+    {
+        return wallsAndMobsLayer;
     }
 }

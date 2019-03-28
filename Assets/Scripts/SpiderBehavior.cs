@@ -40,6 +40,46 @@ public class SpiderBehavior : Enemy
                 chaseCoroutine = true;
             }
         }
+        else
+        {
+            Vector3 playerPosition = GameManager.instance.player.transform.position;
+            Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
+            Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
+
+            float playerToSpiderLength = playerToSpiderVec.magnitude - 2;
+            Light playerLight = GameManager.instance.player.getLight();
+            float lightRange = playerLight.range;
+            float lightAngle = playerLight.spotAngle / 2.0f;// - 5;
+            if (playerToSpiderLength > lightRange)
+            {
+                //print(gameObject.name + " is too far from player : " + playerToSpiderLength + " > " + lightRange + ".");
+            }
+            else
+            {
+                //print(gameObject.name + " is in player light range : " + playerToSpiderLength + ".");
+                float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToSpiderVec) / (lightVec.magnitude * playerToSpiderVec.magnitude)) * Mathf.Rad2Deg;
+                if (angleFromLight > lightAngle)
+                {
+                    //print(gameObject.name + " is not in light : " + angleFromLight + " > " + lightAngle + ".");
+                }
+                else
+                {
+                    //print(gameObject.name + " is in player light : " + angleFromLight + ".");
+                    lightVec = Vector3.RotateTowards(lightVec, playerToSpiderVec, angleFromLight, Mathf.Infinity);
+
+                    RaycastHit hit;
+                    Ray ray = new Ray(playerPosition, lightVec);
+                    Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.getWallsAndMobsLayer());
+
+                    if (hit.transform.gameObject.tag == "Spider")
+                    {
+                        GameManager.instance.ShakeScreen(0.1f);
+                    }
+
+                    //print("Touched " + hit.transform.gameObject.name);
+                }
+            }
+        }
         if (Input.GetMouseButtonDown(0) && clickToSetDestination)
         {
             agent.destination = GameManager.instance.player.GetLookAt();
