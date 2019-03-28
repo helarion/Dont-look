@@ -29,18 +29,21 @@ public class SpiderBehavior : Enemy
     {
         if(isChasing)
         {
-            agent.SetDestination(GameManager.instance.player.transform.position);
+            agent.destination=GameManager.instance.player.transform.position;
+            agent.isStopped = false;
             if (!canSeePlayer && !GameManager.instance.player.lightOn)
             {
                 if(!chaseCoroutine) StartCoroutine("CountChase");
                 chaseCoroutine = true;
             }
         }
-        if (Input.GetMouseButtonDown(0))
+        /*if (Input.GetMouseButtonDown(0))
         {
-            agent.SetDestination(GameManager.instance.player.GetLookAt());
+            //agent.SetDestination(GameManager.instance.player.GetLookAt());
+            agent.destination = GameManager.instance.player.GetLookAt();
+            agent.isStopped = false;
             print("Agent sent to " + GameManager.instance.player.GetLookAt());
-        }
+        }*/
     }
 
     public void Looked()
