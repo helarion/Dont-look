@@ -27,6 +27,7 @@ public class SpiderBehavior : Enemy
 
     void Update()
     {
+        // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)
         {
             agent.destination=GameManager.instance.player.transform.position;
@@ -59,6 +60,7 @@ public class SpiderBehavior : Enemy
 
     }
 
+    // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
     IEnumerator CountLook()
     {
         while (countLook<delaySpot)
@@ -71,6 +73,7 @@ public class SpiderBehavior : Enemy
         yield return null;
     }
 
+    // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE PASSE A CHASSER LE JOUEUR. POTENTIELLEMENT INUTILE ?
     IEnumerator CountChase()
     {
         while(countChase<delayChase)
@@ -84,6 +87,7 @@ public class SpiderBehavior : Enemy
         yield return null;
     }
 
+    // FAIT REAPARAITRE L'ARAIGNEE ALEATOIREMENT DANS UNE DE SES ZONES DE SPAWN
     public override void Respawn()
     {
         base.Respawn();
@@ -93,11 +97,13 @@ public class SpiderBehavior : Enemy
         countLook = 0;
     }
 
+    // ARRETER LA CHASSE DU JOUEUR
     void StopChase()
     {
         Respawn();
     }
 
+    // COMMENCER LA CHASSE DU JOUEUR
     void Chase()
     {
         agent.isStopped = false;
@@ -105,6 +111,7 @@ public class SpiderBehavior : Enemy
         countLook = 0;
     }
 
+    // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON
     public override void DetectPlayer(bool b)
     {
         canSeePlayer = b;
@@ -115,6 +122,7 @@ public class SpiderBehavior : Enemy
         }
     }
 
+    // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void isLit(bool b)
     {
         agent.speed = moveSpeed;
