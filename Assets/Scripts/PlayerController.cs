@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float sizeSpeed = 5;
     [SerializeField] float stickSpeed = 3;
     [SerializeField] float lightSpeed = 1;
-    [SerializeField] private LayerMask walls;
     [SerializeField] Transform lightTransform;
 
     [Header("Debug")]
@@ -89,7 +88,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, walls))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.getWallsAndMobsLayer()))
             {
                 lookAt = hit.point;
             }
@@ -120,7 +119,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, walls))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.getWallsAndMobsLayer()))
             {
                 lookAt = hit.point;
             }
@@ -186,5 +185,10 @@ public class PlayerController : MonoBehaviour
     public bool getIsAlive()
     {
         return isAlive;
+    }
+
+    public Light getLight()
+    {
+        return lt;
     }
 }
