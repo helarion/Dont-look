@@ -21,7 +21,7 @@ public class CameraHandler : MonoBehaviour
 
     void Update()
     {
-        if (!target) return;
+        if (!target || GameManager.instance.GetIsPaused()) return;
         Vector3 cursorPos = target.GetComponent<PlayerController>().GetLookAt();
         Vector3 diffCameraCursor = (cursorPos - transform.position);
         diffCameraCursor.z = zStartPosition;

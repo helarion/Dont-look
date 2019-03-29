@@ -18,5 +18,9 @@ public class GameManagerEditor : Editor
         {
             (target as GameManager).ProgressiveShake(1);
         }
+        if (GUILayout.Button("Death"))
+        {
+            (target as GameManager).Death();
+        }
     }
 }

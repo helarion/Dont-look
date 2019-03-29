@@ -32,8 +32,7 @@ public class SpiderBehavior : Enemy
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)
         {
-            agent.destination=GameManager.instance.player.transform.position;
-            agent.isStopped = false;
+            MoveTo(GameManager.instance.player.transform.position);
             if (!canSeePlayer && !GameManager.instance.player.lightOn)
             {
                 if(!chaseCoroutine) StartCoroutine("CountChase");
@@ -73,7 +72,7 @@ public class SpiderBehavior : Enemy
 
                     if (hit.transform.gameObject.tag == "Spider")
                     {
-                        GameManager.instance.ShakeScreen(0.1f);
+                        IsLit(true);
                     }
 
                     //print("Touched " + hit.transform.gameObject.name);
@@ -82,23 +81,10 @@ public class SpiderBehavior : Enemy
         }
         if (Input.GetMouseButtonDown(0) && clickToSetDestination)
         {
-            agent.destination = GameManager.instance.player.GetLookAt();
-            agent.isStopped = false;
-            print("Agent sent to " + GameManager.instance.player.GetLookAt());
+            Vector3 pos = GameManager.instance.player.GetLookAt();
+            MoveTo(pos);
+            print(pos);
         }
-    }
-
-    public void Looked()
-    {
-        if (isLooked) return;
-        isLooked = true;
-    }
-
-    public void StopLook()
-    {
-        if (!isLooked) return;
-        isLooked = false;
-
     }
 
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
@@ -132,7 +118,7 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
-        agent.isStopped = true;
+        //agent.isStopped = true;
         isChasing = false;
         countChase = 0;
         countLook = 0;
@@ -164,14 +150,14 @@ public class SpiderBehavior : Enemy
     }
 
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
-    public override void isLit(bool b)
+    public override void IsLit(bool b)
     {
         agent.speed = moveSpeed;
         if (b)
         {
+            GameManager.instance.ShakeScreen(0.1f);
             StartCoroutine("CountLook");
             agent.speed += bonusSpeed;
-            Looked();
         }
         else
         {

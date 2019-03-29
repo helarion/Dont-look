@@ -70,8 +70,16 @@ public class PlayerController : MonoBehaviour
 
     void LightAim()
     {
+        if(!TobiiAPI.IsConnected)
+        {
+            UIManager.instance.DisableControlPanel(true);
+        }
+        else
+        {
+            UIManager.instance.DisableControlPanel(false);
+        }
         // LIGHT AIM CONTROL
-        if (TobiiAPI.IsConnected && !disableTracker) // EYE TRACKER OPTION
+        if (!disableTracker && TobiiAPI.IsConnected) // EYE TRACKER OPTION
         {
             isTrackerOn = true;
             if (!TobiiAPI.GetGazePoint().IsRecent())
@@ -187,5 +195,10 @@ public class PlayerController : MonoBehaviour
     public Light getLight()
     {
         return lt;
+    }
+
+    public void DisableTracker(bool b)
+    {
+        disableTracker = b;
     }
 }

@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public virtual void isLit(bool b)
+    public virtual void IsLit(bool b)
     {
 
     }
@@ -54,7 +54,13 @@ public class Enemy : MonoBehaviour
     {
         Vector3 pos = RandomSpawn();
         transform.position = pos;
-        agent.destination=pos;
+        MoveTo(pos);
+    }
+
+    public void MoveTo(Vector3 newPos)
+    {
+        agent.ResetPath();
+        agent.SetDestination(newPos);
         agent.isStopped = false;
     }
 

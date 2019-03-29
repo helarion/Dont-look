@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] LayerMask wallsAndMobsLayer;
 
     Vector3 originalPos;
+    bool isPaused = false;
 
     void Awake()
     {
@@ -42,8 +43,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        ResumeGame();
         originalPos = mainCamera.transform.localPosition;
-
         Cursor.visible = false;
         enemyList = new List<Enemy>();
         Enemy[] temp = FindObjectsOfType<Enemy>();
@@ -51,11 +52,23 @@ public class GameManager : MonoBehaviour
         {
             enemyList.Add(e);
         }
-
         AkSoundEngine.PostEvent("Play_Blend_Amb_Bunker1", instance.gameObject);
     }
 
     private void Update()
+    {
+        // PAUSE HANDLER
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPaused) ResumeGame();
+            else PauseGame();
+        }
+        if (isPaused) return;
+        CheckShake();
+    }
+
+    // Shaking screen for duration set previously
+    void CheckShake()
     {
         if (shakeDuration > 0)
         {
@@ -84,7 +97,7 @@ public class GameManager : MonoBehaviour
     {
         if (!player.getIsAlive()) return;
         player.SetIsAlive(false);
-        UIManager.instance.FadeIn(true);
+        UIManager.instance.FadeDeath(true);
         StartCoroutine("DeathCoroutine");
     }
 
@@ -102,7 +115,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         RespawnEnemies();
         RespawnPlayer();
-        UIManager.instance.FadeIn(false);
+        UIManager.instance.FadeDeath(false);
     }
 
     // SAUVEGARDE LE NOUVEAU CHECKPOINT : POINT DE RESPAWN POUR LE JOUEUR 
@@ -151,5 +164,26 @@ public class GameManager : MonoBehaviour
     public LayerMask getWallsAndMobsLayer()
     {
         return wallsAndMobsLayer;
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+        isPaused = true;
+        UIManager.instance.pausePanel.SetActive(true);
+        //UIManager.instance.FadePause(true);
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        isPaused = false;
+        UIManager.instance.pausePanel.SetActive(false);
+        //UIManager.instance.FadePause(false);
+    }
+
+    public bool GetIsPaused()
+    {
+        return isPaused;
     }
 }
