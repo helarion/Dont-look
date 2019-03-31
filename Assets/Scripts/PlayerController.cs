@@ -32,16 +32,15 @@ public class PlayerController : MonoBehaviour
     public bool lightOn = true;
     bool isAlive = true;
     bool isRunning = false;
-
-    private Player controls; // The Rewired Player
-
+    bool isClimbing = false;
+    bool hasReachedTop = false;
     bool isTrackerOn = false; // Is the eye tracker activated ?
 
     Vector3 lookAt; // Point exact où le joueur
 
     void Start()
     {
-        controls = ReInput.players.GetPlayer(0);
+        
         rb = GetComponent<Rigidbody>();
         lt = lightTransform.GetComponentInChildren<Light>();
         lt.type = LightType.Spot;
@@ -105,7 +104,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             // CHECK DU BOUTON POUR FERMER LES YEUX SI L'EYE TRACKER N'EST PAS ACTIVÉ
-            if (controls.GetAxis("Light")!=0)
+            if (GameManager.instance.controls.GetAxis("Light")!=0)
             {
                 ClosedEyes(true);
             }
@@ -114,8 +113,8 @@ public class PlayerController : MonoBehaviour
                 ClosedEyes(false);
             }
 
-            float xLight = controls.GetAxis("Light Horizontal");
-            float yLight = controls.GetAxis("Light Vertical");
+            float xLight = GameManager.instance.controls.GetAxis("Light Horizontal");
+            float yLight = GameManager.instance.controls.GetAxis("Light Vertical");
 
             if(Input.GetAxis("Mouse X")!=0 || Input.GetAxis("Mouse Y")!=0)
             {
@@ -139,26 +138,42 @@ public class PlayerController : MonoBehaviour
     // CHECK LES INPUTS DE MOVEMENT
     void Movement()
     {
-        float hMove = controls.GetAxis("Move Horizontal");
-        float vMove = controls.GetAxis("Move Vertical");
+        float hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
+        float vMove = GameManager.instance.controls.GetAxis("Move Vertical");
 
-        if (controls.GetAxisRaw("Sprint") != 0) moveSpeed = runSpeed;
+        if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0) moveSpeed = runSpeed;
         else moveSpeed = walkSpeed;
 
         // MOVEMENT
-        if (hMove != 0)
+        if(!isClimbing)
         {
-            transform.Translate(Vector3.right * hMove * moveSpeed * Time.deltaTime);
+            if (hMove != 0)
+            {
+                transform.Translate(Vector3.right * hMove * moveSpeed * Time.deltaTime);
+            }
+            if (vMove != 0)
+            {
+                transform.Translate(Vector3.back * -1 * vMove * moveSpeed * Time.deltaTime);
+            }
+            // JUMP
+            if (GameManager.instance.controls.GetButtonDown("Jump") && isGrounded)
+            {
+                Jump();
+            }
         }
-        if (vMove != 0)
+        else
         {
-            transform.Translate(Vector3.back* -1 * vMove * moveSpeed * Time.deltaTime);
+            if (vMove < 0 || (vMove>0 && !hasReachedTop))
+            {
+                transform.Translate(Vector3.up * vMove * moveSpeed * Time.deltaTime);
+            }
         }
-        // JUMP
-        if (controls.GetButtonDown("Jump") && isGrounded)
-        {
-            rb.AddForce(Vector3.up * jumpSpeed * 10000 * Time.deltaTime);
-        }
+        
+    }
+
+    public void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpSpeed * 10000 * Time.deltaTime);
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
@@ -195,6 +210,23 @@ public class PlayerController : MonoBehaviour
     public Light getLight()
     {
         return lt;
+    }
+
+    public void SetIsClimbing(bool b)
+    {
+        isClimbing = b;
+        if (b) rb.useGravity = false;
+        else rb.useGravity = true;
+    }
+
+    public bool GetIsClimbing()
+    {
+        return isClimbing;
+    }
+
+    public void SetHasReachedTop(bool b)
+    {
+        hasReachedTop = b;
     }
 
     public void DisableTracker(bool b)

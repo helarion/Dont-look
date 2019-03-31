@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Rewired;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ public class GameManager : MonoBehaviour
     [Header("Layers")]
     [SerializeField] LayerMask wallsAndMobsLayer;
 
+    [HideInInspector] public Player controls; // The Rewired Player
+
     Vector3 originalPos;
     bool isPaused = false;
 
@@ -43,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        controls = ReInput.players.GetPlayer(0);
         ResumeGame();
         originalPos = mainCamera.transform.localPosition;
         Cursor.visible = false;
