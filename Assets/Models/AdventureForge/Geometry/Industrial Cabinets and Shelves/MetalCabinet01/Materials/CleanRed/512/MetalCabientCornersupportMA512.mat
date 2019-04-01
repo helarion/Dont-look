@@ -7,11 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Pipe
+  m_Name: MetalCabientCornersupportMA512
   m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
-  m_ShaderKeywords: _EMISSIVE_COLOR_MAP _MASKMAP _MATERIAL_FEATURE_SPECULAR_COLOR
-    _NORMALMAP _NORMALMAP_TANGENT_SPACE _SPECULARCOLORMAP
-  m_LightmapFlags: 4
+  m_ShaderKeywords: _MASKMAP _NORMALMAP _NORMALMAP_TANGENT_SPACE
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
@@ -30,7 +29,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: d358d9a67ec02af49bc0d6ae65c81efb, type: 3}
+        m_Texture: {fileID: 2800000, guid: aaa518bedea9184428262a87981206b2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -42,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 91fa8db1f1610424980fda201f5c2ec8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _CoatMaskMap:
@@ -74,7 +73,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissiveColorMap:
-        m_Texture: {fileID: 2800000, guid: 2a9eb20f0da240c4684f0c1bb5f74029, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
@@ -90,19 +89,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: d358d9a67ec02af49bc0d6ae65c81efb, type: 3}
+        m_Texture: {fileID: 2800000, guid: aaa518bedea9184428262a87981206b2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
-        m_Texture: {fileID: 2800000, guid: 68e85cd1692e01c4698af1588731d516, type: 3}
+        m_Texture: {fileID: 2800000, guid: 95a456e8bea76a54db975f98040dd316, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 5da79ca230433c94c919aee65593a98b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 2ce484218e680ac43bd3d00a6ed79268, type: 3}
+        m_Texture: {fileID: 2800000, guid: 91fa8db1f1610424980fda201f5c2ec8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
@@ -118,7 +117,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecularColorMap:
-        m_Texture: {fileID: 2800000, guid: 8941dcc244707ea4f9da26b0ddba24bb, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SubsurfaceMaskMap:
@@ -185,6 +184,7 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _Drag: 1
     - _DstBlend: 0
+    - _EmissionScaleUI: 0
     - _EmissiveColorMode: 1
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
@@ -193,9 +193,7 @@ Material:
     - _EnableSpecularOcclusion: 0
     - _EnableWind: 0
     - _EnergyConservingSpecularColor: 1
-    - _GlossMapScale: 1
     - _Glossiness: 0.5
-    - _GlossyReflections: 1
     - _HdrpVersion: 2
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
@@ -212,8 +210,8 @@ Material:
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 0
-    - _MaterialID: 4
-    - _Metallic: 0
+    - _MaterialID: 1
+    - _Metallic: 1
     - _Mode: 0
     - _NormalMapSpace: 0
     - _NormalScale: 1
@@ -231,12 +229,10 @@ Material:
     - _ShiverDirectionality: 0.5
     - _ShiverDrag: 0.2
     - _Smoothness: 0.5
-    - _SmoothnessRemapMax: 0.6
+    - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
-    - _SmoothnessTextureChannel: 0
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
-    - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _StencilRef: 2
     - _StencilRefMV: 128
@@ -265,15 +261,16 @@ Material:
     - _ZTestModeDistortion: 4
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.2641509, g: 0.2606621, b: 0.2604129, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.26415086, g: 0.26066208, b: 0.26041287, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissiveColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColorUI: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _SpecularColor: {r: 0.6603774, g: 0.64480245, b: 0.64480245, a: 1}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
