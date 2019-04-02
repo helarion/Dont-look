@@ -16,6 +16,7 @@ public class FallingZone : MonoBehaviour
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
+        rb.isKinematic = false;
         rb.useGravity = true;
         grabZone.SetActive(true);
         GameObject.Destroy(this);
