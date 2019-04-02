@@ -164,6 +164,11 @@ public class GameManager : MonoBehaviour
         originalPos = Vector3.Lerp(originalPos, newPos, cameraSpeed);
     }
 
+    public void RotateCamera(Quaternion newRotate)
+    {
+        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, cameraSpeed);
+    }
+
     public LayerMask getWallsAndMobsLayer()
     {
         return wallsAndMobsLayer;

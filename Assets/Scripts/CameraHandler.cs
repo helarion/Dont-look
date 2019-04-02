@@ -39,10 +39,14 @@ public class CameraHandler : MonoBehaviour
         newPosition.z = target.position.z;
         
         float cameraYawAngle = -180 + GameManager.instance.player.getCursorPosNormalized().x * cameraYawAngleMultiplier;
-        transform.localRotation = Quaternion.Euler(0, cameraYawAngle, 0);
+        //transform.localRotation = Quaternion.Euler(0, cameraYawAngle, 0);
+
+        Quaternion newRotate = Quaternion.Euler(0, cameraYawAngle, 0);
+
 
         newPosition.z = zStartPosition;
 
+        GameManager.instance.RotateCamera(newRotate);
         GameManager.instance.MoveCamera(newPosition);
     }
 }

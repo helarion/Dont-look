@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpForce = 1.5f;
     [SerializeField] float rayCastLength = 0.1f;
     [SerializeField] float hauteurDeGrimpette = 1.0f;
+    [SerializeField] float climbTime = 1f;
 
     [Header("Light")]
     [SerializeField] float sizeSpeed = 5;
@@ -228,11 +229,11 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator ClimbCoroutine(Vector3[] positions)
     {
-        float climbTime = 0.0f;
-        while (climbTime < 1.0f)
+        float currentClimbTime = 0.0f;
+        while (currentClimbTime < climbTime)
         {
-            transform.position = Vector3.Lerp(positions[0], positions[1], climbTime);
-            climbTime += Time.deltaTime;
+            transform.position = Vector3.Lerp(positions[0], positions[1], currentClimbTime/climbTime);
+            currentClimbTime += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }
         isAlive = true;
