@@ -7,11 +7,6 @@ public class Checkpoint : MonoBehaviour
     // a stocker plus tard : les puzzles déja faits pour ne pas les réinitaliser, ou l'inverse : les puzzles à réini
     float z;
 
-    private void Start()
-    {
-        z = GameManager.instance.mainCamera.transform.position.z+2;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
@@ -22,6 +17,7 @@ public class Checkpoint : MonoBehaviour
     [ExecuteInEditMode]
     private void OnDrawGizmos()
     {
+        z=13;
         BoxCollider bCollider = GetComponent<BoxCollider>();
         Vector3 pos = transform.position + bCollider.center;
         Gizmos.color = Color.yellow;

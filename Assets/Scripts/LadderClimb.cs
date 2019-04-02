@@ -10,7 +10,7 @@ public class LadderClimb : MonoBehaviour
     private void Start()
     {
         col = GetComponent<BoxCollider>();
-        maxHeight = (transform.position.y + (col.size.y*2));
+        maxHeight = col.bounds.max.y;
     }
 
     private void OnTriggerStay(Collider other)

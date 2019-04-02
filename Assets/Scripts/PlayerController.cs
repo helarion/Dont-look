@@ -9,12 +9,13 @@ public class PlayerController : MonoBehaviour
     Light lt;
     Rigidbody rb;
     Collider cl;
+    Vector3 lookAtPos;
     Vector3 cursorPos;
 
     [Header("Movement")]
     [SerializeField] float runSpeed = 3;
     [SerializeField] float walkSpeed = 1;
-    [SerializeField] float jumpSpeed = 1.5f;
+    [SerializeField] float jumpForce = 1.5f;
     [SerializeField] float rayCastLength = 0.1f;
     [SerializeField] float hauteurDeGrimpette = 1.0f;
 
@@ -39,7 +40,9 @@ public class PlayerController : MonoBehaviour
     bool isTrackerOn = false; // Is the eye tracker activated ?
     bool isClimbing = false;
 
-    Vector3 lookAt; // Point exact où le joueur
+    bool isGrabbing = false;
+    bool pressedJump = false;
+    Transform objectGrabbed = null;
 
     void Start()
     {
@@ -71,7 +74,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawCube(lookAt, new Vector3(0.1f, 0.1f, 0.1f));
+        Gizmos.DrawCube(lookAtPos, new Vector3(0.1f, 0.1f, 0.1f));
     }
 
 
@@ -99,14 +102,6 @@ public class PlayerController : MonoBehaviour
             }
 
             cursorPos = TobiiAPI.GetGazePoint().Screen;
-
-            RaycastHit hit;
-            Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.getWallsAndMobsLayer()))
-            {
-                lookAt = hit.point;
-            }
         }
         else
         {
@@ -130,16 +125,15 @@ public class PlayerController : MonoBehaviour
 
             cursorPos.x += xLight * stickSpeed * 100 * Time.deltaTime;
             cursorPos.y += yLight * stickSpeed * 100 * Time.deltaTime;
-
-            RaycastHit hit;
-            Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.getWallsAndMobsLayer()))
-            {
-                lookAt = hit.point;
-            }
         }
-        lightTransform.rotation = Quaternion.Slerp(lightTransform.rotation, Quaternion.LookRotation(lookAt - lightTransform.position), Time.deltaTime * lightSpeed * 100);
+        RaycastHit hit;
+        Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.getWallsAndMobsLayer()))
+        {
+            lookAtPos = hit.point;
+        }
+        lightTransform.rotation = Quaternion.Slerp(lightTransform.rotation, Quaternion.LookRotation(lookAtPos - lightTransform.position), Time.deltaTime * lightSpeed * 100);
     }
 
     // CHECK LES INPUTS DE MOVEMENT
@@ -152,7 +146,18 @@ public class PlayerController : MonoBehaviour
         else moveSpeed = walkSpeed;
 
         // MOVEMENT
-        if(!isClimbing)
+        if (isGrabbing)
+        {
+            if (hMove != 0)
+            {
+                Vector3 translation = Vector3.right * hMove * moveSpeed * Time.deltaTime;
+
+                transform.Translate(translation);
+                objectGrabbed.position += translation*-1;
+                //objectGrabbed.Translate(translation,Space.World);
+            }
+        }
+        else if (!isClimbingLadder)
         {
             if (hMove != 0)
             {
@@ -163,16 +168,17 @@ public class PlayerController : MonoBehaviour
                 transform.Translate(Vector3.back * -1 * vMove * moveSpeed * Time.deltaTime);
             }
             // JUMP
-            if (GameManager.instance.controls.GetButtonDown("Jump") && isGrounded)
+            if (isGrounded)
             {
-                Jump();
+                if (GameManager.instance.controls.GetButtonDown("Jump")) Jump();
+                else pressedJump = false;
             }
         }
         else
         {
             if (vMove < 0 || (vMove>0 && !hasReachedTop))
             {
-                transform.Translate(Vector3.up * vMove * moveSpeed * Time.deltaTime);
+                transform.Translate(Vector3.up * vMove * moveSpeed * Time.deltaTime );
             }
         }
         
@@ -180,7 +186,10 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        rb.AddForce(Vector3.up * jumpSpeed * 10000 * Time.deltaTime);
+        if (pressedJump) return;
+        pressedJump = true;
+        Vector3 jumpVector = new Vector3(0, jumpForce);
+        rb.AddForce(jumpVector, ForceMode.VelocityChange);
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
@@ -234,10 +243,15 @@ public class PlayerController : MonoBehaviour
     // RENVOIE LE POINT DANS LE MONDE QUE LE JOUEUR VISE
     public Vector3 GetLookAt()
     {
-        return lookAt;
+        return lookAtPos;
     }
 
-    // RENVOIE LA POSITION ACTUELLE DU JOUER
+    public Vector2 GetCursorPos()
+    {
+        return cursorPos;
+    }
+
+    // RENVOIE LA POSITION ACTUELLE DU JOUEUR
     public Vector3 GetPlayerPos()
     {
         return transform.position;
@@ -274,14 +288,14 @@ public class PlayerController : MonoBehaviour
 
     public void SetIsClimbing(bool b)
     {
-        isClimbing = b;
+        isClimbingLadder = b;
         if (b) rb.useGravity = false;
         else rb.useGravity = true;
     }
 
     public bool GetIsClimbing()
     {
-        return isClimbing;
+        return isClimbingLadder;
     }
 
     public void SetHasReachedTop(bool b)
@@ -292,5 +306,16 @@ public class PlayerController : MonoBehaviour
     public void DisableTracker(bool b)
     {
         disableTracker = b;
+    }
+
+    public void SetIsGrabbing(bool b, Transform obj)
+    {
+        isGrabbing = b;
+        objectGrabbed = obj;
+    }
+
+    public bool GetIsGrabbing()
+    {
+        return isGrabbing;
     }
 }
