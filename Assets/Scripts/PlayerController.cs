@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     Light lt;
     Rigidbody rb;
+    Collider cl;
     Vector3 cursorPos;
 
     [Header("Movement")]
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float walkSpeed = 1;
     [SerializeField] float jumpSpeed = 1.5f;
     [SerializeField] float rayCastLength = 0.1f;
+    [SerializeField] float hauteurDeGrimpette = 1.0f;
 
     [Header("Light")]
     [SerializeField] float sizeSpeed = 5;
@@ -32,15 +34,16 @@ public class PlayerController : MonoBehaviour
     public bool lightOn = true;
     bool isAlive = true;
     bool isRunning = false;
-    bool isClimbing = false;
+    bool isClimbingLadder = false;
     bool hasReachedTop = false;
     bool isTrackerOn = false; // Is the eye tracker activated ?
+    bool isClimbing = false;
 
     Vector3 lookAt; // Point exact où le joueur
 
     void Start()
     {
-        
+        cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
         lt = lightTransform.GetComponentInChildren<Light>();
         lt.type = LightType.Spot;
@@ -64,6 +67,11 @@ public class PlayerController : MonoBehaviour
             lt.spotAngle += range;
         }
         isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, rayCastLength);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawCube(lookAt, new Vector3(0.1f, 0.1f, 0.1f));
     }
 
 
@@ -90,8 +98,7 @@ public class PlayerController : MonoBehaviour
                 ClosedEyes(false);
             }
 
-            Vector2 gazePoint = TobiiAPI.GetGazePoint().Screen;
-            cursorPos = gazePoint;
+            cursorPos = TobiiAPI.GetGazePoint().Screen;
 
             RaycastHit hit;
             Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
@@ -183,6 +190,47 @@ public class PlayerController : MonoBehaviour
         lightOn = !isClosed;
     }
 
+    // Bouge les pieds du joueur à la position donnée
+
+    public void moveTo(Vector3 positionToMove)
+    {
+        positionToMove.y += cl.bounds.center.y - cl.bounds.min.y;
+        transform.position = positionToMove;
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.tag == "Climbable")
+        {
+            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -hauteurDeGrimpette && !isClimbing)
+            {
+                Vector3 newPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
+                newPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
+                Vector3[] positions = new Vector3[2];
+                positions[0] = transform.position;
+                positions[1] = newPosition;
+                isAlive = false;
+                isClimbing = true;
+                rb.isKinematic = true;
+                StartCoroutine("ClimbCoroutine", positions);
+            }
+        }
+    }
+
+    IEnumerator ClimbCoroutine(Vector3[] positions)
+    {
+        float climbTime = 0.0f;
+        while (climbTime < 1.0f)
+        {
+            transform.position = Vector3.Lerp(positions[0], positions[1], climbTime);
+            climbTime += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        isAlive = true;
+        isClimbing = false;
+        rb.isKinematic = false;
+    }
+
     // RENVOIE LE POINT DANS LE MONDE QUE LE JOUEUR VISE
     public Vector3 GetLookAt()
     {
@@ -193,6 +241,18 @@ public class PlayerController : MonoBehaviour
     public Vector3 GetPlayerPos()
     {
         return transform.position;
+    }
+
+    // Renvoie la position du curseur sur l'écran (souris ou eye tracker)
+
+    public Vector2 getCursorPosNormalized()
+    {
+        Vector2 normalizedCursorPos = GameManager.instance.mainCamera.ScreenToViewportPoint(cursorPos);
+
+        normalizedCursorPos.x = Mathf.Clamp(normalizedCursorPos.x, 0.0f, 1.0f) * 2.0f - 1.0f;
+        normalizedCursorPos.y = Mathf.Clamp(normalizedCursorPos.y, 0.0f, 1.0f) * 2.0f - 1.0f;
+
+        return normalizedCursorPos;
     }
 
     // ACTIVE OU DESACTIVE LES CONTROLES DU JOUEUR LORSQU IL EST VIVANT OU MORT

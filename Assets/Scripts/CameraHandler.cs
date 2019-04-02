@@ -10,8 +10,8 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] float offset=1;
     [SerializeField] float minYCamera = 1;
     [SerializeField] float yOffset = 1;
-
-    Vector3 targetPosition;
+    [SerializeField] float cameraYawAngleMultiplier = 10;
+    
     float zStartPosition;
 
     void Start()
@@ -22,8 +22,8 @@ public class CameraHandler : MonoBehaviour
     void Update()
     {
         if (!target || GameManager.instance.GetIsPaused()) return;
-        Vector3 cursorPos = target.GetComponent<PlayerController>().GetLookAt();
-        Vector3 diffCameraCursor = (cursorPos - transform.position);
+        Vector3 cursorPos = GameManager.instance.player.GetLookAt();
+        /*Vector3 diffCameraCursor = (cursorPos - transform.position);
         diffCameraCursor.z = zStartPosition;
         diffCameraCursor.y += yOffset;
 
@@ -31,7 +31,16 @@ public class CameraHandler : MonoBehaviour
         diffCameraCursor.y = Mathf.Clamp(diffCameraCursor.y, minYCamera, offset);
         Vector3 diffCameraPlayer = transform.position - target.position;
 
-        Vector3 newPosition = target.position + diffCameraPlayer.normalized * offset + diffCameraCursor;
+        Vector3 newPosition = target.position + diffCameraPlayer.normalized * offset + diffCameraCursor;*/
+
+        Vector3 newPosition = (target.position + cursorPos) / 2.0f;
+        newPosition.z = target.position.z;
+        newPosition = target.position + Vector3.ClampMagnitude((cursorPos - target.position), offset);
+        newPosition.z = target.position.z;
+        
+        float cameraYawAngle = -180 + GameManager.instance.player.getCursorPosNormalized().x * cameraYawAngleMultiplier;
+        transform.localRotation = Quaternion.Euler(0, cameraYawAngle, 0);
+
         newPosition.z = zStartPosition;
 
         GameManager.instance.MoveCamera(newPosition);

@@ -45,7 +45,7 @@ public class SpiderBehavior : Enemy
             Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
             Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
 
-            float playerToSpiderLength = playerToSpiderVec.magnitude - 2;
+            float playerToSpiderLength = playerToSpiderVec.magnitude;//- 2;
             Light playerLight = GameManager.instance.player.getLight();
             float lightRange = playerLight.range;
             float lightAngle = playerLight.spotAngle / 2.0f;// - 5;
@@ -152,6 +152,7 @@ public class SpiderBehavior : Enemy
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
     {
+
         agent.speed = moveSpeed;
         if (b)
         {
