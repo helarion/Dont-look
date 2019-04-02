@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Checkpoint : MonoBehaviour
+public class WwiseTrigger : MonoBehaviour
 {
-    // a stocker plus tard : les puzzles déja faits pour ne pas les réinitaliser, ou l'inverse : les puzzles à réini
     float z;
+    [SerializeField] bool playsOnlyOnce = true;
+    [SerializeField] string triggerName = "";
 
     private void OnTriggerEnter(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
-        GameManager.instance.SetNewCheckpoint(this);
+        AkSoundEngine.PostEvent(triggerName, GameManager.instance.gameObject);
     }
 
     [ExecuteInEditMode]
     private void OnDrawGizmos()
     {
-        z=13;
+        z = 6;
         BoxCollider bCollider = GetComponent<BoxCollider>();
         Vector3 pos = transform.position + bCollider.center;
-        Gizmos.color = Color.yellow;
+        Gizmos.color = Color.green;
         float wHalf = (bCollider.size.x * .5f);
         float hHalf = (bCollider.size.y * .5f);
         Vector3 topLeftCorner = new Vector3(pos.x - wHalf, pos.y + hHalf, z);
