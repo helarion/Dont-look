@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
     bool isClimbing = false;
     bool hasReachedTop = false;
     bool isTrackerOn = false; // Is the eye tracker activated ?
+    bool isGrabbing = false;
+    Transform objectGrabbed = null;
 
     Vector3 lookAt; // Point exact où le joueur
 
@@ -145,7 +147,18 @@ public class PlayerController : MonoBehaviour
         else moveSpeed = walkSpeed;
 
         // MOVEMENT
-        if(!isClimbing)
+        if (isGrabbing)
+        {
+            if (hMove != 0)
+            {
+                Vector3 translation = Vector3.right * hMove * moveSpeed * Time.deltaTime;
+
+                transform.Translate(translation);
+                objectGrabbed.position += translation*-1;
+                //objectGrabbed.Translate(translation,Space.World);
+            }
+        }
+        else if (!isClimbing)
         {
             if (hMove != 0)
             {
@@ -189,7 +202,7 @@ public class PlayerController : MonoBehaviour
         return lookAt;
     }
 
-    // RENVOIE LA POSITION ACTUELLE DU JOUER
+    // RENVOIE LA POSITION ACTUELLE DU JOUEUR
     public Vector3 GetPlayerPos()
     {
         return transform.position;
@@ -232,5 +245,16 @@ public class PlayerController : MonoBehaviour
     public void DisableTracker(bool b)
     {
         disableTracker = b;
+    }
+
+    public void SetIsGrabbing(bool b, Transform obj)
+    {
+        isGrabbing = b;
+        objectGrabbed = obj;
+    }
+
+    public bool GetIsGrabbing()
+    {
+        return isGrabbing;
     }
 }

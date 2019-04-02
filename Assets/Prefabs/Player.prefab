@@ -233,16 +233,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runSpeed: 6
   walkSpeed: 3
-  jumpSpeed: 1.5
-  rayCastLength: 1
+  jumpSpeed: 20
+  rayCastLength: 0.9
   sizeSpeed: 5
   stickSpeed: 3
   lightSpeed: 0.08
-  walls:
-    serializedVersion: 2
-    m_Bits: 512
   lightTransform: {fileID: 3456108172463778536}
-  disableTracker: 1
+  disableTracker: 0
   raycastPosition: {fileID: 914376431}
   isGrounded: 0
   lightOn: 1
