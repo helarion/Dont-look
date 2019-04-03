@@ -6,6 +6,7 @@ public class LadderClimb : MonoBehaviour
 {
     BoxCollider col;
     float maxHeight;
+    PlayerController player =null;
 
     private void Start()
     {
@@ -15,19 +16,15 @@ public class LadderClimb : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
+        player = other.GetComponent<PlayerController>();
         if (player == null) return;
         if(GameManager.instance.controls.GetButtonDown("Interact"))
         {
-            Vector3 v = player.transform.position;
-            v.x= transform.position.x;
-            player.transform.position = v;
-            player.SetIsClimbing(true);
+            StartClimb();
         }
         if(GameManager.instance.controls.GetButtonDown("Jump") && player.GetIsClimbing())
         {
-            player.SetIsClimbing(false);
-            player.SetHasReachedTop(false);
+            StopClimb();
             player.Jump();
         }
         if(player.transform.position.y>maxHeight)
@@ -39,6 +36,23 @@ public class LadderClimb : MonoBehaviour
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
+        StopClimb();
+    }
+
+    void StartClimb()
+    {
+        Vector3 v = player.transform.position;
+        v.x = transform.position.x;
+        player.transform.position = v;
+        player.transform.eulerAngles += new Vector3(0, -90, 0);
+        player.SetIsClimbing(true);
+    }
+
+    void StopClimb()
+    {
+        if (!player.GetIsClimbing()) return;
+        player.transform.eulerAngles += new Vector3(0, 90, 0);
         player.SetIsClimbing(false);
+        player.SetHasReachedTop(false);
     }
 }
