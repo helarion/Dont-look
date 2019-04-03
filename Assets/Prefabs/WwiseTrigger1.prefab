@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4709919825960942456
+--- !u!1 &7288036208255364177
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,52 +8,54 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4709919825960942454}
-  - component: {fileID: 4709919825960942455}
-  - component: {fileID: 4709919825960942453}
+  - component: {fileID: 7288036208255364191}
+  - component: {fileID: 7288036208255364188}
+  - component: {fileID: 2628045485583521580}
   m_Layer: 0
-  m_Name: Checkpoint1
+  m_Name: WwiseTrigger1
   m_TagString: Untagged
-  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4709919825960942454
+--- !u!4 &7288036208255364191
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4709919825960942456}
+  m_GameObject: {fileID: 7288036208255364177}
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0.00000028088027}
-  m_LocalPosition: {x: 20.5, y: -0.345, z: 3.1200013}
+  m_LocalPosition: {x: -4.25, y: 5, z: 7.5}
   m_LocalScale: {x: 0.5, y: 1.2, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -179.99998, z: 0}
---- !u!114 &4709919825960942455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4709919825960942456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0a975f3272777548a578625a72f5cb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!65 &4709919825960942453
+--- !u!65 &7288036208255364188
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4709919825960942456}
+  m_GameObject: {fileID: 7288036208255364177}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 8, z: 18}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2628045485583521580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7288036208255364177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89e5884ba5d8cf74986defa8d096d0ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playsOnlyOnce: 1
+  triggerName: Play_Blend_Amb_Bunker1
