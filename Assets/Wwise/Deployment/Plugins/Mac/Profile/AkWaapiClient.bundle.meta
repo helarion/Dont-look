@@ -1,5 +1,6 @@
 fileFormatVersion: 2
-guid: 1c40626f21f5b9f45ad4229e4824aaa3
+guid: 1c9c7a5679d40524b89472c3afa9d758
+folderAsset: yes
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -18,11 +19,16 @@ PluginImporter:
   - first:
       Editor: Editor
     second:
-      enabled: 0
+      enabled: 1
       settings:
-        CPU: x86
+        CPU: AnyCPU
         DefaultValueInitialized: true
-        OS: Windows
+        OS: OSX
+  - first:
+      Standalone: OSXUniversal
+    second:
+      enabled: 1
+      settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
