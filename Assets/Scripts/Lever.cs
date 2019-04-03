@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Lever : Objet
 {
-    [SerializeField] Objet target;
-    bool isActivated=false;
+    [SerializeField] Objet target=null;
+    //bool isActivated=false;
     MeshRenderer model;
 
     private void Start()

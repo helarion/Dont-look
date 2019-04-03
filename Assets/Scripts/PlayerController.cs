@@ -1,8 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Tobii.Gaming;
-using Rewired;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,21 +22,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float sizeSpeed = 5;
     [SerializeField] float stickSpeed = 3;
     [SerializeField] float lightSpeed = 1;
-    [SerializeField] Transform lightTransform;
+    [SerializeField] Transform lightTransform=null;
 
     [Header("Debug")]
     [SerializeField] bool disableTracker = false;
-    [SerializeField] Transform raycastPosition;
+    [SerializeField] Transform raycastPosition=null;
     [SerializeField] bool isGrounded = false;
 
     float moveSpeed;
 
     public bool lightOn = true;
     bool isAlive = true;
-    bool isRunning = false;
     bool isClimbingLadder = false;
     bool hasReachedTop = false;
-    bool isTrackerOn = false; // Is the eye tracker activated ?
     bool isClimbing = false;
 
     bool isGrabbing = false;
@@ -92,7 +88,6 @@ public class PlayerController : MonoBehaviour
         // LIGHT AIM CONTROL
         if (!disableTracker && TobiiAPI.IsConnected) // EYE TRACKER OPTION
         {
-            isTrackerOn = true;
             if (!TobiiAPI.GetGazePoint().IsRecent())
             {
                 ClosedEyes(true);

@@ -8,11 +8,11 @@ public class Intro : MonoBehaviour
 {
     [SerializeField] float fadeTime = 0.5f;
     [SerializeField] float zoomSpeed = 0.1f;
-    [SerializeField] SpriteRenderer cnam;
-    [SerializeField] SpriteRenderer magelis;
-    [SerializeField] SpriteRenderer poitiers;
-    [SerializeField] Transform scene;
-    [SerializeField] Canvas logos;
+    [SerializeField] SpriteRenderer cnam=null;
+    [SerializeField] SpriteRenderer magelis=null;
+    [SerializeField] SpriteRenderer poitiers=null;
+    [SerializeField] Transform scene=null;
+    [SerializeField] Canvas logos=null;
 
     Color cnamColor;
     Color magelisColor;

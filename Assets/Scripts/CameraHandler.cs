@@ -8,8 +8,6 @@ public class CameraHandler : MonoBehaviour
 
     [Header("Camera Variables")]
     [SerializeField] float offset=1;
-    [SerializeField] float minYCamera = 1;
-    [SerializeField] float yOffset = 1;
     [SerializeField] float cameraYawAngleMultiplier = 10;
     
     float zStartPosition;

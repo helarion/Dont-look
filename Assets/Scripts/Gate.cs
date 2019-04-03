@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gate : Objet
 {
-    [SerializeField] GameObject door;
+    [SerializeField] GameObject door=null;
 
     public override void Activate()
     {

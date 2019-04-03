@@ -8,10 +8,10 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] Image fadeImg = null;
     [SerializeField] float fadeTime=0.5f;
-    public GameObject pausePanel;
+    public GameObject pausePanel = null;
     [SerializeField] Image pauseImg = null;
-    [SerializeField] GameObject ControlPanel;
-    [SerializeField] GameObject NoEyePanel;
+    [SerializeField] GameObject ControlPanel=null;
+    [SerializeField] GameObject NoEyePanel=null;
 
     public bool isFading = false;
 
