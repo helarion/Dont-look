@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     Collider cl;
     Vector3 lookAtPos;
     Vector3 cursorPos;
+    Animator animator;
 
     [Header("Movement")]
     [SerializeField] float runSpeed = 3;
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
     bool isClimbing = false;
 
     bool isGrabbing = false;
+    bool isMoving = false;
     bool pressedJump = false;
     Transform objectGrabbed = null;
 
@@ -50,6 +52,7 @@ public class PlayerController : MonoBehaviour
         ClosedEyes(false);
         Cursor.visible = false;
         moveSpeed = walkSpeed;
+        animator = GetComponentInChildren<Animator>();
 
         cursorPos = Input.mousePosition;
     }
@@ -129,26 +132,35 @@ public class PlayerController : MonoBehaviour
         {
             lookAtPos = hit.point;
         }
-        lightTransform.rotation = Quaternion.Slerp(lightTransform.rotation, Quaternion.LookRotation(lookAtPos - lightTransform.position), Time.deltaTime * lightSpeed * 100);
+        lt.transform.rotation = Quaternion.Slerp(lt.transform.rotation, Quaternion.LookRotation(lookAtPos - lt.transform.position), Time.deltaTime * lightSpeed * 100);
     }
 
     // CHECK LES INPUTS DE MOVEMENT
     void Movement()
     {
+        isMoving = false;
         float hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
         float vMove = GameManager.instance.controls.GetAxis("Move Vertical");
 
-        if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0) moveSpeed = runSpeed;
-        else moveSpeed = walkSpeed;
+        if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+        {
+            moveSpeed = runSpeed;
+            animator.speed = 1.8f;
+        }
+        else
+        {
+            moveSpeed = walkSpeed;
+            animator.speed = 1;
+        }
 
-        // MOVEMENT
-        if (isGrabbing)
+            // MOVEMENT
+            if (isGrabbing)
         {
             if (hMove != 0)
             {
                 Vector3 translation = Vector3.right * hMove * moveSpeed * Time.deltaTime;
 
-                transform.Translate(translation);
+                transform.position +=translation*-1;
                 objectGrabbed.position += translation*-1;
                 //objectGrabbed.Translate(translation,Space.World);
             }
@@ -157,11 +169,13 @@ public class PlayerController : MonoBehaviour
         {
             if (hMove != 0)
             {
-                transform.Translate(Vector3.right * hMove * moveSpeed * Time.deltaTime);
+                isMoving = true;
+                transform.position += Vector3.right * -1 * hMove * moveSpeed * Time.deltaTime;
             }
             if (vMove != 0)
             {
-                transform.Translate(Vector3.back * -1 * vMove * moveSpeed * Time.deltaTime);
+                isMoving = true;
+                transform.position += Vector3.back * vMove * moveSpeed * Time.deltaTime;
             }
             // JUMP
             if (isGrounded)
@@ -177,7 +191,7 @@ public class PlayerController : MonoBehaviour
                 transform.Translate(Vector3.up * vMove * moveSpeed * Time.deltaTime );
             }
         }
-        
+        animator.SetBool("IsMoving", isMoving);
     }
 
     public void Jump()
