@@ -19,7 +19,7 @@ public class Lever : Objet
         if (player == null) return;
         if(GameManager.instance.controls.GetButtonDown("Interact"))
         {
-
+            Activate();
         }
     }
 
@@ -27,6 +27,6 @@ public class Lever : Objet
     {
         base.Activate();
         target.Activate();
-        model.transform.eulerAngles = new Vector3(0, 180, 0);
+        model.transform.localEulerAngles = new Vector3(0, 180, 0);
     }
 }
