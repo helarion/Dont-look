@@ -12,12 +12,16 @@ public class PlayerController : MonoBehaviour
     Vector3 lookAtPos;
     Vector3 cursorPos;
 
+    [Header("Model and light objects")]
+    [SerializeField] Transform modelTransform;
+    //Transform lightTransform;
+
     [Header("Movement")]
     [SerializeField] float runSpeed = 3;
     [SerializeField] float walkSpeed = 1;
     [SerializeField] float jumpForce = 1.5f;
     [SerializeField] float rayCastLength = 0.1f;
-    [SerializeField] float hauteurDeGrimpette = 1.0f;
+    [SerializeField] float maxClimbHeight = 1.0f;
     [SerializeField] float climbTime = 1f;
 
     [Header("Light")]
@@ -45,6 +49,9 @@ public class PlayerController : MonoBehaviour
     bool pressedJump = false;
     Transform objectGrabbed = null;
 
+    float hMove;
+    float vMove;
+
     void Start()
     {
         cl = GetComponent<Collider>();
@@ -62,7 +69,26 @@ public class PlayerController : MonoBehaviour
     {
         if (!isAlive) return;
         LightAim();
+
+        if (lightTransform.rotation.eulerAngles.y > 180)
+        {
+            modelTransform.rotation = Quaternion.Euler(0, 270, 0);
+        }
+        else
+        {
+            modelTransform.rotation = Quaternion.Euler(0, 90, 0);
+        }
+
         Movement();
+
+        if (vMove > 0)
+        {
+            modelTransform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else if (vMove < 0)
+        {
+            modelTransform.rotation = Quaternion.Euler(0, 0, 0);
+        }
 
         // TAILLE DE LA FLASHLIGHT
         float range = Input.GetAxisRaw("LightRange")*sizeSpeed*100*Time.deltaTime;
@@ -140,8 +166,8 @@ public class PlayerController : MonoBehaviour
     // CHECK LES INPUTS DE MOVEMENT
     void Movement()
     {
-        float hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
-        float vMove = GameManager.instance.controls.GetAxis("Move Vertical");
+        hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
+        vMove = GameManager.instance.controls.GetAxis("Move Vertical");
 
         if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0) moveSpeed = runSpeed;
         else moveSpeed = walkSpeed;
@@ -212,7 +238,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.collider.tag == "Climbable")
         {
-            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -hauteurDeGrimpette && !isClimbing)
+            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing)
             {
                 Vector3 newPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
                 newPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;

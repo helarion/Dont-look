@@ -43,7 +43,6 @@ public class CameraHandler : MonoBehaviour
 
         Quaternion newRotate = Quaternion.Euler(0, cameraYawAngle, 0);
 
-
         newPosition.z = zStartPosition;
 
         GameManager.instance.RotateCamera(newRotate);
