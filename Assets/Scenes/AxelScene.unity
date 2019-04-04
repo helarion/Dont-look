@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.00017954882, g: 0.00014297848, b: 0.00013007654,
+  m_IndirectSpecularColor: {r: 0.00018729935, g: 0.00014914325, b: 0.00013574747,
     a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -3619,7 +3619,7 @@ PrefabInstance:
     - target: {fileID: 108591155377741814, guid: aa6c5f105fddca84dac732069110c0c2,
         type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 245303721, guid: aa6c5f105fddca84dac732069110c0c2, type: 3}
       propertyPath: displayLightIntensity
@@ -4813,7 +4813,7 @@ PrefabInstance:
     - target: {fileID: 108591155377741814, guid: aa6c5f105fddca84dac732069110c0c2,
         type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 245303721, guid: aa6c5f105fddca84dac732069110c0c2, type: 3}
       propertyPath: displayLightIntensity
@@ -8003,6 +8003,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a51c7001a39f0b54aa25039e6641fc5f, type: 3}
+--- !u!4 &952829701 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1491706786681059038, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4194574732569649041}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &953641330
 GameObject:
   m_ObjectHideFlags: 0
@@ -8452,7 +8458,7 @@ PrefabInstance:
     - target: {fileID: 108591155377741814, guid: aa6c5f105fddca84dac732069110c0c2,
         type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 245303721, guid: aa6c5f105fddca84dac732069110c0c2, type: 3}
       propertyPath: displayLightIntensity
@@ -23548,6 +23554,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4194574732181831086, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+        type: 3}
+      propertyPath: lightTransform
+      value: 
+      objectReference: {fileID: 952829701}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c414b3d2f18c514db71f5df2c9bbcd4, type: 3}
 --- !u!1001 &4433784609185006969

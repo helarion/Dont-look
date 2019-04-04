@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour
     float hMove;
     float vMove;
 
+    int inverse = 1;
+
     void Start()
     {
         cl = GetComponent<Collider>();
@@ -69,33 +71,11 @@ public class PlayerController : MonoBehaviour
         if (!isAlive) return;
         LightAim();
 
-        if (lightTransform.rotation.eulerAngles.y > 180)
-        {
-            modelTransform.rotation = Quaternion.Euler(0, 270, 0);
-        }
-        else
-        {
-            modelTransform.rotation = Quaternion.Euler(0, 90, 0);
-        }
-
         Movement();
 
-        if (vMove > 0)
-        {
-            modelTransform.rotation = Quaternion.Euler(0, 180, 0);
-        }
-        else if (vMove < 0)
-        {
-            modelTransform.rotation = Quaternion.Euler(0, 0, 0);
-        }
-
-        // TAILLE DE LA FLASHLIGHT
-        float range = Input.GetAxisRaw("LightRange")*sizeSpeed*100*Time.deltaTime;
-        if (range!=0)
-        {
-            lt.spotAngle += range;
-        }
         isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, rayCastLength);
+
+        BodyRotation();
     }
 
     private void OnDrawGizmos()
@@ -103,6 +83,30 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawCube(lookAtPos, new Vector3(0.1f, 0.1f, 0.1f));
     }
 
+    void BodyRotation()
+    {
+        if (vMove > 0)
+        {
+            modelTransform.rotation = Quaternion.Euler(0, 180, 0);
+            inverse = 1;
+        }
+        else if (vMove < 0)
+        {
+            modelTransform.rotation = Quaternion.Euler(0, 0, 0);
+            inverse = -1;
+        }
+
+        if (lightTransform.rotation.eulerAngles.y > 180)
+        {
+            modelTransform.rotation = Quaternion.Euler(0, 270, 0);
+            inverse = 1;
+        }
+        else
+        {
+            modelTransform.rotation = Quaternion.Euler(0, 90, 0);
+            inverse = -1;
+        }
+    }
 
     void LightAim()
     {
@@ -166,6 +170,7 @@ public class PlayerController : MonoBehaviour
     {
         hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
         vMove = GameManager.instance.controls.GetAxis("Move Vertical");
+
         isMoving = false;
 
         if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
@@ -197,11 +202,13 @@ public class PlayerController : MonoBehaviour
             {
                 isMoving = true;
                 transform.position += Vector3.right * -1 * hMove * moveSpeed * Time.deltaTime;
+                animator.SetFloat("Inverse", hMove*inverse);
             }
             if (vMove != 0)
             {
                 isMoving = true;
                 transform.position += Vector3.back * vMove * moveSpeed * Time.deltaTime;
+                animator.SetFloat("Inverse", vMove*inverse);
             }
             // JUMP
             if (isGrounded)

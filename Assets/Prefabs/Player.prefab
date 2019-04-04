@@ -171,11 +171,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 812e03e711ba65b4dad066e81c1b8d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelTransform: {fileID: 4194574731507233612}
   runSpeed: 6
   walkSpeed: 3
   jumpForce: 13
   rayCastLength: 0.8
-  hauteurDeGrimpette: 2
+  maxClimbHeight: 1
   climbTime: 0.5
   sizeSpeed: 5
   stickSpeed: 3
@@ -364,32 +365,32 @@ PrefabInstance:
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.2747359
+      value: -0.27473527
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.328673
+      value: 8.328697
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.13932338
+      value: -0.1393335
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7198592
+      value: -0.7198593
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.09279541
+      value: 0.09279553
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.032780387
+      value: 0.032780383
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -419,17 +420,17 @@ PrefabInstance:
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.0001378
+      value: 1.000141
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.0001372
+      value: 1.0001413
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.0001378
+      value: 1.00014
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
