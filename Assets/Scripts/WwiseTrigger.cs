@@ -5,14 +5,13 @@ using UnityEngine;
 public class WwiseTrigger : MonoBehaviour
 {
     float z;
-    [SerializeField] bool playsOnlyOnce = true;
     [SerializeField] string triggerName = "";
 
     private void OnTriggerEnter(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
-        AkSoundEngine.PostEvent(triggerName, GameManager.instance.gameObject);
+        //AkSoundEngine.PostEvent(triggerName, GameManager.instance.gameObject);
     }
 
     [ExecuteInEditMode]

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FallingZone : MonoBehaviour
 {
-    [SerializeField] GameObject grabZone;
+    [SerializeField] GameObject grabZone=null;
     Rigidbody rb;
 
     private void Start()

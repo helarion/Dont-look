@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public bool isChasing = false;
 
     [Header("Debug")]
-    [SerializeField] GameObject spawnZones;
+    [SerializeField] GameObject spawnZones=null ;
 
 
     [HideInInspector] public NavMeshAgent agent;
