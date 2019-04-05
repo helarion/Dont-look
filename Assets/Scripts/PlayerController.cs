@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
     void LightAim()
     {
-        if(!TobiiAPI.IsConnected)
+       /* if(!TobiiAPI.IsConnected)
         {
             UIManager.instance.DisableControlPanel(true);
         }
@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
             cursorPos = TobiiAPI.GetGazePoint().Screen;
         }
         else
-        {
+        {*/
             // CHECK DU BOUTON POUR FERMER LES YEUX SI L'EYE TRACKER N'EST PAS ACTIVÉ
             if (GameManager.instance.controls.GetAxis("Light")!=0)
             {
@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
 
             cursorPos.x += xLight * stickSpeed * 100 * Time.deltaTime;
             cursorPos.y += yLight * stickSpeed * 100 * Time.deltaTime;
-        }
+        //}
         RaycastHit hit;
         Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
 

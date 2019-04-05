@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        StopAllCoroutines();
         if (!GameManager.instance.isTesting)
         {
             fadeImg.color = new Color(0, 0, 0, 1);
