@@ -85,27 +85,34 @@ public class PlayerController : MonoBehaviour
 
     void BodyRotation()
     {
+        Quaternion save = lightTransform.rotation;
+        float speed = 0.1f;
         if (vMove > 0)
         {
-            modelTransform.rotation = Quaternion.Euler(0, 180, 0);
+            modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 180, 0), speed);
+            //modelTransform.rotation = Quaternion.Euler(0, 180, 0);
             inverse = 1;
         }
         else if (vMove < 0)
         {
-            modelTransform.rotation = Quaternion.Euler(0, 0, 0);
+            modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 0, 0), speed);
+            //modelTransform.rotation = Quaternion.Euler(0, 0, 0);
             inverse = -1;
         }
 
-        if (lightTransform.rotation.eulerAngles.y > 180)
+        else if (lightTransform.rotation.eulerAngles.y > 180)
         {
-            modelTransform.rotation = Quaternion.Euler(0, 270, 0);
+            modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 270, 0), speed);
+            //modelTransform.rotation = Quaternion.Euler(0, 270, 0);
             inverse = 1;
         }
         else
         {
-            modelTransform.rotation = Quaternion.Euler(0, 90, 0);
+            modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 90, 0), speed);
+            //modelTransform.rotation = Quaternion.Euler(0, 90, 0);
             inverse = -1;
         }
+        lightTransform.rotation = save;
     }
 
     void LightAim()

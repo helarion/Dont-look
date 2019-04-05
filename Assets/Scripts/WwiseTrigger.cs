@@ -11,7 +11,7 @@ public class WwiseTrigger : MonoBehaviour
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
-        //AkSoundEngine.PostEvent(triggerName, GameManager.instance.gameObject);
+        AkSoundEngine.PostEvent(triggerName, GameManager.instance.gameObject);
     }
 
     [ExecuteInEditMode]
