@@ -18,19 +18,32 @@ public class SpiderBehavior : Enemy
     bool canSeePlayer = false;
 
     bool chaseCoroutine = false;
+    Animator animator;
+    bool isMoving = false;
+
+    [SerializeField] float velocity;
+    Vector3 lastPosition;
 
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
         Initialize();
         countChase = 0;
         countLook = 0;
+        lastPosition = transform.position;
     }
 
     void Update()
     {
+        velocity = (transform.position - lastPosition).magnitude;
+        lastPosition = transform.position;
+
+        isMoving = false;
+        animator.SetFloat("mult", velocity);
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)
         {
+            isMoving = true;
             MoveTo(GameManager.instance.player.transform.position);
             if (!canSeePlayer && !GameManager.instance.player.lightOn)
             {
@@ -74,7 +87,7 @@ public class SpiderBehavior : Enemy
                         IsLit(true);
                     }
 
-                    //print("Touched " + hit.transform.gameObject.name);
+                    print("Touched " + hit.transform.gameObject.name);
                 }
             }
         }
@@ -84,6 +97,7 @@ public class SpiderBehavior : Enemy
             MoveTo(pos);
             print(pos);
         }
+        animator.SetBool("IsMoving", isMoving);
     }
 
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
