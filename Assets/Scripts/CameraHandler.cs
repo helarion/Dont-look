@@ -21,6 +21,7 @@ public class CameraHandler : MonoBehaviour
     void Update()
     {
         if (!target || GameManager.instance.GetIsPaused()) return;
+
         Vector3 lookAtPos = GameManager.instance.player.GetLookAt();
         /*Vector3 diffCameraCursor = (cursorPos - transform.position);
         diffCameraCursor.z = zStartPosition;
@@ -51,8 +52,59 @@ public class CameraHandler : MonoBehaviour
 
         newPosition.z = zStartPosition;
 
-        GameManager.instance.RotateCamera(newRotate);
-        GameManager.instance.MoveCamera(newPosition);
+        CameraBlock currentCameraBlock = GameManager.instance.player.getCameraBlock();
+        if (currentCameraBlock != null)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(transform.position - lookAtPos) * Quaternion.Euler(new Vector3(0, -180, 0));
+            newPosition.z = transform.position.z;
+            if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Left)
+            {
+                if (newPosition.x > currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.min.x)
+                {
+                    newPosition.x = currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.min.x;
+                }
+                if (targetRotation.eulerAngles.y < 180 - currentCameraBlock.maxCameraYawAngle)
+                {
+                    targetRotation *= Quaternion.Euler(new Vector3(0, 180 - currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
+                }
+                else if (targetRotation.eulerAngles.y > 180)
+                {
+                    targetRotation *= Quaternion.Euler(new Vector3(0, 180 - targetRotation.eulerAngles.y, 0));
+                }
+            }
+            else
+            {
+                if (newPosition.x < currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.x)
+                {
+                    newPosition.x = currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.x;
+                }
+                if (targetRotation.eulerAngles.y < 180)
+                {
+                    targetRotation *= Quaternion.Euler(new Vector3(0, 180 - targetRotation.eulerAngles.y, 0));
+                }
+                else if (targetRotation.eulerAngles.y > 180 + currentCameraBlock.maxCameraYawAngle)
+                {
+                    targetRotation *= Quaternion.Euler(new Vector3(0, 180 + currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
+                }
+            }
+            
+            
+            if (targetRotation.eulerAngles.y < -currentCameraBlock.maxCameraPitchAngle)
+            {
+                targetRotation *= Quaternion.Euler(new Vector3(-currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
+            }
+            else if (targetRotation.eulerAngles.y > currentCameraBlock.maxCameraPitchAngle)
+            {
+                targetRotation *= Quaternion.Euler(new Vector3(currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
+            }
+            targetRotation *= Quaternion.Euler(0, 0, -targetRotation.eulerAngles.z);
+            GameManager.instance.RotateCamera(targetRotation);
+            GameManager.instance.MoveCamera(newPosition);
+        }
+        else
+        {
+            GameManager.instance.RotateCamera(newRotate);
+            GameManager.instance.MoveCamera(newPosition);
+        }
     }
 }
- 

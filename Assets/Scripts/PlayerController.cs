@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     bool isClimbingLadder = false;
     bool hasReachedTop = false;
     bool isClimbing = false;
+    CameraBlock currentCameraBlock = null;
 
     bool isGrabbing = false;
     bool isMoving = false;
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
+
 
     void Start()
     {
@@ -86,67 +88,51 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawCube(lookAtPos, new Vector3(0.1f, 0.1f, 0.1f));
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "CameraBlock")
+        {
+            currentCameraBlock = other.GetComponent<CameraBlock>();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "CameraBlock")
+        {
+            currentCameraBlock = null;
+        }
+    }
+
     void BodyRotation()
     {
-        //Quaternion save = lightTransform.rotation;
         Quaternion save = lt.transform.rotation;
         float speed = 0.1f;
         if (vMove > 0)
         {
-            //print("derrière");
-            //modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 180, 0), speed);
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
-            //transform.rotation = Quaternion.Euler(0, 180, 0);
             inverse = 1;
         }
         else if (vMove < 0)
         {
-            //print("devant");
-            //modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 0, 0), speed);
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
-            //transform.rotation = Quaternion.Euler(0, 0, 0);
             inverse = -1;
         }
         else
         {
-            if (lookAtPos.x - transform.position.x < -0.25f)
+            if ((lookAtPos.x - transform.position.x < -0.25f) || (currentLookDirection == LookDirection.Right && lookAtPos.x - transform.position.x < 0.25f))
             {
-                //print("droite");
-                //modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 270, 0), speed);
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
-                //transform.rotation = Quaternion.Euler(0, 270, 0);
                 inverse = 1;
                 currentLookDirection = LookDirection.Right;
-            }
-            else if (currentLookDirection == LookDirection.Right && lookAtPos.x - transform.position.x < 0.25f)
-            {
-                //print("droite");
-                //modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 270, 0), speed);
-                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
-                //transform.rotation = Quaternion.Euler(0, 270, 0);
-                inverse = 1;
-                currentLookDirection = LookDirection.Right;
-            }
-            else if (lookAtPos.x - transform.position.x > 0.25f)
-            {
-                //print("gauche");
-                //modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 90, 0), speed);
-                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
-                //transform.rotation = Quaternion.Euler(0, 90, 0);
-                inverse = -1;
-                currentLookDirection = LookDirection.Left;
             }
             else
             {
-                //print("gauche");
-                //modelTransform.eulerAngles = Vector3.Lerp(modelTransform.eulerAngles, new Vector3(0, 90, 0), speed);
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
-                //transform.rotation = Quaternion.Euler(0, 90, 0);
                 inverse = -1;
                 currentLookDirection = LookDirection.Left;
             }
         }
-        //lightTransform.rotation = save;
         lt.transform.rotation = save;
     }
 
@@ -402,5 +388,10 @@ public class PlayerController : MonoBehaviour
     public bool GetIsGrabbing()
     {
         return isGrabbing;
+    }
+
+    public CameraBlock getCameraBlock()
+    {
+        return currentCameraBlock;
     }
 }
