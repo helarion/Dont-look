@@ -6,12 +6,17 @@ public class WwiseTrigger : MonoBehaviour
 {
     float z;
     [SerializeField] string triggerName = "";
+    [SerializeField] bool playOnlyOnce = false;
+    [SerializeField] GameObject emitter = null;
 
     private void OnTriggerEnter(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
-        AkSoundEngine.PostEvent(triggerName, GameManager.instance.gameObject);
+        AkSoundEngine.PostEvent(triggerName, emitter);
+        if (playOnlyOnce) Destroy(gameObject);
+        float value;
+       //AkSoundEngine.GetRTPCValue("position_relative_volume",emitter,value,);
     }
 
     [ExecuteInEditMode]

@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float rayCastLength = 0.1f;
     [SerializeField] float maxClimbHeight = 1.0f;
     [SerializeField] float climbTime = 1f;
+    [SerializeField] private AnimationCurve _accelerationCurve;
 
     [Header("Light")]
     [SerializeField] float sizeSpeed = 5;
@@ -73,7 +74,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (!isAlive) return;
+        if (!isAlive || GameManager.instance.GetIsPaused()) return;
+        DisableTracker();
         LightAim();
 
         Movement();
@@ -138,16 +140,17 @@ public class PlayerController : MonoBehaviour
 
     void LightAim()
     {
-        if(!TobiiAPI.IsConnected)
+        /*if(!TobiiAPI.IsConnected)
         {
             UIManager.instance.DisableControlPanel(true);
         }
         else
         {
             UIManager.instance.DisableControlPanel(false);
-        }
+        }*/
         // LIGHT AIM CONTROL
-        if (!disableTracker && TobiiAPI.IsConnected) // EYE TRACKER OPTION
+        // if (!disableTracker && TobiiAPI.IsConnected) // EYE TRACKER OPTION
+        if (!disableTracker) // EYE TRACKER OPTION
         {
             if (!TobiiAPI.GetGazePoint().IsRecent())
             {
@@ -374,9 +377,9 @@ public class PlayerController : MonoBehaviour
         hasReachedTop = b;
     }
 
-    public void DisableTracker(bool b)
+    public void DisableTracker()
     {
-        disableTracker = b;
+        disableTracker = UIManager.instance.GetCheckTracker();
     }
 
     public void SetIsGrabbing(bool b, Transform obj)

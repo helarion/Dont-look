@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image pauseImg = null;
     [SerializeField] GameObject ControlPanel=null;
     [SerializeField] GameObject NoEyePanel=null;
+    [SerializeField] Slider volumeControl;
+    [SerializeField] Toggle toggleTracker;
 
     public bool isFading = false;
 
@@ -33,6 +35,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         StopAllCoroutines();
+        volumeControl.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
         if (!GameManager.instance.isTesting)
         {
             fadeImg.color = new Color(0, 0, 0, 1);
@@ -40,6 +43,12 @@ public class UIManager : MonoBehaviour
             FadeOut(fadeImg, 1, 0);
             StartCoroutine("StartCoroutine");
         }
+    }
+
+    public void ValueChangeCheck()
+    {
+        AkSoundEngine.SetRTPCValue("Master_Volume_Slider", volumeControl.value);
+        Debug.Log(volumeControl.value);
     }
 
     IEnumerator StartCoroutine()
@@ -129,5 +138,10 @@ public class UIManager : MonoBehaviour
     {
         ControlPanel.SetActive(!b);
         NoEyePanel.SetActive(b);
+    }
+
+    public bool GetCheckTracker()
+    {
+        return toggleTracker.isOn;
     }
 }
