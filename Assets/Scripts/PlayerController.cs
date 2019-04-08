@@ -133,6 +133,7 @@ public class PlayerController : MonoBehaviour
         }*/
         // LIGHT AIM CONTROL
         // if (!disableTracker && TobiiAPI.IsConnected) // EYE TRACKER OPTION
+
         if (!disableTracker) // EYE TRACKER OPTION
         {
             /*if (!TobiiAPI.GetGazePoint().IsRecent())
@@ -245,10 +246,10 @@ public class PlayerController : MonoBehaviour
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
-            rb.MovePosition(transform.position+lMovement * -1 * Time.deltaTime);
+            rb.MovePosition(transform.position+lMovement * Time.deltaTime);
             if(isGrabbing)
             {
-                objectGrabbed.position += lMovement * -1 * Time.deltaTime;
+                objectGrabbed.position += lMovement * Time.deltaTime;
             }
         }
         animator.SetBool("IsMoving", isMoving);
