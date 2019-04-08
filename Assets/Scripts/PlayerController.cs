@@ -15,51 +15,67 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform modelTransform;
     //Transform lightTransform;
 
+    [Header("Jump")]
+    [SerializeField] private float jumpForce = 1.5f;
+    [SerializeField] private float rayCastLength = 0.1f;
+    [SerializeField] private float maxClimbHeight = 1.0f;
+    [SerializeField] private float climbTime = 1f;
+
     [Header("Movement")]
-    [SerializeField] float runSpeed = 3;
-    [SerializeField] float walkSpeed = 1;
-    [SerializeField] float jumpForce = 1.5f;
-    [SerializeField] float rayCastLength = 0.1f;
-    [SerializeField] float maxClimbHeight = 1.0f;
-    [SerializeField] float climbTime = 1f;
-    [SerializeField] private AnimationCurve _accelerationCurve;
+    [SerializeField] private float runSpeed = 3;
+    [SerializeField] private float walkSpeed = 1;
+    [SerializeField] private AnimationCurve _horizontalAccelerationCurve;
+    [SerializeField] private AnimationCurve _verticalAccelerationCurve;
+    [SerializeField] private AnimationCurve _horizontalDecelerationCurve;
+    [SerializeField] private AnimationCurve _verticalDecelerationCurve;
+    [SerializeField] private float _horizontalAccSpeed = 1;
+    [SerializeField] private float _horizontalDecSpeed = 1;
+    [Range(-1, 1)]
+    private float _horizontalAccDecLerpValue;
+    private Vector3 _horizontalLastMovement = Vector3.zero;
+    [SerializeField] private float _verticalAccSpeed = 1;
+    [SerializeField] private float _verticalDecSpeed = 1;
+    [Range(-1, 1)]
+    private float _verticalAccDecLerpValue;
+    private Vector3 _verticalLastMovement = Vector3.zero;
 
     [Header("Light")]
-    [SerializeField] float sizeSpeed = 5;
-    [SerializeField] float stickSpeed = 3;
-    [SerializeField] float lightSpeed = 1;
-    [SerializeField] Transform lightTransform=null;
+    [SerializeField] private float sizeSpeed = 5;
+    [SerializeField] private float stickSpeed = 3;
+    [SerializeField] private float lightSpeed = 1;
+    [SerializeField] private Transform lightTransform=null;
 
     [Header("Debug")]
-    [SerializeField] bool disableTracker = false;
-    [SerializeField] Transform raycastPosition=null;
-    [SerializeField] bool isGrounded = false;
+    [SerializeField] private bool disableTracker = false;
+    [SerializeField] private Transform raycastPosition=null;
+    [SerializeField] private bool isGrounded = false;
 
-    float moveSpeed;
+    private float moveSpeed;
 
     public bool lightOn = true;
-    bool isAlive = true;
-    bool isClimbingLadder = false;
-    bool hasReachedTop = false;
-    bool isClimbing = false;
-    CameraBlock currentCameraBlock = null;
+    private bool isAlive = true;
+    private bool isClimbingLadder = false;
+    private bool hasReachedTop = false;
+    private bool isClimbing = false;
+    private CameraBlock currentCameraBlock = null;
 
-    bool isGrabbing = false;
-    bool isMoving = false;
-    bool pressedJump = false;
-    Transform objectGrabbed = null;
+    private bool isGrabbing = false;
+    private bool isMoving = false;
+    private bool pressedJump = false;
+    private Transform objectGrabbed = null;
 
-    float hMove;
-    float vMove;
+    private int inverse = 1;
 
-    int inverse = 1;
+    private float vMove;
+    private float hMove;
 
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
 
-
     void Start()
     {
+        disableTracker = false;
+        isAlive = true;
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
         lt = lightTransform.GetComponentInChildren<Light>();
@@ -78,9 +94,8 @@ public class PlayerController : MonoBehaviour
         DisableTracker();
         LightAim();
 
-        Movement();
-
-        isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, rayCastLength);
+        Move();
+        JumpCheck();
 
         BodyRotation();
     }
@@ -106,38 +121,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void BodyRotation()
-    {
-        Quaternion save = lt.transform.rotation;
-        float speed = 0.1f;
-        if (vMove > 0)
-        {
-            modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
-            inverse = 1;
-        }
-        else if (vMove < 0)
-        {
-            modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
-            inverse = -1;
-        }
-        else
-        {
-            if ((lookAtPos.x - transform.position.x < -0.25f) || (currentLookDirection == LookDirection.Right && lookAtPos.x - transform.position.x < 0.25f))
-            {
-                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
-                inverse = 1;
-                currentLookDirection = LookDirection.Right;
-            }
-            else
-            {
-                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
-                inverse = -1;
-                currentLookDirection = LookDirection.Left;
-            }
-        }
-        lt.transform.rotation = save;
-    }
-
     void LightAim()
     {
         /*if(!TobiiAPI.IsConnected)
@@ -152,14 +135,14 @@ public class PlayerController : MonoBehaviour
         // if (!disableTracker && TobiiAPI.IsConnected) // EYE TRACKER OPTION
         if (!disableTracker) // EYE TRACKER OPTION
         {
-            if (!TobiiAPI.GetGazePoint().IsRecent())
+            /*if (!TobiiAPI.GetGazePoint().IsRecent())
             {
                 ClosedEyes(true);
             }
             else
             {
                 ClosedEyes(false);
-            }
+            }*/
 
             cursorPos = TobiiAPI.GetGazePoint().Screen;
         }
@@ -196,76 +179,6 @@ public class PlayerController : MonoBehaviour
         lt.transform.rotation = Quaternion.Slerp(lt.transform.rotation, Quaternion.LookRotation(lookAtPos - lt.transform.position), Time.deltaTime * lightSpeed * 100);
     }
 
-    // CHECK LES INPUTS DE MOVEMENT
-    void Movement()
-    {
-        hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
-        vMove = GameManager.instance.controls.GetAxis("Move Vertical");
-
-        isMoving = false;
-
-        if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
-        {
-            moveSpeed = runSpeed;
-            animator.speed = 1.8f;
-        }
-        else
-        {
-            moveSpeed = walkSpeed;
-            animator.speed = 1;
-        }
-
-        // MOVEMENT
-        if (isGrabbing)
-        {
-            if (hMove != 0)
-            {
-                Vector3 translation = Vector3.right * hMove * moveSpeed * Time.deltaTime;
-
-                transform.position +=translation*-1;
-                objectGrabbed.position += translation*-1;
-                //objectGrabbed.Translate(translation,Space.World);
-            }
-        }
-        else if (!isClimbingLadder)
-        {
-            if (hMove != 0)
-            {
-                isMoving = true;
-                transform.position += Vector3.right * -1 * hMove * moveSpeed * Time.deltaTime;
-                animator.SetFloat("Inverse", hMove*inverse);
-            }
-            if (vMove != 0)
-            {
-                isMoving = true;
-                transform.position += Vector3.back * vMove * moveSpeed * Time.deltaTime;
-                animator.SetFloat("Inverse", vMove*inverse);
-            }
-            // JUMP
-            if (isGrounded)
-            {
-                if (GameManager.instance.controls.GetButtonDown("Jump")) Jump();
-                else pressedJump = false;
-            }
-        }
-        else
-        {
-            if (vMove < 0 || (vMove>0 && !hasReachedTop))
-            {
-                transform.Translate(Vector3.up * vMove * moveSpeed * Time.deltaTime );
-            }
-        }
-        animator.SetBool("IsMoving", isMoving);
-    }
-
-    public void Jump()
-    {
-        if (pressedJump) return;
-        pressedJump = true;
-        Vector3 jumpVector = new Vector3(0, jumpForce);
-        rb.AddForce(jumpVector, ForceMode.VelocityChange);
-    }
-
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
@@ -279,6 +192,192 @@ public class PlayerController : MonoBehaviour
     {
         positionToMove.y += cl.bounds.center.y - cl.bounds.min.y;
         transform.position = positionToMove;
+    }
+
+    #region Movement
+
+    void Move()
+    {
+        isMoving = false;
+        Vector3 lMovement = Vector3.zero;
+
+        if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+        {
+            moveSpeed = runSpeed;
+            animator.speed = 1.8f;
+        }
+        else
+        {
+            moveSpeed = walkSpeed;
+            animator.speed = 1;
+        }
+
+
+        hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
+        if(!isClimbingLadder)
+        {
+            if (hMove != 0)
+                lMovement += HorizontalMove(hMove);
+            else if (_horizontalAccDecLerpValue != 0)
+                lMovement += HorizontalSlowDown();
+        }
+
+        vMove = GameManager.instance.controls.GetAxis("Move Vertical");
+        if(!isGrabbing)
+        {
+            if (vMove != 0)
+                lMovement += VerticalMove(vMove);
+            else if (_verticalAccDecLerpValue != 0)
+                lMovement += VerticalSlowDown();
+        }
+
+        Vector3 lPoint;
+        if (isClimbingLadder)
+        {
+           lPoint = new Vector3(transform.position.x + lMovement.x, transform.position.y + lMovement.y,0);
+        }
+        else
+        {
+            lPoint = new Vector3(transform.position.x + lMovement.x, 0, transform.position.z + lMovement.y);
+        }
+        
+
+        if (lMovement != Vector3.zero)
+        {
+            isMoving = true;
+            rb.MovePosition(transform.position+lMovement * -1 * Time.deltaTime);
+            if(isGrabbing)
+            {
+                objectGrabbed.position += lMovement * -1 * Time.deltaTime;
+            }
+        }
+        animator.SetBool("IsMoving", isMoving);
+    }
+
+    Vector3 HorizontalMove(float lXmovValue)
+    {
+        _horizontalAccDecLerpValue += Time.deltaTime * _horizontalAccSpeed * Mathf.Sign(lXmovValue);
+        _horizontalAccDecLerpValue = Mathf.Clamp(_horizontalAccDecLerpValue, -1, 1);
+
+        Vector3 lMovement = new Vector3(Mathf.Abs(lXmovValue), 0, 0);
+        lMovement = lMovement.normalized * moveSpeed * Time.deltaTime * Mathf.Sign(_horizontalAccDecLerpValue);
+
+        _horizontalLastMovement = lMovement;
+
+        lMovement *= _horizontalAccelerationCurve.Evaluate(Mathf.Abs(_horizontalAccDecLerpValue));
+
+        return lMovement;
+    }
+
+    Vector3 VerticalMove(float lYmovValue)
+    {
+        _verticalAccDecLerpValue += Time.deltaTime * _verticalAccSpeed * Mathf.Sign(lYmovValue);
+        _verticalAccDecLerpValue = Mathf.Clamp(_verticalAccDecLerpValue, -1, 1);
+
+        Vector3 lMovement;
+
+        if (isClimbingLadder)
+        {
+            lMovement = new Vector3(0, Mathf.Abs(lYmovValue), 0);
+        }
+        else
+        {
+            lMovement = new Vector3(0, 0, Mathf.Abs(lYmovValue));
+        }
+        
+        lMovement = lMovement.normalized * moveSpeed * Time.deltaTime * Mathf.Sign(_verticalAccDecLerpValue);
+
+        _verticalLastMovement = lMovement;
+
+        lMovement *= _verticalAccelerationCurve.Evaluate(Mathf.Abs(_verticalAccDecLerpValue));
+
+        return lMovement;
+    }
+
+    Vector3 HorizontalSlowDown()
+    {
+        float pastLerp = _horizontalAccDecLerpValue;
+        _horizontalAccDecLerpValue -= Time.deltaTime * _horizontalDecSpeed * Mathf.Sign(_horizontalAccDecLerpValue);
+        if (Mathf.Sign(pastLerp) != Mathf.Sign(_horizontalAccDecLerpValue))
+        {
+            _horizontalAccDecLerpValue = 0;
+        }
+
+        Vector3 lMovement = _horizontalLastMovement;
+        lMovement *= _horizontalDecelerationCurve.Evaluate(Mathf.Abs(_horizontalAccDecLerpValue));
+        //print("SLOW = " + lMovement.x + " lastMovement = " + _horizontalLastMovement.x + " and lerp = " + _horizontalDecelerationCurve.Evaluate(Mathf.Abs(_horizontalAccDecLerpValue)) + " lerp = " + _horizontalAccDecLerpValue);
+
+        return lMovement;
+    }
+
+    Vector3 VerticalSlowDown()
+    {
+        float pastLerp = _verticalAccDecLerpValue;
+        _verticalAccDecLerpValue -= Time.deltaTime * _verticalDecSpeed * Mathf.Sign(_verticalAccDecLerpValue);
+        if (Mathf.Sign(pastLerp) != Mathf.Sign(_verticalAccDecLerpValue))
+        {
+            _verticalAccDecLerpValue = 0;
+        }
+
+        Vector3 lMovement = _verticalLastMovement;
+        lMovement *= _verticalDecelerationCurve.Evaluate(Mathf.Abs(_verticalAccDecLerpValue));
+
+        return lMovement;
+    }
+
+    void BodyRotation()
+    {
+        Quaternion save = lt.transform.rotation;
+        float speed = 0.1f;
+        if (vMove > 0)
+        {
+            modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
+            inverse = 1;
+        }
+        else if (vMove < 0)
+        {
+            modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
+            inverse = -1;
+        }
+        else
+        {
+            if ((lookAtPos.x - transform.position.x < -0.25f) || (currentLookDirection == LookDirection.Right && lookAtPos.x - transform.position.x < 0.25f))
+            {
+                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
+                inverse = 1;
+                currentLookDirection = LookDirection.Right;
+            }
+            else
+            {
+                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
+                inverse = -1;
+                currentLookDirection = LookDirection.Left;
+            }
+        }
+        lt.transform.rotation = save;
+    }
+
+    #endregion
+
+    #region Jump
+
+    void JumpCheck()
+    {
+        isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, rayCastLength);
+        // JUMP
+        if (isGrounded)
+        {
+            if (GameManager.instance.controls.GetButtonDown("Jump")) Jump();
+            else pressedJump = false;
+        }
+    }
+    
+    public void Jump()
+    {
+        if (pressedJump) return;
+        pressedJump = true;
+        Vector3 jumpVector = new Vector3(0, jumpForce);
+        rb.AddForce(jumpVector, ForceMode.VelocityChange);
     }
 
     private void OnCollisionStay(Collision collision)
@@ -313,6 +412,10 @@ public class PlayerController : MonoBehaviour
         isClimbing = false;
         rb.isKinematic = false;
     }
+
+    #endregion
+
+    #region GetSet
 
     // RENVOIE LE POINT DANS LE MONDE QUE LE JOUEUR VISE
     public Vector3 GetLookAt()
@@ -397,4 +500,5 @@ public class PlayerController : MonoBehaviour
     {
         return currentCameraBlock;
     }
+    #endregion
 }

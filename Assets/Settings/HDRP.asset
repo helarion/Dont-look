@@ -42,12 +42,12 @@ MonoBehaviour:
     enablePostprocess: 1
     enableOpaqueObjects: 1
     enableTransparentObjects: 1
-    enableRealtimePlanarReflection: 1
+    enableRealtimePlanarReflection: 0
     enableMSAA: 0
     enableAsyncCompute: 1
     runLightListAsync: 1
-    runSSRAsync: 1
-    runSSAOAsync: 1
+    runSSRAsync: 0
+    runSSAOAsync: 0
     runContactShadowsAsync: 1
     runVolumeVoxelizationAsync: 1
     lightLoopSettings:
@@ -163,7 +163,7 @@ MonoBehaviour:
     supportedLitShaderMode: 3
     supportDecals: 0
     msaaSampleCount: 1
-    supportMotionVectors: 1
+    supportMotionVectors: 0
     supportRuntimeDebugDisplay: 1
     supportDitheringCrossFade: 1
     supportRayTracing: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
         m_Bits: 0
       supportFabricConvolution: 0
       maxDirectionalLightsOnScreen: 16
-      maxPunctualLightsOnScreen: 512
+      maxPunctualLightsOnScreen: 256
       maxAreaLightsOnScreen: 64
       maxEnvLightsOnScreen: 64
       maxDecalsOnScreen: 512
@@ -193,9 +193,9 @@ MonoBehaviour:
       maxShadowRequests: 128
       shadowMapsDepthBits: 32
       useDynamicViewportRescale: 1
-      shadowQuality: 2
+      shadowQuality: 1
     decalSettings:
-      drawDistance: 1000
+      drawDistance: 30
       atlasWidth: 4096
       atlasHeight: 4096
       perChannelMask: 0

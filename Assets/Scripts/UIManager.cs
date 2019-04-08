@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] Image fadeImg = null;
-    [SerializeField] float fadeTime=0.5f;
+    [SerializeField] private Image fadeImg = null;
+    [SerializeField] private float fadeTime=0.5f;
     public GameObject pausePanel = null;
-    [SerializeField] Image pauseImg = null;
-    [SerializeField] GameObject ControlPanel=null;
-    [SerializeField] GameObject NoEyePanel=null;
-    [SerializeField] Slider volumeControl;
-    [SerializeField] Toggle toggleTracker;
+    [SerializeField] private Image pauseImg = null;
+    [SerializeField] private GameObject ControlPanel=null;
+    [SerializeField] private GameObject NoEyePanel=null;
+    [SerializeField] private Slider volumeControl;
+    [SerializeField] private Toggle toggleTracker;
 
     public bool isFading = false;
 
@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
+        StopAllCoroutines();
         if (instance == null)
 
             instance = this;
@@ -34,12 +35,13 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        StopAllCoroutines();
+        //toggleTracker.isOn = true;
+        //GameManager.instance.SetIsPaused(false);
         volumeControl.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
         if (!GameManager.instance.isTesting)
         {
             fadeImg.color = new Color(0, 0, 0, 1);
-            GameManager.instance.player.SetIsAlive(false);
+            GameManager.instance.SetIsPaused(true);
             FadeOut(fadeImg, 1, 0);
             StartCoroutine("StartCoroutine");
         }
@@ -55,7 +57,7 @@ public class UIManager : MonoBehaviour
     {
         while (UIManager.instance.isFading)
             yield return new WaitForSeconds(0.1f);
-        GameManager.instance.player.SetIsAlive(true);
+        GameManager.instance.SetIsPaused(true);
     }
 
     IEnumerator FadeOutCoroutine(object[] param)
@@ -142,6 +144,6 @@ public class UIManager : MonoBehaviour
 
     public bool GetCheckTracker()
     {
-        return toggleTracker.isOn;
+        return !toggleTracker.isOn;
     }
 }

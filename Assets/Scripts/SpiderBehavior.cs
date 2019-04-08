@@ -5,24 +5,24 @@ using UnityEngine.AI;
 
 public class SpiderBehavior : Enemy
 {
-    [SerializeField] float bonusSpeed = 1;
+    [SerializeField] private float bonusSpeed = 1;
 
-    [SerializeField] float delaySpot = 1;
-    [SerializeField] float delayChase = 3;
+    [SerializeField] private float delaySpot = 1;
+    [SerializeField] private float delayChase = 3;
 
-    [SerializeField] bool clickToSetDestination = false;
+    [SerializeField] private bool clickToSetDestination = false;
 
-    float countLook = 0;
-    float countChase = 0;
+    private float countLook = 0;
+    private float countChase = 0;
 
-    bool canSeePlayer = false;
+    private bool canSeePlayer = false;
 
-    bool chaseCoroutine = false;
-    Animator animator;
-    bool isMoving = false;
+    private bool chaseCoroutine = false;
+    private Animator animator;
+    private bool isMoving = false;
 
-    [SerializeField] float velocity;
-    Vector3 lastPosition;
+    [SerializeField] private float velocity;
+    private Vector3 lastPosition;
 
     void Start()
     {
@@ -87,7 +87,7 @@ public class SpiderBehavior : Enemy
                         IsLit(true);
                     }
 
-                    print("Touched " + hit.transform.gameObject.name);
+                    //print("Touched " + hit.transform.gameObject.name);
                 }
             }
         }

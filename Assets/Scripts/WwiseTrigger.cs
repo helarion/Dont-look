@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WwiseTrigger : MonoBehaviour
 {
-    float z;
-    [SerializeField] string triggerName = "";
-    [SerializeField] bool playOnlyOnce = false;
-    [SerializeField] GameObject emitter = null;
+    private float z;
+    [SerializeField] private string triggerName = "";
+    [SerializeField] private bool playOnlyOnce = false;
+    [SerializeField] private GameObject emitter = null;
 
     private void OnTriggerEnter(Collider other)
     {

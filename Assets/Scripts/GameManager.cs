@@ -9,27 +9,27 @@ public class GameManager : MonoBehaviour
     public PlayerController player;
 
     [HideInInspector]public static GameManager instance = null;
-    List<Enemy> enemyList;
+    private List<Enemy> enemyList;
 
-    [SerializeField] float cameraSpeed=3;
+    [SerializeField] private float cameraSpeed=3;
 
     [Header("Debug")]
-    [SerializeField] Checkpoint lastCheckpoint = null;
+    [SerializeField] private Checkpoint lastCheckpoint = null;
     [SerializeField] public bool isTesting = false;
 
     [Header("ScreenShake")]
-    [SerializeField] float shakeDuration = 0f;
-    [SerializeField] float shakeAmount = 0.7f;
-    [SerializeField] float decreaseFactor = 1.0f;
-    [SerializeField] float maxValue = 0.1f;
+    [SerializeField] private float shakeDuration = 0f;
+    [SerializeField] private float shakeAmount = 0.7f;
+    [SerializeField] private float decreaseFactor = 1.0f;
+    [SerializeField] private float maxValue = 0.1f;
 
     [Header("Layers")]
-    [SerializeField] LayerMask wallsAndMobsLayer;
+    [SerializeField] private LayerMask wallsAndMobsLayer;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
-    Vector3 originalPos;
-    bool isPaused = false;
+    private Vector3 originalPos;
+    private bool isPaused = false;
 
     void Awake()
     {
@@ -176,6 +176,7 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
+        Cursor.visible = true;
         Time.timeScale = 0;
         isPaused = true;
         UIManager.instance.pausePanel.SetActive(true);
@@ -184,6 +185,7 @@ public class GameManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        Cursor.visible = false;
         Time.timeScale = 1;
         isPaused = false;
         UIManager.instance.pausePanel.SetActive(false);
@@ -193,5 +195,10 @@ public class GameManager : MonoBehaviour
     public bool GetIsPaused()
     {
         return isPaused;
+    }
+
+    public void SetIsPaused(bool b)
+    {
+        isPaused = b;
     }
 }
