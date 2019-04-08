@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyDetectZone : MonoBehaviour
 {
-    Enemy e;
+    private Enemy e;
 
     private void Start()
     {

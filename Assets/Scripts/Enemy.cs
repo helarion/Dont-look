@@ -12,11 +12,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] public bool isChasing = false;
 
     [Header("Debug")]
-    [SerializeField] GameObject spawnZones=null ;
+    [SerializeField] private GameObject spawnZones=null ;
 
 
     [HideInInspector] public NavMeshAgent agent;
-    List<Transform> listSpawnZones;
+    private List<Transform> listSpawnZones;
 
     private void Start()
     {
@@ -40,15 +40,8 @@ public class Enemy : MonoBehaviour
         Respawn();
     }
 
-    public virtual void DetectPlayer(bool b)
-    {
-
-    }
-
-    public virtual void IsLit(bool b)
-    {
-
-    }
+    public virtual void DetectPlayer(bool b) {}
+    public virtual void IsLit(bool b) {}
 
     public virtual void Respawn()
     {

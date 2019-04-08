@@ -30,8 +30,9 @@ public class GameManager : MonoBehaviour
 
     private Vector3 originalPos;
     private bool isPaused = false;
+    private bool isTrackerEnabled = true;
 
-    void Awake()
+    private void Awake()
     {
         if (instance == null)
 
@@ -61,7 +62,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         // PAUSE HANDLER
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (controls.GetButtonDown("Pause"))
         {
             if (isPaused) ResumeGame();
             else PauseGame();
@@ -71,7 +72,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Shaking screen for duration set previously
-    void CheckShake()
+    private void CheckShake()
     {
         if (shakeDuration > 0)
         {
@@ -87,7 +88,7 @@ public class GameManager : MonoBehaviour
     }
 
     // RESPAWN CHAQUE ENNEMI
-    void RespawnEnemies()
+    private void RespawnEnemies()
     {
         foreach(Enemy e in enemyList)
         {
@@ -112,7 +113,7 @@ public class GameManager : MonoBehaviour
     }
 
     // COROUTINE DE FADE OUT / IN DE LA MORT
-    IEnumerator DeathCoroutine()
+    private IEnumerator DeathCoroutine()
     {
         while (UIManager.instance.isFading)
             yield return new WaitForSeconds(0.1f);
@@ -146,7 +147,7 @@ public class GameManager : MonoBehaviour
     }
 
     // SHAKESCREEN PROGRESSIF COROUTINE /// PAS ENCORE FONCTIONNEL
-    IEnumerator ShakeCoroutine(float maxTime)
+    private IEnumerator ShakeCoroutine(float maxTime)
     {
         float time = 0;
         float update = maxValue *(0.01f*maxTime);
@@ -157,7 +158,12 @@ public class GameManager : MonoBehaviour
         }
         yield return null;
     }
-    
+
+    public void CheckTracker()
+    {
+        isTrackerEnabled = UIManager.instance.GetCheckTracker();
+    }
+
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
@@ -167,11 +173,6 @@ public class GameManager : MonoBehaviour
     public void RotateCamera(Quaternion newRotate)
     {
         mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, cameraSpeed);
-    }
-
-    public LayerMask getWallsAndMobsLayer()
-    {
-        return wallsAndMobsLayer;
     }
 
     public void PauseGame()
@@ -192,6 +193,18 @@ public class GameManager : MonoBehaviour
         //UIManager.instance.FadePause(false);
     }
 
+    #region getter-setter
+
+    public LayerMask GetWallsAndMobsLayer()
+    {
+        return wallsAndMobsLayer;
+    }
+
+    public bool GetIsTrackerEnabled()
+    {
+        return isTrackerEnabled;
+    }
+
     public bool GetIsPaused()
     {
         return isPaused;
@@ -201,4 +214,5 @@ public class GameManager : MonoBehaviour
     {
         isPaused = b;
     }
+    #endregion
 }

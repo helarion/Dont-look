@@ -24,7 +24,7 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float velocity;
     private Vector3 lastPosition;
 
-    void Start()
+    private void Start()
     {
         animator = GetComponentInChildren<Animator>();
         Initialize();
@@ -33,7 +33,7 @@ public class SpiderBehavior : Enemy
         lastPosition = transform.position;
     }
 
-    void Update()
+    private void Update()
     {
         velocity = (transform.position - lastPosition).magnitude;
         lastPosition = transform.position;
@@ -80,7 +80,7 @@ public class SpiderBehavior : Enemy
 
                     RaycastHit hit;
                     Ray ray = new Ray(playerPosition, lightVec);
-                    Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.getWallsAndMobsLayer());
+                    Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer());
 
                     if (hit.transform.gameObject.tag == "Spider")
                     {
@@ -101,7 +101,7 @@ public class SpiderBehavior : Enemy
     }
 
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
-    IEnumerator CountLook()
+    private IEnumerator CountLook()
     {
         while (countLook<delaySpot)
         {
@@ -114,7 +114,7 @@ public class SpiderBehavior : Enemy
     }
 
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE PASSE A CHASSER LE JOUEUR. POTENTIELLEMENT INUTILE ?
-    IEnumerator CountChase()
+    private IEnumerator CountChase()
     {
         while(countChase<delayChase)
         {
@@ -138,13 +138,13 @@ public class SpiderBehavior : Enemy
     }
 
     // ARRETER LA CHASSE DU JOUEUR
-    void StopChase()
+    private void StopChase()
     {
         Respawn();
     }
 
     // COMMENCER LA CHASSE DU JOUEUR
-    void Chase()
+    private void Chase()
     {
         agent.isStopped = false;
         isChasing = true;
@@ -165,7 +165,6 @@ public class SpiderBehavior : Enemy
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
     {
-
         agent.speed = moveSpeed;
         if (b)
         {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.00017954258, g: 0.00014297281, b: 0.00013006943,
+  m_IndirectSpecularColor: {r: 0.00018583951, g: 0.00014793102, b: 0.00013464913,
     a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -18341,7 +18341,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1763861055}
         m_MethodName: DisableTracker
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18352,7 +18352,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!4 &1791919359 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4485985420915106, guid: 75f47d30714ad204e96b30895dc77f89,
@@ -27245,6 +27245,16 @@ PrefabInstance:
         type: 3}
       propertyPath: lightSpeed
       value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194574732181831086, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+        type: 3}
+      propertyPath: walkSpeed
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194574732181831086, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+        type: 3}
+      propertyPath: runSpeed
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 4194574731507233546, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
         type: 3}

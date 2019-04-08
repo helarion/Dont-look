@@ -4,21 +4,9 @@ using UnityEngine;
 
 public class SwingingLightTrigger : MonoBehaviour
 {
-    [SerializeField] string triggerObjectName;
-    [SerializeField] GameObject swingingLight;
-    [SerializeField] Vector3 swingVector = Vector3.zero;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private string triggerObjectName;
+    [SerializeField] private GameObject swingingLight;
+    [SerializeField] private Vector3 swingVector = Vector3.zero;
 
     private void OnTriggerEnter(Collider other)
     {

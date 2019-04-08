@@ -4,20 +4,8 @@ using UnityEngine;
 
 public class ScreenshakeTrigger : MonoBehaviour
 {
-    [SerializeField] string triggerObjectName;
-    [SerializeField] float screenshakeDuration;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    [SerializeField] private string triggerObjectName;
+    [SerializeField] private float screenshakeDuration;
 
     private void OnTriggerEnter(Collider other)
     {

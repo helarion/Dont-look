@@ -4,16 +4,15 @@ using Tobii.Gaming;
 
 public class PlayerController : MonoBehaviour
 {
-    Light lt;
-    Rigidbody rb;
-    Collider cl;
-    Vector3 lookAtPos;
-    Vector3 cursorPos;
-    Animator animator;
+    private Light lt;
+    private Rigidbody rb;
+    private Collider cl;
+    private Vector3 lookAtPos;
+    private Vector3 cursorPos;
+    private Animator animator;
 
     [Header("Model and light objects")]
-    [SerializeField] Transform modelTransform;
-    //Transform lightTransform;
+    [SerializeField] private Transform modelTransform;
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 1.5f;
@@ -46,7 +45,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform lightTransform=null;
 
     [Header("Debug")]
-    [SerializeField] private bool disableTracker = false;
     [SerializeField] private Transform raycastPosition=null;
     [SerializeField] private bool isGrounded = false;
 
@@ -72,9 +70,8 @@ public class PlayerController : MonoBehaviour
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
 
-    void Start()
+    private void Start()
     {
-        disableTracker = false;
         isAlive = true;
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
@@ -88,10 +85,9 @@ public class PlayerController : MonoBehaviour
         cursorPos = Input.mousePosition;
     }
 
-    void Update()
+    private void Update()
     {
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
-        DisableTracker();
         LightAim();
 
         Move();
@@ -121,7 +117,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void LightAim()
+    private void LightAim()
     {
         /*if(!TobiiAPI.IsConnected)
         {
@@ -134,7 +130,7 @@ public class PlayerController : MonoBehaviour
         // LIGHT AIM CONTROL
         // if (!disableTracker && TobiiAPI.IsConnected) // EYE TRACKER OPTION
 
-        if (!disableTracker) // EYE TRACKER OPTION
+        if (GameManager.instance.GetIsTrackerEnabled()) // EYE TRACKER OPTION
         {
             /*if (!TobiiAPI.GetGazePoint().IsRecent())
             {
@@ -173,7 +169,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.getWallsAndMobsLayer()))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer()))
         {
             lookAtPos = hit.point;
         }
@@ -361,7 +357,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Jump
-
     void JumpCheck()
     {
         isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, rayCastLength);
@@ -417,7 +412,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region GetSet
-
     // RENVOIE LE POINT DANS LE MONDE QUE LE JOUEUR VISE
     public Vector3 GetLookAt()
     {
@@ -479,11 +473,6 @@ public class PlayerController : MonoBehaviour
     public void SetHasReachedTop(bool b)
     {
         hasReachedTop = b;
-    }
-
-    public void DisableTracker()
-    {
-        disableTracker = UIManager.instance.GetCheckTracker();
     }
 
     public void SetIsGrabbing(bool b, Transform obj)

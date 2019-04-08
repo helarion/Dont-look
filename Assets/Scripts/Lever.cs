@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Lever : Objet
 {
-    [SerializeField] Objet target=null;
-    //bool isActivated=false;
-    MeshRenderer model;
+    [SerializeField] private Objet target =null;
+    private bool isActivated =false;
+    private MeshRenderer model;
 
     private void Start()
     {
@@ -25,6 +25,7 @@ public class Lever : Objet
 
     public override void Activate()
     {
+        if (isActivated) return;
         base.Activate();
         target.Activate();
         model.transform.localEulerAngles = new Vector3(0, 180, 0);
