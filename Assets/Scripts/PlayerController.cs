@@ -56,7 +56,6 @@ public class PlayerController : MonoBehaviour
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
 
-
     void Start()
     {
         cl = GetComponent<Collider>();
