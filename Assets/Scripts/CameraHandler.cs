@@ -33,43 +33,34 @@ public class CameraHandler : MonoBehaviour
 
         Vector3 newPosition = target.position + diffCameraPlayer.normalized * offset + diffCameraCursor;*/
 
-        Vector3 newPosition = (target.position + lookAtPos) / 2.0f;
+        Vector3 newPosition = target.position + Vector3.ClampMagnitude(lookAtPos - target.position, offset);
         if (newPosition.y < minYCamera)
         {
             newPosition.y = minYCamera;
         }
-        newPosition.z = target.position.z;
-        newPosition = target.position + Vector3.ClampMagnitude((lookAtPos - target.position), offset);
-        if (newPosition.y < minYCamera)
-        {
-            newPosition.y = minYCamera;
-        }
-        newPosition.z = target.position.z;
+        newPosition.z = zStartPosition;
         
-        float cameraYawAngle = -180 + GameManager.instance.player.getCursorPosNormalized().x * cameraYawAngleMultiplier;
+        float cameraYawAngle = GameManager.instance.player.getCursorPosNormalized().x * cameraYawAngleMultiplier;
 
         Quaternion newRotate = Quaternion.Euler(0, cameraYawAngle, 0);
-
-        newPosition.z = zStartPosition;
 
         CameraBlock currentCameraBlock = GameManager.instance.player.getCameraBlock();
         if (currentCameraBlock != null)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(transform.position - lookAtPos) * Quaternion.Euler(new Vector3(0, -180, 0));
-            newPosition.z = transform.position.z;
+            Quaternion targetRotation = Quaternion.LookRotation(transform.position - lookAtPos);
             if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Left)
             {
                 if (newPosition.x > currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.min.x)
                 {
                     newPosition.x = currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.min.x;
                 }
-                if (targetRotation.eulerAngles.y < 180 - currentCameraBlock.maxCameraYawAngle)
+                if (targetRotation.eulerAngles.y < -currentCameraBlock.maxCameraYawAngle)
                 {
-                    targetRotation *= Quaternion.Euler(new Vector3(0, 180 - currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
+                    targetRotation *= Quaternion.Euler(new Vector3(0, -currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
                 }
-                else if (targetRotation.eulerAngles.y > 180)
+                else if (targetRotation.eulerAngles.y > 0)
                 {
-                    targetRotation *= Quaternion.Euler(new Vector3(0, 180 - targetRotation.eulerAngles.y, 0));
+                    targetRotation *= Quaternion.Euler(new Vector3(0, -targetRotation.eulerAngles.y, 0));
                 }
             }
             else
@@ -78,13 +69,13 @@ public class CameraHandler : MonoBehaviour
                 {
                     newPosition.x = currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.x;
                 }
-                if (targetRotation.eulerAngles.y < 180)
+                if (targetRotation.eulerAngles.y < 0)
                 {
-                    targetRotation *= Quaternion.Euler(new Vector3(0, 180 - targetRotation.eulerAngles.y, 0));
+                    targetRotation *= Quaternion.Euler(new Vector3(0, -targetRotation.eulerAngles.y, 0));
                 }
-                else if (targetRotation.eulerAngles.y > 180 + currentCameraBlock.maxCameraYawAngle)
+                else if (targetRotation.eulerAngles.y > currentCameraBlock.maxCameraYawAngle)
                 {
-                    targetRotation *= Quaternion.Euler(new Vector3(0, 180 + currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
+                    targetRotation *= Quaternion.Euler(new Vector3(0, currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
                 }
             }
             
@@ -97,6 +88,7 @@ public class CameraHandler : MonoBehaviour
             {
                 targetRotation *= Quaternion.Euler(new Vector3(currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
             }
+
             targetRotation *= Quaternion.Euler(0, 0, -targetRotation.eulerAngles.z);
             GameManager.instance.RotateCamera(targetRotation);
             GameManager.instance.MoveCamera(newPosition);
