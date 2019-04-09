@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform lightTransform=null;
 
     [Header("Debug")]
-    [SerializeField] private Transform raycastPosition=null;
+    [SerializeField] private Transform[] raycastPosition=null;
     [SerializeField] private bool isGrounded = false;
 
     private float moveSpeed;
@@ -240,10 +240,10 @@ public class PlayerController : MonoBehaviour
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
-            rb.MovePosition(transform.position+lMovement * Time.deltaTime);
+            rb.MovePosition(transform.position+lMovement);
             if(isGrabbing)
             {
-                objectGrabbed.position += lMovement * Time.deltaTime;
+                objectGrabbed.position += lMovement;
             }
         }
         animator.SetBool("IsMoving", isMoving);
@@ -355,9 +355,18 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Jump
-    void JumpCheck()
+    private void GroundedCheck()
     {
-        isGrounded = Physics.Raycast(raycastPosition.position, -Vector3.up, rayCastLength);
+        isGrounded = false;
+        foreach(Transform t in raycastPosition)
+        {
+            if(Physics.Raycast(t.position, -Vector3.up, rayCastLength)) isGrounded=true;
+        }
+    }
+
+    private void JumpCheck()
+    {
+        GroundedCheck();
         // JUMP
         if (isGrounded)
         {
