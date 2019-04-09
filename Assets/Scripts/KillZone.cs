@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class KillZone : MonoBehaviour
 {
-    Enemy e;
+    private Enemy e;
 
-    void Start()
+    private void Start()
     {
         e = GetComponentInParent<Enemy>();
     }

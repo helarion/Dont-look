@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class WwiseTrigger : MonoBehaviour
 {
-    float z;
-    [SerializeField] string triggerName = "";
+    private float z;
+    [SerializeField] private string triggerName = "";
+    [SerializeField] private bool playOnlyOnce = false;
+    [SerializeField] private GameObject emitter = null;
 
     private void OnTriggerEnter(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
-        AkSoundEngine.PostEvent(triggerName, GameManager.instance.gameObject);
+        AkSoundEngine.PostEvent(triggerName, emitter);
+        if (playOnlyOnce) Destroy(gameObject);
+        float value;
+       //AkSoundEngine.GetRTPCValue("position_relative_volume",emitter,value,);
     }
 
     [ExecuteInEditMode]

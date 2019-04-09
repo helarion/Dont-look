@@ -9,29 +9,30 @@ public class GameManager : MonoBehaviour
     public PlayerController player;
 
     [HideInInspector]public static GameManager instance = null;
-    List<Enemy> enemyList;
+    private List<Enemy> enemyList;
 
-    [SerializeField] float cameraSpeed=3;
+    [SerializeField] private float cameraSpeed=3;
 
     [Header("Debug")]
-    [SerializeField] Checkpoint lastCheckpoint = null;
+    [SerializeField] private Checkpoint lastCheckpoint = null;
     [SerializeField] public bool isTesting = false;
 
     [Header("ScreenShake")]
-    [SerializeField] float shakeDuration = 0f;
-    [SerializeField] float shakeAmount = 0.7f;
-    [SerializeField] float decreaseFactor = 1.0f;
-    [SerializeField] float maxValue = 0.1f;
+    [SerializeField] private float shakeDuration = 0f;
+    [SerializeField] private float shakeAmount = 0.7f;
+    [SerializeField] private float decreaseFactor = 1.0f;
+    [SerializeField] private float maxValue = 0.1f;
 
     [Header("Layers")]
-    [SerializeField] LayerMask wallsAndMobsLayer;
+    [SerializeField] private LayerMask wallsAndMobsLayer;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
-    Vector3 originalPos;
-    bool isPaused = false;
+    private Vector3 originalPos;
+    private bool isPaused = false;
+    private bool isTrackerEnabled = true;
 
-    void Awake()
+    private void Awake()
     {
         if (instance == null)
 
@@ -61,7 +62,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         // PAUSE HANDLER
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (controls.GetButtonDown("Pause"))
         {
             if (isPaused) ResumeGame();
             else PauseGame();
@@ -71,7 +72,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Shaking screen for duration set previously
-    void CheckShake()
+    private void CheckShake()
     {
         if (shakeDuration > 0)
         {
@@ -87,7 +88,7 @@ public class GameManager : MonoBehaviour
     }
 
     // RESPAWN CHAQUE ENNEMI
-    void RespawnEnemies()
+    private void RespawnEnemies()
     {
         foreach(Enemy e in enemyList)
         {
@@ -112,7 +113,7 @@ public class GameManager : MonoBehaviour
     }
 
     // COROUTINE DE FADE OUT / IN DE LA MORT
-    IEnumerator DeathCoroutine()
+    private IEnumerator DeathCoroutine()
     {
         while (UIManager.instance.isFading)
             yield return new WaitForSeconds(0.1f);
@@ -146,7 +147,7 @@ public class GameManager : MonoBehaviour
     }
 
     // SHAKESCREEN PROGRESSIF COROUTINE /// PAS ENCORE FONCTIONNEL
-    IEnumerator ShakeCoroutine(float maxTime)
+    private IEnumerator ShakeCoroutine(float maxTime)
     {
         float time = 0;
         float update = maxValue *(0.01f*maxTime);
@@ -157,7 +158,12 @@ public class GameManager : MonoBehaviour
         }
         yield return null;
     }
-    
+
+    public void CheckTracker()
+    {
+        isTrackerEnabled = UIManager.instance.GetCheckTracker();
+    }
+
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
@@ -169,13 +175,9 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, cameraSpeed);
     }
 
-    public LayerMask getWallsAndMobsLayer()
-    {
-        return wallsAndMobsLayer;
-    }
-
     public void PauseGame()
     {
+        Cursor.visible = true;
         Time.timeScale = 0;
         isPaused = true;
         UIManager.instance.pausePanel.SetActive(true);
@@ -184,14 +186,33 @@ public class GameManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        Cursor.visible = false;
         Time.timeScale = 1;
         isPaused = false;
         UIManager.instance.pausePanel.SetActive(false);
         //UIManager.instance.FadePause(false);
     }
 
+    #region getter-setter
+
+    public LayerMask GetWallsAndMobsLayer()
+    {
+        return wallsAndMobsLayer;
+    }
+
+    public bool GetIsTrackerEnabled()
+    {
+        return isTrackerEnabled;
+    }
+
     public bool GetIsPaused()
     {
         return isPaused;
     }
+
+    public void SetIsPaused(bool b)
+    {
+        isPaused = b;
+    }
+    #endregion
 }

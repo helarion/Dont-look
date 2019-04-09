@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class LadderClimb : MonoBehaviour
 {
-    BoxCollider col;
-    float maxHeight;
-    PlayerController player =null;
+    private BoxCollider col;
+    private float maxHeight;
+    private PlayerController player =null;
 
     private void Start()
     {
@@ -39,7 +39,7 @@ public class LadderClimb : MonoBehaviour
         StopClimb();
     }
 
-    void StartClimb()
+    private void StartClimb()
     {
         Vector3 v = player.transform.position;
         v.x = transform.position.x;
@@ -48,7 +48,7 @@ public class LadderClimb : MonoBehaviour
         player.SetIsClimbing(true);
     }
 
-    void StopClimb()
+    private void StopClimb()
     {
         if (!player.GetIsClimbing()) return;
         player.transform.eulerAngles += new Vector3(0, 90, 0);

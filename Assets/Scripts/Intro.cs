@@ -6,22 +6,21 @@ using UnityEngine.UI;
 
 public class Intro : MonoBehaviour
 {
-    [SerializeField] float fadeTime = 0.5f;
-    [SerializeField] float zoomSpeed = 0.1f;
-    [SerializeField] SpriteRenderer cnam=null;
-    [SerializeField] SpriteRenderer magelis=null;
-    [SerializeField] SpriteRenderer poitiers=null;
-    [SerializeField] Transform scene=null;
-    [SerializeField] Canvas logos=null;
+    [SerializeField] private float fadeTime = 0.5f;
+    [SerializeField] private float zoomSpeed = 0.1f;
+    [SerializeField] private SpriteRenderer cnam =null;
+    [SerializeField] private SpriteRenderer magelis =null;
+    [SerializeField] private SpriteRenderer poitiers =null;
+    [SerializeField] private Transform scene =null;
+    [SerializeField] private Canvas logos =null;
 
-    Color cnamColor;
-    Color magelisColor;
-    Color poitiersColor;
+    private Color cnamColor;
+    private Color magelisColor;
+    private Color poitiersColor;
 
-    Camera cam;
+    private Camera cam;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         cam = GetComponent<Camera>();
         cnamColor = cnam.color;
@@ -46,7 +45,7 @@ public class Intro : MonoBehaviour
         scene.position = Vector3.Lerp(scene.position, scene.position + Vector3.back, 0.5f);
     }
 
-    IEnumerator FadeInImage()
+    private IEnumerator FadeInImage()
     {
         yield return new WaitForSeconds(0.5f);
         for (float i = 0; i < 1; i += Time.deltaTime * fadeTime)
@@ -80,7 +79,7 @@ public class Intro : MonoBehaviour
         StartCoroutine("FadeOutImage");
     }
 
-    IEnumerator FadeOutImage()
+    private IEnumerator FadeOutImage()
     {
         for (float i = 1; i > 0; i -= Time.deltaTime * fadeTime)
         {
