@@ -82,11 +82,11 @@ public class CameraHandler : MonoBehaviour
             }
             
             
-            if (targetRotation.eulerAngles.y < -currentCameraBlock.maxCameraPitchAngle)
+            if (targetRotation.eulerAngles.x < -currentCameraBlock.maxCameraPitchAngle)
             {
                 targetRotation *= Quaternion.Euler(new Vector3(-currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
             }
-            else if (targetRotation.eulerAngles.y > currentCameraBlock.maxCameraPitchAngle)
+            else if (targetRotation.eulerAngles.x > currentCameraBlock.maxCameraPitchAngle)
             {
                 targetRotation *= Quaternion.Euler(new Vector3(currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
             }
