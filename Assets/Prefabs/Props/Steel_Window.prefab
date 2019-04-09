@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 4294967287
   m_IsActive: 1
 --- !u!4 &3786363864089357541
 Transform:
@@ -86,7 +86,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3786363864089357543}
-  - component: {fileID: 3786363864095172871}
   m_Layer: 0
   m_Name: Steel_Window
   m_TagString: Untagged
@@ -110,21 +109,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 0}
---- !u!111 &3786363864095172871
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3786363864089391303}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 0}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!1 &3786363864222619258
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,13 +135,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3786363864222619258}
-  m_LocalRotation: {x: -0.5717042, y: -0, z: -0, w: 0.8204598}
-  m_LocalPosition: {x: 0, y: -1, z: -0.16666675}
+  m_LocalRotation: {x: 0.6443201, y: -0, z: -0, w: 0.76475596}
+  m_LocalPosition: {x: 0, y: 0.45833334, z: -0.16666663}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 3786363864089357543}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -69.73801, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 80.229004, y: 0, z: 0}
 --- !u!108 &3786363864222619206
 Light:
   m_ObjectHideFlags: 0
@@ -171,7 +155,7 @@ Light:
   m_Color: {r: 0.504717, g: 0.7946944, b: 1, a: 1}
   m_Intensity: 4096
   m_Range: 40
-  m_SpotAngle: 104
+  m_SpotAngle: 57.317337
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -215,7 +199,7 @@ MonoBehaviour:
   areaIntensity: 200
   enableSpotReflector: 0
   luxAtDistance: 1
-  m_InnerSpotPercent: 54.6
+  m_InnerSpotPercent: 68.48863
   lightDimmer: 1
   m_VolumetricDimmer: 1
   lightUnit: 4

@@ -11,12 +11,13 @@ GameObject:
   - component: {fileID: 430000}
   - component: {fileID: 3302128}
   - component: {fileID: 2373954}
+  - component: {fileID: 6774942118674033621}
   m_Layer: 0
   m_Name: Box06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967287
   m_IsActive: 1
 --- !u!4 &430000
 Transform:
@@ -77,6 +78,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &6774942118674033621
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153342}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.271062, y: 0.14650401, z: 1.0781388}
+  m_Center: {x: 0, y: -0.048893254, z: -0.46993044}
 --- !u!1 &177524
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,11 +101,11 @@ GameObject:
   m_Component:
   - component: {fileID: 453986}
   m_Layer: 0
-  m_Name: wooden_platform_2
+  m_Name: wooden-platform-2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &453986
 Transform:
@@ -102,7 +116,7 @@ Transform:
   m_GameObject: {fileID: 177524}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.664584, y: -7.998, z: -8.093517}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 430000}
   m_Father: {fileID: 0}

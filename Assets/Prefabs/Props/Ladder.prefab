@@ -97,6 +97,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BASML_Props_Stairs (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1279687924320702, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967287
+      objectReference: {fileID: 0}
     - target: {fileID: 4291304753396632, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -166,6 +170,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BASML_Props_Stairs_Entry
       objectReference: {fileID: 0}
+    - target: {fileID: 1826806278703416, guid: 439956ccf986b914eb15bd5912599fcf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967287
+      objectReference: {fileID: 0}
     - target: {fileID: 4504672530288426, guid: 439956ccf986b914eb15bd5912599fcf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -211,18 +219,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4504672530288426, guid: 439956ccf986b914eb15bd5912599fcf, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4504672530288426, guid: 439956ccf986b914eb15bd5912599fcf, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.50000006
       objectReference: {fileID: 0}
-    - target: {fileID: 4504672530288426, guid: 439956ccf986b914eb15bd5912599fcf, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64526300536800354, guid: 439956ccf986b914eb15bd5912599fcf, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 439956ccf986b914eb15bd5912599fcf, type: 3}
 --- !u!4 &5350824456424773993 stripped
 Transform:
@@ -240,6 +241,10 @@ PrefabInstance:
     - target: {fileID: 1279687924320702, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
       propertyPath: m_Name
       value: BASML_Props_Stairs
+      objectReference: {fileID: 0}
+    - target: {fileID: 1279687924320702, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967287
       objectReference: {fileID: 0}
     - target: {fileID: 4291304753396632, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
       propertyPath: m_LocalPosition.x
@@ -285,7 +290,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64359879277737364, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
+    - {fileID: 64359879277737364, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
 --- !u!1 &5356320756241362473 stripped
 GameObject:

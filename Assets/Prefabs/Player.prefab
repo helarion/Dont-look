@@ -341,8 +341,8 @@ MonoBehaviour:
   rayCastLength: 0.8
   maxClimbHeight: 2
   climbTime: 0.5
-  runSpeed: 200
-  walkSpeed: 120
+  runSpeed: 130
+  walkSpeed: 70
   _horizontalAccelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -445,9 +445,8 @@ MonoBehaviour:
   _verticalDecSpeed: 20
   sizeSpeed: 5
   stickSpeed: 3
-  lightSpeed: 0.08
+  lightSpeed: 0.06
   lightTransform: {fileID: 1491706786681059038}
-  disableTracker: 1
   raycastPosition: {fileID: 914376431}
   isGrounded: 1
   lightOn: 1
@@ -551,10 +550,6 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 12364d94c7fd6a648b5b77580fcabf48, type: 2}
-    - target: {fileID: 13700000, guid: 9f72691c01aa9c04d9371acc53982a84, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: b3723010d7204f748ac4d0c8c079493c, type: 2}
     - target: {fileID: 400090, guid: 9f72691c01aa9c04d9371acc53982a84, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.4093181
@@ -583,6 +578,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 77.857
       objectReference: {fileID: 0}
+    - target: {fileID: 13700000, guid: 9f72691c01aa9c04d9371acc53982a84, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b3723010d7204f748ac4d0c8c079493c, type: 2}
     - target: {fileID: 400012, guid: 9f72691c01aa9c04d9371acc53982a84, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0

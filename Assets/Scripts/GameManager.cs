@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        CheckTracker();
         controls = ReInput.players.GetPlayer(0);
         ResumeGame();
         originalPos = mainCamera.transform.localPosition;

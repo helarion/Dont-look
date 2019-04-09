@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,13 +35,11 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        //toggleTracker.isOn = true;
-        //GameManager.instance.SetIsPaused(false);
         volumeControl.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
         if (!GameManager.instance.isTesting)
         {
-            fadeImg.color = new Color(0, 0, 0, 1);
             GameManager.instance.SetIsPaused(true);
+            fadeImg.color = new Color(0, 0, 0, 1);
             FadeOut(fadeImg, 1, 0);
             StartCoroutine("StartCoroutine");
         }
@@ -57,7 +55,7 @@ public class UIManager : MonoBehaviour
     {
         while (UIManager.instance.isFading)
             yield return new WaitForSeconds(0.1f);
-        GameManager.instance.SetIsPaused(true);
+        GameManager.instance.SetIsPaused(false);
     }
 
     IEnumerator FadeOutCoroutine(object[] param)
@@ -144,6 +142,6 @@ public class UIManager : MonoBehaviour
 
     public bool GetCheckTracker()
     {
-        return !toggleTracker.isOn;
+        return toggleTracker.isOn;
     }
 }

@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Collider cl;
     private Vector3 lookAtPos;
-    private Vector3 cursorPos;
+    private Vector2 cursorPos;
     private Animator animator;
 
     [Header("Model and light objects")]
@@ -119,27 +119,25 @@ public class PlayerController : MonoBehaviour
 
     private void LightAim()
     {
-        /*if(!TobiiAPI.IsConnected)
+        if(!TobiiAPI.IsConnected)
         {
             UIManager.instance.DisableControlPanel(true);
         }
         else
         {
             UIManager.instance.DisableControlPanel(false);
-        }*/
+        }
         // LIGHT AIM CONTROL
-        // if (!disableTracker && TobiiAPI.IsConnected) // EYE TRACKER OPTION
-
-        if (GameManager.instance.GetIsTrackerEnabled()) // EYE TRACKER OPTION
+        if (GameManager.instance.GetIsTrackerEnabled() && TobiiAPI.IsConnected) // EYE TRACKER OPTION
         {
-            /*if (!TobiiAPI.GetGazePoint().IsRecent())
+            if (!TobiiAPI.GetGazePoint().IsRecent())
             {
                 ClosedEyes(true);
             }
             else
             {
                 ClosedEyes(false);
-            }*/
+            }
 
             cursorPos = TobiiAPI.GetGazePoint().Screen;
         }
