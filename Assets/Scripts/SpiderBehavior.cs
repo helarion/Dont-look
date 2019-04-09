@@ -12,7 +12,7 @@ public class SpiderBehavior : Enemy
 
     [SerializeField] private bool clickToSetDestination = false;
 
-    private float countLook = 0;
+    [SerializeField] private float countLook = 0;
     private float countChase = 0;
 
     private bool canSeePlayer = false;
@@ -20,6 +20,7 @@ public class SpiderBehavior : Enemy
     private bool chaseCoroutine = false;
     private Animator animator;
     private bool isMoving = false;
+    private bool isLooked = false;
 
     [SerializeField] private float velocity;
     private Vector3 lastPosition;
@@ -27,6 +28,7 @@ public class SpiderBehavior : Enemy
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        animator.SetFloat("WakeMult", (1f / delaySpot));
         Initialize();
         countChase = 0;
         countLook = 0;
@@ -53,43 +55,7 @@ public class SpiderBehavior : Enemy
         }
         else
         {
-            Vector3 playerPosition = GameManager.instance.player.transform.position;
-            Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
-            Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
-
-            float playerToSpiderLength = playerToSpiderVec.magnitude;//- 2;
-            Light playerLight = GameManager.instance.player.getLight();
-            float lightRange = playerLight.range;
-            float lightAngle = playerLight.spotAngle / 2.0f;// - 5;
-            if (playerToSpiderLength > lightRange)
-            {
-                //print(gameObject.name + " is too far from player : " + playerToSpiderLength + " > " + lightRange + ".");
-            }
-            else
-            {
-                //print(gameObject.name + " is in player light range : " + playerToSpiderLength + ".");
-                float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToSpiderVec) / (lightVec.magnitude * playerToSpiderVec.magnitude)) * Mathf.Rad2Deg;
-                if (angleFromLight > lightAngle)
-                {
-                    //print(gameObject.name + " is not in light : " + angleFromLight + " > " + lightAngle + ".");
-                }
-                else
-                {
-                    //print(gameObject.name + " is in player light : " + angleFromLight + ".");
-                    lightVec = Vector3.RotateTowards(lightVec, playerToSpiderVec, angleFromLight, Mathf.Infinity);
-
-                    RaycastHit hit;
-                    Ray ray = new Ray(playerPosition, lightVec);
-                    Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer());
-
-                    if (hit.transform.gameObject.tag == "Spider")
-                    {
-                        IsLit(true);
-                    }
-
-                    //print("Touched " + hit.transform.gameObject.name);
-                }
-            }
+            LightDetection();
         }
         if (Input.GetMouseButtonDown(0) && clickToSetDestination)
         {
@@ -103,6 +69,8 @@ public class SpiderBehavior : Enemy
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
     private IEnumerator CountLook()
     {
+        isLooked = true;
+        animator.SetTrigger("WakesUp");
         while (countLook<delaySpot)
         {
             yield return new WaitForSeconds(0.1f);
@@ -110,6 +78,7 @@ public class SpiderBehavior : Enemy
             //print(countLook);
         }
         Chase();
+        isLooked = false;
         yield return null;
     }
 
@@ -169,12 +138,13 @@ public class SpiderBehavior : Enemy
         if (b)
         {
             GameManager.instance.ShakeScreen(0.1f);
-            StartCoroutine("CountLook");
             agent.speed += bonusSpeed;
+            if (!isLooked) StartCoroutine("CountLook");
         }
         else
         {
             StopCoroutine("CountLook");
+            isLooked = false;
             //countLook = 0; // A UTILISER SI ON VEUT QUE LE TEMPS DE SPOT SE RESET
         }
     }
