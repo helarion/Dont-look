@@ -326,12 +326,12 @@ public class PlayerController : MonoBehaviour
         float speed = 0.1f;
         if (vMove > 0)
         {
-            modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
+            modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
             inverse = 1;
         }
         else if (vMove < 0)
         {
-            modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
+            modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
             inverse = -1;
         }
         else
@@ -436,7 +436,7 @@ public class PlayerController : MonoBehaviour
         return transform.position;
     }
 
-    // Renvoie la position du curseur sur l'écran (souris ou eye tracker)
+    // Renvoie la position du curseur sur l'écran (souris ou eye tracker) dans l'intervalle [-1;1]
 
     public Vector2 getCursorPosNormalized()
     {
