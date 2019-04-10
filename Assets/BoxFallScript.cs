@@ -28,6 +28,8 @@ public class BoxFallScript : MonoBehaviour
                 kinematic = true;
                 boxRigidbody.isKinematic = true;
                 boxRigidbody.useGravity = false;
+                boxRigidbody.gameObject.tag = "Climbable";
+                boxRigidbody.gameObject.transform.GetComponentInChildren<GrabZone>().transform.rotation = Quaternion.Euler(new Vector3 (0, 90, 0));
             }
         }
     }

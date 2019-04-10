@@ -24,11 +24,11 @@ public class SwingingLightTrigger : MonoBehaviour
 
     public void swing(Vector3 swingVelocity)
     {
-        swingingLight.GetComponent<Rigidbody>().AddForce(swingVelocity);
+        swingingLight.GetComponent<Rigidbody>().AddForce(swingVelocity * 1000);
     }
 
     public void swingEditor()
     {
-        swingingLight.GetComponent<Rigidbody>().AddForce(swingVector);
+        swing(swingVector);
     }
 }
