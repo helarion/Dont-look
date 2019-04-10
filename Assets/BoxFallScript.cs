@@ -11,7 +11,7 @@ public class BoxFallScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        boxRigidbody.gameObject.GetComponentInChildren<GrabZone>().isGrabbable = false;
     }
 
     // Update is called once per frame
@@ -28,6 +28,9 @@ public class BoxFallScript : MonoBehaviour
                 kinematic = true;
                 boxRigidbody.isKinematic = true;
                 boxRigidbody.useGravity = false;
+                boxRigidbody.gameObject.tag = "Climbable";
+                boxRigidbody.gameObject.GetComponentInChildren<GrabZone>().isGrabbable = true;
+                boxRigidbody.gameObject.GetComponentInChildren<GrabZone>().transform.rotation = Quaternion.Euler(new Vector3 (0, 90, 0));
             }
         }
     }
