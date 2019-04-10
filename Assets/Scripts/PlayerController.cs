@@ -4,6 +4,7 @@ using Tobii.Gaming;
 
 public class PlayerController : MonoBehaviour
 {
+    #region variables
     private Light lt;
     private Rigidbody rb;
     private Collider cl;
@@ -70,6 +71,8 @@ public class PlayerController : MonoBehaviour
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
 
+    #endregion
+
     private void Start()
     {
         isAlive = true;
@@ -80,7 +83,7 @@ public class PlayerController : MonoBehaviour
         ClosedEyes(false);
         Cursor.visible = false;
         moveSpeed = walkSpeed;
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
 
         cursorPos = Input.mousePosition;
     }
@@ -229,7 +232,7 @@ public class PlayerController : MonoBehaviour
         Vector3 lPoint;
         if (isClimbingLadder)
         {
-           lPoint = new Vector3(transform.position.x + lMovement.x, transform.position.y + lMovement.y,0);
+           if(!hasReachedTop) lPoint = new Vector3(transform.position.x + lMovement.x, transform.position.y + lMovement.y,0);
         }
         else
         {
@@ -375,12 +378,23 @@ public class PlayerController : MonoBehaviour
         }
     }
     
+    public void JumpLand()
+    {
+        animator.SetBool("IsJumping", false);
+    }
+
+    public void JumpStart()
+    {
+        Vector3 jumpVector = new Vector3(0, jumpForce);
+        rb.AddForce(jumpVector, ForceMode.VelocityChange);
+    }
+
     public void Jump()
     {
         if (pressedJump) return;
         pressedJump = true;
-        Vector3 jumpVector = new Vector3(0, jumpForce);
-        rb.AddForce(jumpVector, ForceMode.VelocityChange);
+        animator.SetTrigger("Jump");
+        animator.SetBool("IsJumping",true);
     }
 
     private void OnCollisionStay(Collision collision)
