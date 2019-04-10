@@ -23,15 +23,6 @@ public class CameraHandler : MonoBehaviour
         if (!target || GameManager.instance.GetIsPaused()) return;
 
         Vector3 lookAtPos = GameManager.instance.player.GetLookAt();
-        /*Vector3 diffCameraCursor = (cursorPos - transform.position);
-        diffCameraCursor.z = zStartPosition;
-        diffCameraCursor.y += yOffset;
-
-        diffCameraCursor.x = Mathf.Clamp(diffCameraCursor.x, -offset, offset);
-        diffCameraCursor.y = Mathf.Clamp(diffCameraCursor.y, minYCamera, offset);
-        Vector3 diffCameraPlayer = transform.position - target.position;
-
-        Vector3 newPosition = target.position + diffCameraPlayer.normalized * offset + diffCameraCursor;*/
 
         Vector3 newPosition = target.position + Vector3.ClampMagnitude(lookAtPos - target.position, offset);
         if (newPosition.y < minYCamera)
