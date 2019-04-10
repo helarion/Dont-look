@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class SwingingLightTrigger : MonoBehaviour
 {
-    [SerializeField] private string triggerObjectName;
+    [SerializeField] private GameObject triggerObject;
+    [SerializeField] bool doOnce = true;
     [SerializeField] private GameObject swingingLight;
     [SerializeField] private Vector3 swingVector = Vector3.zero;
+    bool done = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == triggerObjectName)
+        if (other.gameObject == triggerObject && !done)
         {
             swing(swingVector);
+            if (doOnce)
+            {
+                done = true;
+            }
         }
     }
 
