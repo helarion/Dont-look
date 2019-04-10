@@ -112,7 +112,7 @@ public class UIManager : MonoBehaviour
 
     public void FadeDeath(bool b)
     {
-        if(b)FadeIn(fadeImg, 1, 1);
+        if(b)FadeIn(fadeImg, 1, 0);
         else FadeOut(fadeImg, 1, 1);
     }
 
