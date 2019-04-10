@@ -5,18 +5,22 @@ using UnityEngine;
 public class WwiseTrigger : MonoBehaviour
 {
     private float z;
-    [SerializeField] private string triggerName = "";
-    [SerializeField] private bool playOnlyOnce = false;
+    [SerializeField] GameObject triggerObject;
+    [SerializeField] private AK.Wwise.Event triggerEvent;
+    [SerializeField] bool doOnce = true;
     [SerializeField] private GameObject emitter = null;
+    bool done = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
-        if (player == null) return;
-        AkSoundEngine.PostEvent(triggerName, emitter);
-        if (playOnlyOnce) Destroy(gameObject);
-        float value;
-       //AkSoundEngine.GetRTPCValue("position_relative_volume",emitter,value,);
+        if (other.gameObject == triggerObject && !done)
+        {
+            AkSoundEngine.PostEvent(triggerEvent.Id, emitter);
+            if (doOnce)
+            {
+                done = true;
+            }
+        }
     }
 
     [ExecuteInEditMode]
