@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class GrabZone : MonoBehaviour
 {
+    public bool isGrabbable = true;
+
     private void OnTriggerStay(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
-        if (player == null) return;
-        if(GameManager.instance.controls.GetButtonDown("Interact"))
+        if (isGrabbable)
         {
-            print("isGrabbing");
-            player.SetIsGrabbing(true, transform.parent);
-        }
-        if(GameManager.instance.controls.GetButtonUp("Interact"))
-        {
-            print("isNotGrabbing");
-            player.SetIsGrabbing(false, null);
+            PlayerController player = other.GetComponent<PlayerController>();
+            if (player == null) return;
+            if (GameManager.instance.controls.GetButtonDown("Interact"))
+            {
+                print("isGrabbing");
+                player.SetIsGrabbing(true, transform.parent);
+            }
+            if (GameManager.instance.controls.GetButtonUp("Interact"))
+            {
+                print("isNotGrabbing");
+                player.SetIsGrabbing(false, null);
+            }
         }
     }
     private void OnTriggerExit(Collider other)
