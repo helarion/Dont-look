@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer()))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetLookLayer()))
         {
             lookAtPos = hit.point;
         }
