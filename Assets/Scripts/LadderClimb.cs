@@ -22,7 +22,7 @@ public class LadderClimb : MonoBehaviour
         {
             StartClimb();
         }
-        if(GameManager.instance.controls.GetButtonDown("Jump") && player.GetIsClimbing())
+        if(GameManager.instance.controls.GetButtonDown("Jump") && player.GetIsClimbingLadder())
         {
             StopClimb();
             player.Jump();
@@ -31,6 +31,7 @@ public class LadderClimb : MonoBehaviour
         {
             player.SetHasReachedTop(true);
         }
+        else player.SetHasReachedTop(false);
     }
     private void OnTriggerExit(Collider other)
     {
@@ -43,6 +44,7 @@ public class LadderClimb : MonoBehaviour
     {
         Vector3 v = player.transform.position;
         v.x = transform.position.x;
+        v.z = transform.position.z -1;
         player.transform.position = v;
         player.transform.eulerAngles += new Vector3(0, -90, 0);
         player.SetIsClimbing(true);
@@ -50,7 +52,7 @@ public class LadderClimb : MonoBehaviour
 
     private void StopClimb()
     {
-        if (!player.GetIsClimbing()) return;
+        if (!player.GetIsClimbingLadder()) return;
         player.transform.eulerAngles += new Vector3(0, 90, 0);
         player.SetIsClimbing(false);
         player.SetHasReachedTop(false);
