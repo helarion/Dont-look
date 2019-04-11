@@ -25,7 +25,9 @@ public class LadderClimb : MonoBehaviour
         if(GameManager.instance.controls.GetButtonDown("Jump") && player.GetIsClimbingLadder())
         {
             StopClimb();
-            player.Jump();
+            Vector3 newPosition = player.transform.position;
+            newPosition.z -= 2;
+            player.transform.position = newPosition;
         }
         if(player.transform.position.y>maxHeight)
         {
