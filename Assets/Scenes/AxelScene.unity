@@ -1733,7 +1733,7 @@ MonoBehaviour:
       _descriptiveName: Move Horizontal
       _positiveDescriptiveName: Move Right
       _negativeDescriptiveName: Move Left
-      _behaviorId: 2
+      _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
     - _id: 1
@@ -1742,7 +1742,7 @@ MonoBehaviour:
       _descriptiveName: Move Vertical
       _positiveDescriptiveName: Move Up
       _negativeDescriptiveName: Move Down
-      _behaviorId: 2
+      _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
     - _id: 2
@@ -1863,29 +1863,6 @@ MonoBehaviour:
       _buttonLongPressExpiresIn: 0
       _buttonDeadZone: 0.5
       _buttonDownBuffer: 0
-      _buttonRepeatRate: 30
-      _buttonRepeatDelay: 0
-    - _id: 2
-      _name: Movement
-      _joystickAxisSensitivity: 0.01
-      _digitalAxisSimulation: 0
-      _digitalAxisSnap: 1
-      _digitalAxisInstantReverse: 0
-      _digitalAxisGravity: 3
-      _digitalAxisSensitivity: 3
-      _mouseXYAxisMode: 1
-      _mouseOtherAxisMode: 1
-      _mouseXYAxisSensitivity: 1
-      _mouseXYAxisDeltaCalc: 0
-      _mouseOtherAxisSensitivity: 1
-      _customControllerAxisSensitivity: 0.1
-      _buttonDoublePressSpeed: 0.3
-      _buttonShortPressTime: 0.25
-      _buttonShortPressExpiresIn: 0
-      _buttonLongPressTime: 1
-      _buttonLongPressExpiresIn: 0
-      _buttonDeadZone: 0.9
-      _buttonDownBuffer: 0.5
       _buttonRepeatRate: 30
       _buttonRepeatDelay: 0
     mapCategories:
@@ -6648,6 +6625,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5355328096030731384, guid: 0b3e76ea4fa49854fada4da10a2b1fbb,
     type: 3}
   m_PrefabInstance: {fileID: 643280230}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &647246467 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 647246467, guid: 2fbb3d635e6f8684598ccaeef3fcce9d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1777302112232092914}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &652034655 stripped
 Transform:
@@ -25673,6 +25656,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194574732181831086, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+        type: 3}
+      propertyPath: cameraLight
+      value: 
+      objectReference: {fileID: 647246467}
+    - target: {fileID: 4194574732181831086, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+        type: 3}
+      propertyPath: walkTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194574732181831086, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+        type: 3}
+      propertyPath: runTimeMinus
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c414b3d2f18c514db71f5df2c9bbcd4, type: 3}

@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float climbTime = 1f;
 
     [Header("Movement")]
+    [SerializeField] private float walkTime;
+    [SerializeField] private float runTimeMinus;
+    [SerializeField] private float deadZoneValue = 0.3f;
     [SerializeField] private float runSpeed = 3;
     [SerializeField] private float walkSpeed = 1;
     [SerializeField] private AnimationCurve _horizontalAccelerationCurve;
@@ -43,7 +46,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sizeSpeed = 5;
     [SerializeField] private float stickSpeed = 3;
     [SerializeField] private float lightSpeed = 1;
-    [SerializeField] private Transform lightTransform=null;
+    [SerializeField] private Transform flashlight;
+    [SerializeField] private Transform cameraLight;
 
     [Header("Debug")]
     [SerializeField] private Transform[] raycastPosition=null;
@@ -69,6 +73,7 @@ public class PlayerController : MonoBehaviour
 
     private float vMove;
     private float hMove;
+    private bool walkRoutine = false;
 
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
@@ -80,7 +85,7 @@ public class PlayerController : MonoBehaviour
         isAlive = true;
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
-        lt = lightTransform.GetComponentInChildren<Light>();
+        lt = flashlight.GetComponent<Light>();
         lt.type = LightType.Spot;
         ClosedEyes(false);
         Cursor.visible = false;
@@ -88,6 +93,11 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         cursorPos = Input.mousePosition;
+    }
+
+    private void Update()
+    {
+        GroundedCheck();
     }
 
     private void FixedUpdate()
@@ -174,7 +184,8 @@ public class PlayerController : MonoBehaviour
         {
             lookAtPos = hit.point;
         }
-        lt.transform.rotation = Quaternion.Slerp(lt.transform.rotation, Quaternion.LookRotation(lookAtPos - lt.transform.position), Time.fixedDeltaTime * lightSpeed * 100);
+        cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
+        flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.fixedDeltaTime * lightSpeed * 100);
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
@@ -199,22 +210,10 @@ public class PlayerController : MonoBehaviour
         isMoving = false;
         Vector3 lMovement = Vector3.zero;
 
-        if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
-        {
-            animator.SetBool("IsRunning", true);
-            moveSpeed = runSpeed;
-        }
-        else
-        {
-            animator.SetBool("IsRunning", false);
-            moveSpeed = walkSpeed;
-        }
-
-
         hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
         if(!isClimbingLadder)
         {
-            if (hMove != 0)
+            if (Mathf.Abs(hMove) > deadZoneValue)
                 lMovement += HorizontalMove(hMove);
             else if (_horizontalAccDecLerpValue != 0)
                 lMovement += HorizontalSlowDown();
@@ -223,7 +222,7 @@ public class PlayerController : MonoBehaviour
         vMove = GameManager.instance.controls.GetAxis("Move Vertical");
         if(!isGrabbing)
         {
-            if (vMove < 0 || (vMove>0 && !hasReachedTop &&isClimbingLadder) || (vMove>0 && !isClimbingLadder))
+            if (vMove < -deadZoneValue || (vMove>deadZoneValue && !hasReachedTop &&isClimbingLadder) || (vMove>deadZoneValue && !isClimbingLadder))
                 lMovement += VerticalMove(vMove);
             else if (_verticalAccDecLerpValue != 0)
                 lMovement += VerticalSlowDown();
@@ -238,11 +237,23 @@ public class PlayerController : MonoBehaviour
         {
             lPoint = new Vector3(transform.position.x + lMovement.x, 0, transform.position.z + lMovement.y);
         }
-        
 
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
+            if(!walkRoutine)
+                StartCoroutine("WalkCoroutine");
+            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+            {
+                animator.SetBool("IsRunning", true);
+                moveSpeed = runSpeed;
+            }
+            else
+            {
+                animator.SetBool("IsRunning", false);
+                moveSpeed = walkSpeed;
+            }
+            
             if(isGrabbing)
             {
                 lMovement *= 0.25f;
@@ -252,6 +263,28 @@ public class PlayerController : MonoBehaviour
             rb.MovePosition(transform.position + lMovement);
         }
         animator.SetBool("IsMoving", isMoving);
+    }
+
+    IEnumerator WalkCoroutine()
+    {
+        walkRoutine = true;
+        float minus;
+        while(isMoving)
+        {
+            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+            {
+                AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
+                minus = runTimeMinus;
+            }
+            else
+            {
+                AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
+                minus = 0;
+            }
+            yield return new WaitForSeconds(walkTime-minus);
+        }
+        walkRoutine = false;
+        yield return null;
     }
 
     Vector3 HorizontalMove(float lXmovValue)
@@ -329,12 +362,12 @@ public class PlayerController : MonoBehaviour
     {
         Quaternion save = lt.transform.rotation;
         float speed = 0.1f;
-        if (vMove > 0)
+        if (vMove > deadZoneValue)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
             inverse = 1;
         }
-        else if (vMove < 0)
+        else if (vMove < -deadZoneValue)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
             inverse = -1;
@@ -362,20 +395,20 @@ public class PlayerController : MonoBehaviour
     #region Jump
     private void GroundedCheck()
     {
-        isGrounded = false;
+        bool temp = false;
         foreach(Transform t in raycastPosition)
         {
-            if(Physics.Raycast(t.position, -Vector3.up, rayCastLength)) isGrounded=true;
+            if(Physics.Raycast(t.position, -Vector3.up, rayCastLength)) temp=true;
         }
+        isGrounded = temp;
     }
 
     private void JumpCheck()
     {
-        GroundedCheck();
         // JUMP
         if (isGrounded)
         {
-            if (GameManager.instance.controls.GetButtonDown("Jump")) Jump();
+            if (GameManager.instance.controls.GetButtonDown("Jump") &&!pressedJump) Jump();
             else pressedJump = false;
         }
     }
