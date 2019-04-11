@@ -11,6 +11,7 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float delayChase = 3;
 
     [SerializeField] private bool clickToSetDestination = false;
+    [SerializeField] private AK.Wwise.Event WwiseLook;
 
     [SerializeField] private float countLook = 0;
     private float countChase = 0;
@@ -115,14 +116,6 @@ public class SpiderBehavior : Enemy
         Respawn();
     }
 
-    // COMMENCER LA CHASSE DU JOUEUR
-    private void Chase()
-    {
-        agent.isStopped = false;
-        isChasing = true;
-        countLook = 0;
-    }
-
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON
     public override void DetectPlayer(bool b)
     {
@@ -134,12 +127,19 @@ public class SpiderBehavior : Enemy
         }
     }
 
+    public override void Chase()
+    {
+        base.Chase();
+        countLook = 0;
+    }
+
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
     {
         agent.speed = moveSpeed;
         if (b)
         {
+            AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
             GameManager.instance.ShakeScreen(0.1f);
             agent.speed += bonusSpeed;
             if (!isLooked) StartCoroutine("CountLook");

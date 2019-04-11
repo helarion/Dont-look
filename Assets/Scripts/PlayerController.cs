@@ -222,7 +222,7 @@ public class PlayerController : MonoBehaviour
         vMove = GameManager.instance.controls.GetAxis("Move Vertical");
         if(!isGrabbing)
         {
-            if (vMove < 0 || (vMove>0 && !hasReachedTop))
+            if (vMove < 0 || (vMove>0 && !hasReachedTop &&isClimbingLadder) || (vMove>0 && !isClimbingLadder))
                 lMovement += VerticalMove(vMove);
             else if (_verticalAccDecLerpValue != 0)
                 lMovement += VerticalSlowDown();

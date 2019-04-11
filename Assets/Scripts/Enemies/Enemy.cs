@@ -13,9 +13,11 @@ public class Enemy : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private GameObject spawnZones=null ;
+    [SerializeField]private AK.Wwise.Event WwiseChase;
 
 
     [HideInInspector] public NavMeshAgent agent;
+
     private List<Transform> listSpawnZones;
 
     private void Start()
@@ -38,6 +40,14 @@ public class Enemy : MonoBehaviour
         }
 
         Respawn();
+    }
+
+    // COMMENCER LA CHASSE DU JOUEUR
+    public virtual void Chase()
+    {
+        AkSoundEngine.PostEvent(WwiseChase.Id,gameObject);
+        agent.isStopped = false;
+        isChasing = true;
     }
 
     public virtual void DetectPlayer(bool b) {}
