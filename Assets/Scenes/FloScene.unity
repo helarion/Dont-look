@@ -39,7 +39,8 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0001868204, g: 0.0001487665, b: 0.0001354054, a: 1}
+  m_IndirectSpecularColor: {r: 0.00017954258, g: 0.00014297281, b: 0.00013006943,
+    a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -15526,16 +15527,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FallingBox
       objectReference: {fileID: 0}
-    - target: {fileID: 8486620101801477188, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486620101801477188, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
     - target: {fileID: 8486620101801737582, guid: 52c2264b292c6bd4298d8393853c00de,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15591,56 +15582,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3455805889889147622, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3455805889889147622, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486620101471628881, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486620101471628881, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_Mass
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486620101471628881, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486620101471628881, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486620101471628881, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8840868610472606259, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486620101969639836, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486620101969639836, guid: 52c2264b292c6bd4298d8393853c00de,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 1715467595, guid: 52c2264b292c6bd4298d8393853c00de, type: 3}
+      propertyPath: m_ConnectedBody
+      value: 
+      objectReference: {fileID: 1278943998}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52c2264b292c6bd4298d8393853c00de, type: 3}
 --- !u!4 &1715467593 stripped
@@ -15655,53 +15600,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1715467592}
   m_PrefabAsset: {fileID: 0}
---- !u!145 &1715467595
-SpringJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1715467594}
-  m_ConnectedBody: {fileID: 1278943998}
-  m_Anchor: {x: 0, y: 0.11445845, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: -0.47775617, z: 0}
-  serializedVersion: 2
-  m_Spring: 1000
-  m_Damper: 10
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_Tolerance: 0.025
-  m_BreakForce: 800
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
---- !u!114 &1715467596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1715467594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96d47ed3710b5214fb306168d584bdae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1715467597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1715467594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57f1536361ff1b84f9d3fab49f81eb91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1722293966
 GameObject:
   m_ObjectHideFlags: 0
@@ -25941,11 +25839,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2734303198878335312, guid: da9e78ea9bb37bf4ab79ec158c4add9e,
-        type: 3}
-      propertyPath: grabbableBox
-      value: 
-      objectReference: {fileID: 8486620102809037294}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da9e78ea9bb37bf4ab79ec158c4add9e, type: 3}
 --- !u!1001 &6485931376498815205
@@ -26219,21 +26112,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5779449010976937322}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8486620102809037293 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2734303199113280647, guid: da9e78ea9bb37bf4ab79ec158c4add9e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5779449010976937322}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8486620102809037294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8486620102809037293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57f1536361ff1b84f9d3fab49f81eb91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

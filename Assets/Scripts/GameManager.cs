@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private Checkpoint lastCheckpoint = null;
     [SerializeField] public bool isTesting = false;
+    [SerializeField] private Checkpoint[] CheckPointList;
 
     [Header("ScreenShake")]
     [SerializeField] private float shakeDuration = 0f;
@@ -71,6 +72,15 @@ public class GameManager : MonoBehaviour
         }
         if (isPaused) return;
         CheckShake();
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            player.transform.position = CheckPointList[0].transform.position;
+        }
+        else if (Input.GetKeyDown(KeyCode.F2))
+        {
+            player.transform.position = CheckPointList[1].transform.position;
+        }
     }
 
     // Shaking screen for duration set previously

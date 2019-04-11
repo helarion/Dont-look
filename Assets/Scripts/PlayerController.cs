@@ -4,6 +4,7 @@ using Tobii.Gaming;
 
 public class PlayerController : MonoBehaviour
 {
+    #region variables
     private Light lt;
     private Rigidbody rb;
     private Collider cl;
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
     public bool lightOn = true;
     private bool isAlive = true;
     private bool isClimbingLadder = false;
-    private bool hasReachedTop = false;
+    [SerializeField] private bool hasReachedTop = false;
     private bool isClimbing = false;
     private CameraBlock currentCameraBlock = null;
 
@@ -71,6 +72,8 @@ public class PlayerController : MonoBehaviour
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
 
+    #endregion
+
     private void Start()
     {
         isAlive = true;
@@ -81,19 +84,17 @@ public class PlayerController : MonoBehaviour
         ClosedEyes(false);
         Cursor.visible = false;
         moveSpeed = walkSpeed;
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
 
         cursorPos = Input.mousePosition;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
         LightAim();
-
         Move();
         JumpCheck();
-
         BodyRotation();
     }
 
@@ -162,8 +163,8 @@ public class PlayerController : MonoBehaviour
                 cursorPos = Input.mousePosition;
             }
 
-            cursorPos.x += xLight * stickSpeed * 100 * Time.deltaTime;
-            cursorPos.y += yLight * stickSpeed * 100 * Time.deltaTime;
+            cursorPos.x += xLight * stickSpeed * 100 * Time.fixedDeltaTime;
+            cursorPos.y += yLight * stickSpeed * 100 * Time.fixedDeltaTime;
         }
         RaycastHit hit;
         Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
@@ -172,7 +173,7 @@ public class PlayerController : MonoBehaviour
         {
             lookAtPos = hit.point;
         }
-        lt.transform.rotation = Quaternion.Slerp(lt.transform.rotation, Quaternion.LookRotation(lookAtPos - lt.transform.position), Time.deltaTime * lightSpeed * 100);
+        lt.transform.rotation = Quaternion.Slerp(lt.transform.rotation, Quaternion.LookRotation(lookAtPos - lt.transform.position), Time.fixedDeltaTime * lightSpeed * 100);
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
@@ -199,13 +200,13 @@ public class PlayerController : MonoBehaviour
 
         if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
         {
+            animator.SetBool("IsRunning", true);
             moveSpeed = runSpeed;
-            animator.speed = 1.8f;
         }
         else
         {
+            animator.SetBool("IsRunning", false);
             moveSpeed = walkSpeed;
-            animator.speed = 1;
         }
 
 
@@ -221,7 +222,7 @@ public class PlayerController : MonoBehaviour
         vMove = GameManager.instance.controls.GetAxis("Move Vertical");
         if(!isGrabbing)
         {
-            if (vMove != 0)
+            if (vMove < 0 || (vMove>0 && !hasReachedTop))
                 lMovement += VerticalMove(vMove);
             else if (_verticalAccDecLerpValue != 0)
                 lMovement += VerticalSlowDown();
@@ -254,11 +255,11 @@ public class PlayerController : MonoBehaviour
 
     Vector3 HorizontalMove(float lXmovValue)
     {
-        _horizontalAccDecLerpValue += Time.deltaTime * _horizontalAccSpeed * Mathf.Sign(lXmovValue);
+        _horizontalAccDecLerpValue += Time.fixedDeltaTime * _horizontalAccSpeed * Mathf.Sign(lXmovValue);
         _horizontalAccDecLerpValue = Mathf.Clamp(_horizontalAccDecLerpValue, -1, 1);
 
         Vector3 lMovement = new Vector3(Mathf.Abs(lXmovValue), 0, 0);
-        lMovement = lMovement.normalized * moveSpeed * Time.deltaTime * Mathf.Sign(_horizontalAccDecLerpValue);
+        lMovement = lMovement.normalized * moveSpeed * Time.fixedDeltaTime * Mathf.Sign(_horizontalAccDecLerpValue);
 
         _horizontalLastMovement = lMovement;
 
@@ -269,7 +270,7 @@ public class PlayerController : MonoBehaviour
 
     Vector3 VerticalMove(float lYmovValue)
     {
-        _verticalAccDecLerpValue += Time.deltaTime * _verticalAccSpeed * Mathf.Sign(lYmovValue);
+        _verticalAccDecLerpValue += Time.fixedDeltaTime * _verticalAccSpeed * Mathf.Sign(lYmovValue);
         _verticalAccDecLerpValue = Mathf.Clamp(_verticalAccDecLerpValue, -1, 1);
 
         Vector3 lMovement;
@@ -283,7 +284,7 @@ public class PlayerController : MonoBehaviour
             lMovement = new Vector3(0, 0, Mathf.Abs(lYmovValue));
         }
         
-        lMovement = lMovement.normalized * moveSpeed * Time.deltaTime * Mathf.Sign(_verticalAccDecLerpValue);
+        lMovement = lMovement.normalized * moveSpeed * Time.fixedDeltaTime * Mathf.Sign(_verticalAccDecLerpValue);
 
         _verticalLastMovement = lMovement;
 
@@ -295,7 +296,7 @@ public class PlayerController : MonoBehaviour
     Vector3 HorizontalSlowDown()
     {
         float pastLerp = _horizontalAccDecLerpValue;
-        _horizontalAccDecLerpValue -= Time.deltaTime * _horizontalDecSpeed * Mathf.Sign(_horizontalAccDecLerpValue);
+        _horizontalAccDecLerpValue -= Time.fixedDeltaTime * _horizontalDecSpeed * Mathf.Sign(_horizontalAccDecLerpValue);
         if (Mathf.Sign(pastLerp) != Mathf.Sign(_horizontalAccDecLerpValue))
         {
             _horizontalAccDecLerpValue = 0;
@@ -311,7 +312,7 @@ public class PlayerController : MonoBehaviour
     Vector3 VerticalSlowDown()
     {
         float pastLerp = _verticalAccDecLerpValue;
-        _verticalAccDecLerpValue -= Time.deltaTime * _verticalDecSpeed * Mathf.Sign(_verticalAccDecLerpValue);
+        _verticalAccDecLerpValue -= Time.fixedDeltaTime * _verticalDecSpeed * Mathf.Sign(_verticalAccDecLerpValue);
         if (Mathf.Sign(pastLerp) != Mathf.Sign(_verticalAccDecLerpValue))
         {
             _verticalAccDecLerpValue = 0;
@@ -378,12 +379,23 @@ public class PlayerController : MonoBehaviour
         }
     }
     
+    public void JumpLand()
+    {
+        animator.SetBool("IsJumping", false);
+    }
+
+    public void JumpStart()
+    {
+        Vector3 jumpVector = new Vector3(0, jumpForce);
+        rb.AddForce(jumpVector, ForceMode.VelocityChange);
+    }
+
     public void Jump()
     {
         if (pressedJump) return;
         pressedJump = true;
-        Vector3 jumpVector = new Vector3(0, jumpForce);
-        rb.AddForce(jumpVector, ForceMode.VelocityChange);
+        animator.SetTrigger("Jump");
+        animator.SetBool("IsJumping",true);
     }
 
     private void OnCollisionStay(Collision collision)
@@ -411,8 +423,8 @@ public class PlayerController : MonoBehaviour
         while (currentClimbTime < climbTime)
         {
             transform.position = Vector3.Lerp(positions[0], positions[1], currentClimbTime/climbTime);
-            currentClimbTime += Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
+            currentClimbTime += Time.fixedDeltaTime;
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
         isAlive = true;
         isClimbing = false;
@@ -475,7 +487,7 @@ public class PlayerController : MonoBehaviour
         else rb.useGravity = true;
     }
 
-    public bool GetIsClimbing()
+    public bool GetIsClimbingLadder()
     {
         return isClimbingLadder;
     }
