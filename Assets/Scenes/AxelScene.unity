@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.00018700698, g: 0.00014891017, b: 0.00013553575,
+  m_IndirectSpecularColor: {r: 0.00017954258, g: 0.00014297281, b: 0.00013006943,
     a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -20475,24 +20475,11 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1763861054}
-    - target: {fileID: 1777302111981925544, guid: 2fbb3d635e6f8684598ccaeef3fcce9d,
-        type: 3}
-      propertyPath: offset
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 1777302111981925549, guid: 2fbb3d635e6f8684598ccaeef3fcce9d,
         type: 3}
       propertyPath: volumeAnchorOverride
       value: 
       objectReference: {fileID: 1309069312}
-    - target: {fileID: 647246470, guid: 2fbb3d635e6f8684598ccaeef3fcce9d, type: 3}
-      propertyPath: m_Range
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 647246469, guid: 2fbb3d635e6f8684598ccaeef3fcce9d, type: 3}
-      propertyPath: useVolumetric
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fbb3d635e6f8684598ccaeef3fcce9d, type: 3}
 --- !u!1001 &2026032705545856803
@@ -25675,10 +25662,15 @@ PrefabInstance:
       propertyPath: cameraLight
       value: 
       objectReference: {fileID: 647246467}
-    - target: {fileID: 1491706786681059039, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+    - target: {fileID: 4194574732181831086, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
         type: 3}
-      propertyPath: m_Range
-      value: 14
+      propertyPath: walkTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194574732181831086, guid: 4c414b3d2f18c514db71f5df2c9bbcd4,
+        type: 3}
+      propertyPath: runTimeMinus
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c414b3d2f18c514db71f5df2c9bbcd4, type: 3}

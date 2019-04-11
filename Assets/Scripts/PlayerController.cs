@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float climbTime = 1f;
 
     [Header("Movement")]
+    [SerializeField] private float walkTime;
+    [SerializeField] private float runTimeMinus;
     [SerializeField] private float deadZoneValue = 0.3f;
     [SerializeField] private float runSpeed = 3;
     [SerializeField] private float walkSpeed = 1;
@@ -69,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
     private float vMove;
     private float hMove;
+    private bool walkRoutine = false;
 
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
@@ -205,18 +208,6 @@ public class PlayerController : MonoBehaviour
         isMoving = false;
         Vector3 lMovement = Vector3.zero;
 
-        if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
-        {
-            animator.SetBool("IsRunning", true);
-            moveSpeed = runSpeed;
-        }
-        else
-        {
-            animator.SetBool("IsRunning", false);
-            moveSpeed = walkSpeed;
-        }
-
-
         hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
         if(!isClimbingLadder)
         {
@@ -244,11 +235,23 @@ public class PlayerController : MonoBehaviour
         {
             lPoint = new Vector3(transform.position.x + lMovement.x, 0, transform.position.z + lMovement.y);
         }
-        
 
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
+            if(!walkRoutine)
+                StartCoroutine("WalkCoroutine");
+            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+            {
+                animator.SetBool("IsRunning", true);
+                moveSpeed = runSpeed;
+            }
+            else
+            {
+                animator.SetBool("IsRunning", false);
+                moveSpeed = walkSpeed;
+            }
+
             rb.MovePosition(transform.position+lMovement);
             if(isGrabbing)
             {
@@ -256,6 +259,28 @@ public class PlayerController : MonoBehaviour
             }
         }
         animator.SetBool("IsMoving", isMoving);
+    }
+
+    IEnumerator WalkCoroutine()
+    {
+        walkRoutine = true;
+        float minus;
+        while(isMoving)
+        {
+            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+            {
+                AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
+                minus = runTimeMinus;
+            }
+            else
+            {
+                AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
+                minus = 0;
+            }
+            yield return new WaitForSeconds(walkTime-minus);
+        }
+        walkRoutine = false;
+        yield return null;
     }
 
     Vector3 HorizontalMove(float lXmovValue)
