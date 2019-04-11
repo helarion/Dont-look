@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
     private bool pressedJump = false;
     private Rigidbody objectGrabbed = null;
     private float objectGrabbedWidth = 0;
+    private bool isTouchingBox = false;
 
     private int inverse = 1;
 
@@ -400,7 +401,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.collider.tag == "Climbable")
+        if (collision.gameObject.tag == "Climbable")
         {
             if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing)
             {
@@ -414,6 +415,24 @@ public class PlayerController : MonoBehaviour
                 rb.isKinematic = true;
                 StartCoroutine("ClimbCoroutine", positions);
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<GrabbableBox>() != null)
+        {
+            print(true);
+            isTouchingBox = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<GrabbableBox>() != null)
+        {
+            print(false);
+            isTouchingBox = false;
         }
     }
 

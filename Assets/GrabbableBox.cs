@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GrabbableBox : MonoBehaviour
 {
-    bool isGrabbable = true;
-    bool isPlayerInGrabZone = false;
+    public bool isGrabbable = true;
+    public bool isPlayerInGrabZone = false;
     PlayerController player;
     Rigidbody rb;
 
@@ -19,6 +19,7 @@ public class GrabbableBox : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.fixedDeltaTime);
         if (isGrabbable && isPlayerInGrabZone)
         {
             if (GameManager.instance.controls.GetButtonDown("Interact"))
@@ -41,8 +42,10 @@ public class GrabbableBox : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         GameObject collisionGameObject = collision.gameObject;
-        if (collisionGameObject.tag != "Ground" && collisionGameObject.GetComponent<PlayerController>() == null)
+        if (isGrabbable && collisionGameObject.tag != "Ground" && collisionGameObject.GetComponent<PlayerController>() == null)
         {
+            rb.isKinematic = true;
+            rb.useGravity = false;
             player.SetIsGrabbing(false, null, 0);
         }
     }
@@ -55,8 +58,10 @@ public class GrabbableBox : MonoBehaviour
     public void setIsPlayerInGrabZone(bool b)
     {
         isPlayerInGrabZone = b;
-        if (!b)
+        if (!b && isGrabbable)
         {
+            rb.isKinematic = true;
+            rb.useGravity = false;
             player.SetIsGrabbing(false, null, 0);
         }
     }

@@ -5,8 +5,8 @@ using UnityEngine;
 public class FallingBox : MonoBehaviour
 {
     Rigidbody rb;
-    bool touchedGround = false;
-    bool kinematic = false;
+    public bool touchedGround = false;
+    public bool kinematic = false;
 
     // Start is called before the first frame update
     void Start()
@@ -24,8 +24,10 @@ public class FallingBox : MonoBehaviour
         }
         if (touchedGround)
         {
-            if (rb.velocity.y == 0)
+            print(rb.velocity.y);
+            if (Mathf.Abs(rb.velocity.y) < 0.0001f)
             {
+                print("SALU");
                 kinematic = true;
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                 rb.mass = 500;
@@ -37,9 +39,9 @@ public class FallingBox : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.attachedRigidbody == rb)
+        if (collision.gameObject.tag == "Ground")
         {
             touchedGround = true;
         }
