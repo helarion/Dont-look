@@ -60,7 +60,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrabbing = false;
     private bool isMoving = false;
     private bool pressedJump = false;
-    private Transform objectGrabbed = null;
+    private Rigidbody objectGrabbed = null;
+    private float objectGrabbedWidth = 0;
 
     private int inverse = 1;
 
@@ -240,11 +241,13 @@ public class PlayerController : MonoBehaviour
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
-            rb.MovePosition(transform.position+lMovement);
             if(isGrabbing)
             {
-                objectGrabbed.position += lMovement;
+                lMovement *= 0.25f;
+                int direction = (transform.position.x - objectGrabbed.position.x) > 0 ? -1 : 1;
+                objectGrabbed.MovePosition(transform.position + lMovement + new Vector3(objectGrabbedWidth * direction, 0, 0));
             }
+            rb.MovePosition(transform.position + lMovement);
         }
         animator.SetBool("IsMoving", isMoving);
     }
@@ -482,10 +485,11 @@ public class PlayerController : MonoBehaviour
         hasReachedTop = b;
     }
 
-    public void SetIsGrabbing(bool b, Transform obj)
+    public void SetIsGrabbing(bool b, Rigidbody obj, float objWidth)
     {
         isGrabbing = b;
         objectGrabbed = obj;
+        objectGrabbedWidth = objWidth;
     }
 
     public bool GetIsGrabbing()
