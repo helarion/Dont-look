@@ -25,7 +25,7 @@ public class AudioRoom : MonoBehaviour
     {
         foreach (AudioSas entry in entries)
         {
-            if (entry.occupied)
+            if (entry.getIsOccupied())
             {
                 if (!firstPost)
                 {

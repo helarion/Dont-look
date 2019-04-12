@@ -4,30 +4,26 @@ using UnityEngine;
 
 public class GrabZone : MonoBehaviour
 {
-    public bool isGrabbable = true;
+    [SerializeField] GrabbableBox grabbableBox;
 
-    private void OnTriggerStay(Collider other)
+    private void FixedUpdate()
     {
-        if (isGrabbable)
+        transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<PlayerController>() != null)
         {
-            PlayerController player = other.GetComponent<PlayerController>();
-            if (player == null) return;
-            if (GameManager.instance.controls.GetButtonDown("Interact"))
-            {
-                print("isGrabbing");
-                player.SetIsGrabbing(true, transform.parent);
-            }
-            if (GameManager.instance.controls.GetButtonUp("Interact"))
-            {
-                print("isNotGrabbing");
-                player.SetIsGrabbing(false, null);
-            }
+            grabbableBox.setIsPlayerInGrabZone(true);
         }
     }
+
     private void OnTriggerExit(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
-        if (player == null) return;
-        player.SetIsGrabbing(false, null);
+        if (other.GetComponent<PlayerController>() != null)
+        {
+            grabbableBox.setIsPlayerInGrabZone(false);
+        }
     }
 }

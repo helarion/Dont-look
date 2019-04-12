@@ -6,7 +6,7 @@ public class AudioSas : MonoBehaviour
 {
     public enum Direction { Left, Right, Down, Up };
     [SerializeField] public Direction direction;
-    public bool occupied;
+    bool occupied;
 
     // Start is called before the first frame update
     void Start()
@@ -39,5 +39,10 @@ public class AudioSas : MonoBehaviour
     public Collider getCollider()
     {
         return gameObject.GetComponent<Collider>();
+    }
+
+    public bool getIsOccupied()
+    {
+        return occupied;
     }
 }
