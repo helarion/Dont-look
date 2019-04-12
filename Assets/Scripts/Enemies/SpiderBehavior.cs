@@ -9,6 +9,7 @@ public class SpiderBehavior : Enemy
 
     [SerializeField] private float delaySpot = 1;
     [SerializeField] private float delayChase = 3;
+    [SerializeField] private float lengthDetection = 10;
 
     [SerializeField] private bool clickToSetDestination = false;
     [SerializeField] private AK.Wwise.Event WwiseLook;
@@ -45,29 +46,68 @@ public class SpiderBehavior : Enemy
 
         isMoving = false;
         animator.SetFloat("mult", velocity);
+
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)
         {
-            isMoving = true;
-            MoveTo(GameManager.instance.player.transform.position);
-            if (!canSeePlayer && !GameManager.instance.player.lightOn)
-            {
-                if(!chaseCoroutine) StartCoroutine("CountChase");
-                chaseCoroutine = true;
-            }
+            ChaseBehavior();
         }
         else
         {
             LightDetection();
         }
+
+        DebugPath(); 
+        animator.SetBool("IsMoving", isMoving);
+
+        if (agent.isOnOffMeshLink) print("Using link right now");
+    }
+
+    private void DebugPath()
+    {
         if (Input.GetMouseButtonDown(0) && clickToSetDestination)
         {
             Vector3 pos = GameManager.instance.player.GetLookAt();
             MoveTo(pos);
             print(pos);
         }
-        if (agent.isOnOffMeshLink) print("Using link right now");
-        animator.SetBool("IsMoving", isMoving);
+    }
+
+    private void ChaseBehavior()
+    {
+        // goes to the player
+        isMoving = true;
+        MoveTo(GameManager.instance.player.transform.position);
+
+        if (!GameManager.instance.player.lightOn && !GameManager.instance.player.GetIsMoving())
+        {
+            if(!CheckSeePlayer())
+            {
+                if (!chaseCoroutine) StartCoroutine("CountChase");
+                chaseCoroutine = true;
+            }
+        }
+    }
+
+    private bool CheckSeePlayer()
+    {
+        bool test = false;
+        Vector3 playerPosition = GameManager.instance.player.transform.position;
+        Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
+        float playerToSpiderLength = playerToSpiderVec.magnitude;
+
+        if (playerToSpiderLength <= lengthDetection)
+        {
+            RaycastHit hit;
+            Ray ray = new Ray(transform.position, playerPosition);
+            Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer());
+
+            if (hit.transform.gameObject.tag == "Player")
+            {
+                test = true;
+            }
+        }
+        return test;
     }
 
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
@@ -114,6 +154,11 @@ public class SpiderBehavior : Enemy
     private void StopChase()
     {
         Respawn();
+    }
+
+    public void CheckCanSeePlayer()
+    {
+
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON

@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     #region variables
     private Light lt;
+    private Light camLt;
     private Rigidbody rb;
     private Collider cl;
     private Vector3 lookAtPos;
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlight;
     [SerializeField] private Transform cameraLight;
+    [SerializeField] private Light pointLight;
 
     [Header("Debug")]
     [SerializeField] private Transform[] raycastPosition=null;
@@ -64,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrabbing = false;
     private bool isMoving = false;
-    private bool pressedJump = false;
+    [SerializeField]private bool pressedJump = false;
     private Rigidbody objectGrabbed = null;
     private float objectGrabbedWidth = 0;
     private bool isTouchingBox = false;
@@ -86,6 +88,7 @@ public class PlayerController : MonoBehaviour
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
         lt = flashlight.GetComponent<Light>();
+        camLt = cameraLight.GetComponent<Light>();
         lt.type = LightType.Spot;
         ClosedEyes(false);
         Cursor.visible = false;
@@ -191,7 +194,9 @@ public class PlayerController : MonoBehaviour
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
+        camLt.enabled = !isClosed;
         lt.enabled = !isClosed;
+        pointLight.enabled = !isClosed;
         lightOn = !isClosed;
     }
 
@@ -206,6 +211,11 @@ public class PlayerController : MonoBehaviour
     {
         SetIsAlive(false);
         SetHasReachedTop(false);
+        pressedJump = false;
+        isGrabbing = false;
+        isClimbing = false;
+        isClimbingLadder = false;
+        isTouchingBox = false;
     }
 
     #region Movement
@@ -256,8 +266,10 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("IsRunning", false);
                 moveSpeed = walkSpeed;
             }
-            
-            if(isGrabbing)
+
+            if(!isGrounded) moveSpeed = runSpeed;
+
+            if (isGrabbing)
             {
                 lMovement *= 0.25f;
                 int direction = (transform.position.x - objectGrabbed.position.x) > 0 ? -1 : 1;
@@ -270,11 +282,13 @@ public class PlayerController : MonoBehaviour
 
     public void PlaySoundWalk()
     {
+        if (isClimbingLadder) return;
         AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
     }
 
     public void PlaySoundRun()
     {
+        if (isClimbingLadder) return;
         AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
     }
 
@@ -394,13 +408,21 @@ public class PlayerController : MonoBehaviour
         isGrounded = temp;
     }
 
+    private void FallingCheck()
+    {
+        //pressedJump = false;
+    }
+
     private void JumpCheck()
     {
         // JUMP
-        if (isGrounded)
+        if (GameManager.instance.controls.GetButtonDown("Jump"))
         {
-            if (GameManager.instance.controls.GetButtonDown("Jump") &&!pressedJump) Jump();
-            else pressedJump = false;
+            if (isGrounded && !pressedJump)
+            {
+                pressedJump = true;
+                Jump();
+            }
         }
     }
     
@@ -413,12 +435,12 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 jumpVector = new Vector3(0, jumpForce);
         rb.AddForce(jumpVector, ForceMode.VelocityChange);
+        pressedJump = false;
     }
 
     public void Jump()
     {
-        if (pressedJump) return;
-        pressedJump = true;
+        //print("pressed?" + pressedJump);
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
     }
@@ -427,7 +449,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Climbable")
         {
-            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing)
+            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing && !isGrounded)
             {
                 Vector3 newPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
                 newPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
@@ -537,6 +559,11 @@ public class PlayerController : MonoBehaviour
     public CameraBlock getCameraBlock()
     {
         return currentCameraBlock;
+    }
+
+    public bool GetIsMoving()
+    {
+        return isMoving;
     }
     #endregion
 }
