@@ -87,6 +87,10 @@ public class SpiderBehavior : Enemy
                 chaseCoroutine = true;
             }
         }
+        else
+        {
+            StopCoroutine("CountChase");
+        }
     }
 
     private bool CheckSeePlayer()
@@ -186,7 +190,7 @@ public class SpiderBehavior : Enemy
         {
             AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
             GameManager.instance.ShakeScreen(0.1f);
-            agent.speed += bonusSpeed;
+            agent.speed = moveSpeed+bonusSpeed;
             if (!isLooked) StartCoroutine("CountLook");
         }
         else

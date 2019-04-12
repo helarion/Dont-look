@@ -30,7 +30,7 @@ public class LadderClimb : MonoBehaviour
         {
             StopClimb();
             Vector3 newPosition = player.transform.position;
-            newPosition.z -= 2;
+            newPosition.z -= 3;
             player.transform.position = newPosition;
         }
         if(player.transform.position.y>maxHeight)
@@ -54,6 +54,7 @@ public class LadderClimb : MonoBehaviour
         player.transform.position = v;
         player.transform.eulerAngles += new Vector3(0, -90, 0);
         player.SetIsClimbing(true);
+        player.ResetVelocity();
     }
 
     private void StopClimb()

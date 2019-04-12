@@ -216,6 +216,7 @@ public class PlayerController : MonoBehaviour
         isClimbing = false;
         isClimbingLadder = false;
         isTouchingBox = false;
+        ResetVelocity();
     }
 
     #region Movement
@@ -476,6 +477,11 @@ public class PlayerController : MonoBehaviour
         isAlive = true;
         isClimbing = false;
         rb.isKinematic = false;
+    }
+
+    public void ResetVelocity()
+    {
+        rb.velocity = new Vector3(0, 0, 0);
     }
 
     #endregion
