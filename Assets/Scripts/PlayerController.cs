@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     #region variables
     private Light lt;
+    private Light camLt;
     private Rigidbody rb;
     private Collider cl;
     private Vector3 lookAtPos;
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlight;
     [SerializeField] private Transform cameraLight;
+    [SerializeField] private Light pointLight;
 
     [Header("Debug")]
     [SerializeField] private Transform[] raycastPosition=null;
@@ -64,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrabbing = false;
     private bool isMoving = false;
-    private bool pressedJump = false;
+    [SerializeField]private bool pressedJump = false;
     private Rigidbody objectGrabbed = null;
     private float objectGrabbedWidth = 0;
     private bool isTouchingBox = false;
@@ -86,6 +88,7 @@ public class PlayerController : MonoBehaviour
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
         lt = flashlight.GetComponent<Light>();
+        camLt = cameraLight.GetComponent<Light>();
         lt.type = LightType.Spot;
         ClosedEyes(false);
         Cursor.visible = false;
@@ -191,21 +194,33 @@ public class PlayerController : MonoBehaviour
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
+        camLt.enabled = !isClosed;
         lt.enabled = !isClosed;
+        pointLight.enabled = !isClosed;
         lightOn = !isClosed;
     }
 
     // Bouge les pieds du joueur à la position donnée
-
     public void moveTo(Vector3 positionToMove)
     {
         positionToMove.y += cl.bounds.center.y - cl.bounds.min.y;
         transform.position = positionToMove;
     }
 
+    public void Reset()
+    {
+        SetIsAlive(false);
+        SetHasReachedTop(false);
+        pressedJump = false;
+        isGrabbing = false;
+        isClimbing = false;
+        isClimbingLadder = false;
+        isTouchingBox = false;
+    }
+
     #region Movement
 
-    void Move()
+    private void Move()
     {
         isMoving = false;
         Vector3 lMovement = Vector3.zero;
@@ -241,8 +256,6 @@ public class PlayerController : MonoBehaviour
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
-            if(!walkRoutine)
-                StartCoroutine("WalkCoroutine");
             if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
             {
                 animator.SetBool("IsRunning", true);
@@ -253,8 +266,10 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("IsRunning", false);
                 moveSpeed = walkSpeed;
             }
-            
-            if(isGrabbing)
+
+            if(!isGrounded) moveSpeed = runSpeed;
+
+            if (isGrabbing)
             {
                 lMovement *= 0.25f;
                 int direction = (transform.position.x - objectGrabbed.position.x) > 0 ? -1 : 1;
@@ -265,29 +280,19 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsMoving", isMoving);
     }
 
-    IEnumerator WalkCoroutine()
+    public void PlaySoundWalk()
     {
-        walkRoutine = true;
-        float minus;
-        while(isMoving)
-        {
-            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
-            {
-                AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
-                minus = runTimeMinus;
-            }
-            else
-            {
-                AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
-                minus = 0;
-            }
-            yield return new WaitForSeconds(walkTime-minus);
-        }
-        walkRoutine = false;
-        yield return null;
+        if (isClimbingLadder) return;
+        AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
     }
 
-    Vector3 HorizontalMove(float lXmovValue)
+    public void PlaySoundRun()
+    {
+        if (isClimbingLadder) return;
+        AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
+    }
+
+    private Vector3 HorizontalMove(float lXmovValue)
     {
         _horizontalAccDecLerpValue += Time.fixedDeltaTime * _horizontalAccSpeed * Mathf.Sign(lXmovValue);
         _horizontalAccDecLerpValue = Mathf.Clamp(_horizontalAccDecLerpValue, -1, 1);
@@ -302,7 +307,7 @@ public class PlayerController : MonoBehaviour
         return lMovement;
     }
 
-    Vector3 VerticalMove(float lYmovValue)
+    private Vector3 VerticalMove(float lYmovValue)
     {
         _verticalAccDecLerpValue += Time.fixedDeltaTime * _verticalAccSpeed * Mathf.Sign(lYmovValue);
         _verticalAccDecLerpValue = Mathf.Clamp(_verticalAccDecLerpValue, -1, 1);
@@ -327,7 +332,7 @@ public class PlayerController : MonoBehaviour
         return lMovement;
     }
 
-    Vector3 HorizontalSlowDown()
+    private Vector3 HorizontalSlowDown()
     {
         float pastLerp = _horizontalAccDecLerpValue;
         _horizontalAccDecLerpValue -= Time.fixedDeltaTime * _horizontalDecSpeed * Mathf.Sign(_horizontalAccDecLerpValue);
@@ -343,7 +348,7 @@ public class PlayerController : MonoBehaviour
         return lMovement;
     }
 
-    Vector3 VerticalSlowDown()
+    private Vector3 VerticalSlowDown()
     {
         float pastLerp = _verticalAccDecLerpValue;
         _verticalAccDecLerpValue -= Time.fixedDeltaTime * _verticalDecSpeed * Mathf.Sign(_verticalAccDecLerpValue);
@@ -358,7 +363,7 @@ public class PlayerController : MonoBehaviour
         return lMovement;
     }
 
-    void BodyRotation()
+    private void BodyRotation()
     {
         Quaternion save = lt.transform.rotation;
         float speed = 0.1f;
@@ -403,13 +408,21 @@ public class PlayerController : MonoBehaviour
         isGrounded = temp;
     }
 
+    private void FallingCheck()
+    {
+        //pressedJump = false;
+    }
+
     private void JumpCheck()
     {
         // JUMP
-        if (isGrounded)
+        if (GameManager.instance.controls.GetButtonDown("Jump"))
         {
-            if (GameManager.instance.controls.GetButtonDown("Jump") &&!pressedJump) Jump();
-            else pressedJump = false;
+            if (isGrounded && !pressedJump)
+            {
+                pressedJump = true;
+                Jump();
+            }
         }
     }
     
@@ -422,12 +435,12 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 jumpVector = new Vector3(0, jumpForce);
         rb.AddForce(jumpVector, ForceMode.VelocityChange);
+        pressedJump = false;
     }
 
     public void Jump()
     {
-        if (pressedJump) return;
-        pressedJump = true;
+        //print("pressed?" + pressedJump);
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
     }
@@ -436,7 +449,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Climbable")
         {
-            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing)
+            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing && !isGrounded)
             {
                 Vector3 newPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
                 newPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
@@ -448,24 +461,6 @@ public class PlayerController : MonoBehaviour
                 rb.isKinematic = true;
                 StartCoroutine("ClimbCoroutine", positions);
             }
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<GrabbableBox>() != null)
-        {
-            print(true);
-            isTouchingBox = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<GrabbableBox>() != null)
-        {
-            print(false);
-            isTouchingBox = false;
         }
     }
 
@@ -564,6 +559,11 @@ public class PlayerController : MonoBehaviour
     public CameraBlock getCameraBlock()
     {
         return currentCameraBlock;
+    }
+
+    public bool GetIsMoving()
+    {
+        return isMoving;
     }
     #endregion
 }

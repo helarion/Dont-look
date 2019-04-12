@@ -14,14 +14,18 @@ public class LadderClimb : MonoBehaviour
         maxHeight = col.bounds.max.y;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        player = other.GetComponent<PlayerController>();
+        if (player == null) return;
+        StartClimb();
+    }
+
     private void OnTriggerStay(Collider other)
     {
         player = other.GetComponent<PlayerController>();
         if (player == null) return;
-        if(GameManager.instance.controls.GetButtonDown("Interact"))
-        {
-            StartClimb();
-        }
+        
         if(GameManager.instance.controls.GetButtonDown("Jump") && player.GetIsClimbingLadder())
         {
             StopClimb();
