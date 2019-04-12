@@ -38,48 +38,75 @@ public class CameraHandler : MonoBehaviour
         CameraBlock currentCameraBlock = GameManager.instance.player.getCameraBlock();
         if (currentCameraBlock != null)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(transform.position - lookAtPos);
+            Quaternion targetRotation = Quaternion.LookRotation(lookAtPos - transform.position, Vector3.up);
+
+            print(currentCameraBlock.blockDirection + ":" + targetRotation.eulerAngles.x + ";" + targetRotation.eulerAngles.y + ";" + targetRotation.eulerAngles.z);
+
             if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Left)
             {
                 if (newPosition.x < currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.x)
                 {
                     newPosition.x = currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.x;
                 }
-
-                if (targetRotation.eulerAngles.y < -currentCameraBlock.maxCameraYawAngle)
-                {
-                    targetRotation *= Quaternion.Euler(new Vector3(0, -currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
-                }
-                else if (targetRotation.eulerAngles.y > 0)
+                
+                if (targetRotation.eulerAngles.y > 0 && targetRotation.eulerAngles.y < 180)
                 {
                     targetRotation *= Quaternion.Euler(new Vector3(0, -targetRotation.eulerAngles.y, 0));
                 }
             }
-            else
+            else if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Right)
             {
                 if (newPosition.x > currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.min.x)
                 {
                     newPosition.x = currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.min.x;
                 }
                 
-                if (targetRotation.eulerAngles.y < 0)
+                if (targetRotation.eulerAngles.y > 180)
                 {
                     targetRotation *= Quaternion.Euler(new Vector3(0, -targetRotation.eulerAngles.y, 0));
                 }
-                else if (targetRotation.eulerAngles.y > currentCameraBlock.maxCameraYawAngle)
+            }
+            else if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Up)
+            {
+                if (newPosition.y > currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.min.y)
                 {
-                    targetRotation *= Quaternion.Euler(new Vector3(0, currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
+                    newPosition.y = currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.min.y;
+                }
+
+                if (targetRotation.eulerAngles.x > 0 && targetRotation.eulerAngles.x < 180)
+                {
+                    targetRotation *= Quaternion.Euler(new Vector3(-targetRotation.eulerAngles.x, 0, 0));
                 }
             }
-            
-            
-            if (targetRotation.eulerAngles.x < -currentCameraBlock.maxCameraPitchAngle)
+            else if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Down)
             {
-                targetRotation *= Quaternion.Euler(new Vector3(-currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
+                if (newPosition.y < currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.y)
+                {
+                    newPosition.y = currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.y;
+                }
+
+                if (targetRotation.eulerAngles.x > 180)
+                {
+                    targetRotation *= Quaternion.Euler(new Vector3(-targetRotation.eulerAngles.x, 0, 0));
+                }
             }
-            else if (targetRotation.eulerAngles.x > currentCameraBlock.maxCameraPitchAngle)
+
+            if (targetRotation.eulerAngles.y < 360 - currentCameraBlock.maxCameraYawAngle && targetRotation.eulerAngles.y > 180)
             {
-                targetRotation *= Quaternion.Euler(new Vector3(currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
+                targetRotation *= Quaternion.Euler(new Vector3(0, 360 - currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
+            }
+            else if (targetRotation.eulerAngles.y > currentCameraBlock.maxCameraYawAngle && targetRotation.eulerAngles.y < 180)
+            {
+                targetRotation *= Quaternion.Euler(new Vector3(0, currentCameraBlock.maxCameraYawAngle - targetRotation.eulerAngles.y, 0));
+            }
+
+            if (targetRotation.eulerAngles.x < 360 - currentCameraBlock.maxCameraPitchAngle && targetRotation.eulerAngles.x > 180)
+            {
+                targetRotation *= Quaternion.Euler(new Vector3(360 - currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
+            }
+            else if (targetRotation.eulerAngles.x > currentCameraBlock.maxCameraPitchAngle && targetRotation.eulerAngles.x < 180)
+            {
+               targetRotation *= Quaternion.Euler(new Vector3(currentCameraBlock.maxCameraPitchAngle - targetRotation.eulerAngles.x, 0, 0));
             }
 
             targetRotation *= Quaternion.Euler(0, 0, -targetRotation.eulerAngles.z);
