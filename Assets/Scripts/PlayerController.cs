@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "CameraBlock")
+        if (other.GetComponent<CameraBlock>() != null)
         {
             currentCameraBlock = other.GetComponent<CameraBlock>();
         }
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "CameraBlock")
+        if (other.GetComponent<CameraBlock>() != null)
         {
             currentCameraBlock = null;
         }
