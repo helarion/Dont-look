@@ -194,16 +194,21 @@ public class PlayerController : MonoBehaviour
     }
 
     // Bouge les pieds du joueur à la position donnée
-
     public void moveTo(Vector3 positionToMove)
     {
         positionToMove.y += cl.bounds.center.y - cl.bounds.min.y;
         transform.position = positionToMove;
     }
 
+    public void Reset()
+    {
+        SetIsAlive(false);
+        SetHasReachedTop(false);
+    }
+
     #region Movement
 
-    void Move()
+    private void Move()
     {
         isMoving = false;
         Vector3 lMovement = Vector3.zero;
@@ -239,8 +244,6 @@ public class PlayerController : MonoBehaviour
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
-            if(!walkRoutine)
-                StartCoroutine("WalkCoroutine");
             if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
             {
                 animator.SetBool("IsRunning", true);
@@ -261,29 +264,17 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsMoving", isMoving);
     }
 
-    IEnumerator WalkCoroutine()
+    public void PlaySoundWalk()
     {
-        walkRoutine = true;
-        float minus;
-        while(isMoving)
-        {
-            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
-            {
-                AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
-                minus = runTimeMinus;
-            }
-            else
-            {
-                AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
-                minus = 0;
-            }
-            yield return new WaitForSeconds(walkTime-minus);
-        }
-        walkRoutine = false;
-        yield return null;
+        AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
     }
 
-    Vector3 HorizontalMove(float lXmovValue)
+    public void PlaySoundRun()
+    {
+        AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
+    }
+
+    private Vector3 HorizontalMove(float lXmovValue)
     {
         _horizontalAccDecLerpValue += Time.fixedDeltaTime * _horizontalAccSpeed * Mathf.Sign(lXmovValue);
         _horizontalAccDecLerpValue = Mathf.Clamp(_horizontalAccDecLerpValue, -1, 1);
@@ -298,7 +289,7 @@ public class PlayerController : MonoBehaviour
         return lMovement;
     }
 
-    Vector3 VerticalMove(float lYmovValue)
+    private Vector3 VerticalMove(float lYmovValue)
     {
         _verticalAccDecLerpValue += Time.fixedDeltaTime * _verticalAccSpeed * Mathf.Sign(lYmovValue);
         _verticalAccDecLerpValue = Mathf.Clamp(_verticalAccDecLerpValue, -1, 1);
@@ -323,7 +314,7 @@ public class PlayerController : MonoBehaviour
         return lMovement;
     }
 
-    Vector3 HorizontalSlowDown()
+    private Vector3 HorizontalSlowDown()
     {
         float pastLerp = _horizontalAccDecLerpValue;
         _horizontalAccDecLerpValue -= Time.fixedDeltaTime * _horizontalDecSpeed * Mathf.Sign(_horizontalAccDecLerpValue);
@@ -339,7 +330,7 @@ public class PlayerController : MonoBehaviour
         return lMovement;
     }
 
-    Vector3 VerticalSlowDown()
+    private Vector3 VerticalSlowDown()
     {
         float pastLerp = _verticalAccDecLerpValue;
         _verticalAccDecLerpValue -= Time.fixedDeltaTime * _verticalDecSpeed * Mathf.Sign(_verticalAccDecLerpValue);
@@ -354,7 +345,7 @@ public class PlayerController : MonoBehaviour
         return lMovement;
     }
 
-    void BodyRotation()
+    private void BodyRotation()
     {
         Quaternion save = lt.transform.rotation;
         float speed = 0.1f;
@@ -447,7 +438,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator ClimbCoroutine(Vector3[] positions)
+    private IEnumerator ClimbCoroutine(Vector3[] positions)
     {
         float currentClimbTime = 0.0f;
         while (currentClimbTime < climbTime)
