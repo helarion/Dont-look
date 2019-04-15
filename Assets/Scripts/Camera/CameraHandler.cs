@@ -40,7 +40,7 @@ public class CameraHandler : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(lookAtPos - transform.position, Vector3.up);
 
-            print(currentCameraBlock.blockDirection + ":" + targetRotation.eulerAngles.x + ";" + targetRotation.eulerAngles.y + ";" + targetRotation.eulerAngles.z);
+            //print(currentCameraBlock.blockDirection + ":" + targetRotation.eulerAngles.x + ";" + targetRotation.eulerAngles.y + ";" + targetRotation.eulerAngles.z);
 
             if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Left)
             {

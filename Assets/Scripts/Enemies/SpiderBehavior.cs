@@ -12,7 +12,6 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float lengthDetection = 10;
 
     [SerializeField] private bool clickToSetDestination = false;
-    [SerializeField] private AK.Wwise.Event WwiseLook;
 
     [SerializeField] private float countLook = 0;
     private float countChase = 0;
@@ -20,20 +19,17 @@ public class SpiderBehavior : Enemy
     private bool canSeePlayer = false;
 
     private bool chaseCoroutine = false;
-    private Animator animator;
     private bool isMoving = false;
     private bool isLooked = false;
 
-    [SerializeField] private float velocity;
     private Vector3 lastPosition;
 
     NavMeshLink link;
 
     private void Start()
     {
-        animator = GetComponentInChildren<Animator>();
-        animator.SetFloat("WakeMult", (1f / delaySpot));
         Initialize();
+        animator.SetFloat("WakeMult", (1f / delaySpot));
         countChase = 0;
         countLook = 0;
         lastPosition = transform.position;
@@ -73,7 +69,7 @@ public class SpiderBehavior : Enemy
         }
     }
 
-    private void ChaseBehavior()
+    public override void ChaseBehavior()
     {
         // goes to the player
         isMoving = true;
@@ -125,7 +121,7 @@ public class SpiderBehavior : Enemy
             countLook+=0.1f;
             //print(countLook);
         }
-        Chase();
+        StartChase();
         isLooked = false;
         yield return null;
     }
@@ -148,8 +144,6 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
-        //agent.isStopped = true;
-        isChasing = false;
         countChase = 0;
         countLook = 0;
     }
@@ -176,9 +170,9 @@ public class SpiderBehavior : Enemy
         }
     }
 
-    public override void Chase()
+    public override void StartChase()
     {
-        base.Chase();
+        base.StartChase();
         countLook = 0;
     }
 

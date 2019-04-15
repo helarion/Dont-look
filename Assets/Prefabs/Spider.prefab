@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 2436183961040824501}
   - component: {fileID: 2436183961040824494}
   - component: {fileID: 1712864881}
+  - component: {fileID: 7155709134830156767}
   m_Layer: 9
   m_Name: Spider
   m_TagString: Spider
@@ -124,17 +125,19 @@ MonoBehaviour:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
-  agent: {fileID: 0}
-  bonusSpeed: 1
-  delaySpot: 1
-  delayChase: 2
-  clickToSetDestination: 0
   WwiseLook:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
-  countLook: 0
+  agent: {fileID: 0}
+  animator: {fileID: 0}
   velocity: 0
+  bonusSpeed: 1
+  delaySpot: 1
+  delayChase: 2
+  lengthDetection: 10
+  clickToSetDestination: 0
+  countLook: 0
 --- !u!195 &2436183961040824494
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -173,6 +176,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!95 &7155709134830156767
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2436183961040824500}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 552b16a4a5c7fe249900d56e982c5d99, type: 3}
+  m_Controller: {fileID: 9100000, guid: 2fc96b497b11e254ca3eadc23ecb0759, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8986084110171357632
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,10 +537,6 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: 552b16a4a5c7fe249900d56e982c5d99, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 2fc96b497b11e254ca3eadc23ecb0759, type: 2}
     - target: {fileID: 13700000, guid: 552b16a4a5c7fe249900d56e982c5d99, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
