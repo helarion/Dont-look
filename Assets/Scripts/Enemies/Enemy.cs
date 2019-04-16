@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour
                 {
                     test = true;
                 }
-                print("Touched " + hit.transform.gameObject.name);
+                //print("Touched " + hit.transform.gameObject.name);
             }
         }
         IsLit(test);

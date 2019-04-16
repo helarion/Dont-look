@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float deadZoneValue = 0.3f;
     [SerializeField] private float runSpeed = 3;
     [SerializeField] private float walkSpeed = 1;
+    [SerializeField] private float ladderSpeed = 0.5f;
+    [SerializeField] private float grabSpeed = 0.5f;
     [SerializeField] private AnimationCurve _horizontalAccelerationCurve;
     [SerializeField] private AnimationCurve _verticalAccelerationCurve;
     [SerializeField] private AnimationCurve _horizontalDecelerationCurve;
@@ -76,6 +78,8 @@ public class PlayerController : MonoBehaviour
     private float vMove;
     private float hMove;
     private bool walkRoutine = false;
+    private float velocity;
+    private Vector3 lastPosition;
 
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
@@ -96,20 +100,25 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         cursorPos = Input.mousePosition;
+        lastPosition = transform.position;
     }
 
     private void Update()
     {
         GroundedCheck();
+        JumpCheck();
     }
 
     private void FixedUpdate()
     {
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
+
+        velocity = (transform.position - lastPosition).magnitude;
+        lastPosition = transform.position;
         LightAim();
         Move();
-        JumpCheck();
         BodyRotation();
+        animator.SetFloat("ClimbSpeed", vMove);
     }
 
     private void OnDrawGizmos()
@@ -191,6 +200,41 @@ public class PlayerController : MonoBehaviour
         flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.fixedDeltaTime * lightSpeed * 100);
     }
 
+    public void StartClimbLadder(Vector3 v)
+    {
+        transform.position = v;
+        modelTransform.eulerAngles = new Vector3(0, 0, 0);
+        SetIsClimbing(true);
+        ResetVelocity();
+        animator.SetBool("OnLadder", true);
+    }
+
+    public void StopClimbLadder()
+    {
+        modelTransform.eulerAngles = new Vector3(0, 90, 0);
+        SetIsClimbing(false);
+        SetHasReachedTop(false);
+        animator.SetBool("OnLadder", false);
+        Vector3 newPosition = transform.position;
+        newPosition.z -= 3;
+        transform.position = newPosition;
+    }
+
+    private IEnumerator LadderPush()
+    {
+        float count=0;
+        while (count < 1f)
+        {
+            Vector3 lMovement = new Vector3(0,GameManager.instance.controls.GetAxisRaw("Move Vertical"),0);
+            
+            Vector3 move = transform.position + lMovement;
+            transform.position = Vector3.Lerp(transform.position, move, Time.deltaTime/ladderSpeed);
+            count += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        yield return null;
+    }
+
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
@@ -216,6 +260,12 @@ public class PlayerController : MonoBehaviour
         isClimbing = false;
         isClimbingLadder = false;
         isTouchingBox = false;
+        animator.SetBool("OnLadder", false);
+        animator.SetBool("IsMoving", false);
+        animator.SetBool("IsJumping", false);
+        animator.SetBool("IsRunning", false);
+        rb.useGravity = true;
+        rb.isKinematic = false;
         ResetVelocity();
     }
 
@@ -244,7 +294,7 @@ public class PlayerController : MonoBehaviour
                 lMovement += VerticalSlowDown();
         }
 
-        Vector3 lPoint;
+        /*Vector3 lPoint;
         if (isClimbingLadder)
         {
            lPoint = new Vector3(transform.position.x + lMovement.x, transform.position.y + lMovement.y,0);
@@ -252,12 +302,13 @@ public class PlayerController : MonoBehaviour
         else
         {
             lPoint = new Vector3(transform.position.x + lMovement.x, 0, transform.position.z + lMovement.y);
-        }
+        }*/
 
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
-            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+            if (isClimbingLadder) lMovement *= 0;// ladderSpeed; //moveSpeed = ladderSpeed;
+            else if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
             {
                 animator.SetBool("IsRunning", true);
                 moveSpeed = runSpeed;
@@ -272,7 +323,7 @@ public class PlayerController : MonoBehaviour
 
             if (isGrabbing)
             {
-                lMovement *= 0.25f;
+                lMovement *= grabSpeed;
                 int direction = (transform.position.x - objectGrabbed.position.x) > 0 ? -1 : 1;
                 objectGrabbed.MovePosition(transform.position + lMovement + new Vector3(objectGrabbedWidth * direction, 0, 0));
             }
@@ -366,6 +417,7 @@ public class PlayerController : MonoBehaviour
 
     private void BodyRotation()
     {
+        if (isClimbingLadder) return;
         Quaternion save = lt.transform.rotation;
         float speed = 0.1f;
         if (vMove > deadZoneValue)
@@ -417,13 +469,14 @@ public class PlayerController : MonoBehaviour
     private void JumpCheck()
     {
         // JUMP
-        if (GameManager.instance.controls.GetButtonDown("Jump"))
+        if (GameManager.instance.controls.GetButtonDown("Jump") && !isClimbingLadder)
         {
             if (isGrounded && !pressedJump)
             {
                 pressedJump = true;
                 Jump();
             }
+            print("JUMP"+Time.frameCount);
         }
     }
     

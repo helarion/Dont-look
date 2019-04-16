@@ -6,12 +6,14 @@ public class LadderClimb : MonoBehaviour
 {
     private BoxCollider col;
     private float maxHeight;
+    private float minHeight;
     private PlayerController player =null;
 
     private void Start()
     {
         col = GetComponent<BoxCollider>();
-        maxHeight = col.bounds.max.y;
+        maxHeight = col.bounds.max.y - 2;
+        minHeight = col.bounds.min.y;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,20 +27,16 @@ public class LadderClimb : MonoBehaviour
     {
         player = other.GetComponent<PlayerController>();
         if (player == null) return;
-        
-        if(GameManager.instance.controls.GetButtonDown("Jump") && player.GetIsClimbingLadder())
-        {
-            StopClimb();
-            Vector3 newPosition = player.transform.position;
-            newPosition.z -= 3;
-            player.transform.position = newPosition;
-        }
-        if(player.transform.position.y>maxHeight)
+
+        if (player.transform.position.y > maxHeight)
         {
             player.SetHasReachedTop(true);
+            StopClimb();
         }
+        else if (player.transform.position.y <minHeight) StopClimb();
         else player.SetHasReachedTop(false);
     }
+
     private void OnTriggerExit(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
@@ -49,19 +47,15 @@ public class LadderClimb : MonoBehaviour
     private void StartClimb()
     {
         Vector3 v = player.transform.position;
+        v.y += 0.2f;
         v.x = transform.position.x;
-        v.z = transform.position.z -1;
-        player.transform.position = v;
-        player.transform.eulerAngles += new Vector3(0, -90, 0);
-        player.SetIsClimbing(true);
-        player.ResetVelocity();
+        v.z = transform.position.z - 1;
+        player.StartClimbLadder(v);
     }
 
     private void StopClimb()
     {
         if (!player.GetIsClimbingLadder()) return;
-        player.transform.eulerAngles += new Vector3(0, 90, 0);
-        player.SetIsClimbing(false);
-        player.SetHasReachedTop(false);
+        player.StopClimbLadder();
     }
 }
