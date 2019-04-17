@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     [Range(-1, 1)]
     private float _verticalAccDecLerpValue;
     private Vector3 _verticalLastMovement = Vector3.zero;
+    public float velocity;
 
     [Header("Light")]
     [SerializeField] private float sizeSpeed = 5;
@@ -68,7 +69,6 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrabbing = false;
     private bool isMoving = false;
-    [SerializeField]private bool pressedJump = false;
     private Rigidbody objectGrabbed = null;
     private float objectGrabbedWidth = 0;
     private bool isTouchingBox = false;
@@ -78,7 +78,6 @@ public class PlayerController : MonoBehaviour
     private float vMove;
     private float hMove;
     private bool walkRoutine = false;
-    private float velocity;
     private Vector3 lastPosition;
 
     enum LookDirection { Left, Right};
@@ -101,12 +100,6 @@ public class PlayerController : MonoBehaviour
 
         cursorPos = Input.mousePosition;
         lastPosition = transform.position;
-    }
-
-    private void Update()
-    {
-        GroundedCheck();
-        JumpCheck();
     }
 
     private void FixedUpdate()
@@ -255,7 +248,6 @@ public class PlayerController : MonoBehaviour
     {
         SetIsAlive(false);
         SetHasReachedTop(false);
-        pressedJump = false;
         isGrabbing = false;
         isClimbing = false;
         isClimbingLadder = false;
@@ -275,6 +267,7 @@ public class PlayerController : MonoBehaviour
     {
         isMoving = false;
         Vector3 lMovement = Vector3.zero;
+        Vector3 camMove = Vector3.zero;
 
         hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
         if(!isClimbingLadder)
@@ -328,6 +321,9 @@ public class PlayerController : MonoBehaviour
                 objectGrabbed.MovePosition(transform.position + lMovement + new Vector3(objectGrabbedWidth * direction, 0, 0));
             }
             rb.MovePosition(transform.position + lMovement);
+            /*Vector3 camPos = GameManager.instance.mainCamera.transform.position;
+            lMovement.z = 0;
+            GameManager.instance.MoveCamera(camPos + (lMovement*50));*/
         }
         animator.SetBool("IsMoving", isMoving);
     }
@@ -460,25 +456,6 @@ public class PlayerController : MonoBehaviour
         }
         isGrounded = temp;
     }
-
-    private void FallingCheck()
-    {
-        //pressedJump = false;
-    }
-
-    private void JumpCheck()
-    {
-        // JUMP
-        if (GameManager.instance.controls.GetButtonDown("Jump") && !isClimbingLadder)
-        {
-            if (isGrounded && !pressedJump)
-            {
-                pressedJump = true;
-                Jump();
-            }
-            print("JUMP"+Time.frameCount);
-        }
-    }
     
     public void JumpLand()
     {
@@ -489,12 +466,12 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 jumpVector = new Vector3(0, jumpForce);
         rb.AddForce(jumpVector, ForceMode.VelocityChange);
-        pressedJump = false;
     }
 
     public void Jump()
     {
-        //print("pressed?" + pressedJump);
+        GroundedCheck();
+        if (!isGrounded) return;
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
     }
@@ -503,7 +480,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Climbable")
         {
-            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing && !isGrounded)
+            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing)
             {
                 Vector3 newPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
                 newPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;

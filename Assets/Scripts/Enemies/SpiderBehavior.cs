@@ -41,7 +41,8 @@ public class SpiderBehavior : Enemy
         lastPosition = transform.position;
 
         isMoving = false;
-        animator.SetFloat("mult", velocity);
+        animator.SetFloat("Velocity", velocity*10);
+        print(velocity);
 
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)
@@ -114,13 +115,15 @@ public class SpiderBehavior : Enemy
     private IEnumerator CountLook()
     {
         isLooked = true;
-        animator.SetTrigger("WakesUp");
+        animator.SetBool("WakesUp",true);
         while (countLook<delaySpot)
         {
-            yield return new WaitForSeconds(0.1f);
-            countLook+=0.1f;
+            countLook+=Time.deltaTime;
+            animator.SetFloat("WakeMult", countLook);
             //print(countLook);
+            yield return new WaitForEndOfFrame();
         }
+        animator.SetBool("WakesUp", false);
         StartChase();
         isLooked = false;
         yield return null;
@@ -146,6 +149,8 @@ public class SpiderBehavior : Enemy
         base.Respawn();
         countChase = 0;
         countLook = 0;
+        animator.SetFloat("WakeMult", countLook);
+        animator.SetBool("IsMoving", false);
     }
 
     // ARRETER LA CHASSE DU JOUEUR
@@ -166,6 +171,7 @@ public class SpiderBehavior : Enemy
         if (!b)
         {
             StopCoroutine("CountChase");
+            animator.SetBool("WakesUp", false);
             chaseCoroutine = false;
         }
     }

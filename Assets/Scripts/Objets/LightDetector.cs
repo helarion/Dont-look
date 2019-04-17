@@ -16,6 +16,11 @@ public class LightDetector : Objet
         model = GetComponentInChildren<MeshRenderer>();
     }
 
+    private void Update()
+    {
+        LightDetection();
+    }
+
     public void LightDetection()
     {
         bool test = false;
