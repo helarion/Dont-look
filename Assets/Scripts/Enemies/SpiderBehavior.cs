@@ -42,7 +42,7 @@ public class SpiderBehavior : Enemy
 
         isMoving = false;
         animator.SetFloat("Velocity", velocity*10);
-        print(velocity);
+        //print(velocity);
 
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)

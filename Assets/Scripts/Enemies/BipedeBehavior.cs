@@ -23,7 +23,7 @@ public class BipedeBehavior : Enemy
         velocity = (transform.position - lastPosition).magnitude;
         lastPosition = transform.position;
 
-        animator.SetFloat("mult", velocity);
+        animator.SetFloat("Velocity", velocity);
 
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if (isChasing)

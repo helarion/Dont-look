@@ -6,6 +6,8 @@ public class LightDetector : Objet
 {
     [SerializeField] private Objet target =null;
     [SerializeField] private float delayActivate = 1.5f;
+    [SerializeField] private BlinkingLight blinkLight = null;
+    [SerializeField] private AK.Wwise.Event activateSound = null;
     private bool isActivated =false;
     private MeshRenderer model;
     private bool isLooked = false;
@@ -54,6 +56,7 @@ public class LightDetector : Objet
         else if (!test)
         {
             StopCoroutine("CountLook");
+            if(!isActivated && isLooked) blinkLight.StartBlink();
             isLooked = false;
             countLook = 0f;
         }
@@ -63,6 +66,7 @@ public class LightDetector : Objet
     private IEnumerator CountLook()
     {
         isLooked = true;
+        blinkLight.StartLook(delayActivate);
         while (countLook < delayActivate)
         {
             yield return new WaitForSeconds(0.1f);
@@ -78,6 +82,7 @@ public class LightDetector : Objet
         if (isActivated) return;
         base.Activate();
         target.Activate();
+        isActivated = true;
         print("Object activated");
     }
 

@@ -80,6 +80,8 @@ public class PlayerController : MonoBehaviour
     private bool walkRoutine = false;
     private Vector3 lastPosition;
 
+    private Vector3 climbPosition;
+
     enum LookDirection { Left, Right};
     LookDirection currentLookDirection = LookDirection.Right;
 
@@ -256,6 +258,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsMoving", false);
         animator.SetBool("IsJumping", false);
         animator.SetBool("IsRunning", false);
+        animator.SetBool("Climb", false);
         rb.useGravity = true;
         rb.isKinematic = false;
         ResetVelocity();
@@ -476,7 +479,8 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsJumping",true);
     }
 
-    private void OnCollisionStay(Collision collision)
+    /*
+     *     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.tag == "Climbable")
         {
@@ -490,23 +494,36 @@ public class PlayerController : MonoBehaviour
                 isAlive = false;
                 isClimbing = true;
                 rb.isKinematic = true;
-                StartCoroutine("ClimbCoroutine", positions);
+                animator.SetBool("Climb", true);
+            }
+        }
+    }
+    */
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Climbable")
+        {
+            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing)
+            {
+                climbPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
+                climbPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
+                isAlive = false;
+                isClimbing = true;
+                rb.isKinematic = true;
+                animator.SetBool("Climb", true);
             }
         }
     }
 
-    IEnumerator ClimbCoroutine(Vector3[] positions)
+    public void StopClimb()
     {
-        float currentClimbTime = 0.0f;
-        while (currentClimbTime < climbTime)
-        {
-            transform.position = Vector3.Lerp(positions[0], positions[1], currentClimbTime/climbTime);
-            currentClimbTime += Time.fixedDeltaTime;
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
-        }
+        transform.position = climbPosition;
+
         isAlive = true;
         isClimbing = false;
         rb.isKinematic = false;
+        animator.SetBool("Climb", false);
     }
 
     public void ResetVelocity()
@@ -603,3 +620,4 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 }
+ 
