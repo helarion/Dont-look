@@ -28,21 +28,19 @@ public class LadderClimb : MonoBehaviour
         player = other.GetComponent<PlayerController>();
         if (player == null) return;
 
-        if (player.transform.position.y > maxHeight)
-        {
-            player.SetHasReachedTop(true);
-            StopClimb();
-        }
-        else if (player.transform.position.y <minHeight) StopClimb();
+        if (player.transform.position.y > maxHeight) player.SetHasReachedTop(true);
         else player.SetHasReachedTop(false);
+
+        if (player.transform.position.y < minHeight) player.SetHasReachedBottom(true);
+        else player.SetHasReachedBottom(false);
     }
 
-    private void OnTriggerExit(Collider other)
+    /*private void OnTriggerExit(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
         StopClimb();
-    }
+    }*/
 
     private void StartClimb()
     {
@@ -51,11 +49,5 @@ public class LadderClimb : MonoBehaviour
         v.x = transform.position.x;
         v.z = transform.position.z - 1;
         player.StartClimbLadder(v);
-    }
-
-    private void StopClimb()
-    {
-        if (!player.GetIsClimbingLadder()) return;
-        player.StopClimbLadder();
     }
 }

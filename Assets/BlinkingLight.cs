@@ -52,7 +52,7 @@ public class BlinkingLight : MonoBehaviour
                 direction = 1;
             }
             lt.intensity += (Time.deltaTime * blinkSpeed) * direction;
-            print(lt.intensity);
+            //print(lt.intensity);
         }
         else
         {
