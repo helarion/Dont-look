@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     [Header("Layers")]
     [SerializeField] private LayerMask wallsAndMobsLayer;
     [SerializeField] private LayerMask lookLayer;
+    [SerializeField] private LayerMask climbLayer;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
@@ -215,6 +216,11 @@ public class GameManager : MonoBehaviour
     public LayerMask GetLookLayer()
     {
         return lookLayer;
+    }
+
+    public LayerMask GetClimbLayer()
+    {
+        return climbLayer;
     }
 
     public bool GetIsTrackerEnabled()
