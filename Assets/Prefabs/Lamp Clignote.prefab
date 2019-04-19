@@ -361,6 +361,7 @@ MonoBehaviour:
   direction: 1
   blinkSpeed: 40
   maxIntensity: 50
+  isBlinking: 1
   startColor: {r: 1, g: 0, b: 0, a: 0}
   endColor: {r: 0.034784317, g: 1, b: 0, a: 0}
 --- !u!65 &1000416197614702
@@ -391,6 +392,10 @@ MonoBehaviour:
   target: {fileID: 0}
   delayActivate: 1.5
   blinkLight: {fileID: 1000416197614701}
+  activateSound:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
 --- !u!1 &857048285909244033
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +442,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 32
+  m_Intensity: 25.46479
   m_Range: 1.0000001
   m_SpotAngle: 30
   m_CookieSize: 10

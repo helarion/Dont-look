@@ -362,8 +362,6 @@ public class PlayerController : MonoBehaviour
                 moveSpeed = walkSpeed;
             }
 
-            if(!isGrounded) moveSpeed = runSpeed;
-
             if (isGrabbing)
             {
                 lMovement *= grabSpeed;
@@ -481,14 +479,16 @@ public class PlayerController : MonoBehaviour
             if ((lookAtPos.x - transform.position.x < -0.25f) || (currentLookDirection == LookDirection.Right && lookAtPos.x - transform.position.x < 0.25f))
             {
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
-                inverse = 1;
                 currentLookDirection = LookDirection.Right;
+                if (hMove > 0) inverse = -1;
+                else inverse = 1;
             }
             else
             {
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
-                inverse = -1;
                 currentLookDirection = LookDirection.Left;
+                if (hMove < 0) inverse = -1;
+                else inverse = 1;
             }
         }
         lt.transform.rotation = save;

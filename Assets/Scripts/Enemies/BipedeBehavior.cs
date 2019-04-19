@@ -65,7 +65,7 @@ public class BipedeBehavior : Enemy
         if (b)
         {
             AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
-            GameManager.instance.ShakeScreen(0.01f);
+            GameManager.instance.ShakeScreen(0.001f);
             isLooked = true;
         }
         else
