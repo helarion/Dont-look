@@ -6,6 +6,7 @@ public class Checkpoint : MonoBehaviour
 {
     // a stocker plus tard : les puzzles déja faits pour ne pas les réinitaliser, ou l'inverse : les puzzles à réini
     private float z;
+    [SerializeField] Objet[] listObjetsReinitialises;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,5 +32,13 @@ public class Checkpoint : MonoBehaviour
         Gizmos.DrawLine(topRightCorner, bottomRightCorner);
         Gizmos.DrawLine(bottomRightCorner, bottomLeftCorner);
         Gizmos.DrawLine(bottomLeftCorner, topLeftCorner);
+    }
+
+    public void Reset()
+    {
+        foreach(Objet o in listObjetsReinitialises)
+        {
+            o.Reset();
+        }
     }
 }

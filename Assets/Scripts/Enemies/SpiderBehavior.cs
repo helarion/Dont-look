@@ -12,7 +12,6 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float lengthDetection = 10;
 
     [SerializeField] private bool clickToSetDestination = false;
-    [SerializeField] private AK.Wwise.Event WwiseLook;
 
     [SerializeField] private float countLook = 0;
     private float countChase = 0;
@@ -20,20 +19,17 @@ public class SpiderBehavior : Enemy
     private bool canSeePlayer = false;
 
     private bool chaseCoroutine = false;
-    private Animator animator;
     private bool isMoving = false;
     private bool isLooked = false;
 
-    [SerializeField] private float velocity;
     private Vector3 lastPosition;
 
     NavMeshLink link;
 
     private void Start()
     {
-        animator = GetComponentInChildren<Animator>();
-        animator.SetFloat("WakeMult", (1f / delaySpot));
         Initialize();
+        animator.SetFloat("WakeMult", (1f / delaySpot));
         countChase = 0;
         countLook = 0;
         lastPosition = transform.position;
@@ -45,7 +41,8 @@ public class SpiderBehavior : Enemy
         lastPosition = transform.position;
 
         isMoving = false;
-        animator.SetFloat("mult", velocity);
+        animator.SetFloat("Velocity", velocity*10);
+        //print(velocity);
 
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)
@@ -73,7 +70,7 @@ public class SpiderBehavior : Enemy
         }
     }
 
-    private void ChaseBehavior()
+    public override void ChaseBehavior()
     {
         // goes to the player
         isMoving = true;
@@ -86,6 +83,10 @@ public class SpiderBehavior : Enemy
                 if (!chaseCoroutine) StartCoroutine("CountChase");
                 chaseCoroutine = true;
             }
+        }
+        else
+        {
+            StopCoroutine("CountChase");
         }
     }
 
@@ -114,14 +115,16 @@ public class SpiderBehavior : Enemy
     private IEnumerator CountLook()
     {
         isLooked = true;
-        animator.SetTrigger("WakesUp");
+        animator.SetBool("WakesUp",true);
         while (countLook<delaySpot)
         {
-            yield return new WaitForSeconds(0.1f);
-            countLook+=0.1f;
+            countLook+=Time.deltaTime;
+            animator.SetFloat("WakeMult", countLook);
             //print(countLook);
+            yield return new WaitForEndOfFrame();
         }
-        Chase();
+        animator.SetBool("WakesUp", false);
+        StartChase();
         isLooked = false;
         yield return null;
     }
@@ -144,10 +147,10 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
-        //agent.isStopped = true;
-        isChasing = false;
         countChase = 0;
         countLook = 0;
+        animator.SetFloat("WakeMult", countLook);
+        animator.SetBool("IsMoving", false);
     }
 
     // ARRETER LA CHASSE DU JOUEUR
@@ -168,13 +171,14 @@ public class SpiderBehavior : Enemy
         if (!b)
         {
             StopCoroutine("CountChase");
+            animator.SetBool("WakesUp", false);
             chaseCoroutine = false;
         }
     }
 
-    public override void Chase()
+    public override void StartChase()
     {
-        base.Chase();
+        base.StartChase();
         countLook = 0;
     }
 
@@ -186,7 +190,7 @@ public class SpiderBehavior : Enemy
         {
             AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
             GameManager.instance.ShakeScreen(0.1f);
-            agent.speed += bonusSpeed;
+            agent.speed = moveSpeed+bonusSpeed;
             if (!isLooked) StartCoroutine("CountLook");
         }
         else

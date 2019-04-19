@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Checkpoint lastCheckpoint = null;
     [SerializeField] public bool isTesting = false;
     [SerializeField] private Checkpoint[] CheckPointList;
+    [SerializeField] private float cameraMoveOffset = 20;
 
     [Header("ScreenShake")]
     [SerializeField] private float shakeDuration = 0f;
@@ -121,6 +122,7 @@ public class GameManager : MonoBehaviour
     // RESPAWN LE JOUEUR
     private void RespawnPlayer()
     {
+        lastCheckpoint.Reset();
         player.transform.position = lastCheckpoint.transform.position;
         player.SetIsAlive(true);
     }
@@ -180,12 +182,16 @@ public class GameManager : MonoBehaviour
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
-        originalPos = Vector3.Lerp(originalPos, newPos, cameraSpeed);
+        float speed = cameraSpeed;
+        if (player.velocity > 0) speed /= (player.velocity * cameraMoveOffset);
+        originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
     }
 
     public void RotateCamera(Quaternion newRotate)
     {
-        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, cameraSpeed);
+        float speed = cameraSpeed;
+        if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
+        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/ speed);
     }
 
     public void PauseGame()

@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Model and light objects")]
     [SerializeField] private Transform modelTransform;
+    [SerializeField] private Transform[] raycastPosition = null;
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 1.5f;
@@ -29,6 +30,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float deadZoneValue = 0.3f;
     [SerializeField] private float runSpeed = 3;
     [SerializeField] private float walkSpeed = 1;
+    [SerializeField] private float ladderSpeed = 0.5f;
+    [SerializeField] private float grabSpeed = 0.5f;
+
     [SerializeField] private AnimationCurve _horizontalAccelerationCurve;
     [SerializeField] private AnimationCurve _verticalAccelerationCurve;
     [SerializeField] private AnimationCurve _horizontalDecelerationCurve;
@@ -42,7 +46,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _verticalDecSpeed = 1;
     [Range(-1, 1)]
     private float _verticalAccDecLerpValue;
+
     private Vector3 _verticalLastMovement = Vector3.zero;
+    private Vector3 climbPosition;
+    private Vector3 lastPosition;
+    public float velocity;
+
+    private float moveSpeed;
+    private float vMove;
+    private float hMove;
+
+    private int inverse = 1;
 
     [Header("Light")]
     [SerializeField] private float sizeSpeed = 5;
@@ -51,19 +65,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform flashlight;
     [SerializeField] private Transform cameraLight;
     [SerializeField] private Light pointLight;
-
+    
     [Header("Debug")]
-    [SerializeField] private Transform[] raycastPosition=null;
     [SerializeField] private bool ignoreIsGroundedOneTime = false;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private Transform raycastClimb;
-
-    private float moveSpeed;
-
+    
     public bool lightOn = true;
+
+    [Header("State")]
     private bool isAlive = true;
     private bool isClimbingLadder = false;
     [SerializeField] private bool hasReachedTop = false;
+    private bool hasReachedBottom = false;
     private bool isClimbing = false;
     private bool isGrabbing = false;
     private bool isMoving = false;
@@ -78,16 +92,15 @@ public class PlayerController : MonoBehaviour
     private float objectGrabbedWidth = 0;
     private bool isTouchingBox = false;
 
-    private int inverse = 1;
-
-    private float vMove;
-    private float hMove;
     private bool walkRoutine = false;
+    private bool StoppedHMove = false;
 
     enum LookDirection { Left, Right, Front, Back};
     LookDirection currentLookDirection = LookDirection.Right;
 
     #endregion
+
+    #region StartUpdateOn
 
     private void Start()
     {
@@ -103,17 +116,22 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         cursorPos = Input.mousePosition;
+        lastPosition = transform.position;
     }
 
     private void Update()
     {
-        ;
+        if (!isAlive || GameManager.instance.GetIsPaused()) return;
+        LightAim();
+        JumpLadderHandler();
     }
 
     private void FixedUpdate()
     {
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
-        LightAim();
+
+        velocity = (transform.position - lastPosition).magnitude;
+        lastPosition = transform.position;
         Move();
         GroundedCheck();
         JumpCheck();
@@ -122,6 +140,9 @@ public class PlayerController : MonoBehaviour
             ClimbCheck();
         }
         BodyRotation();
+        if (!isClimbingLadder) return;
+        if ((!hasReachedTop && vMove > 0) || !hasReachedBottom && vMove < 0) animator.SetFloat("ClimbSpeed", Mathf.Abs(vMove));
+        else animator.SetFloat("ClimbSpeed", 0);
     }
 
     private void OnDrawGizmos()
@@ -157,6 +178,10 @@ public class PlayerController : MonoBehaviour
             currentCameraBlock = null;
         }
     }
+
+    #endregion
+
+    #region Light
 
     private void LightAim()
     {
@@ -225,23 +250,93 @@ public class PlayerController : MonoBehaviour
         lightOn = !isClosed;
     }
 
-    // Bouge les pieds du joueur à la position donnée
-    public void moveTo(Vector3 positionToMove)
-    {
-        positionToMove.y += cl.bounds.center.y - cl.bounds.min.y;
-        transform.position = positionToMove;
-    }
+    #endregion
 
+    #region System
     public void Reset()
     {
         SetIsAlive(false);
         SetHasReachedTop(false);
-        pressedJump = false;
+        SetHasReachedBottom(false);
         isGrabbing = false;
         isClimbing = false;
         isClimbingLadder = false;
         isTouchingBox = false;
+        animator.SetBool("OnLadder", false);
+        animator.SetBool("IsMoving", false);
+        animator.SetBool("IsJumping", false);
+        animator.SetBool("IsRunning", false);
+        animator.SetBool("Climb", false);
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        StoppedHMove = false;
+        ResetVelocity();
     }
+    #endregion
+
+    #region Ladder
+
+    private void JumpLadderHandler()
+    {
+        if (!isClimbingLadder || (!hasReachedBottom && !hasReachedTop)) return;
+        if (hMove !=0)
+        {
+            if (!StoppedHMove) return;
+            int direction=0;
+            if (hMove > 0) direction = 1;
+            else if(hMove < 0) direction = -1;
+            StopClimbLadder(direction);
+            print(direction);
+        }
+        else
+        {
+            StoppedHMove = true;
+        }
+    }
+
+    public void StartClimbLadder(Vector3 v)
+    {
+        StoppedHMove = false;
+        transform.position = v;
+        modelTransform.eulerAngles = new Vector3(0, 0, 0);
+        SetIsClimbing(true);
+        ResetVelocity();
+        animator.SetBool("OnLadder", true);
+    }
+
+    public void StopClimbLadder(int direction)
+    {
+        animator.SetFloat("ClimbSpeed", 1);
+        StoppedHMove = false;
+        modelTransform.eulerAngles = new Vector3(0, 90, 0);
+        SetIsClimbing(false);
+        SetHasReachedTop(false);
+        SetHasReachedBottom(false);
+        animator.SetBool("OnLadder", false);
+        Vector3 newPosition = transform.position;
+        newPosition.z -= 3;
+        newPosition.x += 2*direction;
+        transform.position = newPosition;
+    }
+
+    private IEnumerator LadderPush()
+    {
+        float count = 0;
+        while (count < 1f)
+        {
+            Vector3 lMovement = new Vector3(0, GameManager.instance.controls.GetAxisRaw("Move Vertical"), 0);
+            if ((lMovement.y > 0 && !hasReachedTop) || lMovement.y < 0 && !hasReachedBottom)
+            {
+                Vector3 move = transform.position + lMovement;
+                transform.position = Vector3.Lerp(transform.position, move, Time.deltaTime / ladderSpeed);
+                count += Time.deltaTime;
+            }
+            yield return new WaitForEndOfFrame();
+        }
+        yield return null;
+    }
+
+    #endregion
 
     #region Movement
 
@@ -249,26 +344,29 @@ public class PlayerController : MonoBehaviour
     {
         isMoving = false;
         Vector3 lMovement = Vector3.zero;
+        Vector3 camMove = Vector3.zero;
 
         hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
+        if (hMove < deadZoneValue && hMove > -deadZoneValue) hMove = 0;
         if(!isClimbingLadder)
         {
-            if (Mathf.Abs(hMove) > deadZoneValue)
+            if (Mathf.Abs(hMove) > 0)
                 lMovement += HorizontalMove(hMove);
             else if (_horizontalAccDecLerpValue != 0)
                 lMovement += HorizontalSlowDown();
         }
 
         vMove = GameManager.instance.controls.GetAxis("Move Vertical");
-        if(!isGrabbing)
+        if (vMove < deadZoneValue && vMove > -deadZoneValue) vMove = 0;
+        if (!isGrabbing)
         {
-            if (vMove < -deadZoneValue || (vMove>deadZoneValue && !hasReachedTop &&isClimbingLadder) || (vMove>deadZoneValue && !isClimbingLadder))
+            if (vMove !=0)
                 lMovement += VerticalMove(vMove);
             else if (_verticalAccDecLerpValue != 0)
                 lMovement += VerticalSlowDown();
         }
 
-        Vector3 lPoint;
+        /*Vector3 lPoint;
         if (isClimbingLadder)
         {
            lPoint = new Vector3(transform.position.x + lMovement.x, transform.position.y + lMovement.y,0);
@@ -276,12 +374,13 @@ public class PlayerController : MonoBehaviour
         else
         {
             lPoint = new Vector3(transform.position.x + lMovement.x, 0, transform.position.z + lMovement.y);
-        }
+        }*/
 
         if (lMovement != Vector3.zero)
         {
             isMoving = true;
-            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+            if (isClimbingLadder) lMovement *= 0;// ladderSpeed; //moveSpeed = ladderSpeed;
+            else if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
             {
                 animator.SetBool("IsRunning", true);
                 moveSpeed = runSpeed;
@@ -296,11 +395,14 @@ public class PlayerController : MonoBehaviour
 
             if (isGrabbing)
             {
-                lMovement *= 0.25f;
-                int direction = (objectGrabbed.position.x - transform.position.x) > 0 ? 1 : -1;
+                lMovement *= grabSpeed;
+                int direction = (transform.position.x - objectGrabbed.position.x) > 0 ? -1 : 1;
                 objectGrabbed.MovePosition(transform.position + lMovement + new Vector3(objectGrabbedWidth * direction, 0, 0));
             }
             rb.MovePosition(transform.position + lMovement);
+            /*Vector3 camPos = GameManager.instance.mainCamera.transform.position;
+            lMovement.z = 0;
+            GameManager.instance.MoveCamera(camPos + (lMovement*50));*/
         }
         animator.SetBool("IsMoving", isMoving);
     }
@@ -390,15 +492,16 @@ public class PlayerController : MonoBehaviour
 
     private void BodyRotation()
     {
+        if (isClimbingLadder) return;
         Quaternion save = lt.transform.rotation;
         float speed = 0.1f;
-        if (vMove > deadZoneValue)
+        if (vMove > 0)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
             inverse = 1;
             currentLookDirection = LookDirection.Front;
         }
-        else if (vMove < -deadZoneValue)
+        else if (vMove < 0)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
             inverse = -1;
@@ -420,6 +523,15 @@ public class PlayerController : MonoBehaviour
             }
         }
         lt.transform.rotation = save;
+        animator.SetFloat("Inverse", inverse);
+    }
+
+
+    // Bouge les pieds du joueur à la position donnée
+    public void moveTo(Vector3 positionToMove)
+    {
+        positionToMove.y += cl.bounds.center.y - cl.bounds.min.y;
+        transform.position = positionToMove;
     }
 
     #endregion
@@ -486,11 +598,12 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        //print("pressed?" + pressedJump);
+        GroundedCheck();
+        if (!isGrounded) return;
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
     }
-
+    
     private void ClimbCheck()
     {
         /*if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing && !isGrounded)
@@ -536,23 +649,40 @@ public class PlayerController : MonoBehaviour
                 isAlive = false;
                 isClimbing = true;
                 rb.isKinematic = true;
-                StartCoroutine("ClimbCoroutine", positions);
+                animator.SetBool("Climb", true);
             }
         }
     }
 
-    IEnumerator ClimbCoroutine(Vector3[] positions)
+    private void OnCollisionStay(Collision collision)
     {
-        float currentClimbTime = 0.0f;
-        while (currentClimbTime < climbTime)
+        if (collision.gameObject.tag == "Climbable")
         {
-            transform.position = Vector3.Lerp(positions[0], positions[1], currentClimbTime/climbTime);
-            currentClimbTime += Time.fixedDeltaTime;
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing)
+            {
+                climbPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
+                climbPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
+                isAlive = false;
+                isClimbing = true;
+                rb.isKinematic = true;
+                animator.SetBool("Climb", true);
+            }
         }
+    }
+
+    public void StopClimb()
+    {
+        transform.position = climbPosition;
+
         isAlive = true;
         isClimbing = false;
         rb.isKinematic = false;
+        animator.SetBool("Climb", false);
+    }
+
+    public void ResetVelocity()
+    {
+        rb.velocity = new Vector3(0, 0, 0);
     }
 
     #endregion
@@ -621,6 +751,11 @@ public class PlayerController : MonoBehaviour
         hasReachedTop = b;
     }
 
+    public void SetHasReachedBottom(bool b)
+    {
+        hasReachedBottom = b;
+    }
+
     public void SetIsGrabbing(bool b, Rigidbody obj, float objWidth)
     {
         isGrabbing = b;
@@ -642,10 +777,6 @@ public class PlayerController : MonoBehaviour
     {
         return isMoving;
     }
-
-    public bool getInCameraRail()
-    {
-        return inCameraRail;
-    }
     #endregion
 }
+ 

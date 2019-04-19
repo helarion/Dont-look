@@ -43,7 +43,7 @@ public class CameraHandler : MonoBehaviour
         if (currentCameraBlock != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(lookAtPos - transform.position, Vector3.up);
-
+            
             if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Left)
             {
                 if (newPosition.x < currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.x)

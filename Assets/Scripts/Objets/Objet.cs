@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Objet : MonoBehaviour
 {
-    public virtual void Activate()
-    {
-
-    }
+    public virtual void Activate() {}
+    public virtual void Reset() {}
 }
