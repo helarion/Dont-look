@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     [Header("Layers")]
     [SerializeField] private LayerMask wallsAndMobsLayer;
     [SerializeField] private LayerMask lookLayer;
+    [SerializeField] private LayerMask climbLayer;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
@@ -188,9 +189,10 @@ public class GameManager : MonoBehaviour
 
     public void RotateCamera(Quaternion newRotate)
     {
-        float speed = cameraSpeed;
-        if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
-        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/ speed);
+        //print(newRotate);
+        //float speed = cameraSpeed;
+        //if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
+        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
     }
 
     public void PauseGame()
@@ -221,6 +223,11 @@ public class GameManager : MonoBehaviour
     public LayerMask GetLookLayer()
     {
         return lookLayer;
+    }
+
+    public LayerMask GetClimbLayer()
+    {
+        return climbLayer;
     }
 
     public bool GetIsTrackerEnabled()

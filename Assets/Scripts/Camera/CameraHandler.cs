@@ -5,17 +5,21 @@ using UnityEngine;
 public class CameraHandler : MonoBehaviour
 {
     [SerializeField] Transform target=null; // target = player, le suivre avec la cam
+    PlayerController player;
 
     [Header("Camera Variables")]
     [SerializeField] float offset=1;
     [SerializeField] float cameraYawAngleMultiplier = 10;
     [SerializeField] float minYCamera = 1.0f;
+    [SerializeField] float railOffsetX;
+    [SerializeField] float railOffsetY;
     
     float zStartPosition;
 
     void Start()
     {
         zStartPosition = transform.position.z;
+        player = GameManager.instance.player;
     }
 
     void Update()
@@ -39,9 +43,7 @@ public class CameraHandler : MonoBehaviour
         if (currentCameraBlock != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(lookAtPos - transform.position, Vector3.up);
-
-            //print(currentCameraBlock.blockDirection + ":" + targetRotation.eulerAngles.x + ";" + targetRotation.eulerAngles.y + ";" + targetRotation.eulerAngles.z);
-
+            
             if (currentCameraBlock.blockDirection == CameraBlock.BlockDirection.Left)
             {
                 if (newPosition.x < currentCameraBlock.gameObject.GetComponent<BoxCollider>().bounds.max.x)

@@ -24,16 +24,14 @@ public class FallingBox : MonoBehaviour
         }
         if (touchedGround)
         {
-            print(rb.velocity.y);
             if (Mathf.Abs(rb.velocity.y) < 0.0001f)
             {
-                print("SALU");
                 kinematic = true;
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                 rb.mass = 500;
                 rb.isKinematic = true;
                 rb.useGravity = false;
-                transform.tag = "Climbable";
+                gameObject.layer = 12;
                 transform.GetComponentInChildren<GrabbableBox>().setIsGrabbable(true);
             }
         }

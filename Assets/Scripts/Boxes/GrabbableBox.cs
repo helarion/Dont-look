@@ -16,10 +16,23 @@ public class GrabbableBox : MonoBehaviour
         rb = transform.GetComponent<Rigidbody>();
     }
 
+    Vector3 vec3_modulo(Vector3 vec, int modulo)
+    {
+        return new Vector3(vec.x % modulo, vec.y % modulo, vec.z % modulo);
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.fixedDeltaTime);
+        if (GetComponent<HingeJoint>() == null)
+        {
+            Vector3 rotationOffset = vec3_modulo(transform.rotation.eulerAngles, 90);
+            Vector3 rotationRounded = transform.rotation.eulerAngles - rotationOffset;
+            Vector3 add90OrNot = new Vector3(rotationOffset.x > 45 ? 1 : 0, rotationOffset.y > 45 ? 1 : 0, rotationOffset.z > 45 ? 1 : 0);
+            Vector3 closestGoodRotation = rotationRounded + add90OrNot * 90;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(closestGoodRotation), Time.fixedDeltaTime);
+        }
+
         if (isGrabbable && isPlayerInGrabZone)
         {
             if (GameManager.instance.controls.GetButtonDown("Interact"))
