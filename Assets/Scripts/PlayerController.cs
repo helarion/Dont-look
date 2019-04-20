@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
     private float _verticalAccDecLerpValue;
 
     private Vector3 _verticalLastMovement = Vector3.zero;
+    private Vector3 localModelPosition;
     private Vector3 climbPosition;
     private Vector3 lastPosition;
     public float velocity;
@@ -116,6 +117,7 @@ public class PlayerController : MonoBehaviour
 
         cursorPos = Input.mousePosition;
         lastPosition = transform.position;
+        localModelPosition = modelTransform.localPosition;
     }
 
     private void Update()
@@ -649,6 +651,7 @@ public class PlayerController : MonoBehaviour
     public void StopClimb()
     {
         transform.position = climbPosition;
+        modelTransform.localPosition = localModelPosition;
 
         isAlive = true;
         isClimbing = false;
