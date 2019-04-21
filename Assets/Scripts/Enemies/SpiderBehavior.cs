@@ -26,9 +26,12 @@ public class SpiderBehavior : Enemy
 
     NavMeshLink link;
 
+    private PlayerController p;
+
     private void Start()
     {
         Initialize();
+        p = GameManager.instance.player;
         animator.SetFloat("WakeMult", (1f / delaySpot));
         countChase = 0;
         countLook = 0;
@@ -64,7 +67,7 @@ public class SpiderBehavior : Enemy
     {
         if (Input.GetMouseButtonDown(0) && clickToSetDestination)
         {
-            Vector3 pos = GameManager.instance.player.GetLookAt();
+            Vector3 pos = p.GetLookAt();
             MoveTo(pos);
             print(pos);
         }
@@ -76,9 +79,9 @@ public class SpiderBehavior : Enemy
         isMoving = true;
         MoveTo(GameManager.instance.player.transform.position);
 
-        if (!GameManager.instance.player.lightOn && !GameManager.instance.player.GetIsMoving())
+        if (!p.lightOn && !p.GetIsMoving() && p.GetIsHidden())
         {
-            if(!CheckSeePlayer())
+            if(!canSeePlayer)
             {
                 if (!chaseCoroutine) StartCoroutine("CountChase");
                 chaseCoroutine = true;
@@ -88,27 +91,6 @@ public class SpiderBehavior : Enemy
         {
             StopCoroutine("CountChase");
         }
-    }
-
-    private bool CheckSeePlayer()
-    {
-        bool test = false;
-        Vector3 playerPosition = GameManager.instance.player.transform.position;
-        Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
-        float playerToSpiderLength = playerToSpiderVec.magnitude;
-
-        if (playerToSpiderLength <= lengthDetection)
-        {
-            RaycastHit hit;
-            Ray ray = new Ray(transform.position, playerPosition);
-            Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer());
-
-            if (hit.transform.gameObject.tag == "Player")
-            {
-                test = true;
-            }
-        }
-        return test;
     }
 
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
@@ -157,11 +139,6 @@ public class SpiderBehavior : Enemy
     private void StopChase()
     {
         Respawn();
-    }
-
-    public void CheckCanSeePlayer()
-    {
-
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON

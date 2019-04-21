@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2734303198878335326}
   - component: {fileID: 2734303198878335313}
-  - component: {fileID: 2734303198878335312}
   m_Layer: 9
   m_Name: GrabZone
-  m_TagString: Untagged
+  m_TagString: Grabbable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,19 +44,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2248961, y: 0.19800861, z: 0.47273332}
   m_Center: {x: -0.0124848485, y: 0.014633096, z: -0.003596449}
---- !u!114 &2734303198878335312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2734303198878335327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c5a6e472b2ec22459cc1328795d9935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabbableBox: {fileID: 8486620102809037294}
 --- !u!1 &2734303199113280647
 GameObject:
   m_ObjectHideFlags: 0
