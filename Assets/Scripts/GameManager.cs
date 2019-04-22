@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
     {
         if (c == lastCheckpoint) return;
         lastCheckpoint = c;
-        print("New Checkpoint activated");
+        //print("New Checkpoint activated");
     }
 
     // SHAKESCREEN POUR LA DUREE ENTREE

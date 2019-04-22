@@ -21,7 +21,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rayCastLength = 0.1f;
     [SerializeField] private float maxClimbHeight = 1.0f;
     [SerializeField] private float maxClimbLength = 1.0f;
-    [SerializeField] private float climbTime = 1f;
+    [SerializeField] private float jumpLength = 3;
+    [SerializeField] private float jumpLengthSpeed = 1;
+    private int jumpDirection = 0;
 
     [Header("Movement")]
     [SerializeField] private float walkTime;
@@ -87,7 +89,6 @@ public class PlayerController : MonoBehaviour
     private bool isGrabbing = false;
     private bool isMoving = false;
     public bool isJumping = false;
-    [SerializeField] private bool pressedJump = false;
 
     private CameraBlock currentCameraBlock = null;
 
@@ -126,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing) return;
+        if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing ) return;
         LightAim();
         GroundedCheck();
         JumpLadderHandler();
@@ -140,6 +141,8 @@ public class PlayerController : MonoBehaviour
         yVelocity = (transform.position.y - lastPosition.y);
 
         lastPosition = transform.position;
+
+        if (isJumping) return;
         Move();
         ClimbCheck();
         BodyRotation();
@@ -190,6 +193,15 @@ public class PlayerController : MonoBehaviour
         {
             Enemy e = other.GetComponentInParent<Enemy>();
             e.DetectPlayer(true);
+        }
+        if (other.CompareTag("JumpZone"))
+        {
+
+            if (other.transform.position.x < transform.position.x) jumpDirection = 1;
+            else if (other.transform.position.x > transform.position.x) jumpDirection = -1;
+            else jumpDirection = 0;
+            //print("direction:" + jumpDirection);
+            Jump();
         }
     }
 
@@ -612,20 +624,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void JumpCheck()
-    {
-        // JUMP
-        if (GameManager.instance.controls.GetButtonDown("Jump"))
-        {
-            print("lol" + Time.frameCount);
-            if (isGrounded && !pressedJump)
-            {
-                pressedJump = true;
-                Jump();
-            }
-        }
-    }
-
     public void RecordModelPosition()
     {
         worldModelPosition = transform.position + modelTransform.localPosition;
@@ -640,10 +638,10 @@ public class PlayerController : MonoBehaviour
 
     public void JumpStart()
     {
-        Vector3 jumpVector = new Vector3(0, jumpForce);
-        rb.AddForce(jumpVector, ForceMode.VelocityChange);
-        pressedJump = false;
         isJumping = true;
+        rb.velocity = Vector3.zero;
+        Vector3 jumpVector = new Vector3(jumpLength, jumpForce);
+        rb.AddForce(jumpVector, ForceMode.VelocityChange);
         ignoreIsGroundedOneTime = true;
     }
 
@@ -654,7 +652,7 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
     }
-    
+
     private void ClimbCheck()
     {
         Vector3 climbDirection = Vector3.zero;

@@ -60,7 +60,7 @@ public class SpiderBehavior : Enemy
         DebugPath(); 
         animator.SetBool("IsMoving", isMoving);
 
-        if (agent.isOnOffMeshLink) print("Using link right now");
+        //if (agent.isOnOffMeshLink) //print("Using link right now");
     }
 
     private void DebugPath()

@@ -49,7 +49,7 @@ public class LightDetector : Objet
                 {
                     test = true;
                 }
-                print("Touched " + hit.transform.gameObject.name);
+                //print("Touched " + hit.transform.gameObject.name);
             }
         }
         if (!isLooked && !isActivated && test) StartCoroutine("CountLook");
