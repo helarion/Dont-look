@@ -25,13 +25,19 @@ public class SpatialRoom : MonoBehaviour
         spatialLines.Add(defaultSpatialLine);
         foreach (SpatialLine asl in additionalSpatialLines)
         {
+            bool inserted = false;
             foreach (SpatialLine sl in spatialLines)
             {
                 if (asl.begin.position.z < sl.begin.position.z)
                 {
                     spatialLines.Insert(spatialLines.IndexOf(sl), asl);
+                    inserted = true;
                     break;
                 }
+            }
+            if (!inserted)
+            {
+                spatialLines.Add(asl);
             }
         }
     }
