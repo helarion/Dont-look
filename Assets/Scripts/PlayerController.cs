@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkSpeed = 1;
     [SerializeField] private float ladderSpeed = 0.5f;
     [SerializeField] private float grabSpeed = 0.5f;
+    [SerializeField] private float changingLineSpeed = 0.1f;
 
     [SerializeField] private AnimationCurve _horizontalAccelerationCurve;
     [SerializeField] private AnimationCurve _verticalAccelerationCurve;
@@ -87,6 +88,9 @@ public class PlayerController : MonoBehaviour
     private CameraBlock currentCameraBlock = null;
 
     SpatialRoom currentSpatialRoom = null;
+    SpatialSas currentSpatialSas = null;
+    SpatialLine currentSpatialLine = null;
+    bool isChangingSpatialLine = false;
 
     private Rigidbody objectGrabbed = null;
     private float objectGrabbedWidth = 0;
@@ -124,6 +128,7 @@ public class PlayerController : MonoBehaviour
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
         LightAim();
         JumpLadderHandler();
+        MoveInputUpdate();
     }
 
     private void FixedUpdate()
@@ -163,10 +168,24 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        SpatialSas spatialSas = other.GetComponent<SpatialSas>();
+        if (spatialSas != null)
+        {
+            currentSpatialSas = spatialSas;
+            currentSpatialLine = spatialSas.spatialLine;
+            isChangingSpatialLine = true;
+            return;
+        }
+
         SpatialRoom spatialRoom = other.GetComponent<SpatialRoom>();
         if (spatialRoom != null)
         {
             currentSpatialRoom = spatialRoom;
+            if (currentSpatialSas == null)
+            {
+                currentSpatialLine = spatialRoom.defaultSpatialLine;
+                transform.position = new Vector3(transform.position.x, transform.position.y, spatialRoom.defaultSpatialLine.begin.position.z);
+            }
             return;
         }
     }
@@ -176,6 +195,15 @@ public class PlayerController : MonoBehaviour
         if (other.GetComponent<CameraBlock>() != null)
         {
             currentCameraBlock = null;
+        }
+
+        SpatialSas spatialSas = other.GetComponent<SpatialSas>();
+        if (spatialSas != null)
+        {
+            currentSpatialSas = null;
+            currentSpatialLine = currentSpatialRoom.defaultSpatialLine;
+            isChangingSpatialLine = true;
+            return;
         }
     }
 
@@ -340,15 +368,20 @@ public class PlayerController : MonoBehaviour
 
     #region Movement
 
+    private void MoveInputUpdate()
+    {
+        hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
+        vMove = GameManager.instance.controls.GetAxis("Move Vertical");
+    }
+
     private void Move()
     {
         isMoving = false;
         Vector3 lMovement = Vector3.zero;
         Vector3 camMove = Vector3.zero;
 
-        hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
         if (hMove < deadZoneValue && hMove > -deadZoneValue) hMove = 0;
-        if(!isClimbingLadder)
+        if (!isClimbingLadder)
         {
             if (Mathf.Abs(hMove) > 0)
                 lMovement += HorizontalMove(hMove);
@@ -356,14 +389,78 @@ public class PlayerController : MonoBehaviour
                 lMovement += HorizontalSlowDown();
         }
 
-        vMove = GameManager.instance.controls.GetAxis("Move Vertical");
-        if (vMove < deadZoneValue && vMove > -deadZoneValue) vMove = 0;
         if (!isGrabbing)
         {
-            if (vMove !=0)
+            if (!isChangingSpatialLine)
+            {
+                if (currentSpatialSas == null)
+                {
+                    if (vMove > deadZoneValue)
+                    {
+                        bool firstDepthFurther = false;
+                        float firstDepthFurtherValue = 0.0f;
+                        for (int i = 0; i < currentSpatialRoom.spatialLines.Count; i++)
+                        {
+                            SpatialLine sl = currentSpatialRoom.spatialLines[i];
+                            if (sl.begin.position.z > currentSpatialLine.begin.position.z)
+                            {
+                                if (firstDepthFurther)
+                                {
+                                    if (sl.begin.position.z != firstDepthFurtherValue)
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    firstDepthFurther = true;
+                                    firstDepthFurtherValue = sl.begin.position.z;
+                                }
+                                if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
+                                {
+                                    currentSpatialLine = sl;
+                                    isChangingSpatialLine = true;
+                                }
+                            }
+                        }
+                    }
+                    else if (vMove < -deadZoneValue)
+                    {
+                        bool firstDepthNearer = false;
+                        float firstDepthNearerValue = 0.0f;
+                        for (int i = currentSpatialRoom.spatialLines.Count - 1; i >= 0; i--)
+                        {
+                            SpatialLine sl = currentSpatialRoom.spatialLines[i];
+                            if (sl.begin.position.z < currentSpatialLine.begin.position.z)
+                            {
+                                if (firstDepthNearer)
+                                {
+                                    if (sl.begin.position.z != firstDepthNearerValue)
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    firstDepthNearer = true;
+                                    firstDepthNearerValue = sl.begin.position.z;
+                                }
+
+                                if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
+                                {
+                                    currentSpatialLine = sl;
+                                    isChangingSpatialLine = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        
+            /*if (vMove !=0)
                 lMovement += VerticalMove(vMove);
             else if (_verticalAccDecLerpValue != 0)
-                lMovement += VerticalSlowDown();
+                lMovement += VerticalSlowDown();*/
         }
 
         /*Vector3 lPoint;
@@ -376,7 +473,7 @@ public class PlayerController : MonoBehaviour
             lPoint = new Vector3(transform.position.x + lMovement.x, 0, transform.position.z + lMovement.y);
         }*/
 
-        if (lMovement != Vector3.zero)
+        if (lMovement != Vector3.zero || isChangingSpatialLine)
         {
             isMoving = true;
             if (isClimbingLadder) lMovement *= 0;// ladderSpeed; //moveSpeed = ladderSpeed;
@@ -396,10 +493,55 @@ public class PlayerController : MonoBehaviour
             if (isGrabbing)
             {
                 lMovement *= grabSpeed;
-                int direction = (transform.position.x - objectGrabbed.position.x) > 0 ? -1 : 1;
-                objectGrabbed.MovePosition(transform.position + lMovement + new Vector3(objectGrabbedWidth * direction, 0, 0));
             }
+
+            if (currentSpatialSas == null)
+            {
+                Vector3 transformPosition = transform.position + lMovement;
+                if (transformPosition.x < currentSpatialLine.begin.position.x)
+                {
+                    lMovement.x = currentSpatialLine.begin.position.x - transform.position.x;
+                }
+                else if (transformPosition.x > currentSpatialLine.end.position.x)
+                {
+                    lMovement.x = currentSpatialLine.end.position.x - transform.position.x;
+                }
+            }
+
+            if (isChangingSpatialLine)
+            {
+                lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
+                lMovement.z *= changingLineSpeed;
+                Vector3 transformPosition = transform.position + lMovement;
+                if (lMovement.z > 0)
+                {
+                    if (transformPosition.z > currentSpatialLine.begin.position.z)
+                    {
+                        lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
+                    }
+                }
+                else
+                {
+                    if (transformPosition.z < currentSpatialLine.begin.position.z)
+                    {
+                        lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
+                    }
+                }
+
+                if (Mathf.Abs(transform.position.z - currentSpatialLine.begin.position.z) < 0.001f)
+                {
+                    isChangingSpatialLine = false;
+                }
+            }
+
             rb.MovePosition(transform.position + lMovement);
+
+            if (isGrabbing)
+            {
+                int direction = (transform.position.x - objectGrabbed.position.x) > 0 ? -1 : 1;
+                objectGrabbed.MovePosition(transform.position + new Vector3(objectGrabbedWidth * direction, 0, 0));
+            }
+
             /*Vector3 camPos = GameManager.instance.mainCamera.transform.position;
             lMovement.z = 0;
             GameManager.instance.MoveCamera(camPos + (lMovement*50));*/

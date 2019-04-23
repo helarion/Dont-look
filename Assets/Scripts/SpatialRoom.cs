@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class SpatialLine
+{
+    public Transform begin;
+    public Transform end;
+}
+
 public class SpatialRoom : MonoBehaviour
 {
-    [System.Serializable]
-    public class SpatialLine
-    {
-        public Transform begin;
-        public Transform end;
-    }
-
     [SerializeField] Collider roomCollider;
-    [SerializeField] SpatialLine defaultSpatialLine;
-    [SerializeField] List<SpatialLine> additionalSpatialLines;
+    [SerializeField] public SpatialLine defaultSpatialLine;
+    [SerializeField] public List<SpatialLine> additionalSpatialLines;
 
-    List<SpatialLine> spatialLines;
+    public List<SpatialLine> spatialLines;
 
 
     // Start is called before the first frame update
@@ -34,16 +34,20 @@ public class SpatialRoom : MonoBehaviour
                 }
             }
         }
-
-        foreach (SpatialLine sl in spatialLines)
-        {
-            print(sl.begin.position.z);
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(defaultSpatialLine.begin.position, defaultSpatialLine.end.position);
+        foreach (SpatialLine sl in additionalSpatialLines)
+        {
+            Gizmos.DrawLine(sl.begin.position, sl.end.position);
+        }
     }
 }
