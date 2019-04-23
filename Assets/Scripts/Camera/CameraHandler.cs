@@ -14,7 +14,7 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] float railOffsetX;
     [SerializeField] float railOffsetY;
     
-    float zStartPosition;
+    private float zStartPosition;
 
     void Start()
     {
@@ -121,5 +121,10 @@ public class CameraHandler : MonoBehaviour
             GameManager.instance.RotateCamera(newRotate);
             GameManager.instance.MoveCamera(newPosition);
         }
+    }
+
+    public void SetNewZ(float newZ)
+    {
+        zStartPosition = newZ;
     }
 }

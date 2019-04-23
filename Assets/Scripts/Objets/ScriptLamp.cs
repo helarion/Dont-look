@@ -5,7 +5,9 @@ using UnityEngine;
 public class ScriptLamp : Objet
 {
     [SerializeField] private Light lt = null;
+    [SerializeField] private SpiderBehavior spider =null;
     bool isEnabled = false;
+    [SerializeField] AK.Wwise.Trigger trigger=null;
 
     private void Start()
     {
@@ -16,6 +18,8 @@ public class ScriptLamp : Objet
     {
         isEnabled = true;
         lt.enabled = isEnabled;
+        spider.StartChase();
+        AkSoundEngine.PostEvent(trigger.Id,gameObject);
     }
 
     public override void Reset()

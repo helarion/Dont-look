@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     [Header("Model and light objects")]
     [SerializeField] private Transform modelTransform;
     [SerializeField] private Transform[] raycastPosition = null;
+    [SerializeField] private Transform raycastClimb;
+    [SerializeField] private Animator animator;
+    [SerializeField] private Transform hipPosition;
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 1.5f;
@@ -23,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxClimbLength = 1.0f;
     [SerializeField] private float jumpLength = 3;
     [SerializeField] private float jumpLengthSpeed = 1;
+    private bool isGrounded = false;
     private int jumpDirection = 0;
 
     [Header("Movement")]
@@ -69,14 +73,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform flashlight;
     [SerializeField] private Transform cameraLight;
     [SerializeField] private Light pointLight;
-    
-    [Header("Debug")]
-    [SerializeField] private bool ignoreIsGroundedOneTime = false;
-    [SerializeField] private bool isGrounded = false;
-    [SerializeField] private Transform raycastClimb;
-    [SerializeField] private Animator animator;
-    [SerializeField] private Transform hipPosition;
-
+    [SerializeField] public float rangeDim; 
     public bool lightOn = true;
 
     [Header("State")]
@@ -89,6 +86,9 @@ public class PlayerController : MonoBehaviour
     private bool isGrabbing = false;
     private bool isMoving = false;
     public bool isJumping = false;
+
+    [Header("Debug")]
+    [SerializeField] private bool ignoreIsGroundedOneTime = false;
 
     private CameraBlock currentCameraBlock = null;
 
@@ -166,6 +166,7 @@ public class PlayerController : MonoBehaviour
         if (cameraBlock != null)
         {
             currentCameraBlock = cameraBlock;
+            GameManager.instance.mainCamera.GetComponent<CameraHandler>().SetNewZ(currentCameraBlock.newZ);
             return;
         }
 
@@ -176,25 +177,25 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if(other.CompareTag("Hideout"))
+        else if(other.CompareTag("Hideout"))
         {
             isHidden = true;
         }
-        if (other.CompareTag("Killzone"))
+        else if (other.CompareTag("Killzone"))
         {
             GameManager.instance.Death();
         }
-        if(other.CompareTag("Grabbable"))
+        else if(other.CompareTag("Grabbable"))
         {
             GrabbableBox gb = other.GetComponentInParent<GrabbableBox>();
             gb.setIsPlayerInGrabZone(true);
         }
-        if(other.CompareTag("DetectZone"))
+        else if(other.CompareTag("DetectZone"))
         {
             Enemy e = other.GetComponentInParent<Enemy>();
             e.DetectPlayer(true);
         }
-        if (other.CompareTag("JumpZone"))
+        else if (other.CompareTag("JumpZone"))
         {
 
             if (other.transform.position.x < transform.position.x) jumpDirection = 1;
@@ -202,6 +203,15 @@ public class PlayerController : MonoBehaviour
             else jumpDirection = 0;
             //print("direction:" + jumpDirection);
             Jump();
+        }
+        else if(other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
+        {
+            if (!isClimbingLadder)
+            {
+                StartClimbLadder(other.transform.position);
+                if (!other.GetComponentInParent<Ladder>().isReusable) Destroy(other.gameObject);
+            }
+            else StopClimbLadder(1);
         }
     }
 
@@ -211,16 +221,16 @@ public class PlayerController : MonoBehaviour
         {
             currentCameraBlock = null;
         }
-        if (other.CompareTag("Hideout"))
+        else if (other.CompareTag("Hideout"))
         {
             isHidden = false;
         }
-        if (other.CompareTag("Grabbable"))
+        else if (other.CompareTag("Grabbable"))
         {
             GrabbableBox gb = other.GetComponentInParent<GrabbableBox>();
             gb.setIsPlayerInGrabZone(false);
         }
-        if (other.CompareTag("DetectZone"))
+        else if (other.CompareTag("DetectZone"))
         {
             Enemy e = other.GetComponentInParent<Enemy>();
             e.DetectPlayer(false);
@@ -589,7 +599,6 @@ public class PlayerController : MonoBehaviour
     #region Jump
     private void GroundedCheck()
     {
-        bool previousGrounded = isGrounded;
         isGrounded = false;
         if (ignoreIsGroundedOneTime)
         {
@@ -612,7 +621,11 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
             FallingCheck();
-            if (!previousGrounded) animator.SetBool("HasLanded", true);
+            if (animator.GetBool("IsFalling"))
+            {
+                animator.SetBool("IsFalling", false);
+                animator.SetBool("HasLanded", true);
+            }
         }
     }
 
@@ -649,6 +662,7 @@ public class PlayerController : MonoBehaviour
     {
         GroundedCheck();
         if (!isGrounded) return;
+        rb.velocity = Vector3.zero;
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
     }

@@ -83,6 +83,14 @@ public class GameManager : MonoBehaviour
         {
             player.transform.position = CheckPointList[1].transform.position;
         }
+        else if (Input.GetKeyDown(KeyCode.F3))
+        {
+            player.transform.position = CheckPointList[2].transform.position;
+        }
+        else if (Input.GetKeyDown(KeyCode.F4))
+        {
+            player.transform.position = CheckPointList[3].transform.position;
+        }
     }
 
     // Shaking screen for duration set previously

@@ -32,7 +32,7 @@ public class LightDetector : Objet
 
         float playerToSpiderLength = playerToSpiderVec.magnitude;
         Light playerLight = GameManager.instance.player.getLight();
-        float lightRange = playerLight.range;
+        float lightRange = playerLight.range/2;
         float lightAngle = playerLight.spotAngle / 2.0f;
         if (playerToSpiderLength <= lightRange)
         {
