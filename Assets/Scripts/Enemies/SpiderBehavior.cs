@@ -40,11 +40,11 @@ public class SpiderBehavior : Enemy
 
     private void Update()
     {
-        velocity = (transform.position - lastPosition).magnitude;
+        velocity = (transform.position - lastPosition).magnitude * 10;
         lastPosition = transform.position;
 
         isMoving = false;
-        animator.SetFloat("Velocity", velocity*10);
+        animator.SetFloat("Velocity", velocity);
         //print(velocity);
 
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
@@ -63,7 +63,9 @@ public class SpiderBehavior : Enemy
         if (agent.isOnOffMeshLink)
         {
             OffMeshLinkData linkData = agent.currentOffMeshLinkData;
-            /*print(linkData);
+
+            /*
+            print(linkData);
             print("test1:"+linkData.offMeshLink.gameObject.name);
             */
 
