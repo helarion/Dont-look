@@ -245,8 +245,8 @@ public class PlayerController : MonoBehaviour
         if (other.GetComponent<SpatialSas>() != null)
         {
             currentSpatialSas = null;
-            isChangingSpatialLine = true;
             currentSpatialLine = currentSpatialRoom.defaultSpatialLine;
+            isChangingSpatialLine = true;
             return;
         }
 
