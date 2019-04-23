@@ -1,5 +1,99 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &7702269881407879672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4928751859074805588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  m_Version: 3
+  directionalIntensity: 3.1415927
+  punctualIntensity: 600
+  areaIntensity: 200
+  enableSpotReflector: 0
+  luxAtDistance: 1
+  m_InnerSpotPercent: 0
+  lightDimmer: 1
+  m_VolumetricDimmer: 1
+  lightUnit: 4
+  sunDiskSize: 1
+  sunHaloSize: 0.1
+  fadeDistance: 10000
+  affectDiffuse: 1
+  affectSpecular: 1
+  nonLightmappedOnly: 0
+  lightTypeExtent: 0
+  spotLightShape: 0
+  shapeWidth: 0.5
+  shapeHeight: 0.5
+  aspectRatio: 1
+  shapeRadius: 0
+  maxSmoothness: 1
+  applyRangeAttenuation: 1
+  useOldInspector: 0
+  useVolumetric: 1
+  featuresFoldout: 1
+  showAdditionalSettings: 0
+  displayLightIntensity: 10
+  displayAreaLightEmissiveMesh: 0
+  lightLayers: 1
+  shadowNearPlane: 0.1
+  shadowSoftness: 0.5
+  blockerSampleCount: 24
+  filterSampleCount: 16
+  minFilterSize: 0.00001
+--- !u!114 &7702269881407879675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4928751859074805588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c2871f720b2af4e9210febdac74517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  shadowResolution: 512
+  shadowDimmer: 1
+  volumetricShadowDimmer: 1
+  shadowFadeDistance: 10000
+  contactShadows: 0
+  viewBiasMin: 0.2
+  viewBiasMax: 100
+  viewBiasScale: 1
+  normalBiasMin: 0.5
+  normalBiasMax: 0.5
+  normalBiasScale: 1
+  sampleBiasScale: 0
+  edgeLeakFixup: 1
+  edgeToleranceNormal: 1
+  edgeTolerance: 1
+  shadowCascadeCount: 4
+  shadowCascadeRatios:
+  - 0.05
+  - 0.2
+  - 0.3
+  shadowCascadeBorders:
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  shadowAlgorithm: 0
+  shadowVariant: 0
+  shadowPrecision: 0
+  shadowData:
+    format: 0
+    data: 
+  shadowDatas: []
 --- !u!1 &7702269881079094302
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,100 +386,6 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &7702269881407879675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4928751859074805588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6c2871f720b2af4e9210febdac74517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  shadowResolution: 512
-  shadowDimmer: 1
-  volumetricShadowDimmer: 1
-  shadowFadeDistance: 10000
-  contactShadows: 0
-  viewBiasMin: 0.2
-  viewBiasMax: 100
-  viewBiasScale: 1
-  normalBiasMin: 0.5
-  normalBiasMax: 0.5
-  normalBiasScale: 1
-  sampleBiasScale: 0
-  edgeLeakFixup: 1
-  edgeToleranceNormal: 1
-  edgeTolerance: 1
-  shadowCascadeCount: 4
-  shadowCascadeRatios:
-  - 0.05
-  - 0.2
-  - 0.3
-  shadowCascadeBorders:
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0.2
-  shadowAlgorithm: 0
-  shadowVariant: 0
-  shadowPrecision: 0
-  shadowData:
-    format: 0
-    data: 
-  shadowDatas: []
---- !u!114 &7702269881407879672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4928751859074805588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 3
-  m_Version: 3
-  directionalIntensity: 3.1415927
-  punctualIntensity: 600
-  areaIntensity: 200
-  enableSpotReflector: 0
-  luxAtDistance: 1
-  m_InnerSpotPercent: 0
-  lightDimmer: 1
-  m_VolumetricDimmer: 1
-  lightUnit: 4
-  sunDiskSize: 1
-  sunHaloSize: 0.1
-  fadeDistance: 10000
-  affectDiffuse: 1
-  affectSpecular: 1
-  nonLightmappedOnly: 0
-  lightTypeExtent: 0
-  spotLightShape: 0
-  shapeWidth: 0.5
-  shapeHeight: 0.5
-  aspectRatio: 1
-  shapeRadius: 0
-  maxSmoothness: 1
-  applyRangeAttenuation: 1
-  useOldInspector: 0
-  useVolumetric: 1
-  featuresFoldout: 1
-  showAdditionalSettings: 0
-  displayLightIntensity: 10
-  displayAreaLightEmissiveMesh: 0
-  lightLayers: 1
-  shadowNearPlane: 0.1
-  shadowSoftness: 0.5
-  blockerSampleCount: 24
-  filterSampleCount: 16
-  minFilterSize: 0.00001
 --- !u!1 &7702269881454032175
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,6 +942,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7702269882296733362}
+  - component: {fileID: 640105835}
   m_Layer: 0
   m_Name: SwingingLamp
   m_TagString: Untagged
@@ -964,6 +965,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &640105835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7702269882296733365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecde5f66920ed0344b4f7d8179fc04a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lt: {fileID: 4928751859074805586}
 --- !u!1 &7702269882800551528
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,17 +1226,7 @@ PrefabInstance:
     - target: {fileID: 3352230726995187368, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Name
-      value: FlashLight
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187368, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
+      value: Light
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1241,23 +1245,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 16.250023
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 16.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 8.750012
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1279,25 +1273,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 90
       objectReference: {fileID: 0}
-    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
-      propertyPath: m_InnerSpotPercent
+      propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
-      propertyPath: lightUnit
-      value: 4
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
-      propertyPath: maxSmoothness
-      value: 1
+      propertyPath: m_LocalScale.x
+      value: 16.250023
       objectReference: {fileID: 0}
-    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
-      propertyPath: displayLightIntensity
-      value: 14
+      propertyPath: m_LocalScale.y
+      value: 16.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 8.750012
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1344,6 +1343,21 @@ PrefabInstance:
       propertyPath: m_ColorTemperature
       value: 5344
       objectReference: {fileID: 0}
+    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: lightUnit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: maxSmoothness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: displayLightIntensity
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8574542227f87dd4b92c5ebe482bc9fa, type: 3}
 --- !u!1 &4928751859074805588 stripped
@@ -1355,6 +1369,12 @@ GameObject:
 --- !u!4 &4928751859074805587 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+    type: 3}
+  m_PrefabInstance: {fileID: 7702269881407879676}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &4928751859074805586 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
     type: 3}
   m_PrefabInstance: {fileID: 7702269881407879676}
   m_PrefabAsset: {fileID: 0}

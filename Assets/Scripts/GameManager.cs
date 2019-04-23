@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
     {
         if (c == lastCheckpoint) return;
         lastCheckpoint = c;
-        print("New Checkpoint activated");
+        //print("New Checkpoint activated");
     }
 
     // SHAKESCREEN POUR LA DUREE ENTREE
@@ -189,9 +189,10 @@ public class GameManager : MonoBehaviour
 
     public void RotateCamera(Quaternion newRotate)
     {
-        float speed = cameraSpeed;
-        if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
-        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/ speed);
+        //print(newRotate);
+        //float speed = cameraSpeed;
+        //if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
+        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
     }
 
     public void PauseGame()

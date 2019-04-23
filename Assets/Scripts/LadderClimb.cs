@@ -8,12 +8,16 @@ public class LadderClimb : MonoBehaviour
     private float maxHeight;
     private float minHeight;
     private PlayerController player =null;
+    [SerializeField] bool isReusable = false;
+    bool isUsed = false;
+    bool downStart = false;
 
     private void Start()
     {
         col = GetComponent<BoxCollider>();
         maxHeight = col.bounds.max.y - 2;
         minHeight = col.bounds.min.y;
+        if (GameManager.instance.player.transform.position.y < transform.position.y) downStart = true; 
     }
 
     private void OnTriggerEnter(Collider other)

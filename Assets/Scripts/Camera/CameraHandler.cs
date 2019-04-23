@@ -29,6 +29,7 @@ public class CameraHandler : MonoBehaviour
         Vector3 lookAtPos = GameManager.instance.player.GetLookAt();
 
         Vector3 newPosition = target.position + Vector3.ClampMagnitude(lookAtPos - target.position, offset);
+        //print(newPosition);
         if (newPosition.y < target.position.y-minYCamera)
         {
             newPosition.y = target.position.y - minYCamera;

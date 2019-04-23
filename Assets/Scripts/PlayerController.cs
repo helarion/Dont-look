@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     private Collider cl;
     private Vector3 lookAtPos;
     private Vector2 cursorPos;
-    private Animator animator;
 
     [Header("Model and light objects")]
     [SerializeField] private Transform modelTransform;
@@ -22,7 +21,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rayCastLength = 0.1f;
     [SerializeField] private float maxClimbHeight = 1.0f;
     [SerializeField] private float maxClimbLength = 1.0f;
-    [SerializeField] private float climbTime = 1f;
+    [SerializeField] private float jumpLength = 3;
+    [SerializeField] private float jumpLengthSpeed = 1;
+    private int jumpDirection = 0;
 
     [Header("Movement")]
     [SerializeField] private float walkTime;
@@ -49,9 +50,12 @@ public class PlayerController : MonoBehaviour
     private float _verticalAccDecLerpValue;
 
     private Vector3 _verticalLastMovement = Vector3.zero;
+    private Vector3 localModelPosition;
+    private Vector3 worldModelPosition;
     private Vector3 climbPosition;
     private Vector3 lastPosition;
     public float velocity;
+    public float yVelocity;
 
     private float moveSpeed;
     private float vMove;
@@ -71,10 +75,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool ignoreIsGroundedOneTime = false;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private Transform raycastClimb;
-    
+    [SerializeField] private Animator animator;
+    [SerializeField] private Transform hipPosition;
+
     public bool lightOn = true;
 
     [Header("State")]
+    private bool isHidden = false;
     private bool isAlive = true;
     private bool isClimbingLadder = false;
     [SerializeField] private bool hasReachedTop = false;
@@ -83,7 +90,6 @@ public class PlayerController : MonoBehaviour
     private bool isGrabbing = false;
     private bool isMoving = false;
     public bool isJumping = false;
-    [SerializeField] private bool pressedJump = false;
 
     private CameraBlock currentCameraBlock = null;
 
@@ -117,33 +123,33 @@ public class PlayerController : MonoBehaviour
         ClosedEyes(false);
         Cursor.visible = false;
         moveSpeed = walkSpeed;
-        animator = GetComponent<Animator>();
 
         cursorPos = Input.mousePosition;
         lastPosition = transform.position;
+        localModelPosition = modelTransform.localPosition;
     }
 
     private void Update()
     {
-        if (!isAlive || GameManager.instance.GetIsPaused()) return;
+        if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing ) return;
         LightAim();
+        GroundedCheck();
         JumpLadderHandler();
         MoveInputUpdate();
     }
 
     private void FixedUpdate()
     {
-        if (!isAlive || GameManager.instance.GetIsPaused()) return;
+        if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing) return;
 
         velocity = (transform.position - lastPosition).magnitude;
+        yVelocity = (transform.position.y - lastPosition.y);
+
         lastPosition = transform.position;
+
+        if (isJumping) return;
         Move();
-        GroundedCheck();
-        JumpCheck();
-        if (isJumping)
-        {
-            ClimbCheck();
-        }
+        ClimbCheck();
         BodyRotation();
         if (!isClimbingLadder) return;
         if ((!hasReachedTop && vMove > 0) || !hasReachedBottom && vMove < 0) animator.SetFloat("ClimbSpeed", Mathf.Abs(vMove));
@@ -188,6 +194,34 @@ public class PlayerController : MonoBehaviour
             }
             return;
         }
+
+        if(other.CompareTag("Hideout"))
+        {
+            isHidden = true;
+        }
+        if (other.CompareTag("Killzone"))
+        {
+            GameManager.instance.Death();
+        }
+        if(other.CompareTag("Grabbable"))
+        {
+            GrabbableBox gb = other.GetComponentInParent<GrabbableBox>();
+            gb.setIsPlayerInGrabZone(true);
+        }
+        if(other.CompareTag("DetectZone"))
+        {
+            Enemy e = other.GetComponentInParent<Enemy>();
+            e.DetectPlayer(true);
+        }
+        if (other.CompareTag("JumpZone"))
+        {
+
+            if (other.transform.position.x < transform.position.x) jumpDirection = 1;
+            else if (other.transform.position.x > transform.position.x) jumpDirection = -1;
+            else jumpDirection = 0;
+            //print("direction:" + jumpDirection);
+            Jump();
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -195,14 +229,34 @@ public class PlayerController : MonoBehaviour
         if (other.GetComponent<CameraBlock>() != null)
         {
             currentCameraBlock = null;
+            return;
         }
-
-        SpatialSas spatialSas = other.GetComponent<SpatialSas>();
-        if (spatialSas != null)
+        
+        if (other.GetComponent<SpatialSas>() != null)
         {
             currentSpatialSas = null;
             currentSpatialLine = currentSpatialRoom.defaultSpatialLine;
             isChangingSpatialLine = true;
+            return;
+        }
+
+        if (other.CompareTag("Hideout"))
+        {
+            isHidden = false;
+            return;
+        }
+
+        if (other.CompareTag("Grabbable"))
+        {
+            GrabbableBox gb = other.GetComponentInParent<GrabbableBox>();
+            gb.setIsPlayerInGrabZone(false);
+            return;
+        }
+
+        if (other.CompareTag("DetectZone"))
+        {
+            Enemy e = other.GetComponentInParent<Enemy>();
+            e.DetectPlayer(false);
             return;
         }
     }
@@ -283,6 +337,7 @@ public class PlayerController : MonoBehaviour
     #region System
     public void Reset()
     {
+        isHidden = false;
         SetIsAlive(false);
         SetHasReachedTop(false);
         SetHasReachedBottom(false);
@@ -295,6 +350,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsJumping", false);
         animator.SetBool("IsRunning", false);
         animator.SetBool("Climb", false);
+        animator.SetBool("IsFalling", false);
         rb.useGravity = true;
         rb.isKinematic = false;
         StoppedHMove = false;
@@ -488,8 +544,6 @@ public class PlayerController : MonoBehaviour
                 moveSpeed = walkSpeed;
             }
 
-            if(!isGrounded) moveSpeed = runSpeed;
-
             if (isGrabbing)
             {
                 lMovement *= grabSpeed;
@@ -654,14 +708,16 @@ public class PlayerController : MonoBehaviour
             if ((lookAtPos.x - transform.position.x < -0.25f) || (currentLookDirection == LookDirection.Left && lookAtPos.x - transform.position.x < 0.25f))
             {
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
-                inverse = 1;
-                currentLookDirection = LookDirection.Left;
+                currentLookDirection = LookDirection.Right;
+                if (hMove > 0) inverse = -1;
+                else inverse = 1;
             }
             else
             {
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
-                inverse = -1;
-                currentLookDirection = LookDirection.Right;
+                currentLookDirection = LookDirection.Left;
+                if (hMove < 0) inverse = -1;
+                else inverse = 1;
             }
         }
         lt.transform.rotation = save;
@@ -681,6 +737,7 @@ public class PlayerController : MonoBehaviour
     #region Jump
     private void GroundedCheck()
     {
+        bool previousGrounded = isGrounded;
         isGrounded = false;
         if (ignoreIsGroundedOneTime)
         {
@@ -702,39 +759,37 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             isJumping = false;
+            FallingCheck();
+            if (!previousGrounded) animator.SetBool("HasLanded", true);
         }
     }
 
     private void FallingCheck()
     {
-        //pressedJump = false;
-    }
-
-    private void JumpCheck()
-    {
-        // JUMP
-        if (GameManager.instance.controls.GetButtonDown("Jump"))
+        if(yVelocity<0 && !isClimbing && !isClimbingLadder)
         {
-            print("lol" + Time.frameCount);
-            if (isGrounded && !pressedJump)
-            {
-                pressedJump = true;
-                Jump();
-            }
+            animator.SetBool("IsFalling", true);
         }
     }
+
+    public void RecordModelPosition()
+    {
+        worldModelPosition = transform.position + modelTransform.localPosition;
+    }
     
-    public void JumpLand()
+    public void LandOnGround()
     {
         animator.SetBool("IsJumping", false);
+        animator.SetBool("IsFalling", false);
+        animator.SetBool("HasLanded", false);
     }
 
     public void JumpStart()
     {
-        Vector3 jumpVector = new Vector3(0, jumpForce);
-        rb.AddForce(jumpVector, ForceMode.VelocityChange);
-        pressedJump = false;
         isJumping = true;
+        rb.velocity = Vector3.zero;
+        Vector3 jumpVector = new Vector3(jumpLength, jumpForce);
+        rb.AddForce(jumpVector, ForceMode.VelocityChange);
         ignoreIsGroundedOneTime = true;
     }
 
@@ -745,23 +800,11 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
     }
-    
+
     private void ClimbCheck()
     {
-        /*if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing && !isGrounded)
-        {
-            Vector3 newPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
-            newPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
-            Vector3[] positions = new Vector3[2];
-            positions[0] = transform.position;
-            positions[1] = newPosition;
-            isAlive = false;
-            isClimbing = true;
-            rb.isKinematic = true;
-            StartCoroutine("ClimbCoroutine", positions);
-        }*/
-
-        Vector3 climbDirection;
+        Vector3 climbDirection = Vector3.zero;
+        /*
         if (currentLookDirection == LookDirection.Left)
         {
             climbDirection = Vector3.left;
@@ -778,33 +821,46 @@ public class PlayerController : MonoBehaviour
         {
             climbDirection = Vector3.back;
         }
+        */
+
+        Vector3 angle=Vector3.zero;
+
+        if (hMove > 0)
+        {
+            climbDirection = Vector3.right;
+            angle = new Vector3(0, 90, 0);
+        }
+        else if (hMove < 0)
+        {
+            climbDirection = Vector3.left;
+            angle = new Vector3(0, -90, 0);
+        }
+        else if (vMove > 0)
+        {
+            climbDirection = Vector3.forward;
+            angle = new Vector3(0, 0, 0);
+        }
+        else if (vMove < 0)
+        {
+            climbDirection = Vector3.back;
+            angle = new Vector3(0, -180, 0);
+        }
+
         RaycastHit hitInfo;
-        if (Physics.Raycast(raycastClimb.position, climbDirection, out hitInfo, maxClimbLength, GameManager.instance.GetClimbLayer()))
+        if(Physics.Raycast(raycastClimb.position, climbDirection, out hitInfo, maxClimbLength, GameManager.instance.GetClimbLayer()))
         {
             if (hitInfo.collider.bounds.max.y - cl.bounds.max.y < maxClimbHeight)
             {
-                Vector3 newPosition = transform.position + Vector3.ClampMagnitude(hitInfo.transform.position - transform.position, hitInfo.collider.bounds.size.x / 2);
+                modelTransform.localEulerAngles = angle;
+                //modelTransform.localEulerAngles = climbDirection;
+                /*Vector3 newPosition = transform.position;// + Vector3.ClampMagnitude(hitInfo.transform.position - transform.position, hitInfo.collider.bounds.size.x / 2);
                 newPosition.y = hitInfo.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
+                newPosition.y += 5;
                 Vector3[] positions = new Vector3[2];
                 positions[0] = transform.position;
                 positions[1] = newPosition;
-                isAlive = false;
-                isClimbing = true;
-                rb.isKinematic = true;
-                animator.SetBool("Climb", true);
-            }
-        }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.tag == "Climbable")
-        {
-            if (cl.bounds.min.y > -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y < -0.25f && cl.bounds.min.y - collision.collider.bounds.max.y > -maxClimbHeight && !isClimbing)
-            {
-                climbPosition = transform.position + 0.5f * (collision.transform.position - transform.position);
-                climbPosition.y = collision.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
-                isAlive = false;
+                climbPosition = newPosition;
+                isAlive = false;*/
                 isClimbing = true;
                 rb.isKinematic = true;
                 animator.SetBool("Climb", true);
@@ -814,12 +870,14 @@ public class PlayerController : MonoBehaviour
 
     public void StopClimb()
     {
-        transform.position = climbPosition;
+        transform.position = hipPosition.position;
+        modelTransform.localPosition = localModelPosition;
 
-        isAlive = true;
-        isClimbing = false;
         rb.isKinematic = false;
+        //isAlive = true;
+        isClimbing = false;
         animator.SetBool("Climb", false);
+        velocity = 0;
     }
 
     public void ResetVelocity()
@@ -913,6 +971,11 @@ public class PlayerController : MonoBehaviour
     public CameraBlock getCameraBlock()
     {
         return currentCameraBlock;
+    }
+
+    public bool GetIsHidden()
+    {
+        return isHidden;
     }
 
     public bool GetIsMoving()
