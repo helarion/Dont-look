@@ -257,11 +257,12 @@ public class PlayerController : MonoBehaviour
         {
             currentSpatialSas = null;
             float zOffset = Mathf.Infinity;
+            float currentZ = currentSpatialLine.begin.position.z;
             foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
             {
-                if (Mathf.Abs(sl.begin.position.z - currentSpatialLine.begin.position.z) < zOffset)
+                if (Mathf.Abs(sl.begin.position.z - currentZ) < zOffset)
                 {
-                    zOffset = Mathf.Abs(sl.begin.position.z - currentSpatialLine.begin.position.z);
+                    zOffset = Mathf.Abs(sl.begin.position.z - currentZ);
                     currentSpatialLine = sl;
                     isChangingSpatialLine = true;
                 }
