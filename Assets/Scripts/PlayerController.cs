@@ -92,8 +92,8 @@ public class PlayerController : MonoBehaviour
 
     private CameraBlock currentCameraBlock = null;
     SpatialRoom currentSpatialRoom = null;
-    SpatialSas currentSpatialSas = null;
     SpatialLine currentSpatialLine = null;
+    SpatialLine nextSpatialLine = null;
     private Rigidbody objectGrabbed = null;
     [Header("Debug")]
     [SerializeField] private bool ignoreIsGroundedOneTime = false;
@@ -177,24 +177,36 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        SpatialSas spatialSas = other.GetComponent<SpatialSas>();
-        if (spatialSas != null)
-        {
-            currentSpatialSas = spatialSas;
-            currentSpatialLine = spatialSas.spatialLine;
-            isChangingSpatialLine = true;
-            return;
-        }
-
         SpatialRoom spatialRoom = other.GetComponent<SpatialRoom>();
         if (spatialRoom != null)
         {
             currentSpatialRoom = spatialRoom;
-            if (currentSpatialSas == null)
+            float zOffset = Mathf.Infinity;
+            if (currentSpatialLine != null)
             {
-                currentSpatialLine = spatialRoom.defaultSpatialLine;
-                isChangingSpatialLine = true;
+                foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
+                {
+                    if (Mathf.Abs(sl.begin.position.z - currentSpatialLine.begin.position.z) < zOffset)
+                    {
+                        zOffset = Mathf.Abs(sl.begin.position.z - currentSpatialLine.begin.position.z);
+                        currentSpatialLine = sl;
+                        isChangingSpatialLine = true;
+                    }
+                }
             }
+            else
+            {
+                foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
+                {
+                    if (Mathf.Abs(sl.begin.position.z - transform.position.z) < zOffset)
+                    {
+                        zOffset = Mathf.Abs(sl.begin.position.z - transform.position.z);
+                        currentSpatialLine = sl;
+                        isChangingSpatialLine = true;
+                    }
+                }
+            }
+            
             return;
         }
 
@@ -240,14 +252,6 @@ public class PlayerController : MonoBehaviour
         if (other.GetComponent<CameraBlock>() != null)
         {
             currentCameraBlock = null;
-            return;
-        }
-        
-        if (other.GetComponent<SpatialSas>() != null)
-        {
-            currentSpatialSas = null;
-            currentSpatialLine = currentSpatialRoom.defaultSpatialLine;
-            isChangingSpatialLine = true;
             return;
         }
 
@@ -436,37 +440,34 @@ public class PlayerController : MonoBehaviour
         {
             if (!isChangingSpatialLine)
             {
-                if (currentSpatialSas == null)
+                if (vMove > deadZoneValue)
                 {
-                    if (vMove > deadZoneValue)
+                    for (int i = 0; i < currentSpatialRoom._spatialLines.Count; i++)
                     {
-                        for (int i = 0; i < currentSpatialRoom.spatialLines.Count; i++)
+                        SpatialLine sl = currentSpatialRoom._spatialLines[i];
+                        if (sl.begin.position.z > currentSpatialLine.begin.position.z)
                         {
-                            SpatialLine sl = currentSpatialRoom.spatialLines[i];
-                            if (sl.begin.position.z > currentSpatialLine.begin.position.z)
+                            if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
                             {
-                                if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
-                                {
-                                    currentSpatialLine = sl;
-                                    isChangingSpatialLine = true;
-                                    break;
-                                }
+                                currentSpatialLine = sl;
+                                isChangingSpatialLine = true;
+                                break;
                             }
                         }
                     }
-                    else if (vMove < -deadZoneValue)
+                }
+                else if (vMove < -deadZoneValue)
+                {
+                    for (int i = currentSpatialRoom._spatialLines.Count - 1; i >= 0; i--)
                     {
-                        for (int i = currentSpatialRoom.spatialLines.Count - 1; i >= 0; i--)
+                        SpatialLine sl = currentSpatialRoom._spatialLines[i];
+                        if (sl.begin.position.z < currentSpatialLine.begin.position.z)
                         {
-                            SpatialLine sl = currentSpatialRoom.spatialLines[i];
-                            if (sl.begin.position.z < currentSpatialLine.begin.position.z)
+                            if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
                             {
-                                if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
-                                {
-                                    currentSpatialLine = sl;
-                                    isChangingSpatialLine = true;
-                                    break;
-                                }
+                                currentSpatialLine = sl;
+                                isChangingSpatialLine = true;
+                                break;
                             }
                         }
                     }
@@ -523,7 +524,7 @@ public class PlayerController : MonoBehaviour
                         lMovement.x = 0;
                     }
                 }
-                else if (currentSpatialSas == null)
+                else
                 {
                     Vector3 transformPosition = transform.position + lMovement;
                     if (transformPosition.x < currentSpatialLine.begin.position.x)

@@ -12,32 +12,29 @@ public class SpatialLine
 public class SpatialRoom : MonoBehaviour
 {
     [SerializeField] Collider roomCollider;
-    [SerializeField] public SpatialLine defaultSpatialLine;
-    [SerializeField] public List<SpatialLine> additionalSpatialLines;
-
-    public List<SpatialLine> spatialLines;
+    [SerializeField] public List<SpatialLine> spatialLines;
+    [HideInInspector] public List<SpatialLine> _spatialLines;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        spatialLines = new List<SpatialLine>();
-        spatialLines.Add(defaultSpatialLine);
-        foreach (SpatialLine asl in additionalSpatialLines)
+        _spatialLines = new List<SpatialLine>();
+        foreach (SpatialLine sl in spatialLines)
         {
             bool inserted = false;
-            foreach (SpatialLine sl in spatialLines)
+            foreach (SpatialLine _sl in _spatialLines)
             {
-                if (asl.begin.position.z < sl.begin.position.z)
+                if (sl.begin.position.z < _sl.begin.position.z)
                 {
-                    spatialLines.Insert(spatialLines.IndexOf(sl), asl);
+                    _spatialLines.Insert(spatialLines.IndexOf(_sl), sl);
                     inserted = true;
                     break;
                 }
             }
             if (!inserted)
             {
-                spatialLines.Add(asl);
+                _spatialLines.Add(sl);
             }
         }
     }
