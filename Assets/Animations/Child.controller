@@ -136,6 +136,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: HasLanded
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: OnLadder
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102204847961482218}
   m_Solo: 0

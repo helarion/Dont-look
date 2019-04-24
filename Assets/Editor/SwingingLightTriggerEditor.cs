@@ -9,10 +9,10 @@ public class SwingingLightEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-
+        /*
         if (GUILayout.Button("Swing"))
         {
             (target as SwingingLightTrigger).swingEditor();
-        }
+        }*/
     }
 }

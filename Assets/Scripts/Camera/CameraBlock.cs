@@ -8,4 +8,5 @@ public class CameraBlock : MonoBehaviour
     [SerializeField] public BlockDirection blockDirection;
     [SerializeField] public float maxCameraYawAngle = 15;
     [SerializeField] public float maxCameraPitchAngle = 10;
+    [SerializeField] public float newZ = -5.5f;
 }

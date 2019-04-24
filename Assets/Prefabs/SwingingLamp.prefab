@@ -946,7 +946,7 @@ GameObject:
   m_Layer: 0
   m_Name: SwingingLamp
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -978,6 +978,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lt: {fileID: 4928751859074805586}
+  spider: {fileID: 0}
+  trigger:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  swingingLight: {fileID: 7702269882120420330}
 --- !u!1 &7702269882800551528
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,6 +1304,26 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 8.750012
       objectReference: {fileID: 0}
+    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: m_VolumetricDimmer
+      value: 0.142
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: lightUnit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: maxSmoothness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
+      propertyPath: displayLightIntensity
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Color.r
@@ -1316,17 +1342,17 @@ PrefabInstance:
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Intensity
-      value: 128
+      value: 2048
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Range
-      value: 11
+      value: 13.2338505
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_SpotAngle
-      value: 120
+      value: 179
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1342,21 +1368,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ColorTemperature
       value: 5344
-      objectReference: {fileID: 0}
-    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: lightUnit
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: maxSmoothness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: displayLightIntensity
-      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8574542227f87dd4b92c5ebe482bc9fa, type: 3}

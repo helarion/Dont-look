@@ -12,14 +12,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] public bool isChasing = false;
 
     [Header("Debug")]
-    [SerializeField] private GameObject spawnZones=null ;
+    [SerializeField] private Transform[] spawnZones=null ;
     [SerializeField] private AK.Wwise.Event WwiseChase;
     [SerializeField] public AK.Wwise.Event WwiseLook;
 
 
     [HideInInspector] public NavMeshAgent agent;
-
-    private List<Transform> listSpawnZones;
     [HideInInspector] public Animator animator;
     public float velocity;
 
@@ -33,16 +31,6 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed;
-
-        listSpawnZones = new List<Transform>();
-        Transform[] temp = spawnZones.GetComponentsInChildren<Transform>();
-        int a = 0;
-        foreach (Transform t in temp)
-        {
-            if(a!=0) listSpawnZones.Add(t);
-            a++;
-        }
-
         Respawn();
     }
 
@@ -67,7 +55,8 @@ public class Enemy : MonoBehaviour
 
         float playerToSpiderLength = playerToSpiderVec.magnitude;
         Light playerLight = GameManager.instance.player.getLight();
-        float lightRange = playerLight.range;
+        float lightDim = GameManager.instance.player.rangeDim;
+        float lightRange = playerLight.range-lightDim;
         float lightAngle = playerLight.spotAngle / 2.0f;
         if (playerToSpiderLength <= lightRange)
         {
@@ -107,8 +96,8 @@ public class Enemy : MonoBehaviour
 
     public Vector3 RandomSpawn()
     {
-        int max = listSpawnZones.Count;
+        int max = spawnZones.Length;
         int rand = Random.Range(0, max);
-        return (listSpawnZones[rand].position);
+        return (spawnZones[rand].position);
     }
 }
