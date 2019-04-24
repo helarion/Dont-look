@@ -5,36 +5,20 @@ using UnityEngine.AI;
 
 public class ScriptedSpider : Enemy
 {
-    [SerializeField] private float bonusSpeed = 1;
-
-    [SerializeField] private float delaySpot = 1;
-    [SerializeField] private float delayChase = 3;
-    [SerializeField] private float lengthDetection = 10;
-
-    [SerializeField] private bool clickToSetDestination = false;
-
-    [SerializeField] private float countLook = 0;
-    private float countChase = 0;
-
-    private bool canSeePlayer = false;
-
-    private bool chaseCoroutine = false;
     private bool isMoving = false;
-    private bool isLooked = false;
-
     private Vector3 lastPosition;
+    [SerializeField] Transform pos1;
+    [SerializeField] Transform pos2;
+    [SerializeField] ScriptLamp lamp;
+    [SerializeField] float shakeIntensity;
 
-    NavMeshLink link;
-
-    private PlayerController p;
+    private bool objective1 = false;
+    private bool objective2 = false;
+    float save;
 
     private void Start()
     {
         Initialize();
-        p = GameManager.instance.player;
-        animator.SetFloat("WakeMult", (1f / delaySpot));
-        countChase = 0;
-        countLook = 0;
         lastPosition = transform.position;
     }
 
@@ -43,68 +27,66 @@ public class ScriptedSpider : Enemy
         velocity = (transform.position - lastPosition).magnitude * 10;
         lastPosition = transform.position;
 
-        isMoving = false;
         animator.SetFloat("Velocity", velocity);
         //print(velocity);
 
-        // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if (isChasing)
         {
             ChaseBehavior();
         }
-        else
-        {
-            LightDetection();
-        }
 
-        DebugPath();
         animator.SetBool("IsMoving", isMoving);
 
         if (agent.isOnOffMeshLink)
         {
-            OffMeshLinkData linkData = agent.currentOffMeshLinkData;
-
-            //print("Using link right now");
             agent.CompleteOffMeshLink();
             agent.isStopped = false;
         }
     }
 
-    private void DebugPath()
+    private void OnTriggerEnter(Collider other)
     {
-        if (Input.GetMouseButtonDown(0) && clickToSetDestination)
+        if (other.CompareTag("DetectZone"))
         {
-            Vector3 pos = p.GetLookAt();
-            MoveTo(pos);
-            print(pos);
+            save = GameManager.instance.GetShakeIntensity();
+            GameManager.instance.SetShakeIntensity(shakeIntensity);
+            GameManager.instance.ShakeScreen(0.2f);
+            lamp.Swing();
         }
     }
 
-    public override void ChaseBehavior()
-    {
-        // goes to the player
-        
-        MoveTo(GameManager.instance.player.transform.position);
-
-        if (!p.lightOn && !p.GetIsMoving() && p.GetIsHidden())
-        {
-            if (!canSeePlayer)
-            {
-                if (!chaseCoroutine) StartCoroutine("CountChase");
-                chaseCoroutine = true;
-            }
-        }
-        else
-        {
-            StopCoroutine("CountChase");
-        }
-
-    }
-
-    public void StartScript()
+    public void Script()
     {
         isMoving = true;
-        MoveTo(GameManager.instance.player.transform.position);
+        StartCoroutine("ScriptRoutine");
     }
 
+    private IEnumerator ScriptRoutine()
+    {
+        int count = 0;
+        int step = 1;
+        while (count <3)
+        {
+            if (step == 1) MoveTo(pos1.position);
+            else if(step==2) MoveTo(pos2.position);
+            else
+            {
+                count++;
+                step = 1;
+                if(count <3)MoveTo(pos1.position);
+            }
+            yield return new WaitForSeconds(0.5f);
+            while (agent.remainingDistance >0.5f)
+            {
+                print("remaining distance:"+agent.remainingDistance);
+                print("Step" + step);
+                yield return new WaitForSeconds(0.1f);
+            }
+            step++;
+            yield return new WaitForEndOfFrame();
+        }
+        GameManager.instance.SetShakeIntensity(save);
+        Destroy(gameObject);        
+        yield return null;
+    }
 }

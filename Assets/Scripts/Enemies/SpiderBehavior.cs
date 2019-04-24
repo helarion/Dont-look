@@ -145,7 +145,8 @@ public class SpiderBehavior : Enemy
     // ARRETER LA CHASSE DU JOUEUR
     private void StopChase()
     {
-        Respawn();
+        //Respawn();
+        Destroy(gameObject);
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ScriptLamp : Objet
 {
     [SerializeField] private Light lt = null;
-    [SerializeField] private SpiderBehavior spider =null;
+    [SerializeField] private ScriptedSpider spider =null;
     bool isEnabled = false;
     [SerializeField] AK.Wwise.Trigger trigger=null;
     [SerializeField] GameObject swingingLight;
@@ -15,18 +15,18 @@ public class ScriptLamp : Objet
         lt.enabled = isEnabled;
     }
 
-    public void swing(Vector3 swingVelocity)
+    public void Swing()
     {
-        swingingLight.GetComponent<Rigidbody>().AddForce(swingVelocity * 3000);
+        swingingLight.GetComponent<Rigidbody>().AddForce(Vector3.left * 3000);
     }
 
     public override void Activate()
     {
         isEnabled = true;
         lt.enabled = isEnabled;
-        spider.StartChase();
-        AkSoundEngine.PostEvent(trigger.Id,gameObject);
-        swing(Vector3.right);
+        spider.Script();
+        //AkSoundEngine.PostEvent(trigger.Id,gameObject);
+        //swing);
     }
 
     public override void Reset()

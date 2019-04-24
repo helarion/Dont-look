@@ -252,6 +252,16 @@ public class GameManager : MonoBehaviour
         return climbLayer;
     }
 
+    public float GetShakeIntensity()
+    {
+        return shakeAmount;
+    }
+
+    public void SetShakeIntensity(float newIntensity)
+    {
+        shakeAmount = newIntensity;
+    }
+
     public bool GetIsTrackerEnabled()
     {
         return isTrackerEnabled;

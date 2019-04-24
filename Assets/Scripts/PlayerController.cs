@@ -128,6 +128,7 @@ public class PlayerController : MonoBehaviour
         if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing ) return;
         LightAim();
         GroundedCheck();
+        FallingCheck();
         MoveInputUpdate();
     }
 
@@ -748,10 +749,9 @@ public class PlayerController : MonoBehaviour
         }
         if (isGrounded)
         {
-            isJumping = false;
-            FallingCheck();
             if (animator.GetBool("IsFalling"))
             {
+                isJumping = false;
                 animator.SetBool("IsJumping", false);
                 animator.SetBool("IsFalling", false);
                 animator.SetBool("HasLanded", true);
@@ -761,9 +761,16 @@ public class PlayerController : MonoBehaviour
 
     private void FallingCheck()
     {
-        if(yVelocity<0 && !isClimbing && !isClimbingLadder)
+        if(!isClimbing && !isClimbingLadder)
         {
-            animator.SetBool("IsFalling", true);
+            if (yVelocity < 0)
+            {
+                animator.SetBool("IsFalling", true);
+            }
+            else
+            {
+                animator.SetBool("IsFalling", false);
+            }
         }
     }
 

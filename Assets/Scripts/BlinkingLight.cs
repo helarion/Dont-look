@@ -10,12 +10,14 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] private int direction=1;
     [SerializeField] private float blinkSpeed = 20;
     [SerializeField] private float maxIntensity = 200;
+    [SerializeField] private float wait = 2;
     [SerializeField] private bool isBlinking = true;
     [SerializeField] private Color startColor;
     [SerializeField] private Color endColor;
     private Color FinishedColor;
     private float count = 0;
     private float countTime = 0;
+    [SerializeField] private bool isWaiting = false;
 
     public void StartBlink()
     {
@@ -42,6 +44,23 @@ public class BlinkingLight : MonoBehaviour
         pointLt.color = startColor;
     }
 
+    private IEnumerator DarkWait()
+    {
+        if(!isWaiting)
+        {
+            float count = 0;
+            isWaiting = true;
+            while (count < wait)
+            {
+                count += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+            lt.intensity = 0.1f;
+            isWaiting = false;
+            yield return null;
+        }
+    }
+
     private void Update()
     {
         if(isBlinking)
@@ -50,12 +69,12 @@ public class BlinkingLight : MonoBehaviour
             {
                 direction = -1;
             }
-            else if (lt.intensity <= 0)
+            else if (lt.intensity <= 0 &&!isWaiting)
             {
                 direction = 1;
+                StartCoroutine("DarkWait");
             }
-            lt.intensity += (Time.deltaTime * blinkSpeed) * direction;
-            //print(lt.intensity);
+            if(!isWaiting)lt.intensity += (Time.deltaTime * blinkSpeed) * direction;
         }
         else
         {
