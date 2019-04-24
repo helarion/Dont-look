@@ -75,21 +75,28 @@ public class GameManager : MonoBehaviour
         if (isPaused) return;
         CheckShake();
 
+        int check = -1;
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            player.transform.position = CheckPointList[0].transform.position;
+            check = 0;
         }
         else if (Input.GetKeyDown(KeyCode.F2))
         {
-            player.transform.position = CheckPointList[1].transform.position;
+            check = 1;
         }
         else if (Input.GetKeyDown(KeyCode.F3))
         {
-            player.transform.position = CheckPointList[2].transform.position;
+            check = 2;
         }
         else if (Input.GetKeyDown(KeyCode.F4))
         {
-            player.transform.position = CheckPointList[3].transform.position;
+            check = 3;
+        }
+
+        if (check != -1)
+        {
+            player.Reset();
+            UseCheckpoint(CheckPointList[check]);
         }
     }
 
@@ -127,11 +134,17 @@ public class GameManager : MonoBehaviour
         StartCoroutine("DeathCoroutine");
     }
 
+    public void UseCheckpoint(Checkpoint c)
+    {
+        player.transform.position = c.transform.position;
+        mainCamera.GetComponent<CameraHandler>().SetNewZ(c.newZ);
+    }
+
     // RESPAWN LE JOUEUR
     private void RespawnPlayer()
     {
         lastCheckpoint.Reset();
-        player.transform.position = lastCheckpoint.transform.position;
+        UseCheckpoint(lastCheckpoint);
         player.SetIsAlive(true);
     }
 

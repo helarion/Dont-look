@@ -179,7 +179,7 @@ Transform:
   m_GameObject: {fileID: 179686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.174, y: 0, z: -1.305}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3.2500005, y: 3.750001, z: 3}
   m_Children:
   - {fileID: 474048}
   - {fileID: 429026}
@@ -198,7 +198,6 @@ GameObject:
   - component: {fileID: 473710}
   - component: {fileID: 3339628}
   - component: {fileID: 2306968}
-  - component: {fileID: 2945637545793801853}
   m_Layer: 9
   m_Name: SupportRods
   m_TagString: Untagged
@@ -265,16 +264,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &2945637545793801853
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 197020}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.99521786, y: 1.9939222, z: 0.49128905}
-  m_Center: {x: 0, y: 1, z: 0}

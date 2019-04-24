@@ -17,11 +17,6 @@ public class BlinkingLight : MonoBehaviour
     private float count = 0;
     private float countTime = 0;
 
-    private void Start()
-    {
-        startColor = lt.color;
-    }
-
     public void StartBlink()
     {
         isBlinking = true;
@@ -59,11 +54,7 @@ public class BlinkingLight : MonoBehaviour
             pointLt.intensity = Mathf.Lerp(0, maxIntensity, count);
             lt.intensity = Mathf.Lerp(startingIntensity, maxIntensity, count);
             pointLt.color = Color.Lerp(startColor, endColor, count);
-
-            if(count < countTime)
-            {
-                count += Time.deltaTime;
-            }
+            count += Time.deltaTime/countTime;
         }
     }
 }

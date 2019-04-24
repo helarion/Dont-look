@@ -274,6 +274,7 @@ GameObject:
   - component: {fileID: 5653559492565201597}
   - component: {fileID: 5026061470162382335}
   - component: {fileID: 6949402514399227679}
+  - component: {fileID: 1035677191}
   m_Layer: 9
   m_Name: LightDetector
   m_TagString: LightDetector
@@ -362,7 +363,7 @@ MonoBehaviour:
   maxIntensity: 50
   isBlinking: 1
   startColor: {r: 1, g: 0, b: 0, a: 0}
-  endColor: {r: 0.034784317, g: 1, b: 0, a: 0}
+  endColor: {r: 0.21299925, g: 0.5943396, b: 0.19904771, a: 0}
 --- !u!114 &6949402514399227679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,6 +383,19 @@ MonoBehaviour:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
+--- !u!65 &1035677191
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5630086726492585343}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.103, y: 0.4718, z: 0.121}
+  m_Center: {x: 0, y: -0.00000011920929, z: 0}
 --- !u!1 &5631607816161732883
 GameObject:
   m_ObjectHideFlags: 0

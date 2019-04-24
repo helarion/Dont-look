@@ -80,30 +80,25 @@ public class PlayerController : MonoBehaviour
     [Header("State")]
     private bool isHidden = false;
     private bool isAlive = true;
-    private bool isClimbingLadder = false;
-    [SerializeField] private bool hasReachedTop = false;
-    private bool hasReachedBottom = false;
+    [SerializeField]private bool isClimbingLadder = false;
     private bool isClimbing = false;
     private bool isGrabbing = false;
     private bool isMoving = false;
-    public bool isJumping = false;
-
-    [Header("Debug")]
-    [SerializeField] private bool ignoreIsGroundedOneTime = false;
+    [SerializeField] public bool isJumping = false;
+    private bool isChangingSpatialLine = false;
+    private bool isTouchingBox = false;
+    private bool walkRoutine = false;
+    private bool StoppedHMove = false;
 
     private CameraBlock currentCameraBlock = null;
-
     SpatialRoom currentSpatialRoom = null;
     SpatialSas currentSpatialSas = null;
     SpatialLine currentSpatialLine = null;
-    bool isChangingSpatialLine = false;
-
     private Rigidbody objectGrabbed = null;
-    private float objectGrabbedWidth = 0;
-    private bool isTouchingBox = false;
+    [Header("Debug")]
+    [SerializeField] private bool ignoreIsGroundedOneTime = false;
 
-    private bool walkRoutine = false;
-    private bool StoppedHMove = false;
+    private float objectGrabbedWidth = 0;
 
     enum LookDirection { Left, Right, Front, Back};
     LookDirection currentLookDirection = LookDirection.Right;
@@ -134,7 +129,6 @@ public class PlayerController : MonoBehaviour
         if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing ) return;
         LightAim();
         GroundedCheck();
-        JumpLadderHandler();
         MoveInputUpdate();
     }
 
@@ -147,13 +141,14 @@ public class PlayerController : MonoBehaviour
 
         lastPosition = transform.position;
 
-        if (isJumping) return;
+
+        if (isClimbingLadder && ((vMove > 0) || vMove < 0)) animator.SetFloat("ClimbSpeed", Mathf.Abs(vMove));
+        else animator.SetFloat("ClimbSpeed", 0);
+
+        if (isJumping || isClimbingLadder) return;
         Move();
         ClimbCheck();
         BodyRotation();
-        if (!isClimbingLadder) return;
-        if ((!hasReachedTop && vMove > 0) || !hasReachedBottom && vMove < 0) animator.SetFloat("ClimbSpeed", Mathf.Abs(vMove));
-        else animator.SetFloat("ClimbSpeed", 0);
     }
 
     private void OnDrawGizmos()
@@ -234,9 +229,9 @@ public class PlayerController : MonoBehaviour
             if (!isClimbingLadder)
             {
                 StartClimbLadder(other.transform.position);
-                if (!other.GetComponentInParent<Ladder>().isReusable) Destroy(other.gameObject);
+                if (!other.GetComponentInParent<Ladder>().isReusable) other.isTrigger = false;
             }
-            else StopClimbLadder(1);
+            else StopClimbLadder();
         }
     }
 
@@ -335,14 +330,14 @@ public class PlayerController : MonoBehaviour
         {
             lookAtPos = hit.point;
         }
-        cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
+        //cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
         flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.fixedDeltaTime * lightSpeed * 100);
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
-        camLt.enabled = !isClosed;
+        //camLt.enabled = !isClosed;
         lt.enabled = !isClosed;
         pointLight.enabled = !isClosed;
         lightOn = !isClosed;
@@ -354,9 +349,7 @@ public class PlayerController : MonoBehaviour
     public void Reset()
     {
         isHidden = false;
-        SetIsAlive(false);
-        SetHasReachedTop(false);
-        SetHasReachedBottom(false);
+        SetIsAlive(true);
         isGrabbing = false;
         isClimbing = false;
         isClimbingLadder = false;
@@ -376,46 +369,24 @@ public class PlayerController : MonoBehaviour
 
     #region Ladder
 
-    private void JumpLadderHandler()
-    {
-        if (!isClimbingLadder || (!hasReachedBottom && !hasReachedTop)) return;
-        if (hMove !=0)
-        {
-            if (!StoppedHMove) return;
-            int direction=0;
-            if (hMove > 0) direction = 1;
-            else if(hMove < 0) direction = -1;
-            StopClimbLadder(direction);
-            print(direction);
-        }
-        else
-        {
-            StoppedHMove = true;
-        }
-    }
-
     public void StartClimbLadder(Vector3 v)
     {
         StoppedHMove = false;
         transform.position = v;
         modelTransform.eulerAngles = new Vector3(0, 0, 0);
-        SetIsClimbing(true);
+        SetIsClimbingLadder(true);
         ResetVelocity();
         animator.SetBool("OnLadder", true);
     }
 
-    public void StopClimbLadder(int direction)
+    public void StopClimbLadder()
     {
         animator.SetFloat("ClimbSpeed", 1);
         StoppedHMove = false;
         modelTransform.eulerAngles = new Vector3(0, 90, 0);
-        SetIsClimbing(false);
-        SetHasReachedTop(false);
-        SetHasReachedBottom(false);
+        SetIsClimbingLadder(false);
         animator.SetBool("OnLadder", false);
         Vector3 newPosition = transform.position;
-        newPosition.z -= 3;
-        newPosition.x += 2*direction;
         transform.position = newPosition;
     }
 
@@ -425,7 +396,7 @@ public class PlayerController : MonoBehaviour
         while (count < 1f)
         {
             Vector3 lMovement = new Vector3(0, GameManager.instance.controls.GetAxisRaw("Move Vertical"), 0);
-            if ((lMovement.y > 0 && !hasReachedTop) || lMovement.y < 0 && !hasReachedBottom)
+            if ((lMovement.y > 0) || lMovement.y < 0)
             {
                 Vector3 move = transform.position + lMovement;
                 transform.position = Vector3.Lerp(transform.position, move, Time.deltaTime / ladderSpeed);
@@ -884,6 +855,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = hipPosition.position;
         modelTransform.localPosition = localModelPosition;
+        lastPosition = transform.position;
 
         rb.isKinematic = false;
         //isAlive = true;
@@ -946,7 +918,7 @@ public class PlayerController : MonoBehaviour
         return lt;
     }
 
-    public void SetIsClimbing(bool b)
+    public void SetIsClimbingLadder(bool b)
     {
         isClimbingLadder = b;
         if (b) rb.useGravity = false;
@@ -956,16 +928,6 @@ public class PlayerController : MonoBehaviour
     public bool GetIsClimbingLadder()
     {
         return isClimbingLadder;
-    }
-
-    public void SetHasReachedTop(bool b)
-    {
-        hasReachedTop = b;
-    }
-
-    public void SetHasReachedBottom(bool b)
-    {
-        hasReachedBottom = b;
     }
 
     public void SetIsGrabbing(bool b, Rigidbody obj, float objWidth)

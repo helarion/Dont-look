@@ -17,7 +17,7 @@ public class ScriptLamp : Objet
 
     public void swing(Vector3 swingVelocity)
     {
-        swingingLight.GetComponent<Rigidbody>().AddForce(swingVelocity * 1000);
+        swingingLight.GetComponent<Rigidbody>().AddForce(swingVelocity * 3000);
     }
 
     public override void Activate()
