@@ -64,12 +64,7 @@ public class SpiderBehavior : Enemy
         {
             OffMeshLinkData linkData = agent.currentOffMeshLinkData;
 
-            /*
-            print(linkData);
-            print("test1:"+linkData.offMeshLink.gameObject.name);
-            */
-
-            print("Using link right now");
+            //print("Using link right now");
             agent.CompleteOffMeshLink();
             agent.isStopped=false;
         }

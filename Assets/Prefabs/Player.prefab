@@ -499,6 +499,9 @@ MonoBehaviour:
   - {fileID: 1408855781}
   - {fileID: 584274341}
   - {fileID: 2073814420}
+  raycastClimb: {fileID: 554286558}
+  animator: {fileID: 312924326}
+  hipPosition: {fileID: 4194574731507233648}
   jumpForce: 6.5
   rayCastLength: 0.8
   maxClimbHeight: 1
@@ -512,6 +515,7 @@ MonoBehaviour:
   walkSpeed: 3
   ladderSpeed: 0.7
   grabSpeed: 0.5
+  changingLineSpeed: 0.1
   _horizontalAccelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -620,14 +624,11 @@ MonoBehaviour:
   flashlight: {fileID: 1491706786681059038}
   cameraLight: {fileID: 0}
   pointLight: {fileID: 626973580}
-  ignoreIsGroundedOneTime: 1
-  isGrounded: 1
-  raycastClimb: {fileID: 554286558}
-  animator: {fileID: 312924326}
-  hipPosition: {fileID: 4194574731507233648}
+  rangeDim: 5
   lightOn: 1
-  hasReachedTop: 0
+  isClimbingLadder: 0
   isJumping: 0
+  ignoreIsGroundedOneTime: 1
 --- !u!54 &4194574732181831121
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1706,7 +1707,7 @@ PrefabInstance:
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: displayLightIntensity
-      value: 4000
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1736,17 +1737,17 @@ PrefabInstance:
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Intensity
-      value: 318.30988
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Range
-      value: 15
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_SpotAngle
-      value: 65
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}

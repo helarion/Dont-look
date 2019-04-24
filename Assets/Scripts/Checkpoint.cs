@@ -7,6 +7,7 @@ public class Checkpoint : MonoBehaviour
     // a stocker plus tard : les puzzles déja faits pour ne pas les réinitaliser, ou l'inverse : les puzzles à réini
     private float z;
     [SerializeField] Objet[] listObjetsReinitialises;
+    [SerializeField] public float newZ;
 
     private void OnTriggerEnter(Collider other)
     {
