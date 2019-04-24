@@ -163,6 +163,13 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.right);
         Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.forward);
         Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.back);
+
+        Gizmos.color = Color.green;
+        if (currentSpatialLine != null)
+        {
+            Gizmos.DrawLine(currentSpatialLine.begin.position, currentSpatialLine.end.position);
+        }
+        Gizmos.color = Color.white;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -190,7 +197,7 @@ public class PlayerController : MonoBehaviour
             if (currentSpatialSas == null)
             {
                 currentSpatialLine = spatialRoom.defaultSpatialLine;
-                transform.position = new Vector3(transform.position.x, transform.position.y, spatialRoom.defaultSpatialLine.begin.position.z);
+                isChangingSpatialLine = true;
             }
             return;
         }
@@ -215,7 +222,6 @@ public class PlayerController : MonoBehaviour
         }
         if (other.CompareTag("JumpZone"))
         {
-
             if (other.transform.position.x < transform.position.x) jumpDirection = 1;
             else if (other.transform.position.x > transform.position.x) jumpDirection = -1;
             else jumpDirection = 0;
@@ -437,7 +443,7 @@ public class PlayerController : MonoBehaviour
         Vector3 camMove = Vector3.zero;
 
         if (hMove < deadZoneValue && hMove > -deadZoneValue) hMove = 0;
-        if (!isClimbingLadder)
+        if (!isClimbingLadder && !isHidden)
         {
             if (Mathf.Abs(hMove) > 0)
                 lMovement += HorizontalMove(hMove);
@@ -445,7 +451,7 @@ public class PlayerController : MonoBehaviour
                 lMovement += HorizontalSlowDown();
         }
 
-        if (!isGrabbing)
+        if (!isGrabbing && !isClimbingLadder)
         {
             if (!isChangingSpatialLine)
             {
@@ -453,59 +459,32 @@ public class PlayerController : MonoBehaviour
                 {
                     if (vMove > deadZoneValue)
                     {
-                        bool firstDepthFurther = false;
-                        float firstDepthFurtherValue = 0.0f;
                         for (int i = 0; i < currentSpatialRoom.spatialLines.Count; i++)
                         {
                             SpatialLine sl = currentSpatialRoom.spatialLines[i];
                             if (sl.begin.position.z > currentSpatialLine.begin.position.z)
                             {
-                                if (firstDepthFurther)
-                                {
-                                    if (sl.begin.position.z != firstDepthFurtherValue)
-                                    {
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    firstDepthFurther = true;
-                                    firstDepthFurtherValue = sl.begin.position.z;
-                                }
                                 if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
                                 {
                                     currentSpatialLine = sl;
                                     isChangingSpatialLine = true;
+                                    break;
                                 }
                             }
                         }
                     }
                     else if (vMove < -deadZoneValue)
                     {
-                        bool firstDepthNearer = false;
-                        float firstDepthNearerValue = 0.0f;
                         for (int i = currentSpatialRoom.spatialLines.Count - 1; i >= 0; i--)
                         {
                             SpatialLine sl = currentSpatialRoom.spatialLines[i];
                             if (sl.begin.position.z < currentSpatialLine.begin.position.z)
                             {
-                                if (firstDepthNearer)
-                                {
-                                    if (sl.begin.position.z != firstDepthNearerValue)
-                                    {
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    firstDepthNearer = true;
-                                    firstDepthNearerValue = sl.begin.position.z;
-                                }
-
                                 if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
                                 {
                                     currentSpatialLine = sl;
                                     isChangingSpatialLine = true;
+                                    break;
                                 }
                             }
                         }
@@ -549,42 +528,57 @@ public class PlayerController : MonoBehaviour
                 lMovement *= grabSpeed;
             }
 
-            if (currentSpatialSas == null)
+            if (!isClimbingLadder)
             {
-                Vector3 transformPosition = transform.position + lMovement;
-                if (transformPosition.x < currentSpatialLine.begin.position.x)
+                if (isHidden)
                 {
-                    lMovement.x = currentSpatialLine.begin.position.x - transform.position.x;
-                }
-                else if (transformPosition.x > currentSpatialLine.end.position.x)
-                {
-                    lMovement.x = currentSpatialLine.end.position.x - transform.position.x;
-                }
-            }
-
-            if (isChangingSpatialLine)
-            {
-                lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
-                lMovement.z *= changingLineSpeed;
-                Vector3 transformPosition = transform.position + lMovement;
-                if (lMovement.z > 0)
-                {
-                    if (transformPosition.z > currentSpatialLine.begin.position.z)
+                    if (currentSpatialLine.begin.position.z > transform.position.z)
                     {
-                        lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
+                        lMovement.x = Mathf.Clamp(((currentSpatialLine.end.position.x - currentSpatialLine.begin.position.x) / 2 + currentSpatialLine.begin.position.x) - transform.position.x, -1, 1);
+                        lMovement.x *= changingLineSpeed;
+                    }
+                    else
+                    {
+                        lMovement.x = 0;
                     }
                 }
-                else
+                else if (currentSpatialSas == null)
                 {
-                    if (transformPosition.z < currentSpatialLine.begin.position.z)
+                    Vector3 transformPosition = transform.position + lMovement;
+                    if (transformPosition.x < currentSpatialLine.begin.position.x)
                     {
-                        lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
+                        lMovement.x = currentSpatialLine.begin.position.x - transform.position.x;
+                    }
+                    else if (transformPosition.x > currentSpatialLine.end.position.x)
+                    {
+                        lMovement.x = currentSpatialLine.end.position.x - transform.position.x;
                     }
                 }
 
-                if (Mathf.Abs(transform.position.z - currentSpatialLine.begin.position.z) < 0.001f)
+                if (isChangingSpatialLine)
                 {
-                    isChangingSpatialLine = false;
+                    lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
+                    lMovement.z *= changingLineSpeed;
+                    Vector3 transformPosition = transform.position + lMovement;
+                    if (lMovement.z > 0)
+                    {
+                        if (transformPosition.z > currentSpatialLine.begin.position.z)
+                        {
+                            lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
+                        }
+                    }
+                    else
+                    {
+                        if (transformPosition.z < currentSpatialLine.begin.position.z)
+                        {
+                            lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
+                        }
+                    }
+
+                    if (Mathf.Abs(transform.position.z - currentSpatialLine.begin.position.z) < 0.001f)
+                    {
+                        isChangingSpatialLine = false;
+                    }
                 }
             }
 
@@ -599,6 +593,10 @@ public class PlayerController : MonoBehaviour
             /*Vector3 camPos = GameManager.instance.mainCamera.transform.position;
             lMovement.z = 0;
             GameManager.instance.MoveCamera(camPos + (lMovement*50));*/
+        }
+        if (Mathf.Abs(lMovement.x) < 0.01f && Mathf.Abs(lMovement.z) < 0.01f)
+        {
+            isMoving = false;
         }
         animator.SetBool("IsMoving", isMoving);
     }
