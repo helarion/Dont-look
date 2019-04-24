@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxClimbLength = 1.0f;
     [SerializeField] private float jumpLength = 3;
     [SerializeField] private float jumpLengthSpeed = 1;
-    private bool isGrounded = false;
+    [SerializeField] private bool isGrounded = false;
     private int jumpDirection = 0;
 
     [Header("Movement")]
@@ -142,8 +142,11 @@ public class PlayerController : MonoBehaviour
         lastPosition = transform.position;
 
 
-        if (isClimbingLadder && ((vMove > 0) || vMove < 0)) animator.SetFloat("ClimbSpeed", Mathf.Abs(vMove));
-        else animator.SetFloat("ClimbSpeed", 0);
+        if (isClimbingLadder)
+        {
+            if(vMove > 0 || vMove < 0) animator.SetFloat("ClimbSpeed", Mathf.Abs(vMove));
+            else animator.SetFloat("ClimbSpeed", 0);
+        }
 
         if (isJumping || isClimbingLadder) return;
         Move();
@@ -160,7 +163,7 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.back);
 
         Gizmos.color = Color.green;
-        if (currentSpatialLine != null)
+        if (Application.isPlaying)
         {
             Gizmos.DrawLine(currentSpatialLine.begin.position, currentSpatialLine.end.position);
         }
@@ -479,16 +482,6 @@ public class PlayerController : MonoBehaviour
                 lMovement += VerticalSlowDown();*/
         }
 
-        /*Vector3 lPoint;
-        if (isClimbingLadder)
-        {
-           lPoint = new Vector3(transform.position.x + lMovement.x, transform.position.y + lMovement.y,0);
-        }
-        else
-        {
-            lPoint = new Vector3(transform.position.x + lMovement.x, 0, transform.position.z + lMovement.y);
-        }*/
-
         if (lMovement != Vector3.zero || isChangingSpatialLine)
         {
             isMoving = true;
@@ -716,6 +709,8 @@ public class PlayerController : MonoBehaviour
     #region Jump
     private void GroundedCheck()
     {
+        if (!isGrounded) isJumping = true;
+        if (!isJumping) return;
         isGrounded = false;
         if (ignoreIsGroundedOneTime)
         {
@@ -740,6 +735,7 @@ public class PlayerController : MonoBehaviour
             FallingCheck();
             if (animator.GetBool("IsFalling"))
             {
+                animator.SetBool("IsJumping", false);
                 animator.SetBool("IsFalling", false);
                 animator.SetBool("HasLanded", true);
             }

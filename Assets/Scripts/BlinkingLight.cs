@@ -34,6 +34,14 @@ public class BlinkingLight : MonoBehaviour
         isBlinking = false;
     }
 
+    public void Reset()
+    {
+        count = 0;
+        pointLt.intensity = 0;
+        lt.intensity = startingIntensity;
+        pointLt.color = startColor;
+    }
+
     private void Update()
     {
         if(isBlinking)

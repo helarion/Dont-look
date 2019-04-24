@@ -172,7 +172,7 @@ public class SpiderBehavior : Enemy
         agent.speed = moveSpeed;
         if (b)
         {
-            AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
+            //AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
             GameManager.instance.ShakeScreen(0.1f);
             agent.speed = moveSpeed+bonusSpeed;
             if (!isLooked) StartCoroutine("CountLook");

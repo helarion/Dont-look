@@ -89,6 +89,7 @@ public class LightDetector : Objet
     public override void Reset()
     {
         base.Reset();
+        blinkLight.Reset();
         isActivated = false;
         isLooked = false;
         countLook = 0f;

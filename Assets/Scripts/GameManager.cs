@@ -130,6 +130,7 @@ public class GameManager : MonoBehaviour
     {
         if (!player.getIsAlive()) return;
         player.Reset();
+        player.SetIsAlive(false);
         UIManager.instance.FadeDeath(true);
         StartCoroutine("DeathCoroutine");
     }
