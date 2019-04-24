@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.back);
 
         Gizmos.color = Color.green;
-        if (currentSpatialLine != null)
+        if (Application.isPlaying)
         {
             Gizmos.DrawLine(currentSpatialLine.begin.position, currentSpatialLine.end.position);
         }
@@ -699,13 +699,13 @@ public class PlayerController : MonoBehaviour
         if (isClimbingLadder) return;
         Quaternion save = lt.transform.rotation;
         float speed = 0.1f;
-        if (vMove > 0)
+        if (vMove > 0 && isChangingSpatialLine)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
             inverse = 1;
             currentLookDirection = LookDirection.Front;
         }
-        else if (vMove < 0)
+        else if (vMove < 0 && isChangingSpatialLine)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
             inverse = -1;
