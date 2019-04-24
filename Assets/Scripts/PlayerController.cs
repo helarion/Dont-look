@@ -68,7 +68,6 @@ public class PlayerController : MonoBehaviour
     private int inverse = 1;
 
     [Header("Light")]
-    [SerializeField] private float sizeSpeed = 5;
     [SerializeField] private float stickSpeed = 3;
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlight;

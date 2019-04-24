@@ -45,10 +45,11 @@ public class SpatialRoom : MonoBehaviour
         
     }
 
+    [ExecuteInEditMode]
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(defaultSpatialLine.begin.position, defaultSpatialLine.end.position);
-        foreach (SpatialLine sl in additionalSpatialLines)
+        if(!Application.isPlaying)
+        foreach (SpatialLine sl in spatialLines)
         {
             Gizmos.DrawLine(sl.begin.position, sl.end.position);
         }
