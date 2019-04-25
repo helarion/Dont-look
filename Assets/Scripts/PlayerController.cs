@@ -263,20 +263,21 @@ public class PlayerController : MonoBehaviour
         {
             currentSpatialSas = null;
             float zOffset = Mathf.Infinity;
-            SpatialLine currentSL = currentSpatialLine;
+            float currentZ = currentSpatialLine.begin.position.z;
+            float currentXBegin = currentSpatialLine.begin.position.x;
+            float currentXEnd = currentSpatialLine.end.position.x;
             foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
             {
-                if (Mathf.Abs(sl.begin.position.z - currentSL.begin.position.z) < zOffset)
+                if (sl.begin.position.x < currentXEnd || sl.end.position.x > currentXBegin)
                 {
-                    if (sl.begin.position.x < currentSL.end.position.x || sl.end.position.x > currentSL.begin.position.x)
+                    if (Mathf.Abs(sl.begin.position.z - currentZ) < zOffset)
                     {
-                        zOffset = Mathf.Abs(sl.begin.position.z - currentSL.begin.position.z);
+                        zOffset = Mathf.Abs(sl.begin.position.z - currentZ);
                         currentSpatialLine = sl;
                         isChangingSpatialLine = true;
                     }
                 }
             }
-            isChangingSpatialLine = true;
             return;
         }
 
