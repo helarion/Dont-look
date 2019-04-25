@@ -268,7 +268,7 @@ public class PlayerController : MonoBehaviour
             float currentXEnd = currentSpatialLine.end.position.x;
             foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
             {
-                if (sl.begin.position.x < currentXEnd || sl.end.position.x > currentXBegin)
+                if (sl.begin.position.x < currentXEnd && sl.end.position.x > currentXBegin)
                 {
                     if (Mathf.Abs(sl.begin.position.z - currentZ) < zOffset)
                     {
