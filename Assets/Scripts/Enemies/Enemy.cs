@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
     public float velocity;
+    [SerializeField] private Transform _transform;
 
     private void Start()
     {
@@ -83,7 +84,7 @@ public class Enemy : MonoBehaviour
     {
         isChasing = false;
         Vector3 pos = RandomSpawn();
-        transform.position = pos;
+        _transform.position = pos;
         MoveTo(pos);
     }
 
