@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -40,7 +41,7 @@ public class UIManager : MonoBehaviour
         {
             GameManager.instance.SetIsPaused(true);
             fadeImg.color = new Color(0, 0, 0, 1);
-            FadeOut(fadeImg, 1, 0);
+            FadeOut(fadeImg, 2, 0);
             StartCoroutine("StartCoroutine");
         }
     }
@@ -48,7 +49,7 @@ public class UIManager : MonoBehaviour
     public void ValueChangeCheck()
     {
         AkSoundEngine.SetRTPCValue("Master_Volume_Slider", volumeControl.value);
-        Debug.Log(volumeControl.value);
+        //Debug.Log(volumeControl.value);
     }
 
     IEnumerator StartCoroutine()
@@ -72,7 +73,7 @@ public class UIManager : MonoBehaviour
         }
         isFading = true;
         yield return new WaitForSeconds(waitBefore);
-        for (float i = duration; i > 0; i -= Time.deltaTime * fadeTime)
+        for (float i = duration; i > 0; i -= Time.deltaTime / duration)
         {
             // set color with i as alpha
             savedColor.a = i;
@@ -98,7 +99,7 @@ public class UIManager : MonoBehaviour
         }
         isFading = true;
         yield return new WaitForSeconds(waitBefore);
-        for (float i = 0; i < duration; i += Time.deltaTime * fadeTime)
+        for (float i = 0; i < duration; i += Time.deltaTime / duration)
         {
             // set color with i as alpha
             savedColor.a = i;
@@ -110,10 +111,21 @@ public class UIManager : MonoBehaviour
         isFading = false;
     }
 
+    IEnumerator EndCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        while(isFading)
+        {
+            yield return null;
+        }
+        SceneManager.LoadScene(4);
+        yield return null;
+    }
+
     public void FadeDeath(bool b)
     {
-        if(b)FadeIn(fadeImg, 1, 0);
-        else FadeOut(fadeImg, 1, 1);
+        if(b)FadeIn(fadeImg, 1f, 0f);
+        else FadeOut(fadeImg, 1f, 1f);
     }
 
     public void FadePause(bool b)
@@ -126,6 +138,14 @@ public class UIManager : MonoBehaviour
     {
         object[] o = { img, duration, waitBefore };
         StartCoroutine("FadeInCoroutine",o);
+    }
+
+
+    public void FadeInEnd()
+    {
+        object[] o = { fadeImg, 2f, 0f};
+        StartCoroutine("FadeInCoroutine", o);
+        StartCoroutine("EndCoroutine");
     }
 
     public void FadeOut(Image img, float duration, float waitBefore)

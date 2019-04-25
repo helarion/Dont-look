@@ -13,6 +13,7 @@ public class Intro : MonoBehaviour
     [SerializeField] private SpriteRenderer poitiers =null;
     [SerializeField] private Transform scene =null;
     [SerializeField] private Canvas logos =null;
+    [SerializeField] private Image fadeImg;
 
     private Color cnamColor;
     private Color magelisColor;
@@ -47,15 +48,22 @@ public class Intro : MonoBehaviour
 
     private IEnumerator FadeInImage()
     {
-        yield return new WaitForSeconds(0.5f);
+        Color fadeColor = fadeImg.color;
+        for (float i = 1; i > 0; i-= Time.deltaTime * 2)
+        {
+            fadeColor.a = i;
+            fadeImg.color = fadeColor;
+            yield return new WaitForEndOfFrame();
+        }
+        fadeColor.a = 0;
+        fadeImg.color = fadeColor;
         for (float i = 0; i < 1; i += Time.deltaTime * fadeTime)
         {
             magelisColor.a = i;
             poitiersColor.a = i;
             magelis.color = magelisColor;
             poitiers.color = poitiersColor;
-
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
 
         magelisColor.a = 1;

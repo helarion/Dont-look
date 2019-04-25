@@ -177,6 +177,7 @@ public class PlayerController : MonoBehaviour
         {
             currentCameraBlock = cameraBlock;
             GameManager.instance.mainCamera.GetComponent<CameraHandler>().SetNewZ(currentCameraBlock.newZ);
+            if (currentCameraBlock.ChangesLightRange) lt.range = currentCameraBlock.newLightRange;
             return;
         }
 
@@ -243,6 +244,10 @@ public class PlayerController : MonoBehaviour
                 if (!other.GetComponentInParent<Ladder>().isReusable) other.isTrigger = false;
             }
             else StopClimbLadder();
+        }
+        else if(other.CompareTag("Finish"))
+        {
+            UIManager.instance.FadeInEnd();
         }
     }
 

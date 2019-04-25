@@ -53,7 +53,7 @@ public class LightDetector : Objet
             }
         }
         if (!isLooked && !isActivated && test) StartCoroutine("CountLook");
-        else if (!test)
+        else if (!test &&!isActivated)
         {
             StopCoroutine("CountLook");
             if(!isActivated && isLooked) blinkLight.StartBlink();

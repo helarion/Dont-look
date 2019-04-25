@@ -50,8 +50,8 @@ MonoBehaviour:
   pauseImg: {fileID: 4433784609411319872}
   ControlPanel: {fileID: 4433784609518619877}
   NoEyePanel: {fileID: 4433784608152383189}
-  volumeControl: {fileID: 4433784609489388136}
-  toggleTracker: {fileID: 4433784607755158505}
+  volumeControl: {fileID: 1533102050553294354}
+  toggleTracker: {fileID: 7630913507350461335}
   isFading: 0
 --- !u!1001 &8327313820682560506
 PrefabInstance:
@@ -64,6 +64,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MainCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627098547644889884, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5627098548108176495, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
@@ -215,6 +220,61 @@ PrefabInstance:
       propertyPath: m_PlaneDistance
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3912653594282358646, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 42.017883
+      objectReference: {fileID: 0}
+    - target: {fileID: 936411622738264322, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 936411622738264322, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1906989305011017837, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CheckTracker
+      objectReference: {fileID: 0}
+    - target: {fileID: 1906989305011017837, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8986887463818910118, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_Name
+      value: Slider
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405380661371802517, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405380661371802517, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433588887892737562, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433588887892737562, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433588887892737562, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b4aa82e73706094e882bf5bb69c5826, type: 3}
 --- !u!224 &4433784608007819157 stripped
@@ -265,9 +325,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8327313820682560506}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4433784607755158505 stripped
+--- !u!114 &7630913507350461335 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5627098547857612819, guid: 6b4aa82e73706094e882bf5bb69c5826,
+  m_CorrespondingSourceObject: {fileID: 1906989305011017837, guid: 6b4aa82e73706094e882bf5bb69c5826,
     type: 3}
   m_PrefabInstance: {fileID: 8327313820682560506}
   m_PrefabAsset: {fileID: 0}
@@ -277,9 +337,9 @@ MonoBehaviour:
   m_Script: {fileID: 2109663825, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4433784609489388136 stripped
+--- !u!114 &1533102050553294354 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5627098547465331090, guid: 6b4aa82e73706094e882bf5bb69c5826,
+  m_CorrespondingSourceObject: {fileID: 7410149810467687912, guid: 6b4aa82e73706094e882bf5bb69c5826,
     type: 3}
   m_PrefabInstance: {fileID: 8327313820682560506}
   m_PrefabAsset: {fileID: 0}

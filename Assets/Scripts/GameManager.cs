@@ -92,6 +92,10 @@ public class GameManager : MonoBehaviour
         {
             check = 3;
         }
+        else if (Input.GetKeyDown(KeyCode.F5))
+        {
+            check = 4;
+        }
 
         if (check != -1)
         {
