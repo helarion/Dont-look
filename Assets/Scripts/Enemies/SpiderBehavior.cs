@@ -40,7 +40,7 @@ public class SpiderBehavior : Enemy
 
     private void Update()
     {
-        velocity = ((transform.position - lastPosition).magnitude * 10)/moveSpeed;
+        velocity = ((transform.position - lastPosition).magnitude * 10)*moveSpeed;
         lastPosition = transform.position;
 
         isMoving = false;
