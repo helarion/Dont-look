@@ -87,6 +87,7 @@ public class ScriptedSpider : Enemy
             step++;
             yield return new WaitForEndOfFrame();
         }
+        col.isTrigger = true;
         GameManager.instance.SetShakeIntensity(save);
         Destroy(gameObject);        
         yield return null;
