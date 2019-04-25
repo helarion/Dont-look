@@ -14,6 +14,7 @@ public class SpiderBehavior : Enemy
     [SerializeField] private bool clickToSetDestination = false;
 
     [SerializeField] private float countLook = 0;
+    [SerializeField] private bool delete = false;
     private float countChase = 0;
 
     private bool canSeePlayer = false;
@@ -145,8 +146,8 @@ public class SpiderBehavior : Enemy
     // ARRETER LA CHASSE DU JOUEUR
     private void StopChase()
     {
-        //Respawn();
-        Destroy(gameObject);
+        if(!delete)Respawn();
+        else Destroy(gameObject);
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON

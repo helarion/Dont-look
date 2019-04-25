@@ -11,6 +11,8 @@ public class ScriptedSpider : Enemy
     [SerializeField] Transform pos2;
     [SerializeField] ScriptLamp lamp;
     [SerializeField] float shakeIntensity;
+    [SerializeField] BoxCollider col;
+    [SerializeField] int nbAttack = 2;
 
     private bool objective1 = false;
     private bool objective2 = false;
@@ -65,7 +67,7 @@ public class ScriptedSpider : Enemy
     {
         int count = 0;
         int step = 1;
-        while (count <3)
+        while (count <nbAttack)
         {
             if (step == 1) MoveTo(pos1.position);
             else if(step==2) MoveTo(pos2.position);
@@ -73,10 +75,10 @@ public class ScriptedSpider : Enemy
             {
                 count++;
                 step = 1;
-                if(count <3)MoveTo(pos1.position);
+                if(count <nbAttack)MoveTo(pos1.position);
             }
-            yield return new WaitForSeconds(0.5f);
-            while (agent.remainingDistance >0.5f)
+            yield return new WaitForSeconds(0.2f);
+            while (agent.remainingDistance >0)
             {
                 //print("remaining distance:"+agent.remainingDistance);
                 //print("Step" + step);

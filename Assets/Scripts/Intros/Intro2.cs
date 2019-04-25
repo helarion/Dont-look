@@ -34,7 +34,7 @@ public class Intro2 : MonoBehaviour
         Color savedColor = fadeImg.color;
         savedColor.a = 1;
         fadeImg.color = savedColor;
-        for (float i = 1; i > 0; i -= Time.deltaTime/2)
+        for (float i = 1; i > 0; i -= Time.deltaTime/fadeDuration)
         {
             // set color with i as alpha
             savedColor.a = i;
@@ -53,7 +53,7 @@ public class Intro2 : MonoBehaviour
         savedColor.a = 0;
         fadeImg.color = savedColor;
 
-        for (float i = 0; i < fadeDuration; i += Time.deltaTime)
+        for (float i = 0; i < fadeDuration; i += Time.deltaTime/fadeDuration)
         {
             // set color with i as alpha
             savedColor.a = i;
