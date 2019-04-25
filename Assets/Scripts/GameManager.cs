@@ -74,7 +74,12 @@ public class GameManager : MonoBehaviour
         }
         if (isPaused) return;
         CheckShake();
+        TP();
+    }
 
+    [ExecuteInEditMode]
+    private void TP()
+    {
         int check = -1;
         if (Input.GetKeyDown(KeyCode.F1))
         {
