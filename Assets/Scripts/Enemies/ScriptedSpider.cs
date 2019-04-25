@@ -19,6 +19,7 @@ public class ScriptedSpider : Enemy
     private void Start()
     {
         Initialize();
+        save = GameManager.instance.GetShakeIntensity();
         lastPosition = transform.position;
     }
 
@@ -48,7 +49,6 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
-            save = GameManager.instance.GetShakeIntensity();
             GameManager.instance.SetShakeIntensity(shakeIntensity);
             GameManager.instance.ShakeScreen(0.2f);
             lamp.Swing();
@@ -78,8 +78,8 @@ public class ScriptedSpider : Enemy
             yield return new WaitForSeconds(0.5f);
             while (agent.remainingDistance >0.5f)
             {
-                print("remaining distance:"+agent.remainingDistance);
-                print("Step" + step);
+                //print("remaining distance:"+agent.remainingDistance);
+                //print("Step" + step);
                 yield return new WaitForSeconds(0.1f);
             }
             step++;

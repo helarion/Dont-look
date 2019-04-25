@@ -733,7 +733,6 @@ public class PlayerController : MonoBehaviour
     private void GroundedCheck()
     {
         if (!isGrounded) isJumping = true;
-        if (!isJumping) return;
         isGrounded = false;
         if (ignoreIsGroundedOneTime)
         {
@@ -752,15 +751,13 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        if (!isJumping) return;
         if (isGrounded)
         {
-            if (animator.GetBool("IsFalling"))
-            {
                 isJumping = false;
                 animator.SetBool("IsJumping", false);
                 animator.SetBool("IsFalling", false);
                 animator.SetBool("HasLanded", true);
-            }
         }
     }
 
