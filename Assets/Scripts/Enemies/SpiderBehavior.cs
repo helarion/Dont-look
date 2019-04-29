@@ -21,7 +21,6 @@ public class SpiderBehavior : Enemy
 
     private bool chaseCoroutine = false;
     private bool isMoving = false;
-    private bool isLooked = false;
 
     NavMeshLink link;
 

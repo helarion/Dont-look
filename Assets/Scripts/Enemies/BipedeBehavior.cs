@@ -6,7 +6,6 @@ public class BipedeBehavior : Enemy
 {
     private Vector3 lastPosition;
     private bool isMoving=false;
-    private bool isLooked = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,13 +18,10 @@ public class BipedeBehavior : Enemy
     // Update is called once per frame
     void Update()
     {
+        VelocityCount();
         isMoving = false;
-        velocity = (transform.position - lastPosition).magnitude;
         lastPosition = transform.position;
 
-        animator.SetFloat("Velocity", velocity);
-
-        // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if (isChasing)
         {
             LightDetection();
@@ -59,18 +55,20 @@ public class BipedeBehavior : Enemy
         }
     }
 
-    // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
+    // APPELER LORSQUE LE BIPEDE EST ECLAIREE
     public override void IsLit(bool b)
     {
         if (b)
         {
-            AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
+            //AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
             GameManager.instance.ShakeScreen(0.001f);
             isLooked = true;
+            animator.SetBool("IsLooked", true);
         }
         else
         {
             isLooked = false;
+            animator.SetBool("IsLooked", false);
         }
     }
 

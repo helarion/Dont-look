@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public Animator animator;
     public float velocity;
     [SerializeField] private Transform _transform;
+    public bool isLooked = true;
 
 
     private Vector3 lastPosition;

@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3351070176851155320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.75, z: -6.5}
+  m_LocalPosition: {x: -2.25, y: 3.25, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3351070177885151997}
@@ -129,17 +129,17 @@ PrefabInstance:
     - target: {fileID: 2436183961040824500, guid: 7a03abdb298463249a402d293eaa2cf6,
         type: 3}
       propertyPath: m_Name
-      value: Spider2
+      value: Spider1
       objectReference: {fileID: 0}
     - target: {fileID: 2436183961040824497, guid: 7a03abdb298463249a402d293eaa2cf6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -2.75
       objectReference: {fileID: 0}
     - target: {fileID: 2436183961040824497, guid: 7a03abdb298463249a402d293eaa2cf6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 2436183961040824497, guid: 7a03abdb298463249a402d293eaa2cf6,
         type: 3}
@@ -188,6 +188,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2436183961040824501, guid: 7a03abdb298463249a402d293eaa2cf6,
         type: 3}
+      propertyPath: moveSpeed
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2436183961040824501, guid: 7a03abdb298463249a402d293eaa2cf6,
+        type: 3}
       propertyPath: spawnZones.Array.data[0]
       value: 
       objectReference: {fileID: 3351070176851155271}
@@ -201,11 +206,37 @@ PrefabInstance:
       propertyPath: delayChase
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2436183961040824501, guid: 7a03abdb298463249a402d293eaa2cf6,
+        type: 3}
+      propertyPath: delete
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 853257168, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
       propertyPath: m_TagString
       value: Killzone
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 1046466825057929529, guid: 7a03abdb298463249a402d293eaa2cf6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0340921
+      objectReference: {fileID: 0}
+    - target: {fileID: 1046466825057929529, guid: 7a03abdb298463249a402d293eaa2cf6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.060470153
+      objectReference: {fileID: 0}
+    - target: {fileID: 1046466825057929377, guid: 7a03abdb298463249a402d293eaa2cf6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.06257326
+      objectReference: {fileID: 0}
+    - target: {fileID: 1046466825057929377, guid: 7a03abdb298463249a402d293eaa2cf6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.42734066
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1046466825050253075, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
 --- !u!4 &2436183961381135696 stripped
 Transform:

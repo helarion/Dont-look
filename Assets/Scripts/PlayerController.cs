@@ -219,7 +219,12 @@ public class PlayerController : MonoBehaviour
         }
         else if (other.CompareTag("Killzone"))
         {
-            GameManager.instance.Death();
+            BipedeBehavior b = other.GetComponentInParent<BipedeBehavior>();
+            if(b!=null)
+            {
+                if(!b.isLooked) GameManager.instance.Death();
+            }
+            else   GameManager.instance.Death();
         }
         else if(other.CompareTag("Grabbable"))
         {
