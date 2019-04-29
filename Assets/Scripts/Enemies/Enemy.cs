@@ -22,8 +22,25 @@ public class Enemy : MonoBehaviour
     public float velocity;
     [SerializeField] private Transform _transform;
 
+
+    private Vector3 lastPosition;
+
+    private void Update()
+    {
+        VelocityCount();
+    }
+
+    public void VelocityCount()
+    {
+        velocity = ((transform.position - lastPosition).magnitude * 10) * moveSpeed;
+        lastPosition = transform.position;
+        animator.SetFloat("Velocity", velocity);
+        //print(velocity);
+    }
+
     private void Start()
     {
+        lastPosition = transform.position;
         Initialize();
     }
 

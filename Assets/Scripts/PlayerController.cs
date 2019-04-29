@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
     private bool isTouchingBox = false;
     private bool walkRoutine = false;
     private bool StoppedHMove = false;
+    private bool stopMove = false;
 
     private CameraBlock currentCameraBlock = null;
     SpatialRoom currentSpatialRoom = null;
@@ -148,9 +149,11 @@ public class PlayerController : MonoBehaviour
             else animator.SetFloat("ClimbSpeed", 0);
         }
 
-        if (isJumping || isClimbingLadder) return;
-        Move();
+        if (isClimbingLadder) return;
         ClimbCheck();
+        if (isJumping || stopMove) return;
+        Move();
+
         BodyRotation();
     }
 
@@ -228,15 +231,11 @@ public class PlayerController : MonoBehaviour
             Enemy e = other.GetComponentInParent<Enemy>();
             e.DetectPlayer(true);
         }
-        else if (other.CompareTag("JumpZone"))
+        else if(other.CompareTag("Finish"))
         {
-            if (other.transform.position.x < transform.position.x) jumpDirection = 1;
-            else if (other.transform.position.x > transform.position.x) jumpDirection = -1;
-            else jumpDirection = 0;
-            //print("direction:" + jumpDirection);
-            Jump();
+            UIManager.instance.FadeInEnd();
         }
-        else if(other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
+        else if (other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
         {
             if (!isClimbingLadder)
             {
@@ -245,9 +244,19 @@ public class PlayerController : MonoBehaviour
             }
             else StopClimbLadder();
         }
-        else if(other.CompareTag("Finish"))
+
+        if (!isJumping && !isClimbing &&!isClimbingLadder)
         {
-            UIManager.instance.FadeInEnd();
+            if (other.CompareTag("JumpZoneRight") && hMove>0)
+            {
+                jumpDirection = 1;
+                Jump();
+            }
+            else if (other.CompareTag("JumpZoneLeft") && hMove <0)
+            {
+                jumpDirection = 0;
+                Jump();
+            }
         }
     }
 
@@ -393,6 +402,7 @@ public class PlayerController : MonoBehaviour
         rb.useGravity = true;
         rb.isKinematic = false;
         StoppedHMove = false;
+        stopMove = false;
         ResetVelocity();
     }
     #endregion
@@ -449,6 +459,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        if (isJumping) return;
         isMoving = false;
         Vector3 lMovement = Vector3.zero;
         Vector3 camMove = Vector3.zero;
@@ -758,10 +769,11 @@ public class PlayerController : MonoBehaviour
         if (!isJumping) return;
         if (isGrounded)
         {
-                isJumping = false;
-                animator.SetBool("IsJumping", false);
-                animator.SetBool("IsFalling", false);
-                animator.SetBool("HasLanded", true);
+            isJumping = false;
+            stopMove = false;
+            animator.SetBool("IsJumping", false);
+            animator.SetBool("IsFalling", false);
+            animator.SetBool("HasLanded", true);
         }
     }
 
@@ -796,7 +808,9 @@ public class PlayerController : MonoBehaviour
     {
         isJumping = true;
         rb.velocity = Vector3.zero;
-        Vector3 jumpVector = new Vector3(jumpLength, jumpForce);
+        float direction = jumpLength;
+        if (jumpDirection == 0) direction *= -1;
+        Vector3 jumpVector = new Vector3(direction, jumpForce);
         rb.AddForce(jumpVector, ForceMode.VelocityChange);
         ignoreIsGroundedOneTime = true;
     }
@@ -805,6 +819,7 @@ public class PlayerController : MonoBehaviour
     {
         GroundedCheck();
         if (!isGrounded) return;
+        stopMove = true;
         rb.velocity = Vector3.zero;
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
@@ -855,6 +870,20 @@ public class PlayerController : MonoBehaviour
             angle = new Vector3(0, -180, 0);
         }
 
+        if(isJumping)
+        {
+            if (jumpDirection == 0)
+            {
+                climbDirection = Vector3.left;
+                angle = new Vector3(0, -90, 0);
+            }
+            else if (jumpDirection == 1)
+            {
+                climbDirection = Vector3.right;
+                angle = new Vector3(0, 90, 0);
+            }
+        }
+
         RaycastHit hitInfo;
         if(Physics.Raycast(raycastClimb.position, climbDirection, out hitInfo, maxClimbLength, GameManager.instance.GetClimbLayer()))
         {
@@ -872,6 +901,7 @@ public class PlayerController : MonoBehaviour
                 isAlive = false;*/
                 isClimbing = true;
                 rb.isKinematic = true;
+                animator.SetBool("IsFalling", false);
                 animator.SetBool("Climb", true);
             }
         }
@@ -896,6 +926,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+
 
     #region GetSet
     // RENVOIE LE POINT DANS LE MONDE QUE LE JOUEUR VISE

@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         TP();
     }
 
-    [ExecuteInEditMode]
+   // [ExecuteInEditMode]
     private void TP()
     {
         int check = -1;
@@ -161,6 +161,7 @@ public class GameManager : MonoBehaviour
     // COROUTINE DE FADE OUT / IN DE LA MORT
     private IEnumerator DeathCoroutine()
     {
+        yield return new WaitForSeconds(0.5f);
         while (UIManager.instance.isFading)
             yield return new WaitForSeconds(0.1f);
         RespawnEnemies();

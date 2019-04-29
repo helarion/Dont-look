@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class ScriptedSpider : Enemy
 {
     private bool isMoving = false;
-    private Vector3 lastPosition;
     [SerializeField] Transform pos1;
     [SerializeField] Transform pos2;
     [SerializeField] ScriptLamp lamp;
@@ -22,17 +21,11 @@ public class ScriptedSpider : Enemy
     {
         Initialize();
         save = GameManager.instance.GetShakeIntensity();
-        lastPosition = transform.position;
     }
 
     private void Update()
     {
-        velocity = (transform.position - lastPosition).magnitude * 10;
-        lastPosition = transform.position;
-
-        animator.SetFloat("Velocity", velocity);
-        //print(velocity);
-
+        VelocityCount();
         if (isChasing)
         {
             ChaseBehavior();

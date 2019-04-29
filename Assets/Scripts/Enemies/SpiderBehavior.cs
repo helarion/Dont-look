@@ -23,8 +23,6 @@ public class SpiderBehavior : Enemy
     private bool isMoving = false;
     private bool isLooked = false;
 
-    private Vector3 lastPosition;
-
     NavMeshLink link;
 
     private PlayerController p;
@@ -36,18 +34,12 @@ public class SpiderBehavior : Enemy
         animator.SetFloat("WakeMult", (1f / delaySpot));
         countChase = 0;
         countLook = 0;
-        lastPosition = transform.position;
     }
 
     private void Update()
     {
-        velocity = ((transform.position - lastPosition).magnitude * 10)*moveSpeed;
-        lastPosition = transform.position;
-
+        VelocityCount();
         isMoving = false;
-        animator.SetFloat("Velocity", velocity);
-        //print(velocity);
-
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)
         {
@@ -147,7 +139,7 @@ public class SpiderBehavior : Enemy
     private void StopChase()
     {
         if(!delete)Respawn();
-        else Destroy(gameObject);
+        else if(p.getIsAlive()) Destroy(gameObject);
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON
