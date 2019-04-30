@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class BipedeBehavior : Enemy
 {
-    private Vector3 lastPosition;
-    private bool isMoving=false;
-
     // Start is called before the first frame update
     void Start()
     {
         Initialize();
-        lastPosition = transform.position;
         agent.speed = moveSpeed;
     }
 
@@ -19,8 +15,6 @@ public class BipedeBehavior : Enemy
     void Update()
     {
         VelocityCount();
-        isMoving = false;
-        lastPosition = transform.position;
 
         if (isChasing)
         {
@@ -29,7 +23,7 @@ public class BipedeBehavior : Enemy
         }
 
         //DebugPath();
-        animator.SetBool("IsMoving", isMoving);
+        
     }
 
     private void OnTriggerEnter(Collider other)

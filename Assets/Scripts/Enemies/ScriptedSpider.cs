@@ -5,12 +5,11 @@ using UnityEngine.AI;
 
 public class ScriptedSpider : Enemy
 {
-    private bool isMoving = false;
     [SerializeField] Transform pos1;
     [SerializeField] Transform pos2;
     [SerializeField] ScriptLamp lamp;
     [SerializeField] float shakeIntensity;
-    [SerializeField] BoxCollider col;
+    [SerializeField] BoxCollider ladderCol;
     [SerializeField] int nbAttack = 2;
 
     private bool objective1 = false;
@@ -31,8 +30,6 @@ public class ScriptedSpider : Enemy
             ChaseBehavior();
         }
 
-        animator.SetBool("IsMoving", isMoving);
-
         if (agent.isOnOffMeshLink)
         {
             agent.CompleteOffMeshLink();
@@ -52,7 +49,7 @@ public class ScriptedSpider : Enemy
 
     public void Script()
     {
-        isMoving = true;
+        StartChase();
         StartCoroutine("ScriptRoutine");
     }
 
@@ -68,7 +65,10 @@ public class ScriptedSpider : Enemy
             {
                 count++;
                 step = 1;
-                if(count <nbAttack)MoveTo(pos1.position);
+                if (count < nbAttack)
+                {
+                    MoveTo(pos1.position);
+                }
             }
             yield return new WaitForSeconds(0.2f);
             while (agent.remainingDistance >0)
@@ -80,7 +80,8 @@ public class ScriptedSpider : Enemy
             step++;
             yield return new WaitForEndOfFrame();
         }
-        col.isTrigger = true;
+        ladderCol.isTrigger = true;
+        StopChase();
         GameManager.instance.SetShakeIntensity(save);
         Destroy(gameObject);        
         yield return null;

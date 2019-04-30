@@ -14,7 +14,6 @@ public class SpiderBehavior : Enemy
     [SerializeField] private bool clickToSetDestination = false;
 
     [SerializeField] private float countLook = 0;
-    [SerializeField] private bool delete = false;
     private float countChase = 0;
 
     private bool canSeePlayer = false;
@@ -24,12 +23,9 @@ public class SpiderBehavior : Enemy
 
     NavMeshLink link;
 
-    private PlayerController p;
-
     private void Start()
     {
         Initialize();
-        p = GameManager.instance.player;
         animator.SetFloat("WakeMult", (1f / delaySpot));
         countChase = 0;
         countLook = 0;
@@ -38,7 +34,6 @@ public class SpiderBehavior : Enemy
     private void Update()
     {
         VelocityCount();
-        isMoving = false;
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if(isChasing)
         {
@@ -50,7 +45,6 @@ public class SpiderBehavior : Enemy
         }
 
         DebugPath(); 
-        animator.SetBool("IsMoving", isMoving);
 
         if (agent.isOnOffMeshLink)
         {
@@ -132,17 +126,6 @@ public class SpiderBehavior : Enemy
         countLook = 0;
         animator.SetFloat("WakeMult", countLook);
         animator.SetBool("IsMoving", false);
-    }
-
-    // ARRETER LA CHASSE DU JOUEUR
-    private void StopChase()
-    {
-        if (!delete) Respawn();
-        else if (p.getIsAlive())
-        {
-            GameManager.instance.DeleteEnemyFromList(this);
-            Destroy(gameObject);
-        }
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON

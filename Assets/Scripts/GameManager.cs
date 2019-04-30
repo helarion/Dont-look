@@ -30,6 +30,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LayerMask lookLayer;
     [SerializeField] private LayerMask climbLayer;
 
+    [Header("Sons")]
+    [SerializeField] public AK.Wwise.Event ChaseAmbPlay;
+    [SerializeField] public AK.Wwise.Event ChaseAmbStop;
+    [SerializeField] public AK.Wwise.Event HeartPlay;
+    [SerializeField] public AK.Wwise.Event HeartStop;
+
+
     [HideInInspector] public Player controls; // The Rewired Player
 
     private Vector3 originalPos;

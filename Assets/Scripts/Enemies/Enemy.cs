@@ -10,10 +10,12 @@ public class Enemy : MonoBehaviour
 
     [Header("Chase Variables")]
     [SerializeField] public bool isChasing = false;
+    [SerializeField] private bool delete = false;
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
-    [SerializeField] private AK.Wwise.Event WwiseChase;
+    [SerializeField] private AK.Wwise.Event WwiseChasePlay;
+    [SerializeField] private AK.Wwise.Event WwiseChaseStop;
     [SerializeField] public AK.Wwise.Event WwiseLook;
 
 
@@ -22,7 +24,9 @@ public class Enemy : MonoBehaviour
     public float velocity;
     [SerializeField] private Transform _transform;
     public bool isLooked = true;
+    public bool isMoving = false;
 
+    [HideInInspector] public PlayerController p;
 
     private Vector3 lastPosition;
 
@@ -47,6 +51,7 @@ public class Enemy : MonoBehaviour
 
     public void Initialize()
     {
+        p = GameManager.instance.player;
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed;
@@ -56,9 +61,27 @@ public class Enemy : MonoBehaviour
     // COMMENCER LA CHASSE DU JOUEUR
     public virtual void StartChase()
     {
-        AkSoundEngine.PostEvent(WwiseChase.Id,gameObject);
+        //AkSoundEngine.PostEvent(WwiseChasePlay.Id,gameObject);
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay.Id, gameObject);
         agent.isStopped = false;
         isChasing = true;
+        isMoving = true;
+        animator.SetBool("IsMoving", isMoving);
+    }
+
+    public virtual void StopChase()
+    {
+        if (!isChasing) return;
+        isMoving = false;
+        animator.SetBool("IsMoving", isMoving);
+        //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop.Id, gameObject);
+        if (!delete) Respawn();
+        else if (p.getIsAlive())
+        {
+            GameManager.instance.DeleteEnemyFromList(this);
+            Destroy(gameObject);
+        }
     }
 
     public virtual void DetectPlayer(bool b) {}
@@ -100,7 +123,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Respawn()
     {
-        isChasing = false;
+        StopChase();
         Vector3 pos = RandomSpawn();
         _transform.position = pos;
         MoveTo(pos);
@@ -108,9 +131,12 @@ public class Enemy : MonoBehaviour
 
     public void MoveTo(Vector3 newPos)
     {
-        agent.ResetPath();
-        agent.SetDestination(newPos);
-        agent.isStopped = false;
+        if(agent.hasPath) agent.ResetPath();
+        if (agent.isOnNavMesh)
+        {
+            agent.SetDestination(newPos);
+            agent.isStopped = false;
+        }
     }
 
     public Vector3 RandomSpawn()

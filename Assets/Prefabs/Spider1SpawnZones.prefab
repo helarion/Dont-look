@@ -194,8 +194,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2436183961040824501, guid: 7a03abdb298463249a402d293eaa2cf6,
         type: 3}
-      propertyPath: moveSpeed
-      value: 3.5
+      propertyPath: delete
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2436183961040824501, guid: 7a03abdb298463249a402d293eaa2cf6,
         type: 3}
@@ -211,11 +211,6 @@ PrefabInstance:
         type: 3}
       propertyPath: delayChase
       value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2436183961040824501, guid: 7a03abdb298463249a402d293eaa2cf6,
-        type: 3}
-      propertyPath: delete
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 853257168, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
       propertyPath: m_TagString
@@ -241,7 +236,8 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.42734066
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1046466825050253075, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
 --- !u!4 &2436183961381135696 stripped
 Transform:

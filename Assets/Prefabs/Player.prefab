@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554286557}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 1, z: 0.25}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 914376431}
@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 565811983}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: -1, z: 0.25}
+  m_LocalPosition: {x: -0.5, y: -1.25, z: 0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 914376431}
@@ -84,7 +84,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584274340}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -1, z: -0.25}
+  m_LocalPosition: {x: 0.5, y: -1.25, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 914376431}
@@ -315,7 +315,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408855780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -1, z: 0.25}
+  m_LocalPosition: {x: 0.5, y: -1.25, z: 0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 914376431}
@@ -345,7 +345,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2073814419}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.501, y: -1, z: -0.25}
+  m_LocalPosition: {x: -0.5009999, y: -1.25, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 914376431}
@@ -502,13 +502,13 @@ MonoBehaviour:
   raycastClimb: {fileID: 554286558}
   animator: {fileID: 312924326}
   hipPosition: {fileID: 4194574731507233648}
-  jumpForce: 2.5
-  rayCastLength: 0.8
+  jumpForce: 2.4
+  rayCastLength: 0.25
   maxClimbHeight: 1
-  maxClimbLength: 0.8
-  jumpLength: 6
+  maxClimbLength: 1
+  jumpLength: 6.5
   jumpLengthSpeed: 1
-  isGrounded: 0
+  isGrounded: 1
   walkTime: 0.5
   runTimeMinus: 0.1
   deadZoneValue: 0.3
@@ -628,7 +628,6 @@ MonoBehaviour:
   lightOn: 1
   isClimbingLadder: 0
   isJumping: 0
-  ignoreIsGroundedOneTime: 1
 --- !u!54 &4194574732181831121
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
     SpatialLine currentSpatialLine = null;
     private Rigidbody objectGrabbed = null;
     [Header("Debug")]
-    [SerializeField] private bool ignoreIsGroundedOneTime = false;
+    //[SerializeField] private bool ignoreIsGroundedOneTime = false;
 
     private float objectGrabbedWidth = 0;
 
@@ -757,16 +757,17 @@ public class PlayerController : MonoBehaviour
     {
         if (!isGrounded) isJumping = true;
         isGrounded = false;
-        if (ignoreIsGroundedOneTime)
+        /*if (ignoreIsGroundedOneTime)
         {
             ignoreIsGroundedOneTime = false;
             return;
-        }
+        }*/
         RaycastHit hitInfo;
         foreach (Transform t in raycastPosition)
         {
             if (Physics.Raycast(t.position, -Vector3.up, out hitInfo, rayCastLength))
             {
+                //print("raycasthit: "+hitInfo.collider.name);
                 if (!hitInfo.collider.isTrigger)
                 {
                     isGrounded = true;
@@ -820,7 +821,7 @@ public class PlayerController : MonoBehaviour
         if (jumpDirection == 0) direction *= -1;
         Vector3 jumpVector = new Vector3(direction, jumpForce);
         rb.AddForce(jumpVector, ForceMode.VelocityChange);
-        ignoreIsGroundedOneTime = true;
+       // ignoreIsGroundedOneTime = true;
     }
 
     public void Jump()
@@ -829,8 +830,19 @@ public class PlayerController : MonoBehaviour
         if (!isGrounded) return;
         stopMove = true;
         rb.velocity = Vector3.zero;
+        Vector3 angle=Vector3.zero;
+        if (jumpDirection == 0)
+        {
+            angle = new Vector3(0, -90, 0);
+        }
+        else if (jumpDirection == 1)
+        {
+            angle = new Vector3(0, 90, 0);
+        }
+        modelTransform.localEulerAngles = angle;
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
+
     }
 
     private void ClimbCheck()
@@ -917,7 +929,9 @@ public class PlayerController : MonoBehaviour
 
     public void StopClimb()
     {
-        transform.position = hipPosition.position;
+        Vector3 newPos = hipPosition.position;
+        newPos.y -= 0.3f;
+        transform.position = newPos;
         modelTransform.localPosition = localModelPosition;
         lastPosition = transform.position;
 
@@ -926,6 +940,8 @@ public class PlayerController : MonoBehaviour
         isClimbing = false;
         animator.SetBool("Climb", false);
         velocity = 0;
+        animator.SetBool("IsFalling", false);
+        animator.SetBool("HasLanded", false);
     }
 
     public void ResetVelocity()
@@ -934,7 +950,6 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-
 
     #region GetSet
     // RENVOIE LE POINT DANS LE MONDE QUE LE JOUEUR VISE
