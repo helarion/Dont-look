@@ -44,6 +44,7 @@ public class Intro : MonoBehaviour
         newPos.z -= Time.deltaTime * zoomSpeed;
         logos.transform.position = newPos;
         scene.position = Vector3.Lerp(scene.position, scene.position + Vector3.back, 0.5f);
+        if (Input.GetKeyDown(KeyCode.F1)) SceneManager.LoadScene(3);
     }
 
     private IEnumerator FadeInImage()

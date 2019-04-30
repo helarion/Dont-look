@@ -249,15 +249,18 @@ public class PlayerController : MonoBehaviour
             }
             else StopClimbLadder();
         }
+    }
 
-        if (!isJumping && !isClimbing &&!isClimbingLadder)
+    private void OnTriggerStay(Collider other)
+    {
+        if (!stopMove && !isClimbing && !isClimbingLadder)
         {
-            if (other.CompareTag("JumpZoneRight") && hMove>0)
+            if (other.CompareTag("JumpZoneRight") && hMove > 0)
             {
                 jumpDirection = 1;
                 Jump();
             }
-            else if (other.CompareTag("JumpZoneLeft") && hMove <0)
+            else if (other.CompareTag("JumpZoneLeft") && hMove < 0)
             {
                 jumpDirection = 0;
                 Jump();
