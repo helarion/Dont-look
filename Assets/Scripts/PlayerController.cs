@@ -253,7 +253,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!stopMove && !isClimbing && !isClimbingLadder)
+        if (!stopMove && !isClimbing && !isClimbingLadder && !animator.GetBool("IsJumping"))
         {
             if (other.CompareTag("JumpZoneRight") && hMove > 0)
             {

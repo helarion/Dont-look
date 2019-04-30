@@ -360,7 +360,7 @@ MonoBehaviour:
   startingIntensity: 50
   direction: 1
   blinkSpeed: 40
-  maxIntensity: 50
+  maxIntensity: 400
   wait: 1.5
   isBlinking: 1
   startColor: {r: 1, g: 0, b: 0, a: 0}
@@ -379,7 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  delayActivate: 3
+  delayActivate: 3.25
   blinkLight: {fileID: 5026061470162382335}
   activateSound:
     idInternal: 0
@@ -444,7 +444,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 32
+  m_Intensity: 16.976526
   m_Range: 1.0000001
   m_SpotAngle: 30
   m_CookieSize: 10

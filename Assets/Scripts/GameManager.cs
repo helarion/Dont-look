@@ -158,6 +158,12 @@ public class GameManager : MonoBehaviour
         player.SetIsAlive(true);
     }
 
+    public void DeleteEnemyFromList(Enemy e)
+    {
+        //int index =enemyList.IndexOf(e);
+        enemyList.Remove(e);
+    }
+
     // COROUTINE DE FADE OUT / IN DE LA MORT
     private IEnumerator DeathCoroutine()
     {

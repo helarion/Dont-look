@@ -137,8 +137,12 @@ public class SpiderBehavior : Enemy
     // ARRETER LA CHASSE DU JOUEUR
     private void StopChase()
     {
-        if(!delete)Respawn();
-        else if(p.getIsAlive()) Destroy(gameObject);
+        if (!delete) Respawn();
+        else if (p.getIsAlive())
+        {
+            GameManager.instance.DeleteEnemyFromList(this);
+            Destroy(gameObject);
+        }
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON
