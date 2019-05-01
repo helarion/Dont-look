@@ -43,7 +43,7 @@ public class BipedeBehavior : Enemy
         }
         else
         {
-            print("regardé");
+            //print("regardé");
             isMoving = false;
             agent.isStopped = true;
         }
@@ -55,7 +55,7 @@ public class BipedeBehavior : Enemy
         if (b)
         {
             //AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
-            GameManager.instance.ShakeScreen(0.001f);
+            GameManager.instance.ShakeScreen(0.1f,shakeIntensity);
             isLooked = true;
             animator.SetBool("IsLooked", true);
         }

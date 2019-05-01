@@ -212,6 +212,11 @@ PrefabInstance:
       propertyPath: delayChase
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2436183961040824501, guid: 7a03abdb298463249a402d293eaa2cf6,
+        type: 3}
+      propertyPath: bonusSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 853257168, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
       propertyPath: m_TagString
       value: Killzone
@@ -236,8 +241,7 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.42734066
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1046466825050253075, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a03abdb298463249a402d293eaa2cf6, type: 3}
 --- !u!4 &2436183961381135696 stripped
 Transform:

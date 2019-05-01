@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    #region variables
     public Camera mainCamera;
     public PlayerController player;
 
     [HideInInspector]public static GameManager instance = null;
     private List<Enemy> enemyList;
+    [SerializeField] Enemy[] listE;
 
     [SerializeField] private float cameraSpeed=3;
 
@@ -36,13 +38,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] public AK.Wwise.Event HeartPlay;
     [SerializeField] public AK.Wwise.Event HeartStop;
 
-
     [HideInInspector] public Player controls; // The Rewired Player
 
     private Vector3 originalPos;
     private bool isPaused = false;
     private bool isTrackerEnabled = true;
+    private bool isPlayingHeart = false;
+    #endregion
 
+    #region startupdate
     private void Awake()
     {
         if (instance == null)
@@ -64,8 +68,7 @@ public class GameManager : MonoBehaviour
         originalPos = mainCamera.transform.localPosition;
         Cursor.visible = false;
         enemyList = new List<Enemy>();
-        Enemy[] temp = FindObjectsOfType<Enemy>();
-        foreach(Enemy e in temp)
+        foreach(Enemy e in listE)
         {
             enemyList.Add(e);
         }
@@ -84,7 +87,9 @@ public class GameManager : MonoBehaviour
         TP();
     }
 
-   // [ExecuteInEditMode]
+    #endregion
+
+    // [ExecuteInEditMode]
     private void TP()
     {
         int check = -1;
@@ -116,6 +121,91 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void UseCheckpoint(Checkpoint c)
+    {
+        player.transform.position = c.transform.position;
+        mainCamera.GetComponent<CameraHandler>().SetNewZ(c.newZ);
+    }
+
+    public void CheckTracker()
+    {
+        isTrackerEnabled = UIManager.instance.GetCheckTracker();
+    }
+
+    public void DeleteEnemyFromList(Enemy e)
+    {
+        //int index =enemyList.IndexOf(e);
+        enemyList.Remove(e);
+    }
+    // SAUVEGARDE LE NOUVEAU CHECKPOINT : POINT DE RESPAWN POUR LE JOUEUR 
+    public void SetNewCheckpoint(Checkpoint c)
+    {
+        if (c == lastCheckpoint) return;
+        lastCheckpoint = c;
+        //print("New Checkpoint activated");
+    }
+
+    public void PlayHeart()
+    {
+        if (isPlayingHeart) return;
+        StartCoroutine("HeartCoroutine");
+    }
+
+    private IEnumerator HeartCoroutine()
+    {
+        isPlayingHeart = true;
+        AkSoundEngine.PostEvent(HeartPlay.Id, player.gameObject);
+        yield return new WaitForSeconds(6);
+        AkSoundEngine.PostEvent(HeartStop.Id, player.gameObject);
+        isPlayingHeart = false;
+    }
+
+    #region death
+
+    // TUE LE JOUEUR
+    public void Death()
+    {
+        if (!player.getIsAlive()) return;
+        player.Reset();
+        player.SetIsAlive(false);
+        UIManager.instance.FadeDeath(true);
+        StartCoroutine("DeathCoroutine");
+    }
+
+    // COROUTINE DE FADE OUT / IN DE LA MORT
+    private IEnumerator DeathCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        while (UIManager.instance.isFading)
+            yield return new WaitForSeconds(0.1f);
+        RespawnEnemies();
+        RespawnPlayer();
+        UIManager.instance.FadeDeath(false);
+    }
+
+    // RESPAWN CHAQUE ENNEMI
+    private void RespawnEnemies()
+    {
+        print("test-1");
+        foreach (Enemy e in enemyList)
+        {
+            print("test0");
+            e.Respawn();
+        }
+        print("test6");
+    }
+
+    // RESPAWN LE JOUEUR
+    private void RespawnPlayer()
+    {
+        lastCheckpoint.Reset();
+        UseCheckpoint(lastCheckpoint);
+        player.SetIsAlive(true);
+    }
+
+    #endregion
+
+    #region shake
     // Shaking screen for duration set previously
     private void CheckShake()
     {
@@ -132,98 +222,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // RESPAWN CHAQUE ENNEMI
-    private void RespawnEnemies()
-    {
-        foreach(Enemy e in enemyList)
-        {
-            e.Respawn();
-        }
-    }
-
-    // TUE LE JOUEUR
-    public void Death()
-    {
-        if (!player.getIsAlive()) return;
-        player.Reset();
-        player.SetIsAlive(false);
-        UIManager.instance.FadeDeath(true);
-        StartCoroutine("DeathCoroutine");
-    }
-
-    public void UseCheckpoint(Checkpoint c)
-    {
-        player.transform.position = c.transform.position;
-        mainCamera.GetComponent<CameraHandler>().SetNewZ(c.newZ);
-    }
-
-    // RESPAWN LE JOUEUR
-    private void RespawnPlayer()
-    {
-        lastCheckpoint.Reset();
-        UseCheckpoint(lastCheckpoint);
-        player.SetIsAlive(true);
-    }
-
-    public void DeleteEnemyFromList(Enemy e)
-    {
-        //int index =enemyList.IndexOf(e);
-        enemyList.Remove(e);
-    }
-
-    // COROUTINE DE FADE OUT / IN DE LA MORT
-    private IEnumerator DeathCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-        while (UIManager.instance.isFading)
-            yield return new WaitForSeconds(0.1f);
-        RespawnEnemies();
-        RespawnPlayer();
-        UIManager.instance.FadeDeath(false);
-    }
-
-    // SAUVEGARDE LE NOUVEAU CHECKPOINT : POINT DE RESPAWN POUR LE JOUEUR 
-    public void SetNewCheckpoint(Checkpoint c)
-    {
-        if (c == lastCheckpoint) return;
-        lastCheckpoint = c;
-        //print("New Checkpoint activated");
-    }
-
     // SHAKESCREEN POUR LA DUREE ENTREE
-    public void ShakeScreen(float duration)
+    public void ShakeScreen(float duration, float intensity)
     {
         shakeDuration = duration;
+        shakeAmount = intensity;
     }
 
-    // SHAKESCREEN A VALEUR PROGRESSIVE /// PAS ENCORE FONCTIONNEL
-    public void ProgressiveShake(float duration)
-    {
-        float savedAmount = shakeAmount;
-        shakeAmount = 0;
-        ShakeScreen(duration);
-        StartCoroutine("ShakeCoroutine", duration);
-        shakeAmount = savedAmount;
-    }
+    #endregion
 
-    // SHAKESCREEN PROGRESSIF COROUTINE /// PAS ENCORE FONCTIONNEL
-    private IEnumerator ShakeCoroutine(float maxTime)
-    {
-        float time = 0;
-        float update = maxValue *(0.01f*maxTime);
-        while (time<maxTime)
-        {
-            if (shakeAmount < maxValue) shakeAmount += update;
-            yield return new WaitForSeconds(0.01f);
-        }
-        yield return null;
-    }
-
-    public void CheckTracker()
-    {
-        isTrackerEnabled = UIManager.instance.GetCheckTracker();
-    }
-
+    #region camera
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
@@ -240,6 +248,9 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
     }
 
+    #endregion
+
+    #region pause
     public void PauseGame()
     {
         Cursor.visible = true;
@@ -257,6 +268,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.pausePanel.SetActive(false);
         //UIManager.instance.FadePause(false);
     }
+    #endregion
 
     #region getter-setter
 
@@ -273,16 +285,6 @@ public class GameManager : MonoBehaviour
     public LayerMask GetClimbLayer()
     {
         return climbLayer;
-    }
-
-    public float GetShakeIntensity()
-    {
-        return shakeAmount;
-    }
-
-    public void SetShakeIntensity(float newIntensity)
-    {
-        shakeAmount = newIntensity;
     }
 
     public bool GetIsTrackerEnabled()

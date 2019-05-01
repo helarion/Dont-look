@@ -19,7 +19,6 @@ public class SpiderBehavior : Enemy
     private bool canSeePlayer = false;
 
     private bool chaseCoroutine = false;
-    private bool isMoving = false;
 
     NavMeshLink link;
 
@@ -34,14 +33,11 @@ public class SpiderBehavior : Enemy
     private void Update()
     {
         VelocityCount();
+        LightDetection();
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
-        if(isChasing)
+        if (isChasing)
         {
             ChaseBehavior();
-        }
-        else
-        {
-            LightDetection();
         }
 
         DebugPath(); 
@@ -83,6 +79,7 @@ public class SpiderBehavior : Enemy
         else
         {
             StopCoroutine("CountChase");
+            agent.speed = moveSpeed;
         }
     }
 
@@ -109,8 +106,9 @@ public class SpiderBehavior : Enemy
     {
         while(countChase<delayChase)
         {
-            yield return new WaitForSeconds(0.5f);
-            countChase+=0.5f;
+            agent.speed = moveSpeed - bonusSpeed;
+            countChase += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
             //print(countChase);
         }
         StopChase();
@@ -149,16 +147,16 @@ public class SpiderBehavior : Enemy
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
     {
-        agent.speed = moveSpeed;
         if (b)
         {
             //AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
-            GameManager.instance.ShakeScreen(0.1f);
+            GameManager.instance.ShakeScreen(0.1f,shakeIntensity);
             agent.speed = moveSpeed+bonusSpeed;
             if (!isLooked) StartCoroutine("CountLook");
         }
         else
         {
+            if (isChasing) agent.speed = moveSpeed;
             StopCoroutine("CountLook");
             isLooked = false;
             //countLook = 0; // A UTILISER SI ON VEUT QUE LE TEMPS DE SPOT SE RESET

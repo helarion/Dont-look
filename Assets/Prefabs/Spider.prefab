@@ -107,9 +107,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 4
   isChasing: 0
+  delete: 0
+  shakeIntensity: 0.1
   spawnZones:
   - {fileID: 0}
-  WwiseChase:
+  WwiseChasePlay:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  WwiseChaseStop:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
@@ -120,13 +126,16 @@ MonoBehaviour:
   agent: {fileID: 0}
   animator: {fileID: 0}
   velocity: 0
+  _transform: {fileID: 0}
+  isLooked: 1
+  isMoving: 0
+  p: {fileID: 0}
   bonusSpeed: 1
   delaySpot: 1
   delayChase: 2
   lengthDetection: 10
   clickToSetDestination: 0
   countLook: 0
-  delete: 0
 --- !u!195 &2436183961040824494
 NavMeshAgent:
   m_ObjectHideFlags: 0

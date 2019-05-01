@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     [Header("Chase Variables")]
     [SerializeField] public bool isChasing = false;
     [SerializeField] private bool delete = false;
+    [SerializeField] public float shakeIntensity;
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
@@ -40,7 +41,6 @@ public class Enemy : MonoBehaviour
         velocity = ((transform.position - lastPosition).magnitude * 10) * moveSpeed;
         lastPosition = transform.position;
         animator.SetFloat("Velocity", velocity);
-        //print(velocity);
     }
 
     private void Start()
@@ -63,24 +63,30 @@ public class Enemy : MonoBehaviour
     {
         //AkSoundEngine.PostEvent(WwiseChasePlay.Id,gameObject);
         AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay.Id, gameObject);
+        AkSoundEngine.PostEvent(GameManager.instance.HeartPlay.Id, GameManager.instance.player.gameObject);
         agent.isStopped = false;
         isChasing = true;
         isMoving = true;
         animator.SetBool("IsMoving", isMoving);
     }
 
-    public virtual void StopChase()
+    public void StopChase()
     {
-        if (!isChasing) return;
-        isMoving = false;
-        animator.SetBool("IsMoving", isMoving);
-        //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
-        AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop.Id, gameObject);
-        if (!delete) Respawn();
-        else if (p.getIsAlive())
+        if (isChasing)
         {
-            GameManager.instance.DeleteEnemyFromList(this);
-            Destroy(gameObject);
+            isMoving = false;
+            isChasing = false;
+            animator.SetBool("IsMoving", isMoving);
+            //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop.Id, gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.HeartStop.Id, GameManager.instance.player.gameObject);
+            //GameManager.instance.PlayHeart();
+            if (!delete) Respawn();
+            else if (p.getIsAlive())
+            {
+                GameManager.instance.DeleteEnemyFromList(this);
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -123,17 +129,19 @@ public class Enemy : MonoBehaviour
 
     public virtual void Respawn()
     {
+        agent.speed = 25;
         StopChase();
         Vector3 pos = RandomSpawn();
-        _transform.position = pos;
         MoveTo(pos);
     }
+
 
     public void MoveTo(Vector3 newPos)
     {
         if(agent.hasPath) agent.ResetPath();
         if (agent.isOnNavMesh)
         {
+            agent.isStopped = false;
             agent.SetDestination(newPos);
             agent.isStopped = false;
         }

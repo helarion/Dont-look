@@ -407,6 +407,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsRunning", false);
         animator.SetBool("Climb", false);
         animator.SetBool("IsFalling", false);
+        animator.SetBool("HasLanded", false);
         rb.useGravity = true;
         rb.isKinematic = false;
         StoppedHMove = false;
@@ -532,7 +533,7 @@ public class PlayerController : MonoBehaviour
         {
             isMoving = true;
             if (isClimbingLadder) lMovement *= 0;// ladderSpeed; //moveSpeed = ladderSpeed;
-            else if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)
+            else if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0 && inverse==1)
             {
                 animator.SetBool("IsRunning", true);
                 moveSpeed = runSpeed;

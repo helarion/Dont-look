@@ -103,9 +103,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   isChasing: 0
+  delete: 0
+  shakeIntensity: 0.05
   spawnZones:
   - {fileID: 0}
-  WwiseChase:
+  WwiseChasePlay:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  WwiseChaseStop:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
@@ -117,6 +123,9 @@ MonoBehaviour:
   animator: {fileID: 0}
   velocity: 0
   _transform: {fileID: 0}
+  isLooked: 1
+  isMoving: 0
+  p: {fileID: 0}
 --- !u!65 &1761496436471998870
 BoxCollider:
   m_ObjectHideFlags: 0

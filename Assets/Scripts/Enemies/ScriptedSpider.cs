@@ -8,18 +8,15 @@ public class ScriptedSpider : Enemy
     [SerializeField] Transform pos1;
     [SerializeField] Transform pos2;
     [SerializeField] ScriptLamp lamp;
-    [SerializeField] float shakeIntensity;
     [SerializeField] BoxCollider ladderCol;
     [SerializeField] int nbAttack = 2;
 
     private bool objective1 = false;
     private bool objective2 = false;
-    float save;
 
     private void Start()
     {
         Initialize();
-        save = GameManager.instance.GetShakeIntensity();
     }
 
     private void Update()
@@ -41,14 +38,14 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
-            GameManager.instance.SetShakeIntensity(shakeIntensity);
-            GameManager.instance.ShakeScreen(0.2f);
+            GameManager.instance.ShakeScreen(0.2f,shakeIntensity);
             lamp.Swing();
         }
     }
 
     public void Script()
     {
+        agent.speed = moveSpeed;
         StartChase();
         StartCoroutine("ScriptRoutine");
     }
@@ -70,11 +67,9 @@ public class ScriptedSpider : Enemy
                     MoveTo(pos1.position);
                 }
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.5f);
             while (agent.remainingDistance >0)
             {
-                //print("remaining distance:"+agent.remainingDistance);
-                //print("Step" + step);
                 yield return new WaitForSeconds(0.1f);
             }
             step++;
@@ -82,7 +77,6 @@ public class ScriptedSpider : Enemy
         }
         ladderCol.isTrigger = true;
         StopChase();
-        GameManager.instance.SetShakeIntensity(save);
         Destroy(gameObject);        
         yield return null;
     }
