@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float stickSpeed = 3;
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlight;
-    [SerializeField] private Transform cameraLight;
+   // [SerializeField] private Transform cameraLight;
     [SerializeField] private Light pointLight;
     [SerializeField] public float rangeDim; 
     public bool lightOn = true;
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
         lt = flashlight.GetComponent<Light>();
-        camLt = cameraLight.GetComponent<Light>();
+        //camLt = cameraLight.GetComponent<Light>();
         lt.type = LightType.Spot;
         ClosedEyes(false);
         Cursor.visible = false;
@@ -754,7 +754,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Climb
-
 
     private void ClimbCheck()
     {
