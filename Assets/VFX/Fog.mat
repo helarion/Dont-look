@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Fog
-  m_Shader: {fileID: 209, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 205, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _ALBEDOCONTRIBUTION _AXF_BRDF_TYPE_SVBRDF _BLENDMODE_ALPHA _BLENDMODE_NONE
     _BLEND_ADDITIVE _COLORMAP _DISABLE_DECALS _DISABLE_SSR _MATERIAL_FEATURE_TRANSMISSION
     _NORMALMAP_TANGENT_SPACE _NORMALMAP_TANGENT_SPACE0 _NORMALMAP_TANGENT_SPACE1 _NORMALMAP_TANGENT_SPACE2
@@ -629,7 +629,7 @@ Material:
     - _InheritBaseNormal2: 0
     - _InheritBaseNormal3: 0
     - _InitialBend: 1
-    - _InvFade: 0.01
+    - _InvFade: 3
     - _InvTilingScale: 1
     - _InvTilingScale0: 1
     - _InvTilingScale1: 1
@@ -843,7 +843,7 @@ Material:
     - _ThicknessRemap2: {r: 0, g: 1, b: 0, a: 0}
     - _ThicknessRemap3: {r: 0, g: 1, b: 0, a: 0}
     - _Tint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-    - _TintColor: {r: 0.22641495, g: 0.22641495, b: 0.31372532, a: 0.11764706}
+    - _TintColor: {r: 0.22641489, g: 0.22641489, b: 0.31372526, a: 0}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVDetailsMappingMask0: {r: 1, g: 0, b: 0, a: 0}

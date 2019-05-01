@@ -753,6 +753,84 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Climb
+
+
+    private void ClimbCheck()
+    {
+        Vector3 climbDirection = Vector3.zero;
+        Vector3 angle = Vector3.zero;
+
+        if (hMove > 0)
+        {
+            climbDirection = Vector3.right;
+            angle = new Vector3(0, 90, 0);
+        }
+        else if (hMove < 0)
+        {
+            climbDirection = Vector3.left;
+            angle = new Vector3(0, -90, 0);
+        }
+        else if (vMove > 0)
+        {
+            climbDirection = Vector3.forward;
+            angle = new Vector3(0, 0, 0);
+        }
+        else if (vMove < 0)
+        {
+            climbDirection = Vector3.back;
+            angle = new Vector3(0, -180, 0);
+        }
+
+        if (isJumping)
+        {
+            if (jumpDirection == 0)
+            {
+                climbDirection = Vector3.left;
+                angle = new Vector3(0, -90, 0);
+            }
+            else if (jumpDirection == 1)
+            {
+                climbDirection = Vector3.right;
+                angle = new Vector3(0, 90, 0);
+            }
+        }
+
+        RaycastHit hitInfo;
+        if (Physics.Raycast(raycastClimb.position, climbDirection, out hitInfo, maxClimbLength, GameManager.instance.GetClimbLayer()))
+        {
+            if (hitInfo.collider.bounds.max.y - cl.bounds.max.y < maxClimbHeight)
+            {
+                modelTransform.localEulerAngles = angle;
+                isClimbing = true;
+                rb.isKinematic = true;
+                animator.SetBool("IsFalling", false);
+                animator.SetBool("Climb", true);
+            }
+        }
+    }
+
+    public void StopClimb()
+    {
+        Vector3 newPos = hipPosition.position;
+        newPos.y -= 0.3f;
+        transform.position = newPos;
+        modelTransform.localPosition = localModelPosition;
+        lastPosition = transform.position;
+
+        rb.isKinematic = false;
+        //isAlive = true;
+        isClimbing = false;
+        isGrounded = true;
+        animator.SetBool("Climb", false);
+        animator.SetBool("IsMoving", false);
+        velocity = 0;
+        animator.SetBool("IsFalling", false);
+        animator.SetBool("HasLanded", false);
+    }
+
+    #endregion
+
     #region Jump
     private void GroundedCheck()
     {
@@ -844,105 +922,6 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Jump");
         animator.SetBool("IsJumping",true);
 
-    }
-
-    private void ClimbCheck()
-    {
-        Vector3 climbDirection = Vector3.zero;
-        /*
-        if (currentLookDirection == LookDirection.Left)
-        {
-            climbDirection = Vector3.left;
-        }
-        else if (currentLookDirection == LookDirection.Right)
-        {
-            climbDirection = Vector3.right;
-        }
-        else if (currentLookDirection == LookDirection.Front)
-        {
-            climbDirection = Vector3.forward;
-        }
-        else
-        {
-            climbDirection = Vector3.back;
-        }
-        */
-
-        Vector3 angle=Vector3.zero;
-
-        if (hMove > 0)
-        {
-            climbDirection = Vector3.right;
-            angle = new Vector3(0, 90, 0);
-        }
-        else if (hMove < 0)
-        {
-            climbDirection = Vector3.left;
-            angle = new Vector3(0, -90, 0);
-        }
-        else if (vMove > 0)
-        {
-            climbDirection = Vector3.forward;
-            angle = new Vector3(0, 0, 0);
-        }
-        else if (vMove < 0)
-        {
-            climbDirection = Vector3.back;
-            angle = new Vector3(0, -180, 0);
-        }
-
-        if(isJumping)
-        {
-            if (jumpDirection == 0)
-            {
-                climbDirection = Vector3.left;
-                angle = new Vector3(0, -90, 0);
-            }
-            else if (jumpDirection == 1)
-            {
-                climbDirection = Vector3.right;
-                angle = new Vector3(0, 90, 0);
-            }
-        }
-
-        RaycastHit hitInfo;
-        if(Physics.Raycast(raycastClimb.position, climbDirection, out hitInfo, maxClimbLength, GameManager.instance.GetClimbLayer()))
-        {
-            if (hitInfo.collider.bounds.max.y - cl.bounds.max.y < maxClimbHeight)
-            {
-                modelTransform.localEulerAngles = angle;
-                //modelTransform.localEulerAngles = climbDirection;
-                /*Vector3 newPosition = transform.position;// + Vector3.ClampMagnitude(hitInfo.transform.position - transform.position, hitInfo.collider.bounds.size.x / 2);
-                newPosition.y = hitInfo.collider.bounds.max.y + cl.bounds.center.y - cl.bounds.min.y;
-                newPosition.y += 5;
-                Vector3[] positions = new Vector3[2];
-                positions[0] = transform.position;
-                positions[1] = newPosition;
-                climbPosition = newPosition;
-                isAlive = false;*/
-                isClimbing = true;
-                rb.isKinematic = true;
-                animator.SetBool("IsFalling", false);
-                animator.SetBool("Climb", true);
-            }
-        }
-    }
-
-    public void StopClimb()
-    {
-        Vector3 newPos = hipPosition.position;
-        newPos.y -= 0.3f;
-        transform.position = newPos;
-        modelTransform.localPosition = localModelPosition;
-        lastPosition = transform.position;
-
-        rb.isKinematic = false;
-        //isAlive = true;
-        isClimbing = false;
-        animator.SetBool("Climb", false);
-        velocity = 0;
-        animator.SetBool("IsFalling", false);
-        animator.SetBool("HasLanded", false);
     }
 
     public void ResetVelocity()
