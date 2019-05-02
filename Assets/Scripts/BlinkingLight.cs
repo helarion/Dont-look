@@ -11,13 +11,13 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] private float blinkSpeed = 20;
     [SerializeField] private float maxIntensity = 200;
     [SerializeField] private float wait = 2;
-    [SerializeField] private bool isBlinking = true;
     [SerializeField] private Color startColor;
     [SerializeField] private Color endColor;
     private Color FinishedColor;
     private float count = 0;
     private float countTime = 0;
-    [SerializeField] private bool isWaiting = false;
+    private bool isWaiting = false;
+    private bool isBlinking = true;
 
     public void StartBlink()
     {
@@ -42,6 +42,8 @@ public class BlinkingLight : MonoBehaviour
         pointLt.intensity = 0;
         lt.intensity = startingIntensity;
         pointLt.color = startColor;
+        isWaiting = false;
+        isBlinking = true;
     }
 
     private IEnumerator DarkWait()

@@ -14,6 +14,9 @@ public class SpatialRoom : MonoBehaviour
     [SerializeField] Collider roomCollider;
     [SerializeField] public List<SpatialLine> spatialLines;
     [HideInInspector] public List<SpatialLine> _spatialLines;
+    [SerializeField] public float newZ = -5.5f;
+    [SerializeField] public float newLightRange = 16;
+    [SerializeField] public float newOffset = 2;
 
 
     // Start is called before the first frame update

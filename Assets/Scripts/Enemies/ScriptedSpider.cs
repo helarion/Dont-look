@@ -10,6 +10,8 @@ public class ScriptedSpider : Enemy
     [SerializeField] ScriptLamp lamp;
     [SerializeField] BoxCollider ladderCol;
     [SerializeField] int nbAttack = 2;
+    [SerializeField] float scriptIntensity;
+    [SerializeField] private bool hasPlayedLook = false;
 
     private bool objective1 = false;
     private bool objective2 = false;
@@ -22,6 +24,7 @@ public class ScriptedSpider : Enemy
     private void Update()
     {
         VelocityCount();
+        LightDetection();
         if (isChasing)
         {
             ChaseBehavior();
@@ -38,7 +41,7 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
-            GameManager.instance.ShakeScreen(0.2f,shakeIntensity);
+            GameManager.instance.ShakeScreen(0.2f,scriptIntensity);
             lamp.Swing();
         }
     }
@@ -77,7 +80,22 @@ public class ScriptedSpider : Enemy
         }
         ladderCol.isTrigger = true;
         StopChase();
+        GameManager.instance.DeleteEnemyFromList(this);
         Destroy(gameObject);        
         yield return null;
+    }
+
+    // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
+    public override void IsLit(bool b)
+    {
+        if (b)
+        {
+            if (!hasPlayedLook)
+            {
+                AkSoundEngine.PostEvent(WwiseLook, gameObject);
+                hasPlayedLook = true;
+            }
+            GameManager.instance.ShakeScreen(0.1f, shakeIntensity);
+        }
     }
 }

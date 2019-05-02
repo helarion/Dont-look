@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlight;
    // [SerializeField] private Transform cameraLight;
-    [SerializeField] private Light pointLight;
+   // [SerializeField] private Light pointLight;
     [SerializeField] public float rangeDim; 
     public bool lightOn = true;
 
@@ -89,6 +89,7 @@ public class PlayerController : MonoBehaviour
     private bool walkRoutine = false;
     private bool StoppedHMove = false;
     private bool stopMove = false;
+    private bool isFalling = false;
 
     private CameraBlock currentCameraBlock = null;
     SpatialRoom currentSpatialRoom = null;
@@ -151,7 +152,7 @@ public class PlayerController : MonoBehaviour
 
         if (isClimbingLadder) return;
         ClimbCheck();
-        if (isJumping || stopMove) return;
+        if (isJumping || stopMove || isFalling) return;
         Move();
 
         BodyRotation();
@@ -179,8 +180,9 @@ public class PlayerController : MonoBehaviour
         if (cameraBlock != null)
         {
             currentCameraBlock = cameraBlock;
-            GameManager.instance.mainCamera.GetComponent<CameraHandler>().SetNewZ(currentCameraBlock.newZ);
-            if (currentCameraBlock.ChangesLightRange) lt.range = currentCameraBlock.newLightRange;
+            GameManager.instance.camHandler.SetNewZ(currentCameraBlock.room.newZ);
+            GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
+            SetLightRange(currentCameraBlock.room.newLightRange);
             return;
         }
 
@@ -238,6 +240,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(other.CompareTag("Finish"))
         {
+            AkSoundEngine.PostEvent("Stop_Random_Rythme_Bass", GameManager.instance.gameObject);
             UIManager.instance.FadeInEnd();
         }
         else if (other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
@@ -386,7 +389,7 @@ public class PlayerController : MonoBehaviour
     {
         //camLt.enabled = !isClosed;
         lt.enabled = !isClosed;
-        pointLight.enabled = !isClosed;
+        //pointLight.enabled = !isClosed;
         lightOn = !isClosed;
     }
 
@@ -795,6 +798,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //print(climbDirection);
+
         RaycastHit hitInfo;
         if (Physics.Raycast(raycastClimb.position, climbDirection, out hitInfo, maxClimbLength, GameManager.instance.GetClimbLayer()))
         {
@@ -833,7 +838,7 @@ public class PlayerController : MonoBehaviour
     #region Jump
     private void GroundedCheck()
     {
-        if (!isGrounded) isJumping = true;
+        if (!isGrounded) isFalling = true;
         isGrounded = false;
         /*if (ignoreIsGroundedOneTime)
         {
@@ -853,10 +858,11 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        if (!isJumping) return;
+        if (!isFalling) return;
         if (isGrounded)
         {
             isJumping = false;
+            isFalling = false;
             stopMove = false;
             animator.SetBool("IsJumping", false);
             animator.SetBool("IsFalling", false);
@@ -975,6 +981,11 @@ public class PlayerController : MonoBehaviour
     public Light getLight()
     {
         return lt;
+    }
+
+    public void SetLightRange(float newRange)
+    {
+        lt.range = newRange;
     }
 
     public void SetIsClimbingLadder(bool b)

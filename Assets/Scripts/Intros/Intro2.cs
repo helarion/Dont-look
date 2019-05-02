@@ -16,8 +16,9 @@ public class Intro2 : MonoBehaviour
     {
         if (scene == -1)
         {
-            Destroy(GameManager.instance.gameObject);
-            Destroy(UIManager.instance.gameObject);
+            AkSoundEngine.PostEvent("Play_Random_Track2", gameObject);
+            if(GameManager.instance!=null) Destroy(GameManager.instance.gameObject);
+            if(UIManager.instance!=null) Destroy(UIManager.instance.gameObject);
         }
         StartCoroutine("FadeOutCoroutine");
     }
@@ -65,5 +66,6 @@ public class Intro2 : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         if(scene!=-1)SceneManager.LoadScene(scene);
+        Application.Quit();
     }
 }

@@ -127,4 +127,9 @@ public class CameraHandler : MonoBehaviour
     {
         zStartPosition = newZ;
     }
+
+    public void SetNewOffset(float newOffset)
+    {
+        offset = newOffset;
+    }
 }

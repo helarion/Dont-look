@@ -12,12 +12,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] public bool isChasing = false;
     [SerializeField] private bool delete = false;
     [SerializeField] public float shakeIntensity;
+    private bool hasPlayedChase = false;
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
-    [SerializeField] private AK.Wwise.Event WwiseChasePlay;
-    [SerializeField] private AK.Wwise.Event WwiseChaseStop;
-    [SerializeField] public AK.Wwise.Event WwiseLook;
+    [SerializeField] private string WwiseChasePlay;
+    [SerializeField] private string WwiseChaseStop;
+    [SerializeField] public string WwiseLook;
 
 
     [HideInInspector] public NavMeshAgent agent;
@@ -62,8 +63,12 @@ public class Enemy : MonoBehaviour
     public virtual void StartChase()
     {
         //AkSoundEngine.PostEvent(WwiseChasePlay.Id,gameObject);
-        AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay.Id, gameObject);
-        AkSoundEngine.PostEvent(GameManager.instance.HeartPlay.Id, GameManager.instance.player.gameObject);
+        if(!hasPlayedChase)
+        {
+            hasPlayedChase = true;
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, GameManager.instance.gameObject);
+        }
+        //AkSoundEngine.PostEvent(GameManager.instance.HeartPlay, GameManager.instance.player.gameObject);
         agent.isStopped = false;
         isChasing = true;
         isMoving = true;
@@ -78,15 +83,16 @@ public class Enemy : MonoBehaviour
             isChasing = false;
             animator.SetBool("IsMoving", isMoving);
             //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop.Id, gameObject);
-            AkSoundEngine.PostEvent(GameManager.instance.HeartStop.Id, GameManager.instance.player.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
+            //AkSoundEngine.PostEvent(GameManager.instance.HeartStop, GameManager.instance.player.gameObject);
             //GameManager.instance.PlayHeart();
             if (!delete) Respawn();
-            else if (p.getIsAlive())
+            else if (p.GetIsHidden())
             {
                 GameManager.instance.DeleteEnemyFromList(this);
                 Destroy(gameObject);
             }
+            else Respawn();
         }
     }
 
@@ -129,6 +135,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Respawn()
     {
+        hasPlayedChase = false;
         agent.speed = 25;
         StopChase();
         Vector3 pos = RandomSpawn();
