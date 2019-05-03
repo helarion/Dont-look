@@ -26,7 +26,7 @@ public class CameraHandler : MonoBehaviour
     {
         if (!target || GameManager.instance.GetIsPaused()) return;
 
-        Vector3 lookAtPos = GameManager.instance.player.GetLookAt();
+        Vector3 lookAtPos = player.GetLookAt();
 
         Vector3 newPosition = target.position + Vector3.ClampMagnitude(lookAtPos - target.position, offset);
         //print(newPosition);
@@ -36,11 +36,11 @@ public class CameraHandler : MonoBehaviour
         }
         newPosition.z = zStartPosition;
         
-        float cameraYawAngle = GameManager.instance.player.getCursorPosNormalized().x * cameraYawAngleMultiplier;
+        float cameraYawAngle = player.getCursorPosNormalized().x * cameraYawAngleMultiplier;
 
         Quaternion newRotate = Quaternion.Euler(0, cameraYawAngle, 0);
 
-        CameraBlock currentCameraBlock = GameManager.instance.player.getCameraBlock();
+        CameraBlock currentCameraBlock = player.getCameraBlock();
         if (currentCameraBlock != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(lookAtPos - transform.position, Vector3.up);
