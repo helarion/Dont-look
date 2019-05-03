@@ -435,6 +435,16 @@ PrefabInstance:
       propertyPath: room
       value: 
       objectReference: {fileID: 619055056}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: sRoom
+      value: 
+      objectReference: {fileID: 619055056}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: aRoom
+      value: 
+      objectReference: {fileID: 1740762371}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 899e4a2024c9d5a4e900a1ec63b20326, type: 3}
 --- !u!4 &7269624 stripped
@@ -12855,7 +12865,7 @@ PrefabInstance:
     - target: {fileID: 7728247864968240410, guid: 44b65c7ca1ee2804c9c7c41520c72556,
         type: 3}
       propertyPath: m_Name
-      value: AudioRoom 8
+      value: AudioRoom 9
       objectReference: {fileID: 0}
     - target: {fileID: 7728247864968240413, guid: 44b65c7ca1ee2804c9c7c41520c72556,
         type: 3}
@@ -14678,6 +14688,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d226d878fce9a6a42a98d8e82506104e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &799958980 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7728247864968240412, guid: 44b65c7ca1ee2804c9c7c41520c72556,
+    type: 3}
+  m_PrefabInstance: {fileID: 1494721365}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18fd846c9ace6b439deed77d8df41d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &805191030
@@ -17768,6 +17790,18 @@ Transform:
   m_Father: {fileID: 563988546}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &989226924 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7728247864968240412, guid: 44b65c7ca1ee2804c9c7c41520c72556,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714913406}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18fd846c9ace6b439deed77d8df41d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &989898793
 GameObject:
   m_ObjectHideFlags: 0
@@ -20221,6 +20255,16 @@ PrefabInstance:
       propertyPath: room
       value: 
       objectReference: {fileID: 1455577144}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: sRoom
+      value: 
+      objectReference: {fileID: 1455577144}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: aRoom
+      value: 
+      objectReference: {fileID: 1520070387}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 899e4a2024c9d5a4e900a1ec63b20326, type: 3}
 --- !u!4 &1108866594 stripped
@@ -25216,6 +25260,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1346722590}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1347885891 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7728247864968240412, guid: 44b65c7ca1ee2804c9c7c41520c72556,
+    type: 3}
+  m_PrefabInstance: {fileID: 683650056}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18fd846c9ace6b439deed77d8df41d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1351864787
 GameObject:
   m_ObjectHideFlags: 0
@@ -26868,6 +26924,16 @@ PrefabInstance:
       propertyPath: room
       value: 
       objectReference: {fileID: 113121601}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: sRoom
+      value: 
+      objectReference: {fileID: 113121601}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: aRoom
+      value: 
+      objectReference: {fileID: 799958980}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 899e4a2024c9d5a4e900a1ec63b20326, type: 3}
 --- !u!4 &1465298197 stripped
@@ -32502,6 +32568,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1739855316}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1740762371 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7728247864968240412, guid: 44b65c7ca1ee2804c9c7c41520c72556,
+    type: 3}
+  m_PrefabInstance: {fileID: 755103204}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18fd846c9ace6b439deed77d8df41d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1748150814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36471,6 +36549,16 @@ PrefabInstance:
       propertyPath: room
       value: 
       objectReference: {fileID: 1040623624}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: sRoom
+      value: 
+      objectReference: {fileID: 1040623624}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: aRoom
+      value: 
+      objectReference: {fileID: 1347885891}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 899e4a2024c9d5a4e900a1ec63b20326, type: 3}
 --- !u!4 &1972561967 stripped
@@ -40634,6 +40722,11 @@ PrefabInstance:
       propertyPath: startRoom
       value: 
       objectReference: {fileID: 1520070387}
+    - target: {fileID: 3695006473054658848, guid: 1b329c8af72d9f240b1d3880b7e3730f,
+        type: 3}
+      propertyPath: nbAudioRoomId
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3695006473054658849, guid: 1b329c8af72d9f240b1d3880b7e3730f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -40901,6 +40994,16 @@ PrefabInstance:
       propertyPath: room
       value: 
       objectReference: {fileID: 2102374862}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: sRoom
+      value: 
+      objectReference: {fileID: 2102374862}
+    - target: {fileID: 4709919825960942455, guid: 899e4a2024c9d5a4e900a1ec63b20326,
+        type: 3}
+      propertyPath: aRoom
+      value: 
+      objectReference: {fileID: 989226924}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 899e4a2024c9d5a4e900a1ec63b20326, type: 3}
 --- !u!114 &5067022611308873245 stripped

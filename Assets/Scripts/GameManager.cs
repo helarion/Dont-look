@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
     [SerializeField] public AudioRoom startRoom;
+    [SerializeField] int nbAudioRoomId;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
@@ -65,8 +66,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         AkSoundEngine.PostEvent(startRoom.playEvent, GameManager.instance.gameObject);
-        AkSoundEngine.SetRTPCValue("position_relative_volume_0", 50);
-        AkSoundEngine.SetRTPCValue("position_gd_0", 50);
+        PlayCurrentRoom(startRoom);
         CheckTracker();
         camHandler = mainCamera.GetComponent<CameraHandler>();
         controls = ReInput.players.GetPlayer(0);
@@ -94,6 +94,26 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    #region Checkpoints
+
+    public void UseCheckpoint(Checkpoint c)
+    {
+        player.transform.position = c.transform.position;
+        camHandler.SetNewZ(c.sRoom.newZ);
+        camHandler.SetNewOffset(c.sRoom.newOffset);
+        player.SetLightRange(c.sRoom.newLightRange);
+        ResetAudioRooms();
+        PlayCurrentRoom(c.aRoom);
+    }
+
+    // SAUVEGARDE LE NOUVEAU CHECKPOINT : POINT DE RESPAWN POUR LE JOUEUR 
+    public void SetNewCheckpoint(Checkpoint c)
+    {
+        if (c == lastCheckpoint) return;
+        lastCheckpoint = c;
+        //print("New Checkpoint activated");
+    }
 
     // [ExecuteInEditMode]
     private void TP()
@@ -127,31 +147,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UseCheckpoint(Checkpoint c)
+    #endregion
+
+    #region audio
+    private void PlayCurrentRoom(AudioRoom ar)
     {
-        player.transform.position = c.transform.position;
-        camHandler.SetNewZ(c.room.newZ);
-        camHandler.SetNewOffset(c.room.newOffset);
-        player.SetLightRange(c.room.newLightRange);
-        
+        ar.PlayEvent();
+        AkSoundEngine.SetRTPCValue("position_relative_volume_" + ar.id, 50);
+        AkSoundEngine.SetRTPCValue("position_gd_" + ar.id, 50);
     }
 
-    public void CheckTracker()
+    private void ResetAudioRooms()
     {
-        isTrackerEnabled = UIManager.instance.GetCheckTracker();
-    }
-
-    public void DeleteEnemyFromList(Enemy e)
-    {
-        //int index =enemyList.IndexOf(e);
-        enemyList.Remove(e);
-    }
-    // SAUVEGARDE LE NOUVEAU CHECKPOINT : POINT DE RESPAWN POUR LE JOUEUR 
-    public void SetNewCheckpoint(Checkpoint c)
-    {
-        if (c == lastCheckpoint) return;
-        lastCheckpoint = c;
-        //print("New Checkpoint activated");
+        for (int i = 0; i < nbAudioRoomId; i++)
+        {
+            AkSoundEngine.SetRTPCValue("position_relative_volume_" + i, 0);
+            AkSoundEngine.SetRTPCValue("position_gd_" + i, 0);
+        }
     }
 
     public void PlayHeart()
@@ -167,6 +179,19 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(6);
         AkSoundEngine.PostEvent(HeartStop, player.gameObject);
         isPlayingHeart = false;
+    }
+
+    #endregion
+
+    public void CheckTracker()
+    {
+        isTrackerEnabled = UIManager.instance.GetCheckTracker();
+    }
+
+    public void DeleteEnemyFromList(Enemy e)
+    {
+        //int index =enemyList.IndexOf(e);
+        enemyList.Remove(e);
     }
 
     #region death

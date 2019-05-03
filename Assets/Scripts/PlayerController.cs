@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region StartUpdateOn
+    #region StartUpdate
 
     private void Start()
     {
@@ -182,6 +182,10 @@ public class PlayerController : MonoBehaviour
         }
         Gizmos.color = Color.white;
     }
+
+    #endregion
+
+    #region TriggersCollision
 
     private void OnTriggerEnter(Collider other)
     {

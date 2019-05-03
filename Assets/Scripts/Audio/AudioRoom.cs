@@ -9,7 +9,7 @@ public class AudioRoom : MonoBehaviour
     [SerializeField] AudioSas[] entries;
     [SerializeField] public string playEvent;
     [SerializeField] float postOffset = 1;
-    [SerializeField] int id;
+    [SerializeField] public int id;
     float rtpcVolumeFilter;
     float rtpcPan;
 
@@ -44,11 +44,7 @@ public class AudioRoom : MonoBehaviour
             }
             else if (entry.getIsOccupied())
             {
-                if (!firstPost)
-                {
-                    firstPost = true;
-                    AkSoundEngine.PostEvent(playEvent, GameManager.instance.player.gameObject);
-                }
+                PlayEvent();
                 //le sas est à gauche de la salle
                 if (entry.direction == AudioSas.Direction.Left)
                 {
@@ -81,6 +77,15 @@ public class AudioRoom : MonoBehaviour
                 AkSoundEngine.SetRTPCValue("position_gd_"+id, rtpcPan);
                 //print("Position GD:" + rtpcPan+" de l'id:"+id);
             }
+        }
+    }
+
+    public void PlayEvent()
+    {
+        if (!firstPost)
+        {
+            firstPost = true;
+            AkSoundEngine.PostEvent(playEvent, GameManager.instance.player.gameObject);
         }
     }
 }

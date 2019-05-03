@@ -20,12 +20,6 @@ public class AudioSas : MonoBehaviour
         col = gameObject.GetComponent<Collider>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        ;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "Player")
