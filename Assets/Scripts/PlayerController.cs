@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour
     private bool StoppedHMove = false;
     private bool stopMove = false;
     private bool isFalling = false;
+    private bool hasPlayedHeart = false;
 
     private CameraBlock currentCameraBlock = null;
     SpatialRoom currentSpatialRoom = null;
@@ -221,6 +222,7 @@ public class PlayerController : MonoBehaviour
         else if(other.CompareTag("Hideout"))
         {
             isHidden = true;
+            PlayHeart();
         }
         else if (other.CompareTag("Killzone"))
         {
@@ -243,7 +245,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(other.CompareTag("Finish"))
         {
-            AkSoundEngine.PostEvent("Stop_Random_Rythme_Bass", GameManager.instance.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
             UIManager.instance.FadeInEnd();
         }
         else if (other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
@@ -307,6 +309,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Hideout"))
         {
             isHidden = false;
+            StopHeart();
             return;
         }
 
@@ -364,6 +367,28 @@ public class PlayerController : MonoBehaviour
         }
         animator.SetIKPosition(AvatarIKGoal.LeftHand, armPos);*/
         //animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.LookRotation(headLookAt - armPos) * Quaternion.Euler(45, -30, 0));
+    }
+
+    #endregion
+
+    #region audio
+
+    private void PlayHeart()
+    {
+        if (!hasPlayedHeart)
+        {
+            hasPlayedHeart = true;
+            AkSoundEngine.PostEvent(GameManager.instance.HeartPlay, GameManager.instance.gameObject);
+        }
+    }
+
+    private void StopHeart()
+    {
+        if (hasPlayedHeart)
+        {
+            hasPlayedHeart = false;
+            AkSoundEngine.PostEvent(GameManager.instance.HeartStop, GameManager.instance.gameObject);
+        }
     }
 
     #endregion
@@ -447,6 +472,15 @@ public class PlayerController : MonoBehaviour
         lt.enabled = !isClosed;
         //pointLight.enabled = !isClosed;
         lightOn = !isClosed;
+
+        if(isClosed)
+        {
+            PlayHeart();
+        }
+        else if(!isHidden)
+        {
+            StopHeart();
+        }
     }
 
     #endregion
