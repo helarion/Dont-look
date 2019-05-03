@@ -427,7 +427,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             // CHECK DU BOUTON POUR FERMER LES YEUX SI L'EYE TRACKER N'EST PAS ACTIVÉ
-            if (GameManager.instance.controls.GetAxis("Light")!=0)
+            if (GameManager.instance.controls.GetAxis("LightOff")!=0)
             {
                 ClosedEyes(true);
             }

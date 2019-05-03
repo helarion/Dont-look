@@ -46,10 +46,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   player: {fileID: 0}
+  listE:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   cameraSpeed: 0.5
   lastCheckpoint: {fileID: 0}
-  isTesting: 1
+  isTesting: 0
   CheckPointList:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -68,6 +73,11 @@ MonoBehaviour:
   climbLayer:
     serializedVersion: 2
     m_Bits: 8192
+  ChaseAmbPlay: Play_Random_Rythme_Bass
+  ChaseAmbStop: Stop_Random_Rythme_Bass
+  HeartPlay: Play_Random_Heart
+  HeartStop: Stop_Random_Heart
+  camHandler: {fileID: 0}
 --- !u!114 &2026705480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,12 +90,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc3a750a46412e45a142e50e0cd60ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerList: f7e1664c
+  triggerList: ae8d9d44
   useOtherObject: 0
   data:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 11400000, guid: 15fa98aaa97744240acf8db9d8c42bd1,
+    WwiseObjectReference: {fileID: 11400000, guid: 63ad9a93685ec5d499b449ca569e4df9,
       type: 2}
   decodeBank: 0
   loadAsynchronous: 0
