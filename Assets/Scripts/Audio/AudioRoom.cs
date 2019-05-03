@@ -31,7 +31,7 @@ public class AudioRoom : MonoBehaviour
                 if (!firstPost)
                 {
                     firstPost = true;
-                    AkSoundEngine.PostEvent(playEvent, gameObject);
+                    AkSoundEngine.PostEvent(playEvent, GameManager.instance.player.gameObject);
                 }
                 if (entry.direction == AudioSas.Direction.Left)
                 {
@@ -59,6 +59,7 @@ public class AudioRoom : MonoBehaviour
                 }
                 AkSoundEngine.SetRTPCValue("position_relative_volume_"+id, rtpcVolumeFilter);
                 AkSoundEngine.SetRTPCValue("position_gd_"+id, rtpcPan);
+                //print("Position GD:" + rtpcPan+" de l'id:"+id);
             }
         }
     }

@@ -63,9 +63,10 @@ public class Intro2 : MonoBehaviour
         }
         savedColor.a = 1;
         fadeImg.color = savedColor;
+        if(scene==-1)AkSoundEngine.PostEvent("Stop_Random_Track2", gameObject);
         yield return new WaitForSeconds(1);
 
         if(scene!=-1)SceneManager.LoadScene(scene);
-        Application.Quit();
+        else Application.Quit();
     }
 }
