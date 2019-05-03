@@ -70,7 +70,8 @@ public class PlayerController : MonoBehaviour
     private int inverse = 1;
 
     [Header("Light")]
-    [SerializeField] private float stickSpeed = 3;
+    [Range(0, 1)]
+    [SerializeField] private float lightSensitivity = 1;
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlight;
    // [SerializeField] private Transform cameraLight;
@@ -433,14 +434,21 @@ public class PlayerController : MonoBehaviour
 
             float xLight = GameManager.instance.controls.GetAxis("Light Horizontal");
             float yLight = GameManager.instance.controls.GetAxis("Light Vertical");
-
+            
             if(Input.GetAxis("Mouse X")!=0 || Input.GetAxis("Mouse Y")!=0)
             {
                 cursorPos = Input.mousePosition;
             }
-
-            cursorPos.x += xLight * stickSpeed * 100 * Time.fixedDeltaTime;
-            cursorPos.y += yLight * stickSpeed * 100 * Time.fixedDeltaTime;
+            else if (Mathf.Abs(xLight) > 0.1f || Mathf.Abs(yLight) > 0.1f)
+            {
+                cursorPos.x = ((xLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelWidth;
+                cursorPos.y = ((yLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelHeight;
+            }
+            else
+            {
+                //cursorPos.x = GameManager.instance.mainCamera.pixelWidth / 2;
+                //cursorPos.y = GameManager.instance.mainCamera.pixelHeight / 2;
+            }
         }
 
         RaycastHit hit;
