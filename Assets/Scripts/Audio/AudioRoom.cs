@@ -38,8 +38,8 @@ public class AudioRoom : MonoBehaviour
                     rtpcVolumeFilter = 0;
                     rtpcPan = 0;
                 }
-                AkSoundEngine.SetRTPCValue("position_relative_volume", rtpcVolumeFilter);
-                AkSoundEngine.SetRTPCValue("position_gd", rtpcPan);
+                AkSoundEngine.SetRTPCValue("position_relative_volume_" + id, rtpcVolumeFilter);
+                AkSoundEngine.SetRTPCValue("position_gd_" + id, rtpcPan);
             }
             else if (entry.getIsOccupied())
             {
