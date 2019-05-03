@@ -78,7 +78,10 @@ public class PlayerController : MonoBehaviour
    // [SerializeField] private Transform cameraLight;
     [SerializeField] private Transform lamp;
     [SerializeField] private Light pointLight;
-    [SerializeField] public float rangeDim; 
+    [SerializeField] private int flickerPercentage = 10;
+    [SerializeField] private int flickeringFrequency = 1;
+    [SerializeField] public float rangeDim;
+    [SerializeField] public Animator flashlightAnimator;
     public bool lightOn = true;
 
     [Header("State")]
@@ -132,6 +135,7 @@ public class PlayerController : MonoBehaviour
         cursorPos = Input.mousePosition;
         lastPosition = transform.position;
         localModelPosition = modelTransform.localPosition;
+        StartFlickering();
     }
 
     private void Update()
@@ -469,13 +473,15 @@ public class PlayerController : MonoBehaviour
         }
 
         /* --- Code pour vérouiller le z de la lampe --- */
-        /*Vector3 lightAimVec = lookAtPos - GameManager.instance.mainCamera.transform.position;
+        /*
+        Vector3 lightAimVec = lookAtPos - GameManager.instance.mainCamera.transform.position;
         Vector3 cameraPosBack = GameManager.instance.mainCamera.transform.position;
         cameraPosBack.z = lookAtPos.z;
         Vector3 cameraPosPlayer = GameManager.instance.mainCamera.transform.position;
         cameraPosPlayer.z = transform.position.z + 2;
         float vecRate = (cameraPosPlayer - GameManager.instance.mainCamera.transform.position).magnitude / (cameraPosBack - GameManager.instance.mainCamera.transform.position).magnitude;
-        lookAtPos = GameManager.instance.mainCamera.transform.position + lightAimVec * vecRate;*/
+        lookAtPos = GameManager.instance.mainCamera.transform.position + lightAimVec * vecRate;
+        */
         /* ---  --- */
 
         //cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
@@ -498,6 +504,31 @@ public class PlayerController : MonoBehaviour
         {
             StopHeart();
         }
+    }
+
+    public void StartFlickering()
+    {
+        StartCoroutine("RandomFlickerCoroutine");
+    }
+
+    private void RandomFlicker()
+    {
+        int rand = Random.Range(0, 100);
+        if (rand <= flickerPercentage)
+        {
+            flashlightAnimator.SetTrigger("Flicker1");
+            print("Flickers");
+        }
+    }
+
+    IEnumerator RandomFlickerCoroutine()
+    {
+        while (true)
+        {
+            RandomFlicker();
+            yield return new WaitForSeconds(flickeringFrequency);
+        }
+        //yield return null;
     }
 
     #endregion
@@ -523,6 +554,7 @@ public class PlayerController : MonoBehaviour
         StoppedHMove = false;
         stopMove = false;
         ResetVelocity();
+        //StartFlickering();
     }
     #endregion
 
@@ -930,7 +962,6 @@ public class PlayerController : MonoBehaviour
         lastPosition = transform.position;
 
         rb.isKinematic = false;
-        //isAlive = true;
         isClimbing = false;
         isGrounded = true;
         animator.SetBool("Climb", false);
