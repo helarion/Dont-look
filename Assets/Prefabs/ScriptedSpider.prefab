@@ -91,20 +91,12 @@ MonoBehaviour:
   moveSpeed: 4.5
   isChasing: 0
   delete: 0
+  shakeIntensity: 0.1
   spawnZones:
   - {fileID: 0}
-  WwiseChasePlay:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  WwiseChaseStop:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  WwiseLook:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+  WwiseChasePlay: 
+  WwiseChaseStop: 
+  WwiseLook: Play_Blend_Stinger_Araignee
   agent: {fileID: 0}
   animator: {fileID: 0}
   velocity: 0
@@ -115,9 +107,10 @@ MonoBehaviour:
   pos1: {fileID: 0}
   pos2: {fileID: 0}
   lamp: {fileID: 0}
-  shakeIntensity: 1
   ladderCol: {fileID: 0}
   nbAttack: 1
+  scriptIntensity: 1
+  hasPlayedLook: 0
 --- !u!54 &40422760194682775
 Rigidbody:
   m_ObjectHideFlags: 0

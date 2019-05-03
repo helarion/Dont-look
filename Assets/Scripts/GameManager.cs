@@ -33,10 +33,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LayerMask climbLayer;
 
     [Header("Sons")]
-    [SerializeField] public AK.Wwise.Event ChaseAmbPlay;
-    [SerializeField] public AK.Wwise.Event ChaseAmbStop;
-    [SerializeField] public AK.Wwise.Event HeartPlay;
-    [SerializeField] public AK.Wwise.Event HeartStop;
+    [SerializeField] public string ChaseAmbPlay;
+    [SerializeField] public string ChaseAmbStop;
+    [SerializeField] public string HeartPlay;
+    [SerializeField] public string HeartStop;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     private bool isTrackerEnabled = true;
     private bool isPlayingHeart = false;
+    [HideInInspector] public CameraHandler camHandler;
     #endregion
 
     #region startupdate
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         CheckTracker();
+        camHandler = mainCamera.GetComponent<CameraHandler>();
         controls = ReInput.players.GetPlayer(0);
         ResumeGame();
         originalPos = mainCamera.transform.localPosition;
@@ -124,7 +126,10 @@ public class GameManager : MonoBehaviour
     public void UseCheckpoint(Checkpoint c)
     {
         player.transform.position = c.transform.position;
-        mainCamera.GetComponent<CameraHandler>().SetNewZ(c.newZ);
+        camHandler.SetNewZ(c.room.newZ);
+        camHandler.SetNewOffset(c.room.newOffset);
+        player.SetLightRange(c.room.newLightRange);
+        
     }
 
     public void CheckTracker()
@@ -154,9 +159,9 @@ public class GameManager : MonoBehaviour
     private IEnumerator HeartCoroutine()
     {
         isPlayingHeart = true;
-        AkSoundEngine.PostEvent(HeartPlay.Id, player.gameObject);
+        AkSoundEngine.PostEvent(HeartPlay, player.gameObject);
         yield return new WaitForSeconds(6);
-        AkSoundEngine.PostEvent(HeartStop.Id, player.gameObject);
+        AkSoundEngine.PostEvent(HeartStop, player.gameObject);
         isPlayingHeart = false;
     }
 
@@ -186,13 +191,13 @@ public class GameManager : MonoBehaviour
     // RESPAWN CHAQUE ENNEMI
     private void RespawnEnemies()
     {
-        print("test-1");
+        //print("test-1");
         foreach (Enemy e in enemyList)
         {
-            print("test0");
+            //print("test0");
             e.Respawn();
         }
-        print("test6");
+        //print("test6");
     }
 
     // RESPAWN LE JOUEUR

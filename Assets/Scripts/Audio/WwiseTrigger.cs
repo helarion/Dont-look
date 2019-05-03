@@ -6,7 +6,7 @@ public class WwiseTrigger : MonoBehaviour
 {
     private float z;
     [SerializeField] GameObject triggerObject;
-    [SerializeField] private AK.Wwise.Event triggerEvent;
+    [SerializeField] private string triggerEvent;
     [SerializeField] bool doOnce = true;
     [SerializeField] private GameObject emitter = null;
     bool done = false;
@@ -15,7 +15,7 @@ public class WwiseTrigger : MonoBehaviour
     {
         if (other.gameObject == triggerObject && !done)
         {
-            AkSoundEngine.PostEvent(triggerEvent.Id, emitter);
+            AkSoundEngine.PostEvent(triggerEvent, emitter);
             if (doOnce)
             {
                 done = true;

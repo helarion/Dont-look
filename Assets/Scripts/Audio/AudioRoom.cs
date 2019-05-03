@@ -7,8 +7,9 @@ public class AudioRoom : MonoBehaviour
     Collider cl;
     bool firstPost = false;
     [SerializeField] AudioSas[] entries;
-    [SerializeField] AK.Wwise.Event playEvent;
+    [SerializeField] string playEvent;
     [SerializeField] float postOffset = 1;
+    [SerializeField] int id;
     float rtpcVolumeFilter;
     float rtpcPan;
 
@@ -45,7 +46,7 @@ public class AudioRoom : MonoBehaviour
                 if (!firstPost)
                 {
                     firstPost = true;
-                    AkSoundEngine.PostEvent(playEvent.Id, gameObject);
+                    AkSoundEngine.PostEvent(playEvent, gameObject);
                 }
                 //le sas est à gauche de la salle
                 if (entry.direction == AudioSas.Direction.Left)
@@ -75,8 +76,8 @@ public class AudioRoom : MonoBehaviour
                     rtpcVolumeFilter = Mathf.Clamp(25 * (1 - rate), 0, 100);
                     rtpcPan = Mathf.Clamp(50, 0, 100);
                 }
-                AkSoundEngine.SetRTPCValue("position_relative_volume", rtpcVolumeFilter);
-                AkSoundEngine.SetRTPCValue("position_gd", rtpcPan);
+                AkSoundEngine.SetRTPCValue("position_relative_volume_"+id, rtpcVolumeFilter);
+                AkSoundEngine.SetRTPCValue("position_gd_"+id, rtpcPan);
             }
         }
     }

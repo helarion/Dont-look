@@ -14,6 +14,7 @@ public class SpiderBehavior : Enemy
     [SerializeField] private bool clickToSetDestination = false;
 
     [SerializeField] private float countLook = 0;
+    [SerializeField] private bool hasPlayedLook = false;
     private float countChase = 0;
 
     private bool canSeePlayer = false;
@@ -120,6 +121,7 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
+        hasPlayedLook = false;
         countChase = 0;
         countLook = 0;
         animator.SetFloat("WakeMult", countLook);
@@ -149,7 +151,11 @@ public class SpiderBehavior : Enemy
     {
         if (b)
         {
-            //AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
+            if (!hasPlayedLook)
+            {
+                AkSoundEngine.PostEvent(WwiseLook, gameObject);
+                hasPlayedLook = true;
+            }
             GameManager.instance.ShakeScreen(0.1f,shakeIntensity);
             agent.speed = moveSpeed+bonusSpeed;
             if (!isLooked) StartCoroutine("CountLook");
