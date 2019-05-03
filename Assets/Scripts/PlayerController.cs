@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour
     private int inverse = 1;
 
     [Header("Light")]
+    [SerializeField] private float bodyRotationDeadZone = 0.5f;
     [Range(0, 1)]
     [SerializeField] private float lightSensitivity = 1;
     [SerializeField] private float lightSpeed = 1;
@@ -348,11 +349,11 @@ public class PlayerController : MonoBehaviour
         Vector3 headLookAt = lookAtPos;
         if (currentLookDirection == LookDirection.Left)
         {
-            headLookAt = rotatePointAround(headLookAt, headPosition.position, Vector3.up, -90);
+            headLookAt = rotatePointAround(headLookAt, headPosition.position, Vector3.up, 90);
         }
         else
         {
-            headLookAt = rotatePointAround(headLookAt, headPosition.position, Vector3.up, 90);
+            headLookAt = rotatePointAround(headLookAt, headPosition.position, Vector3.up, -90);
         }
         animator.SetLookAtPosition(headLookAt);
 
@@ -829,16 +830,16 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if ((lookAtPos.x - transform.position.x < -0.25f) || (currentLookDirection == LookDirection.Left && lookAtPos.x - transform.position.x < 0.25f))
+            if ((lookAtPos.x - transform.position.x > -bodyRotationDeadZone) || (currentLookDirection == LookDirection.Left && lookAtPos.x - transform.position.x > bodyRotationDeadZone))
             {
-                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
+                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
                 currentLookDirection = LookDirection.Right;
                 if (hMove > 0) inverse = -1;
                 else inverse = 1;
             }
             else
             {
-                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
+                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
                 currentLookDirection = LookDirection.Left;
                 if (hMove < 0) inverse = -1;
                 else inverse = 1;
