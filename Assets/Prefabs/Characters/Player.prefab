@@ -502,6 +502,8 @@ MonoBehaviour:
   raycastClimb: {fileID: 554286558}
   animator: {fileID: 312924326}
   hipPosition: {fileID: 4194574731507233648}
+  headPosition: {fileID: 0}
+  armPosition: {fileID: 0}
   jumpForce: 2.5
   rayCastLength: 0.26
   maxClimbHeight: 0
@@ -619,9 +621,11 @@ MonoBehaviour:
   _verticalDecSpeed: 10
   velocity: 0
   yVelocity: 0
-  stickSpeed: 5
+  lightSensitivity: 0.75
   lightSpeed: 0.03
   flashlight: {fileID: 1491706786681059038}
+  lamp: {fileID: 0}
+  pointLight: {fileID: 0}
   rangeDim: 1
   lightOn: 1
   isClimbingLadder: 0
@@ -1997,11 +2001,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
-      propertyPath: m_Intensity
-      value: 1448.1547
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
       propertyPath: m_Range
       value: 16
       objectReference: {fileID: 0}
@@ -2033,7 +2032,7 @@ PrefabInstance:
     - target: {fileID: 8756509515508405638, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: volumetricShadowDimmer
-      value: 0.6
+      value: 0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8574542227f87dd4b92c5ebe482bc9fa, type: 3}
