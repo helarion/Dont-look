@@ -109,6 +109,9 @@ public class PlayerController : MonoBehaviour
     enum LookDirection { Left, Right, Front, Back};
     LookDirection currentLookDirection = LookDirection.Right;
 
+    enum InputMode { PC, Pad};
+    InputMode inputMode = InputMode.Pad;
+
     #endregion
 
     #region StartUpdateOn
@@ -438,16 +441,17 @@ public class PlayerController : MonoBehaviour
             if(Input.GetAxis("Mouse X")!=0 || Input.GetAxis("Mouse Y")!=0)
             {
                 cursorPos = Input.mousePosition;
+                inputMode = InputMode.PC;
             }
             else if (Mathf.Abs(xLight) > 0.1f || Mathf.Abs(yLight) > 0.1f)
             {
                 cursorPos.x = ((xLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelWidth;
                 cursorPos.y = ((yLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelHeight;
+                inputMode = InputMode.Pad;
             }
-            else
+            else if (inputMode == InputMode.Pad)
             {
-                //cursorPos.x = GameManager.instance.mainCamera.pixelWidth / 2;
-                //cursorPos.y = GameManager.instance.mainCamera.pixelHeight / 2;
+                cursorPos = GameManager.instance.mainCamera.WorldToScreenPoint(transform.position);
             }
         }
 
@@ -464,7 +468,7 @@ public class PlayerController : MonoBehaviour
         Vector3 cameraPosBack = GameManager.instance.mainCamera.transform.position;
         cameraPosBack.z = lookAtPos.z;
         Vector3 cameraPosPlayer = GameManager.instance.mainCamera.transform.position;
-        cameraPosPlayer.z = transform.position.z;
+        cameraPosPlayer.z = transform.position.z + 2;
         float vecRate = (cameraPosPlayer - GameManager.instance.mainCamera.transform.position).magnitude / (cameraPosBack - GameManager.instance.mainCamera.transform.position).magnitude;
         lookAtPos = GameManager.instance.mainCamera.transform.position + lightAimVec * vecRate;*/
         /* ---  --- */
