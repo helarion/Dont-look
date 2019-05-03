@@ -834,15 +834,15 @@ public class PlayerController : MonoBehaviour
             {
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
                 currentLookDirection = LookDirection.Right;
-                if (hMove > 0) inverse = -1;
-                else inverse = 1;
+                if (hMove > 0) inverse = 1;
+                else inverse = -1;
             }
             else
             {
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
                 currentLookDirection = LookDirection.Left;
-                if (hMove < 0) inverse = -1;
-                else inverse = 1;
+                if (hMove < 0) inverse = 1;
+                else inverse = -1;
             }
         }
         lt.transform.rotation = save;

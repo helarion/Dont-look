@@ -104,6 +104,7 @@ public class Enemy : MonoBehaviour
     {
         bool test = false;
         Vector3 playerPosition = GameManager.instance.player.transform.position;
+        playerPosition.y += 1;
         Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
         Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
 
@@ -136,7 +137,7 @@ public class Enemy : MonoBehaviour
     public virtual void Respawn()
     {
         hasPlayedChase = false;
-        agent.speed = 75;
+        agent.speed = 35;
         StopChase();
         Vector3 pos = RandomSpawn();
         MoveTo(pos);
