@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform raycastClimb;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform hipPosition;
+    [SerializeField] private Transform headPosition;
+    [SerializeField] private Transform armPosition;
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 1.5f;
@@ -72,7 +74,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlight;
    // [SerializeField] private Transform cameraLight;
-   // [SerializeField] private Light pointLight;
+    [SerializeField] private Transform lamp;
+    [SerializeField] private Light pointLight;
     [SerializeField] public float rangeDim; 
     public bool lightOn = true;
 
@@ -325,6 +328,47 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    Vector3 rotatePointAround(Vector3 point, Vector3 pivot, Vector3 axis, float angle)
+    {
+        GameObject gameObject = new GameObject();
+        gameObject.transform.position = point;
+        gameObject.transform.RotateAround(pivot, axis, angle);
+        Vector3 result = gameObject.transform.position;
+        Destroy(gameObject);
+        return result;
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        animator.SetLookAtWeight(1);
+        Vector3 headLookAt = lookAtPos;
+        if (currentLookDirection == LookDirection.Left)
+        {
+            headLookAt = rotatePointAround(headLookAt, headPosition.position, Vector3.up, -90);
+        }
+        else
+        {
+            headLookAt = rotatePointAround(headLookAt, headPosition.position, Vector3.up, 90);
+        }
+        animator.SetLookAtPosition(headLookAt);
+
+        /*animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+        //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+        Vector3 armPos;
+        if (currentLookDirection == LookDirection.Left)
+        {
+            armPos = hipPosition.position + new Vector3(0.05f, 1.0f, 0.1f) + Vector3.ClampMagnitude(lookAtPos - new Vector3(0.05f, 0.75f, 0.1f) - hipPosition.position, 0.25f);
+            armPos = rotatePointAround(armPos, hipPosition.position, Vector3.up, -90);
+        }
+        else
+        {
+            armPos = hipPosition.position + new Vector3(-0.05f, 1.0f, -0.1f) + Vector3.ClampMagnitude(lookAtPos - new Vector3(-0.05f, 0.75f, -0.1f) - hipPosition.position, 0.25f);
+            armPos = rotatePointAround(armPos, hipPosition.position, Vector3.up, 90);
+        }
+        animator.SetIKPosition(AvatarIKGoal.LeftHand, armPos);*/
+        //animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.LookRotation(headLookAt - armPos) * Quaternion.Euler(45, -30, 0));
+    }
+
     #endregion
 
     #region audio
@@ -398,6 +442,7 @@ public class PlayerController : MonoBehaviour
             cursorPos.x += xLight * stickSpeed * 100 * Time.fixedDeltaTime;
             cursorPos.y += yLight * stickSpeed * 100 * Time.fixedDeltaTime;
         }
+
         RaycastHit hit;
         Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
 
@@ -405,6 +450,17 @@ public class PlayerController : MonoBehaviour
         {
             lookAtPos = hit.point;
         }
+
+        /* --- Code pour vérouiller le z de la lampe --- */
+        /*Vector3 lightAimVec = lookAtPos - GameManager.instance.mainCamera.transform.position;
+        Vector3 cameraPosBack = GameManager.instance.mainCamera.transform.position;
+        cameraPosBack.z = lookAtPos.z;
+        Vector3 cameraPosPlayer = GameManager.instance.mainCamera.transform.position;
+        cameraPosPlayer.z = transform.position.z;
+        float vecRate = (cameraPosPlayer - GameManager.instance.mainCamera.transform.position).magnitude / (cameraPosBack - GameManager.instance.mainCamera.transform.position).magnitude;
+        lookAtPos = GameManager.instance.mainCamera.transform.position + lightAimVec * vecRate;*/
+        /* ---  --- */
+
         //cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
         flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.fixedDeltaTime * lightSpeed * 100);
     }
