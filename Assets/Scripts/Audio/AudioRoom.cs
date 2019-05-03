@@ -7,7 +7,7 @@ public class AudioRoom : MonoBehaviour
     Collider cl;
     bool firstPost = false;
     [SerializeField] AudioSas[] entries;
-    [SerializeField] string playEvent;
+    [SerializeField] public string playEvent;
     [SerializeField] float postOffset = 1;
     [SerializeField] int id;
     float rtpcVolumeFilter;

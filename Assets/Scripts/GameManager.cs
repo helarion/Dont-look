@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public string ChaseAmbStop;
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
+    [SerializeField] public AudioRoom startRoom;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
@@ -63,6 +64,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        AkSoundEngine.PostEvent(startRoom.playEvent, GameManager.instance.gameObject);
+        AkSoundEngine.SetRTPCValue("position_relative_volume_0", 50);
+        AkSoundEngine.SetRTPCValue("position_gd_0", 50);
         CheckTracker();
         camHandler = mainCamera.GetComponent<CameraHandler>();
         controls = ReInput.players.GetPlayer(0);

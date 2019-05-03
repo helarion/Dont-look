@@ -137,7 +137,7 @@ public class Enemy : MonoBehaviour
     public virtual void Respawn()
     {
         hasPlayedChase = false;
-        agent.speed = 35;
+        agent.speed = 75;
         StopChase();
         Vector3 pos = RandomSpawn();
         MoveTo(pos);

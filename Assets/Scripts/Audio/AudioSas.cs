@@ -9,7 +9,7 @@ public class AudioSas : MonoBehaviour
     bool occupied;
     bool exited;
     bool exitRtpcValue;
-    Collider collider;
+    Collider col;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +17,7 @@ public class AudioSas : MonoBehaviour
         occupied = false;
         exited = false;
         exitRtpcValue = false;
-        collider = gameObject.GetComponent<Collider>();
+        col = gameObject.GetComponent<Collider>();
     }
 
     // Update is called once per frame
@@ -43,26 +43,26 @@ public class AudioSas : MonoBehaviour
             exited = true;
             if (direction == Direction.Down)
             {
-                exitRtpcValue = playerPosition.y < collider.bounds.min.y;
+                exitRtpcValue = playerPosition.y < col.bounds.min.y;
             }
             else if (direction == Direction.Up)
             {
-                exitRtpcValue = playerPosition.y > collider.bounds.max.y;
+                exitRtpcValue = playerPosition.y > col.bounds.max.y;
             }
             else if (direction == Direction.Left)
             {
-                exitRtpcValue = playerPosition.x > collider.bounds.max.x;
+                exitRtpcValue = playerPosition.x > col.bounds.max.x;
             }
             else if (direction == Direction.Right)
             {
-                exitRtpcValue = playerPosition.x < collider.bounds.min.x;
+                exitRtpcValue = playerPosition.x < col.bounds.min.x;
             }
         }
     }
 
     public Collider getCollider()
     {
-        return collider;
+        return col;
     }
 
     public bool getIsOccupied()

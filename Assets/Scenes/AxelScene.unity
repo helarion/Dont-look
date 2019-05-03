@@ -1892,7 +1892,7 @@ PrefabInstance:
     - target: {fileID: 7728247864968240410, guid: 44b65c7ca1ee2804c9c7c41520c72556,
         type: 3}
       propertyPath: m_Name
-      value: AudioRoom 2
+      value: AudioRoom 1
       objectReference: {fileID: 0}
     - target: {fileID: 7728247864968240413, guid: 44b65c7ca1ee2804c9c7c41520c72556,
         type: 3}
@@ -1952,13 +1952,13 @@ PrefabInstance:
     - target: {fileID: 7728247864968240412, guid: 44b65c7ca1ee2804c9c7c41520c72556,
         type: 3}
       propertyPath: entries.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7728247864968240412, guid: 44b65c7ca1ee2804c9c7c41520c72556,
         type: 3}
       propertyPath: entries.Array.data[0]
       value: 
-      objectReference: {fileID: 388111230}
+      objectReference: {fileID: 1704430556}
     - target: {fileID: 7728247864968240412, guid: 44b65c7ca1ee2804c9c7c41520c72556,
         type: 3}
       propertyPath: entries.Array.data[1]
@@ -7702,6 +7702,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: "AudioSas d\xE9but Room1-2"
       objectReference: {fileID: 0}
+    - target: {fileID: 5067022611308873232, guid: 4ca2132833b94614e882a9da9c1f0803,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5067022611308873235, guid: 4ca2132833b94614e882a9da9c1f0803,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7774,18 +7779,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ca2132833b94614e882a9da9c1f0803, type: 3}
---- !u!114 &388111230 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5067022611308873245, guid: 4ca2132833b94614e882a9da9c1f0803,
-    type: 3}
-  m_PrefabInstance: {fileID: 388111229}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 482added6146dde40adf32028675b556, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &398082389 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 948253805718523965, guid: b0635cb502009ed4bbbd52f8e8a6a42a,
@@ -27478,7 +27471,7 @@ PrefabInstance:
     - target: {fileID: 5027043684092661479, guid: 1d7f02ab7bfece44abc958f590c02467,
         type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 456881282829271768, guid: 1d7f02ab7bfece44abc958f590c02467,
         type: 3}
@@ -27507,7 +27500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2109709499, guid: 1d7f02ab7bfece44abc958f590c02467, type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 3.8838851
       objectReference: {fileID: 0}
     - target: {fileID: 2109709494, guid: 1d7f02ab7bfece44abc958f590c02467, type: 3}
       propertyPath: m_LocalPosition.x
@@ -28286,6 +28279,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2027977502}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1520070387 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7728247864968240412, guid: 44b65c7ca1ee2804c9c7c41520c72556,
+    type: 3}
+  m_PrefabInstance: {fileID: 96566960}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18fd846c9ace6b439deed77d8df41d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1522646780
 GameObject:
   m_ObjectHideFlags: 0
@@ -31207,7 +31212,7 @@ PrefabInstance:
     - target: {fileID: 5027043684092661479, guid: 1d7f02ab7bfece44abc958f590c02467,
         type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2109709499, guid: 1d7f02ab7bfece44abc958f590c02467, type: 3}
       propertyPath: m_Intensity
@@ -40624,6 +40629,11 @@ PrefabInstance:
       propertyPath: CheckPointList.Array.data[4]
       value: 
       objectReference: {fileID: 1972561968}
+    - target: {fileID: 3695006473054658848, guid: 1b329c8af72d9f240b1d3880b7e3730f,
+        type: 3}
+      propertyPath: startRoom
+      value: 
+      objectReference: {fileID: 1520070387}
     - target: {fileID: 3695006473054658849, guid: 1b329c8af72d9f240b1d3880b7e3730f,
         type: 3}
       propertyPath: m_LocalPosition.x
