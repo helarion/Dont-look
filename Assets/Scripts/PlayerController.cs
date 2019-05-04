@@ -110,6 +110,8 @@ public class PlayerController : MonoBehaviour
     enum LookDirection { Left, Right, Front, Back};
     LookDirection currentLookDirection = LookDirection.Right;
 
+    Vector3 headLookAt;
+
     enum InputMode { PC, Pad};
     InputMode inputMode = InputMode.Pad;
 
@@ -132,6 +134,8 @@ public class PlayerController : MonoBehaviour
         cursorPos = Input.mousePosition;
         lastPosition = transform.position;
         localModelPosition = modelTransform.localPosition;
+
+        headLookAt = rotatePointAround(transform.position + Vector3.right, headPosition.position, Vector3.up, -90);
     }
 
     private void Update()
@@ -346,15 +350,24 @@ public class PlayerController : MonoBehaviour
     private void OnAnimatorIK(int layerIndex)
     {
         animator.SetLookAtWeight(1);
-        Vector3 headLookAt = lookAtPos;
+        Vector3 headLookAtGoal = lookAtPos;
         if (currentLookDirection == LookDirection.Left)
         {
-            headLookAt = rotatePointAround(headLookAt, headPosition.position, Vector3.up, 90);
+            headLookAtGoal = rotatePointAround(lookAtPos, headPosition.position, Vector3.up, 90);
         }
-        else
+        else if (currentLookDirection == LookDirection.Right)
         {
-            headLookAt = rotatePointAround(headLookAt, headPosition.position, Vector3.up, -90);
+            headLookAtGoal = rotatePointAround(lookAtPos, headPosition.position, Vector3.up, -90);
         }
+        else if (currentLookDirection == LookDirection.Front)
+        {
+            headLookAtGoal = rotatePointAround(lookAtPos, headPosition.position, Vector3.up, 0);
+        }
+        else if (currentLookDirection == LookDirection.Back)
+        {
+            headLookAtGoal = rotatePointAround(lookAtPos, headPosition.position, Vector3.up, 180);
+        }
+        headLookAt = Vector3.Lerp(headLookAt, headLookAtGoal, Time.deltaTime * 3);
         animator.SetLookAtPosition(headLookAt);
 
         /*animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
@@ -832,14 +845,14 @@ public class PlayerController : MonoBehaviour
         {
             if ((lookAtPos.x - transform.position.x > -bodyRotationDeadZone) || (currentLookDirection == LookDirection.Left && lookAtPos.x - transform.position.x > bodyRotationDeadZone))
             {
-                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), speed / 2.0f);
+                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 89, 0)), speed / 2.0f);
                 currentLookDirection = LookDirection.Right;
                 if (hMove > 0) inverse = -1;
                 else inverse = 1;
             }
             else
             {
-                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 270, 0)), speed / 2.0f);
+                modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 271, 0)), speed / 2.0f);
                 currentLookDirection = LookDirection.Left;
                 if (hMove < 0) inverse = -1;
                 else inverse = 1;
