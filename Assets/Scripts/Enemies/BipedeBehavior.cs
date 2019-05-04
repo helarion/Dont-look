@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BipedeBehavior : Enemy
 {
+    [SerializeField] private float walkShakeIntensity=0.3f;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,9 +22,12 @@ public class BipedeBehavior : Enemy
             LightDetection();
             ChaseBehavior();
         }
+        //DebugPath(); 
+    }
 
-        //DebugPath();
-        
+    public void PlayWalk()
+    {
+        GameManager.instance.ShakeScreen(0.1f, walkShakeIntensity);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -35,17 +39,11 @@ public class BipedeBehavior : Enemy
 
     public override void ChaseBehavior()
     {
+        base.ChaseBehavior();
         if(!isLooked)
         {
             // goes to the player
-            isMoving = true;
             MoveTo(GameManager.instance.player.transform.position);
-        }
-        else
-        {
-            //print("regardé");
-            isMoving = false;
-            agent.isStopped = true;
         }
     }
 
@@ -54,15 +52,21 @@ public class BipedeBehavior : Enemy
     {
         if (b)
         {
-            //AkSoundEngine.PostEvent(WwiseLook.Id, gameObject);
+            //AkSoundEngine.PostEvent(WwiseLook, gameObject);
             GameManager.instance.ShakeScreen(0.1f,shakeIntensity);
             isLooked = true;
+            agent.isStopped = true;
+            isMoving = false;
             animator.SetBool("IsLooked", true);
+            animator.SetBool("IsMoving", isMoving);
         }
         else
         {
             isLooked = false;
+            agent.isStopped = false;
+            isMoving = true;
             animator.SetBool("IsLooked", false);
+            animator.SetBool("IsMoving", isMoving);
         }
     }
 

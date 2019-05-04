@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private bool delete = false;
     [SerializeField] public float shakeIntensity;
     private bool hasPlayedChase = false;
+    [SerializeField] private float chaseShakeIntensity=0.02f;
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
@@ -98,7 +99,10 @@ public class Enemy : MonoBehaviour
 
     public virtual void DetectPlayer(bool b) {}
     public virtual void IsLit(bool b) {}
-    public virtual void ChaseBehavior() {}
+    public virtual void ChaseBehavior()
+    {
+        GameManager.instance.ShakeScreen(0.01f, chaseShakeIntensity);
+    }
 
     public void LightDetection()
     {

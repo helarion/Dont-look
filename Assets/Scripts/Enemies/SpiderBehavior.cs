@@ -65,6 +65,7 @@ public class SpiderBehavior : Enemy
 
     public override void ChaseBehavior()
     {
+        base.ChaseBehavior();
         // goes to the player
         isMoving = true;
         MoveTo(GameManager.instance.player.transform.position);
