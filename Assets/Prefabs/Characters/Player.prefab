@@ -1286,6 +1286,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 0.8051764
       objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: 9f72691c01aa9c04d9371acc53982a84, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ec9443ab8cc54b44d90edced1c3ffe9b, type: 2}
     - target: {fileID: 400010, guid: 9f72691c01aa9c04d9371acc53982a84, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0.03704939
@@ -1318,10 +1322,6 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 0.82971746
       objectReference: {fileID: 0}
-    - target: {fileID: 2300000, guid: 9f72691c01aa9c04d9371acc53982a84, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: ec9443ab8cc54b44d90edced1c3ffe9b, type: 2}
     - target: {fileID: 400124, guid: 9f72691c01aa9c04d9371acc53982a84, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.1525572
@@ -1487,21 +1487,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FlashLight (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.6124232
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 8.5144005
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.7627141
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187375, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}

@@ -140,8 +140,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing ) return;
+        if (!isAlive || GameManager.instance.GetIsPaused()) return;
         LightAim();
+        if (isClimbing) return;
         GroundedCheck();
         FallingCheck();
         MoveInputUpdate();
@@ -485,7 +486,19 @@ public class PlayerController : MonoBehaviour
         /* ---  --- */
 
         //cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
-        flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.fixedDeltaTime * lightSpeed * 100);
+
+        if(!isClimbing && !isClimbingLadder)
+        {
+            flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.deltaTime * lightSpeed * 100);
+        }
+        else if(isClimbingLadder)
+        {
+            flashlight.eulerAngles = Vector3.Lerp(flashlight.eulerAngles, new Vector3(-90,0,0), Time.deltaTime * lightSpeed * 10);
+        }
+        else if(isClimbing)
+        {
+            flashlight.eulerAngles = Vector3.Lerp(flashlight.eulerAngles, new Vector3(0, 0, 0), Time.deltaTime * lightSpeed * 10);
+        }
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
