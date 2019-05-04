@@ -5,8 +5,7 @@ using UnityEngine.AI;
 
 public class ShadowSpider : Enemy
 {
-    [SerializeField] Transform pos1;
-    [SerializeField] float scriptIntensity;
+    [SerializeField] Transform endPos;
     [SerializeField] private bool hasPlayedLook = false;
 
     private void Start()
@@ -18,9 +17,13 @@ public class ShadowSpider : Enemy
     {
         VelocityCount();
         LightDetection();
-        if (isChasing)
+
+        if(isMoving)
         {
-            ChaseBehavior();
+            if(agent.remainingDistance<0.1f)
+            {
+                //Destroy(gameObject);
+            }
         }
 
         if (agent.isOnOffMeshLink)
@@ -42,6 +45,8 @@ public class ShadowSpider : Enemy
                 hasPlayedLook = true;
             }
             GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
+            MoveTo(endPos.position);
+            isMoving = true;
         }
     }
 }

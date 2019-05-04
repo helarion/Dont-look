@@ -530,7 +530,7 @@ public class PlayerController : MonoBehaviour
         if (rand <= flickerPercentage)
         {
             flashlightAnimator.SetTrigger("Flicker1");
-            print("Flickers");
+            //print("Flickers");
         }
     }
 
