@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public float lookShakeIntensity=0.08f;
     private bool hasPlayedChase = false;
     [SerializeField] private float chaseShakeIntensity=0.02f;
+    [SerializeField] private float delayBeforeChase = 1;
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
@@ -63,17 +64,24 @@ public class Enemy : MonoBehaviour
     // COMMENCER LA CHASSE DU JOUEUR
     public virtual void StartChase()
     {
-        //AkSoundEngine.PostEvent(WwiseChasePlay.Id,gameObject);
         if(!hasPlayedChase)
         {
             hasPlayedChase = true;
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, GameManager.instance.gameObject);
         }
-        //AkSoundEngine.PostEvent(GameManager.instance.HeartPlay, GameManager.instance.player.gameObject);
+        StartCoroutine("WaitBeforeChaseCoroutine");
+    }
+
+    IEnumerator WaitBeforeChaseCoroutine()
+    {
+        agent.speed = 1;
         agent.isStopped = false;
         isChasing = true;
         isMoving = true;
         animator.SetBool("IsMoving", isMoving);
+        yield return new WaitForSeconds(delayBeforeChase);
+        agent.speed = moveSpeed;
+        //AkSoundEngine.PostEvent(WwiseChasePlay.Id,gameObject);
     }
 
     public void StopChase()
@@ -102,6 +110,8 @@ public class Enemy : MonoBehaviour
     public virtual void ChaseBehavior()
     {
         GameManager.instance.ShakeScreen(0.01f, chaseShakeIntensity);
+        float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
+        AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);
     }
 
     public void LightDetection()

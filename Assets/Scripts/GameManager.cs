@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public string HeartStop;
     [SerializeField] public AudioRoom startRoom;
     [SerializeField] int nbAudioRoomId;
+    [SerializeField] float audioFadeSpeed=10;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
@@ -66,7 +67,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         AkSoundEngine.PostEvent(startRoom.playEvent, GameManager.instance.gameObject);
-        PlayCurrentRoom(startRoom);
+        player.SetCurrentAudioRoom(startRoom);
+        PlayCurrentAudioRoom(startRoom);
         CheckTracker();
         camHandler = mainCamera.GetComponent<CameraHandler>();
         controls = ReInput.players.GetPlayer(0);
@@ -95,75 +97,58 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    #region Checkpoints
-
-    public void UseCheckpoint(Checkpoint c)
-    {
-        player.transform.position = c.transform.position;
-        camHandler.SetNewZ(c.sRoom.newZ);
-        camHandler.SetNewOffset(c.sRoom.newOffset);
-        player.SetLightRange(c.sRoom.newLightRange);
-        ResetAudioRooms();
-        PlayCurrentRoom(c.aRoom);
-    }
-
-    // SAUVEGARDE LE NOUVEAU CHECKPOINT : POINT DE RESPAWN POUR LE JOUEUR 
-    public void SetNewCheckpoint(Checkpoint c)
-    {
-        if (c == lastCheckpoint) return;
-        lastCheckpoint = c;
-        //print("New Checkpoint activated");
-    }
-
-    // [ExecuteInEditMode]
-    private void TP()
-    {
-        int check = -1;
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            check = 0;
-        }
-        else if (Input.GetKeyDown(KeyCode.F2))
-        {
-            check = 1;
-        }
-        else if (Input.GetKeyDown(KeyCode.F3))
-        {
-            check = 2;
-        }
-        else if (Input.GetKeyDown(KeyCode.F4))
-        {
-            check = 3;
-        }
-        else if (Input.GetKeyDown(KeyCode.F5))
-        {
-            check = 4;
-        }
-
-        if (check != -1)
-        {
-            player.Reset();
-            UseCheckpoint(CheckPointList[check]);
-        }
-    }
-
-    #endregion
-
     #region audio
-    private void PlayCurrentRoom(AudioRoom ar)
+    private void PlayCurrentAudioRoom(AudioRoom ar)
     {
         ar.PlayEvent();
-        AkSoundEngine.SetRTPCValue("position_relative_volume_" + ar.id, 50);
         AkSoundEngine.SetRTPCValue("position_gd_" + ar.id, 50);
+        StartCoroutine("FadeInAudioRoutine", ar);
     }
 
-    private void ResetAudioRooms()
+    private void StopCurrentAudioRoom()
+    {
+        StartCoroutine("FadeOutAudioRoutine");
+    }
+
+    private void ResetAllAudioRooms()
     {
         for (int i = 0; i < nbAudioRoomId; i++)
         {
             AkSoundEngine.SetRTPCValue("position_relative_volume_" + i, 0);
             AkSoundEngine.SetRTPCValue("position_gd_" + i, 0);
         }
+    }
+
+    IEnumerator FadeInAudioRoutine(AudioRoom ar)
+    {
+        player.SetCurrentAudioRoom(lastCheckpoint.aRoom);
+        float i = 0;
+        while (i<50)
+        {
+            i += Time.deltaTime*audioFadeSpeed;
+            AkSoundEngine.SetRTPCValue("position_relative_volume_" + ar.id, i);
+            yield return new WaitForEndOfFrame();
+        }
+        i = 50;
+        AkSoundEngine.SetRTPCValue("position_relative_volume_" + ar.id, i);
+
+        yield return null;
+    }
+
+    IEnumerator FadeOutAudioRoutine()
+    {
+        float value = 50;
+        //AkSoundEngine.GetRTPCValue("position_relative_volume_" + player.GetCurrentAudioRoom().id,0,0,value);
+        while(value>0)
+        {
+            value-= Time.deltaTime * audioFadeSpeed;
+            AkSoundEngine.SetRTPCValue("position_relative_volume_" + player.GetCurrentAudioRoom().id, value);
+            yield return new WaitForEndOfFrame();
+        }
+        AkSoundEngine.SetRTPCValue("position_relative_volume_" + player.GetCurrentAudioRoom().id, 0);
+        ResetAllAudioRooms();
+        PlayCurrentAudioRoom(lastCheckpoint.aRoom);
+        yield return null;
     }
 
     public void PlayHeart()
@@ -236,6 +221,59 @@ public class GameManager : MonoBehaviour
         UseCheckpoint(lastCheckpoint);
         player.SetIsAlive(true);
     }
+
+    #region Checkpoints
+
+    public void UseCheckpoint(Checkpoint c)
+    {
+        player.transform.position = c.transform.position;
+        camHandler.SetNewZ(c.sRoom.newZ);
+        camHandler.SetNewOffset(c.sRoom.newOffset);
+        player.SetLightRange(c.sRoom.newLightRange);
+        StopCurrentAudioRoom();
+    }
+
+    // SAUVEGARDE LE NOUVEAU CHECKPOINT : POINT DE RESPAWN POUR LE JOUEUR 
+    public void SetNewCheckpoint(Checkpoint c)
+    {
+        if (c == lastCheckpoint) return;
+        lastCheckpoint = c;
+        //print("New Checkpoint activated");
+    }
+
+    // [ExecuteInEditMode]
+    private void TP()
+    {
+        int check = -1;
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            check = 0;
+        }
+        else if (Input.GetKeyDown(KeyCode.F2))
+        {
+            check = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.F3))
+        {
+            check = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.F4))
+        {
+            check = 3;
+        }
+        else if (Input.GetKeyDown(KeyCode.F5))
+        {
+            check = 4;
+        }
+
+        if (check != -1)
+        {
+            player.Reset();
+            UseCheckpoint(CheckPointList[check]);
+        }
+    }
+
+    #endregion
 
     #endregion
 

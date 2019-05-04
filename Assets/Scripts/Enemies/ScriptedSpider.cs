@@ -90,11 +90,6 @@ public class ScriptedSpider : Enemy
     {
         if (b)
         {
-            if (!hasPlayedLook)
-            {
-                AkSoundEngine.PostEvent(WwiseLook, gameObject);
-                hasPlayedLook = true;
-            }
             GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
         }
     }

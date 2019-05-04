@@ -75,9 +75,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lightSensitivity = 1;
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlight;
-   // [SerializeField] private Transform cameraLight;
-    [SerializeField] private Transform lamp;
-    [SerializeField] private Light pointLight;
     [SerializeField] private int flickerPercentage = 10;
     [SerializeField] private int flickeringFrequency = 1;
     [SerializeField] public float rangeDim;
@@ -101,12 +98,11 @@ public class PlayerController : MonoBehaviour
     private bool hasPlayedHeart = false;
 
     private CameraBlock currentCameraBlock = null;
-    SpatialRoom currentSpatialRoom = null;
+    private AudioRoom currentAudioRoom = null;
+    [HideInInspector] public SpatialRoom currentSpatialRoom = null;
     SpatialSas currentSpatialSas = null;
     SpatialLine currentSpatialLine = null;
     private Rigidbody objectGrabbed = null;
-    [Header("Debug")]
-    //[SerializeField] private bool ignoreIsGroundedOneTime = false;
 
     private float objectGrabbedWidth = 0;
 
@@ -140,6 +136,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        CheckTrackerConnected();
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
         LightAim();
         if (isClimbing) return;
@@ -236,7 +233,6 @@ public class PlayerController : MonoBehaviour
         else if(other.CompareTag("Hideout"))
         {
             isHidden = true;
-            PlayHeart();
         }
         else if (other.CompareTag("Killzone"))
         {
@@ -323,7 +319,6 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Hideout"))
         {
             isHidden = false;
-            StopHeart();
             return;
         }
 
@@ -409,9 +404,9 @@ public class PlayerController : MonoBehaviour
 
     #region Light
 
-    private void LightAim()
+    private void CheckTrackerConnected()
     {
-        if(!TobiiAPI.IsConnected)
+        if (!TobiiAPI.IsConnected)
         {
             UIManager.instance.DisableControlPanel(true);
         }
@@ -419,6 +414,10 @@ public class PlayerController : MonoBehaviour
         {
             UIManager.instance.DisableControlPanel(false);
         }
+    }
+
+    private void LightAim()
+    {
         // LIGHT AIM CONTROL
         if (GameManager.instance.GetIsTrackerEnabled() && TobiiAPI.IsConnected) // EYE TRACKER OPTION
         {
@@ -504,18 +503,18 @@ public class PlayerController : MonoBehaviour
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
-        //camLt.enabled = !isClosed;
         lt.enabled = !isClosed;
-        //pointLight.enabled = !isClosed;
         lightOn = !isClosed;
 
         if(isClosed)
         {
             PlayHeart();
+            flashlightAnimator.enabled = false;
         }
-        else if(!isHidden)
+        else
         {
             StopHeart();
+            flashlightAnimator.enabled = true;
         }
     }
 
@@ -1132,6 +1131,16 @@ public class PlayerController : MonoBehaviour
     public Light getLight()
     {
         return lt;
+    }
+
+    public void SetCurrentAudioRoom(AudioRoom ar)
+    {
+        currentAudioRoom = ar;
+    }
+
+    public AudioRoom GetCurrentAudioRoom()
+    {
+        return currentAudioRoom;
     }
 
     public void SetLightRange(float newRange)

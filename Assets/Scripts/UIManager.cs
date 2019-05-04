@@ -1,7 +1,8 @@
-﻿    using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject NoEyePanel=null;
     [SerializeField] private Slider volumeControl;
     [SerializeField] private Toggle toggleTracker;
+    [SerializeField] private EventSystem eventSystem;
 
     public bool isFading = false;
 
@@ -44,6 +46,9 @@ public class UIManager : MonoBehaviour
             FadeOut(fadeImg, 2, 0);
             StartCoroutine("StartCoroutine");
         }
+        eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+        volumeControl.OnSelect(null);
+        toggleTracker.OnSelect(null);
     }
 
     public void ValueChangeCheck()
@@ -158,6 +163,17 @@ public class UIManager : MonoBehaviour
     {
         ControlPanel.SetActive(!b);
         NoEyePanel.SetActive(b);
+        
+        if(!b)
+        {
+            eventSystem.firstSelectedGameObject = toggleTracker.gameObject;
+            eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+        }
+        else
+        {
+            eventSystem.firstSelectedGameObject = volumeControl.gameObject;
+            eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+        }
     }
 
     public bool GetCheckTracker()

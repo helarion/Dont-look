@@ -7,7 +7,7 @@ public class ScriptLamp : Objet
     [SerializeField] private Light lt = null;
     [SerializeField] private ScriptedSpider spider =null;
     bool isEnabled = false;
-    [SerializeField] AK.Wwise.Trigger trigger=null;
+    [SerializeField] string trigger;
     [SerializeField] GameObject swingingLight;
 
     private void Start()
@@ -25,7 +25,7 @@ public class ScriptLamp : Objet
         isEnabled = true;
         lt.enabled = isEnabled;
         spider.Script();
-        //AkSoundEngine.PostEvent(trigger.Id,gameObject);
+        AkSoundEngine.PostEvent(trigger,gameObject);
         //swing);
     }
 

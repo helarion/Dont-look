@@ -30,6 +30,7 @@ public class AudioRoom : MonoBehaviour
             {
                 if (entry.getExitRtpcValue())
                 {
+                    GameManager.instance.player.SetCurrentAudioRoom(this);
                     rtpcVolumeFilter = 50;
                     rtpcPan = 50;
                 }
@@ -40,7 +41,6 @@ public class AudioRoom : MonoBehaviour
                 }
                 AkSoundEngine.SetRTPCValue("position_relative_volume_" + id, rtpcVolumeFilter);
                 AkSoundEngine.SetRTPCValue("position_gd_" + id, rtpcPan);
-                //print("Position GD:" + rtpcPan + " de l'id:" + id);
             }
             else if (entry.getIsOccupied())
             {
@@ -75,7 +75,6 @@ public class AudioRoom : MonoBehaviour
                 }
                 AkSoundEngine.SetRTPCValue("position_relative_volume_"+id, rtpcVolumeFilter);
                 AkSoundEngine.SetRTPCValue("position_gd_"+id, rtpcPan);
-                //print("Position GD:" + rtpcPan+" de l'id:"+id);
             }
         }
     }

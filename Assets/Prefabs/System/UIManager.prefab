@@ -52,6 +52,7 @@ MonoBehaviour:
   NoEyePanel: {fileID: 4433784608152383189}
   volumeControl: {fileID: 1533102050553294354}
   toggleTracker: {fileID: 7630913507350461335}
+  eventSystem: {fileID: 0}
   isFading: 0
 --- !u!1001 &8327313820682560506
 PrefabInstance:
@@ -195,16 +196,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slider
       objectReference: {fileID: 0}
-    - target: {fileID: 6405380661371802517, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6405380661371802517, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5627098546761480231, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
       propertyPath: m_AnchorMin.x
@@ -243,21 +234,6 @@ PrefabInstance:
     - target: {fileID: 5627098546761480231, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2433588887892737562, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2433588887892737562, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2433588887892737562, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5627098548108176488, guid: 6b4aa82e73706094e882bf5bb69c5826,
@@ -315,6 +291,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -76.266815
       objectReference: {fileID: 0}
+    - target: {fileID: 3387428049420734382, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3387428049420734382, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3387428049420734382, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836040448153833415, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 27.047876
+      objectReference: {fileID: 0}
     - target: {fileID: 8991335725271450557, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
       propertyPath: m_fontAsset
@@ -335,12 +331,7 @@ PrefabInstance:
     - target: {fileID: 8991335725271450557, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
       propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8991335725271450557, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7211547673032276693, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
@@ -357,16 +348,6 @@ PrefabInstance:
       propertyPath: m_enableAutoSizing
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7211547673032276693, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7211547673032276693, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 936411622738264322, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -380,12 +361,7 @@ PrefabInstance:
     - target: {fileID: 4646621914772306620, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
       propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4646621914772306620, guid: 6b4aa82e73706094e882bf5bb69c5826,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b4aa82e73706094e882bf5bb69c5826, type: 3}
