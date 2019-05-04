@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     [Header("Chase Variables")]
     [SerializeField] public bool isChasing = false;
     [SerializeField] private bool delete = false;
-    [SerializeField] public float shakeIntensity;
+    [SerializeField] public float lookShakeIntensity=0.08f;
     private bool hasPlayedChase = false;
     [SerializeField] private float chaseShakeIntensity=0.02f;
 

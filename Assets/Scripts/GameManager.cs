@@ -239,6 +239,24 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
+    #region camera
+    // BOUGER LA CAMERA
+    public void MoveCamera(Vector3 newPos)
+    {
+        float speed = cameraSpeed;
+        if (player.velocity > 0) speed /= (player.velocity * cameraMoveOffset);
+        originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
+    }
+
+    public void RotateCamera(Quaternion newRotate)
+    {
+        //print(newRotate);
+        //float speed = cameraSpeed;
+        //if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
+        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
+    }
+
     #region shake
     // Shaking screen for duration set previously
     private void CheckShake()
@@ -259,28 +277,16 @@ public class GameManager : MonoBehaviour
     // SHAKESCREEN POUR LA DUREE ENTREE
     public void ShakeScreen(float duration, float intensity)
     {
-        shakeDuration = duration;
-        shakeAmount = intensity;
+        if (shakeDuration > 0)
+        {
+            if (intensity > shakeAmount) shakeAmount = intensity;
+        }
+        else shakeAmount = intensity;
+        shakeDuration = duration; 
     }
 
     #endregion
 
-    #region camera
-    // BOUGER LA CAMERA
-    public void MoveCamera(Vector3 newPos)
-    {
-        float speed = cameraSpeed;
-        if (player.velocity > 0) speed /= (player.velocity * cameraMoveOffset);
-        originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
-    }
-
-    public void RotateCamera(Quaternion newRotate)
-    {
-        //print(newRotate);
-        //float speed = cameraSpeed;
-        //if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
-        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
-    }
 
     #endregion
 
