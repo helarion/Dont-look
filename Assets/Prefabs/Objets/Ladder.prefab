@@ -83,11 +83,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1030103326}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 0, z: 1.25}
-  m_Center: {x: 0, y: 0.3, z: 0}
+  m_Size: {x: 1.5000011, y: 0, z: 1.6625636}
+  m_Center: {x: -0.000000039345128, y: 0.3, z: 0.20628178}
 --- !u!1 &2093306122
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +181,7 @@ PrefabInstance:
     - target: {fileID: 2995354734864589733, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_Name
-      value: LadderCameraBlock
+      value: LadderCameraBlock Sortie Room4
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589733, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
@@ -191,17 +191,17 @@ PrefabInstance:
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.12500003
+      value: -0.099999286
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.090909
+      value: 1.2727273
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.37500012
+      value: 1.2500001
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
@@ -262,11 +262,6 @@ PrefabInstance:
         type: 3}
       propertyPath: blockDirection
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2995354734864589728, guid: 32431e1ec1dd2574caa7bda18085bdeb,
-        type: 3}
-      propertyPath: newZ
-      value: -4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32431e1ec1dd2574caa7bda18085bdeb, type: 3}
@@ -335,6 +330,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23343467926455734, guid: 95bf493d8160e0e4fb65507deb002e02,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d52e630beb6f4f044a6b754531bd0189, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
 --- !u!4 &4291304110442234 stripped
@@ -353,7 +353,7 @@ PrefabInstance:
     - target: {fileID: 2995354734864589733, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_Name
-      value: LadderCameraBlock (1)
+      value: "LadderCameraBlock Entr\xE9e Room5"
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589733, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
@@ -363,17 +363,17 @@ PrefabInstance:
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.12500003
+      value: -0.099999785
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.45454544
+      value: 0.27272725
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.37500012
+      value: 0.3750001
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
@@ -423,17 +423,12 @@ PrefabInstance:
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.75
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 2995354734864589734, guid: 32431e1ec1dd2574caa7bda18085bdeb,
         type: 3}
       propertyPath: m_LocalScale.z
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2995354734864589728, guid: 32431e1ec1dd2574caa7bda18085bdeb,
-        type: 3}
-      propertyPath: newZ
-      value: -6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32431e1ec1dd2574caa7bda18085bdeb, type: 3}
@@ -502,6 +497,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23343467926455734, guid: 95bf493d8160e0e4fb65507deb002e02,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d52e630beb6f4f044a6b754531bd0189, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
 --- !u!4 &5358945373952954498 stripped
@@ -569,6 +569,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23537800973567906, guid: 439956ccf986b914eb15bd5912599fcf,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d52e630beb6f4f044a6b754531bd0189, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 439956ccf986b914eb15bd5912599fcf, type: 3}
 --- !u!4 &5350824456424773993 stripped
@@ -636,6 +641,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23343467926455734, guid: 95bf493d8160e0e4fb65507deb002e02,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d52e630beb6f4f044a6b754531bd0189, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95bf493d8160e0e4fb65507deb002e02, type: 3}
 --- !u!4 &5358945374696676367 stripped
