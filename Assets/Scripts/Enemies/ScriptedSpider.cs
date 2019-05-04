@@ -10,7 +10,7 @@ public class ScriptedSpider : Enemy
     [SerializeField] ScriptLamp lamp;
     [SerializeField] BoxCollider ladderCol;
     [SerializeField] int nbAttack = 2;
-    [SerializeField] float scriptIntensity;
+    [SerializeField] float scriptShakeIntensity;
     [SerializeField] private bool hasPlayedLook = false;
 
     private bool objective1 = false;
@@ -41,7 +41,7 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
-            GameManager.instance.ShakeScreen(0.2f,scriptIntensity);
+            GameManager.instance.ShakeScreen(0.2f,scriptShakeIntensity);
             lamp.Swing();
         }
     }
@@ -95,7 +95,7 @@ public class ScriptedSpider : Enemy
                 AkSoundEngine.PostEvent(WwiseLook, gameObject);
                 hasPlayedLook = true;
             }
-            GameManager.instance.ShakeScreen(0.1f, shakeIntensity);
+            GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
         }
     }
 }

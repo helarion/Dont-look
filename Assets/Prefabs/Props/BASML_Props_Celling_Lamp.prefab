@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401885151}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.4166667, z: 0}
+  m_LocalPosition: {x: 0, y: -0.44, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children: []
   m_Father: {fileID: 4050444042300614}
@@ -44,8 +44,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0.83674645, b: 0.3915094, a: 1}
-  m_Intensity: 32
-  m_Range: 12
+  m_Intensity: 256
+  m_Range: 20
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -112,10 +112,10 @@ MonoBehaviour:
   useVolumetric: 1
   featuresFoldout: 1
   showAdditionalSettings: 0
-  displayLightIntensity: 8
+  displayLightIntensity: 11
   displayAreaLightEmissiveMesh: 0
   lightLayers: 1
-  shadowNearPlane: 1
+  shadowNearPlane: 0.1
   shadowSoftness: 0
   blockerSampleCount: 1
   filterSampleCount: 1
@@ -192,7 +192,7 @@ Transform:
   m_GameObject: {fileID: 1341350811561482}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalScale: {x: 8, y: 6, z: 6}
   m_Children:
   - {fileID: 401885152}
   m_Father: {fileID: 0}
@@ -223,7 +223,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 38cd102acd6c77d4e99498e8221c2b7b, type: 2}
+  - {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

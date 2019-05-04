@@ -11,8 +11,9 @@ public class Enemy : MonoBehaviour
     [Header("Chase Variables")]
     [SerializeField] public bool isChasing = false;
     [SerializeField] private bool delete = false;
-    [SerializeField] public float shakeIntensity;
+    [SerializeField] public float lookShakeIntensity=0.08f;
     private bool hasPlayedChase = false;
+    [SerializeField] private float chaseShakeIntensity=0.02f;
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
@@ -98,12 +99,16 @@ public class Enemy : MonoBehaviour
 
     public virtual void DetectPlayer(bool b) {}
     public virtual void IsLit(bool b) {}
-    public virtual void ChaseBehavior() {}
+    public virtual void ChaseBehavior()
+    {
+        GameManager.instance.ShakeScreen(0.01f, chaseShakeIntensity);
+    }
 
     public void LightDetection()
     {
         bool test = false;
         Vector3 playerPosition = GameManager.instance.player.transform.position;
+        playerPosition.y += 1;
         Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
         Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
 

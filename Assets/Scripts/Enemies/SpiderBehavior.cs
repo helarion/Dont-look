@@ -65,6 +65,7 @@ public class SpiderBehavior : Enemy
 
     public override void ChaseBehavior()
     {
+        base.ChaseBehavior();
         // goes to the player
         isMoving = true;
         MoveTo(GameManager.instance.player.transform.position);
@@ -156,7 +157,7 @@ public class SpiderBehavior : Enemy
                 AkSoundEngine.PostEvent(WwiseLook, gameObject);
                 hasPlayedLook = true;
             }
-            GameManager.instance.ShakeScreen(0.1f,shakeIntensity);
+            GameManager.instance.ShakeScreen(0.1f,lookShakeIntensity);
             agent.speed = moveSpeed+bonusSpeed;
             if (!isLooked) StartCoroutine("CountLook");
         }

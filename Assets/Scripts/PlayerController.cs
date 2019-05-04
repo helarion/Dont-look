@@ -78,7 +78,10 @@ public class PlayerController : MonoBehaviour
    // [SerializeField] private Transform cameraLight;
     [SerializeField] private Transform lamp;
     [SerializeField] private Light pointLight;
-    [SerializeField] public float rangeDim; 
+    [SerializeField] private int flickerPercentage = 10;
+    [SerializeField] private int flickeringFrequency = 1;
+    [SerializeField] public float rangeDim;
+    [SerializeField] public Animator flashlightAnimator;
     public bool lightOn = true;
 
     [Header("State")]
@@ -117,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region StartUpdateOn
+    #region StartUpdate
 
     private void Start()
     {
@@ -136,12 +139,14 @@ public class PlayerController : MonoBehaviour
         localModelPosition = modelTransform.localPosition;
 
         headLookAt = rotatePointAround(transform.position + Vector3.right, headPosition.position, Vector3.up, -90);
+        StartFlickering();
     }
 
     private void Update()
     {
-        if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing ) return;
+        if (!isAlive || GameManager.instance.GetIsPaused()) return;
         LightAim();
+        if (isClimbing) return;
         GroundedCheck();
         FallingCheck();
         MoveInputUpdate();
@@ -186,6 +191,10 @@ public class PlayerController : MonoBehaviour
         }
         Gizmos.color = Color.white;
     }
+
+    #endregion
+
+    #region TriggersCollision
 
     private void OnTriggerEnter(Collider other)
     {
@@ -440,7 +449,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             // CHECK DU BOUTON POUR FERMER LES YEUX SI L'EYE TRACKER N'EST PAS ACTIVÉ
-            if (GameManager.instance.controls.GetAxis("Light")!=0)
+            if (GameManager.instance.controls.GetAxis("LightOff")!=0)
             {
                 ClosedEyes(true);
             }
@@ -478,17 +487,31 @@ public class PlayerController : MonoBehaviour
         }
 
         /* --- Code pour vérouiller le z de la lampe --- */
-        /*Vector3 lightAimVec = lookAtPos - GameManager.instance.mainCamera.transform.position;
+        /*
+        Vector3 lightAimVec = lookAtPos - GameManager.instance.mainCamera.transform.position;
         Vector3 cameraPosBack = GameManager.instance.mainCamera.transform.position;
         cameraPosBack.z = lookAtPos.z;
         Vector3 cameraPosPlayer = GameManager.instance.mainCamera.transform.position;
         cameraPosPlayer.z = transform.position.z + 2;
         float vecRate = (cameraPosPlayer - GameManager.instance.mainCamera.transform.position).magnitude / (cameraPosBack - GameManager.instance.mainCamera.transform.position).magnitude;
-        lookAtPos = GameManager.instance.mainCamera.transform.position + lightAimVec * vecRate;*/
+        lookAtPos = GameManager.instance.mainCamera.transform.position + lightAimVec * vecRate;
+        */
         /* ---  --- */
 
         //cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
-        flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.fixedDeltaTime * lightSpeed * 100);
+
+        if(!isClimbing && !isClimbingLadder)
+        {
+            flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.deltaTime * lightSpeed * 100);
+        }
+        else if(isClimbingLadder)
+        {
+            flashlight.eulerAngles = Vector3.Lerp(flashlight.eulerAngles, new Vector3(-90,0,0), Time.deltaTime * lightSpeed * 10);
+        }
+        else if(isClimbing)
+        {
+            flashlight.eulerAngles = Vector3.Lerp(flashlight.eulerAngles, new Vector3(0, 0, 0), Time.deltaTime * lightSpeed * 10);
+        }
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
@@ -507,6 +530,31 @@ public class PlayerController : MonoBehaviour
         {
             StopHeart();
         }
+    }
+
+    public void StartFlickering()
+    {
+        StartCoroutine("RandomFlickerCoroutine");
+    }
+
+    private void RandomFlicker()
+    {
+        int rand = Random.Range(0, 100);
+        if (rand <= flickerPercentage)
+        {
+            flashlightAnimator.SetTrigger("Flicker1");
+            //print("Flickers");
+        }
+    }
+
+    IEnumerator RandomFlickerCoroutine()
+    {
+        while (true)
+        {
+            RandomFlicker();
+            yield return new WaitForSeconds(flickeringFrequency);
+        }
+        //yield return null;
     }
 
     #endregion
@@ -532,6 +580,7 @@ public class PlayerController : MonoBehaviour
         StoppedHMove = false;
         stopMove = false;
         ResetVelocity();
+        //StartFlickering();
     }
     #endregion
 
@@ -847,15 +896,15 @@ public class PlayerController : MonoBehaviour
             {
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 89, 0)), speed / 2.0f);
                 currentLookDirection = LookDirection.Right;
-                if (hMove > 0) inverse = -1;
-                else inverse = 1;
+                if (hMove > 0) inverse = 1;
+                else inverse = -1;
             }
             else
             {
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 271, 0)), speed / 2.0f);
                 currentLookDirection = LookDirection.Left;
-                if (hMove < 0) inverse = -1;
-                else inverse = 1;
+                if (hMove < 0) inverse = 1;
+                else inverse = -1;
             }
         }
         lt.transform.rotation = save;
@@ -939,7 +988,6 @@ public class PlayerController : MonoBehaviour
         lastPosition = transform.position;
 
         rb.isKinematic = false;
-        //isAlive = true;
         isClimbing = false;
         isGrounded = true;
         animator.SetBool("Climb", false);
