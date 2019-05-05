@@ -27,7 +27,7 @@ public class BipedeBehavior : Enemy
 
     public void PlayWalk()
     {
-        GameManager.instance.ShakeScreen(0.5f, walkShakeIntensity);
+        GameManager.instance.ShakeScreen(1, walkShakeIntensity);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,8 +52,6 @@ public class BipedeBehavior : Enemy
     {
         if (b)
         {
-            //AkSoundEngine.PostEvent(WwiseLook, gameObject);
-            GameManager.instance.ShakeScreen(0.1f,lookShakeIntensity);
             isLooked = true;
             agent.isStopped = true;
             isMoving = false;
@@ -70,4 +68,10 @@ public class BipedeBehavior : Enemy
         }
     }
 
+    public override void Respawn()
+    {
+        base.Respawn();
+        hasPlayedLook = false;
+        isLooked = false;
+    }
 }

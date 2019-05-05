@@ -11,7 +11,6 @@ public class ScriptedSpider : Enemy
     [SerializeField] BoxCollider ladderCol;
     [SerializeField] int nbAttack = 2;
     [SerializeField] float scriptShakeIntensity;
-    [SerializeField] private bool hasPlayedLook = false;
 
     private bool objective1 = false;
     private bool objective2 = false;

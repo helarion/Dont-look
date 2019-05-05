@@ -12,12 +12,14 @@ public class Elevator : Objet
     [SerializeField] string stopSound;
     [SerializeField] BoxCollider enterCol;
     private Vector3 startPos;
+    //private Rigidbody rb;
 
     private bool isMoving = false;
 
     private void Start()
     {
         startPos = transform.position;
+        //rb = GetComponent<Rigidbody>();
     }
 
     public override void Activate()
@@ -32,6 +34,7 @@ public class Elevator : Objet
     public override void Reset()
     {
         base.Reset();
+        StopCoroutine("MoveCoroutine");
         transform.position = startPos;
     }
 
@@ -46,12 +49,16 @@ public class Elevator : Objet
 
     IEnumerator MoveCoroutine()
     {
+        GameManager.instance.player.StopMove();
         while(transform.position.y<endPos.position.y)
         {
-            transform.position = Vector3.Lerp(startPos, endPos.position, Time.deltaTime*moveSpeed);
+            //rb.MovePosition(new Vector3(0, 1 * Time.deltaTime * moveSpeed, 0));
+            transform.position += transform.up * Time.deltaTime*moveSpeed;
+            //transform.position = Vector3.Lerp(startPos, endPos.position, Time.deltaTime*moveSpeed);
             yield return new WaitForEndOfFrame();
         }
         //AkSoundEngine.PostEvent(stopSound, gameObject);
+        GameManager.instance.player.ResumeMove();
         isMoving = false;
         yield return null;
     }

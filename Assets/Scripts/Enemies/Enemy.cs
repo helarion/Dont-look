@@ -9,13 +9,15 @@ public class Enemy : MonoBehaviour
     [SerializeField] public float moveSpeed = 1;
 
     [Header("Chase Variables")]
-    [SerializeField] public bool isChasing = false;
     [SerializeField] private bool delete = false;
     [SerializeField] public float lookShakeIntensity=0.08f;
-    private bool hasPlayedChase = false;
     [SerializeField] private float chaseShakeIntensity=0.02f;
     [SerializeField] private float delayBeforeChase = 1;
     [SerializeField] public float delayChase = 3;
+
+    private bool hasPlayedChase = false;
+    [HideInInspector] public bool hasPlayedLook = false;
+    [HideInInspector] public bool isChasing = false;
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
@@ -126,7 +128,19 @@ public class Enemy : MonoBehaviour
     }
 
     public virtual void DetectPlayer(bool b) {}
-    public virtual void IsLit(bool b) {}
+    public virtual void IsLit(bool b)
+    {
+        if (b)
+        {
+            GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
+            if (!hasPlayedLook)
+            {
+                AkSoundEngine.PostEvent(WwiseLook, gameObject);
+                hasPlayedLook = true;
+            }
+        }
+    }
+
     public virtual void ChaseBehavior()
     {
         GameManager.instance.ShakeScreen(0.01f, chaseShakeIntensity);
@@ -183,10 +197,18 @@ public class Enemy : MonoBehaviour
 
     public virtual void Respawn()
     {
+        StopChase();
+        isLooked = false;
         hasPlayedChase = false;
-        agent.speed = 75;
+        hasPlayedLook = false;
+        isMoving = false;
+        isCountingEndChase = false;
+        isChasing = false;
+        //agent.speed = 75;
         StopChase();
         Vector3 pos = RandomSpawn();
+        animator.SetBool("IsMoving", false);
+        agent.Warp(pos);
         MoveTo(pos);
     }
 

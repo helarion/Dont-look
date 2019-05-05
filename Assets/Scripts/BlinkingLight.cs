@@ -46,6 +46,7 @@ public class BlinkingLight : MonoBehaviour
         pointLt.color = startColor;
         isWaiting = false;
         isBlinking = true;
+        isWaiting = false;
     }
 
     private IEnumerator DarkWait()

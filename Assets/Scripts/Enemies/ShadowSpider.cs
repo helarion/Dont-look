@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class ShadowSpider : Enemy
 {
     [SerializeField] Transform endPos;
-    [SerializeField] private bool hasPlayedLook = false;
 
     private void Start()
     {
@@ -17,20 +16,6 @@ public class ShadowSpider : Enemy
     {
         VelocityCount();
         LightDetection();
-
-        if(isMoving)
-        {
-            if(agent.remainingDistance<0.1f)
-            {
-                //Destroy(gameObject);
-            }
-        }
-
-        if (agent.isOnOffMeshLink)
-        {
-            agent.CompleteOffMeshLink();
-            agent.isStopped = false;
-        }
     }
 
 

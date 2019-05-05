@@ -271,10 +271,12 @@ public class PlayerController : MonoBehaviour
         }
         else if (other.CompareTag("Elevator"))
         {
+            print("enters elevator");
             Elevator elevator = other.GetComponent<Elevator>();
             if(elevator!=null)
             {
                 elevator.StartMoving();
+                print("elevator starts moving");
             }
         }
         else if (other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
@@ -1122,6 +1124,16 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region GetSet
+    public void StopMove()
+    {
+        stopMove = true;
+    }
+
+    public void ResumeMove()
+    {
+        stopMove = false;
+    }
+
     // RENVOIE LE POINT DANS LE MONDE QUE LE JOUEUR VISE
     public Vector3 GetLookAt()
     {

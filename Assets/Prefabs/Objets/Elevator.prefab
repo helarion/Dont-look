@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245245557}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.5, z: 0}
+  m_LocalPosition: {x: 0, y: 6.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4551404754655040}
@@ -46,7 +46,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4551404754655040
 Transform:
@@ -123,8 +123,8 @@ GameObject:
   - component: {fileID: 1700556721083671}
   - component: {fileID: 1782030476667746518}
   m_Layer: 9
-  m_Name: Elevator
-  m_TagString: Untagged
+  m_Name: Elevator Room12
+  m_TagString: Elevator
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,8 +137,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700556721083670}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -0.16666667, z: 0}
+  m_LocalScale: {x: 0.75, y: 1.25, z: 0.75}
   m_Children:
   - {fileID: 5703603294428852224}
   m_Father: {fileID: 4551404754655040}
@@ -218,7 +218,7 @@ BoxCollider:
   m_GameObject: {fileID: 1700556721083670}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.3142295, y: 2.0286002, z: 0.7602455}
   m_Center: {x: 0, y: 1, z: -0.1}

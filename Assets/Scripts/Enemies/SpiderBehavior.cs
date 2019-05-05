@@ -14,7 +14,6 @@ public class SpiderBehavior : Enemy
     [SerializeField] private bool clickToSetDestination = false;
 
     [SerializeField] private float countLook = 0;
-    [SerializeField] private bool hasPlayedLook = false;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
@@ -121,10 +120,8 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
-        hasPlayedLook = false;
         countLook = 0;
         animator.SetFloat("WakeMult", countLook);
-        animator.SetBool("IsMoving", false);
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON
@@ -149,14 +146,9 @@ public class SpiderBehavior : Enemy
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
     {
+        base.IsLit(b);
         if (b)
         {
-            if (!hasPlayedLook)
-            {
-                AkSoundEngine.PostEvent(WwiseLook, gameObject);
-                hasPlayedLook = true;
-            }
-            GameManager.instance.ShakeScreen(0.1f,lookShakeIntensity);
             agent.speed = moveSpeed+bonusSpeed;
             if (!isCountingStartChase)
             {
