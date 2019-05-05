@@ -6,13 +6,12 @@ public class ScriptLamp : Objet
 {
     [SerializeField] private Light lt = null;
     [SerializeField] private ScriptedSpider spider =null;
-    bool isEnabled = false;
-    [SerializeField] string trigger;
+    [SerializeField] string swingingLampSound;
     [SerializeField] GameObject swingingLight;
 
     private void Start()
     {
-        lt.enabled = isEnabled;
+        lt.enabled = isActivated;
     }
 
     public void Swing()
@@ -22,17 +21,15 @@ public class ScriptLamp : Objet
 
     public override void Activate()
     {
-        isEnabled = true;
-        lt.enabled = isEnabled;
+        isActivated = true;
+        lt.enabled = isActivated;
         spider.Script();
-        AkSoundEngine.PostEvent(trigger,gameObject);
-        //swing);
+        //AkSoundEngine.PostEvent(swingingLampSound,gameObject);
     }
 
     public override void Reset()
     {
         base.Reset();
-        isEnabled = false;
-        lt.enabled = isEnabled;
+        lt.enabled = isActivated;
     }
 }

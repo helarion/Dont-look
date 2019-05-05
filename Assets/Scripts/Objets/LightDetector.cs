@@ -7,8 +7,8 @@ public class LightDetector : Objet
     [SerializeField] private Objet target =null;
     [SerializeField] private float delayActivate = 1.5f;
     [SerializeField] private BlinkingLight blinkLight = null;
+    [SerializeField] private string chargingSound = null;
     [SerializeField] private string activateSound = null;
-    private bool isActivated =false;
     private MeshRenderer model;
     private bool isLooked = false;
     private float countLook=0f;
@@ -71,6 +71,7 @@ public class LightDetector : Objet
         {
             yield return new WaitForSeconds(0.1f);
             countLook += 0.1f;
+            // jouer le son de lampe qui se charge
         }
         Activate();
         isLooked = false;
@@ -81,6 +82,7 @@ public class LightDetector : Objet
     {
         if (isActivated) return;
         base.Activate();
+        AkSoundEngine.PostEvent(activateSound, gameObject);
         target.Activate();
         isActivated = true;
         print("Object activated");
@@ -90,7 +92,6 @@ public class LightDetector : Objet
     {
         base.Reset();
         blinkLight.Reset();
-        isActivated = false;
         isLooked = false;
         countLook = 0f;
     }

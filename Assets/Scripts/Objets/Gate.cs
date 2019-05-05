@@ -5,6 +5,7 @@ using UnityEngine;
 public class Gate : Objet
 {
     [SerializeField] private GameObject door =null;
+    [SerializeField] private string doorOpenSound;
     Vector3 startRotation;
 
     private void Start()
@@ -15,7 +16,7 @@ public class Gate : Objet
     public override void Activate()
     {
         door.transform.eulerAngles = new Vector3(0, 90, 0);
-        // PLAY SOUND
+        //AkSoundEngine.PostEvent(doorOpenSound,gameObject);
     }
 
     public override void Reset()
