@@ -269,6 +269,14 @@ public class PlayerController : MonoBehaviour
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
             UIManager.instance.FadeInEnd();
         }
+        else if (other.CompareTag("Elevator"))
+        {
+            Elevator elevator = other.GetComponent<Elevator>();
+            if(elevator!=null)
+            {
+                elevator.StartMoving();
+            }
+        }
         else if (other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
         {
             if (!isClimbingLadder)

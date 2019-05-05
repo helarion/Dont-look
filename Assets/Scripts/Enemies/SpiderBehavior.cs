@@ -8,14 +8,13 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float bonusSpeed = 1;
 
     [SerializeField] private float delaySpot = 1;
-    [SerializeField] private float delayChase = 3;
+
     [SerializeField] private float lengthDetection = 10;
 
     [SerializeField] private bool clickToSetDestination = false;
 
     [SerializeField] private float countLook = 0;
     [SerializeField] private bool hasPlayedLook = false;
-    private float countChase = 0;
 
     private bool canSeePlayer = false;
 
@@ -106,7 +105,8 @@ public class SpiderBehavior : Enemy
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE PASSE A CHASSER LE JOUEUR. POTENTIELLEMENT INUTILE ?
     private IEnumerator CountChase()
     {
-        while(countChase<delayChase)
+        float countChase = 0;
+        while (countChase < delayChase)
         {
             agent.speed = moveSpeed - bonusSpeed;
             countChase += Time.deltaTime;

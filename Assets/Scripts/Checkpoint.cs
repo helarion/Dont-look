@@ -20,7 +20,7 @@ public class Checkpoint : MonoBehaviour
     [ExecuteInEditMode]
     private void OnDrawGizmos()
     {
-        z=13;
+        z=0;
         BoxCollider bCollider = GetComponent<BoxCollider>();
         Vector3 pos = transform.position + bCollider.center;
         Gizmos.color = new Color(255,165,0); // orange

@@ -269,6 +269,30 @@ public class GameManager : MonoBehaviour
         {
             check = 5;
         }
+        else if (Input.GetKeyDown(KeyCode.F7))
+        {
+            check = 6;
+        }
+        else if (Input.GetKeyDown(KeyCode.F8))
+        {
+            check = 7;
+        }
+        else if (Input.GetKeyDown(KeyCode.F9))
+        {
+            check = 8;
+        }
+        else if (Input.GetKeyDown(KeyCode.F10))
+        {
+            check = 9;
+        }
+        else if (Input.GetKeyDown(KeyCode.F11))
+        {
+            check = 10;
+        }
+        else if (Input.GetKeyDown(KeyCode.F12))
+        {
+            check = 11;
+        }
 
         if (check != -1)
         {

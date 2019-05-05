@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     private bool hasPlayedChase = false;
     [SerializeField] private float chaseShakeIntensity=0.02f;
     [SerializeField] private float delayBeforeChase = 1;
+    [SerializeField] public float delayChase = 3;
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
@@ -29,6 +30,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform _transform;
     public bool isLooked = true;
     public bool isMoving = false;
+    public bool isSearching = false;
 
     [HideInInspector] public PlayerController p;
 
@@ -105,6 +107,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE PASSE A CHASSER LE JOUEUR. POTENTIELLEMENT INUTILE ?
+    private IEnumerator CountChase()
+    {
+        float countChase = 0;
+        while (countChase < delayChase)
+        {
+            countChase += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+            //print(countChase);
+        }
+        StopChase();
+        yield return null;
+    }
+
     public virtual void DetectPlayer(bool b) {}
     public virtual void IsLit(bool b) {}
     public virtual void ChaseBehavior()
@@ -112,6 +128,16 @@ public class Enemy : MonoBehaviour
         GameManager.instance.ShakeScreen(0.01f, chaseShakeIntensity);
         float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
         AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);
+        if(agent.isPathStale && !isSearching)
+        {
+            isSearching = true;
+            StartCoroutine("CountChase");
+        }
+        else
+        {
+            isSearching = false;
+            StopCoroutine("CountChase");
+        }
     }
 
     public void LightDetection()

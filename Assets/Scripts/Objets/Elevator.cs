@@ -8,7 +8,11 @@ public class Elevator : Objet
     [SerializeField] float moveSpeed;
     [SerializeField] string activateSound;
     [SerializeField] string engineSound;
+    [SerializeField] string movingSound;
+    [SerializeField] string stopSound;
     [SerializeField] BoxCollider enterCol;
+
+    private bool isMoving = false;
 
     public override void Activate()
     {
@@ -22,6 +26,27 @@ public class Elevator : Objet
     public override void Reset()
     {
         base.Reset();
+    }
 
+    public void StartMoving()
+    {
+        if (!isMoving)
+        {
+            isMoving = true;
+            StartCoroutine("MoveCoroutine");
+        }
+    }
+
+    IEnumerator MoveCoroutine()
+    {
+        Vector3 startPos = transform.position;
+        while(transform.position.y<endPos.position.y)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos.position, Time.deltaTime*moveSpeed);
+            yield return new WaitForEndOfFrame();
+        }
+        //AkSoundEngine.PostEvent(stopSound, gameObject);
+        isMoving = false;
+        yield return null;
     }
 }
