@@ -11,8 +11,14 @@ public class Elevator : Objet
     [SerializeField] string movingSound;
     [SerializeField] string stopSound;
     [SerializeField] BoxCollider enterCol;
+    private Vector3 startPos;
 
     private bool isMoving = false;
+
+    private void Start()
+    {
+        startPos = transform.position;
+    }
 
     public override void Activate()
     {
@@ -26,6 +32,7 @@ public class Elevator : Objet
     public override void Reset()
     {
         base.Reset();
+        transform.position = startPos;
     }
 
     public void StartMoving()
@@ -39,7 +46,6 @@ public class Elevator : Objet
 
     IEnumerator MoveCoroutine()
     {
-        Vector3 startPos = transform.position;
         while(transform.position.y<endPos.position.y)
         {
             transform.position = Vector3.Lerp(startPos, endPos.position, Time.deltaTime*moveSpeed);

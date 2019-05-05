@@ -176,11 +176,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a5b70d466c8344db087afb0cc2f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 2
   isChasing: 0
   delete: 0
   lookShakeIntensity: 0.05
   chaseShakeIntensity: 0.02
+  delayBeforeChase: 2
+  delayChase: 3
   spawnZones:
   - {fileID: 451292413311776609}
   WwiseChasePlay: 
@@ -192,6 +194,7 @@ MonoBehaviour:
   _transform: {fileID: 5058967854183323159}
   isLooked: 1
   isMoving: 0
+  isCountingEndChase: 0
   p: {fileID: 0}
   walkShakeIntensity: 0.8
 --- !u!65 &2175598857284857689

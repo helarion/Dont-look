@@ -18,6 +18,7 @@ public class SpiderBehavior : Enemy
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
+    private bool isCountingStartChase = false;
 
     NavMeshLink link;
 
@@ -86,7 +87,6 @@ public class SpiderBehavior : Enemy
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
     private IEnumerator CountLook()
     {
-        isLooked = true;
         animator.SetBool("WakesUp",true);
         while (countLook<delaySpot)
         {
@@ -97,7 +97,7 @@ public class SpiderBehavior : Enemy
         }
         animator.SetBool("WakesUp", false);
         StartChase();
-        isLooked = false;
+        isCountingStartChase = false;
         yield return null;
     }
 
@@ -158,13 +158,17 @@ public class SpiderBehavior : Enemy
             }
             GameManager.instance.ShakeScreen(0.1f,lookShakeIntensity);
             agent.speed = moveSpeed+bonusSpeed;
-            if (!isLooked) StartCoroutine("CountLook");
+            if (!isCountingStartChase)
+            {
+                isCountingStartChase = true;
+                StartCoroutine("CountLook");
+            }
         }
         else
         {
             if (isChasing) agent.speed = moveSpeed;
             StopCoroutine("CountLook");
-            isLooked = false;
+            isCountingStartChase = false;
             //countLook = 0; // A UTILISER SI ON VEUT QUE LE TEMPS DE SPOT SE RESET
         }
     }

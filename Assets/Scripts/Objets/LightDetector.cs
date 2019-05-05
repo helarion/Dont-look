@@ -82,6 +82,7 @@ public class LightDetector : Objet
     {
         if (isActivated) return;
         base.Activate();
+        blinkLight.Activate();
         AkSoundEngine.PostEvent(activateSound, gameObject);
         target.Activate();
         isActivated = true;

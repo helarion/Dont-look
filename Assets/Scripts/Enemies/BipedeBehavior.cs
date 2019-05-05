@@ -27,7 +27,7 @@ public class BipedeBehavior : Enemy
 
     public void PlayWalk()
     {
-        GameManager.instance.ShakeScreen(0.01f, walkShakeIntensity);
+        GameManager.instance.ShakeScreen(0.5f, walkShakeIntensity);
     }
 
     private void OnTriggerEnter(Collider other)

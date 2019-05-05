@@ -41,7 +41,7 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
-            GameManager.instance.ShakeScreen(0.2f,scriptShakeIntensity);
+            GameManager.instance.ShakeScreen(0.5f,scriptShakeIntensity);
             lamp.Swing();
         }
     }

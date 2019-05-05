@@ -13,11 +13,13 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] private float wait = 2;
     [SerializeField] private Color startColor;
     [SerializeField] private Color endColor;
+    [SerializeField] private Color activatedColor;
     private Color FinishedColor;
     private float count = 0;
     private float countTime = 0;
     private bool isWaiting = false;
     private bool isBlinking = true;
+    private bool isActivated = false;
 
     public void StartBlink()
     {
@@ -78,12 +80,18 @@ public class BlinkingLight : MonoBehaviour
             }
             if(!isWaiting)lt.intensity += (Time.deltaTime * blinkSpeed) * direction;
         }
-        else
+        else if(!isActivated)
         {
             pointLt.intensity = Mathf.Lerp(0, maxIntensity, count);
             lt.intensity = Mathf.Lerp(startingIntensity, maxIntensity, count);
             pointLt.color = Color.Lerp(startColor, endColor, count);
             count += Time.deltaTime/countTime;
         }
+    }
+
+    public void Activate()
+    {
+        isActivated = true;
+        pointLt.color = activatedColor;
     }
 }
