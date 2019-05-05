@@ -265,6 +265,10 @@ public class GameManager : MonoBehaviour
         {
             check = 4;
         }
+        else if(Input.GetKeyDown(KeyCode.F6))
+        {
+            check = 5;
+        }
 
         if (check != -1)
         {
