@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform _transform;
     public bool isLooked = true;
     public bool isMoving = false;
-    public bool isSearching = false;
+    public bool isCountingEndChase = false;
 
     [HideInInspector] public PlayerController p;
 
@@ -108,16 +108,20 @@ public class Enemy : MonoBehaviour
     }
 
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE PASSE A CHASSER LE JOUEUR. POTENTIELLEMENT INUTILE ?
-    private IEnumerator CountChase()
+    private IEnumerator CountEndChase()
     {
+        print("Start Counting chase");
         float countChase = 0;
         while (countChase < delayChase)
         {
+            print("count:"+countChase);
             countChase += Time.deltaTime;
             yield return new WaitForEndOfFrame();
             //print(countChase);
         }
+        print("Fin du compte");
         StopChase();
+        isCountingEndChase = false;
         yield return null;
     }
 
@@ -128,15 +132,18 @@ public class Enemy : MonoBehaviour
         GameManager.instance.ShakeScreen(0.01f, chaseShakeIntensity);
         float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
         AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);
-        if(agent.isPathStale && !isSearching)
+        bool isPathValid = agent.CalculatePath(p.transform.position, agent.path);
+        if(!isPathValid && !isCountingEndChase)
         {
-            isSearching = true;
-            StartCoroutine("CountChase");
+            print("path invalid");
+            isCountingEndChase = true;
+            StartCoroutine("CountEndChase");
         }
-        else
+        else if(isPathValid)
         {
-            isSearching = false;
-            StopCoroutine("CountChase");
+            print("path valid");
+            isCountingEndChase = false;
+            StopCoroutine("CountEndChase");
         }
     }
 

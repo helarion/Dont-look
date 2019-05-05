@@ -16,9 +16,8 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float countLook = 0;
     [SerializeField] private bool hasPlayedLook = false;
 
+    private bool isSearching = false;
     private bool canSeePlayer = false;
-
-    private bool chaseCoroutine = false;
 
     NavMeshLink link;
 
@@ -26,7 +25,6 @@ public class SpiderBehavior : Enemy
     {
         Initialize();
         animator.SetFloat("WakeMult", (1f / delaySpot));
-        countChase = 0;
         countLook = 0;
     }
 
@@ -73,13 +71,14 @@ public class SpiderBehavior : Enemy
         {
             if(!canSeePlayer)
             {
-                if (!chaseCoroutine) StartCoroutine("CountChase");
-                chaseCoroutine = true;
+                if (!isSearching) StartCoroutine("CountChase");
+                isSearching = true;
             }
         }
         else
         {
             StopCoroutine("CountChase");
+            isSearching = false;
             agent.speed = moveSpeed;
         }
     }
@@ -114,7 +113,7 @@ public class SpiderBehavior : Enemy
             //print(countChase);
         }
         StopChase();
-        chaseCoroutine = false;
+        isSearching = false;
         yield return null;
     }
 
@@ -123,7 +122,6 @@ public class SpiderBehavior : Enemy
     {
         base.Respawn();
         hasPlayedLook = false;
-        countChase = 0;
         countLook = 0;
         animator.SetFloat("WakeMult", countLook);
         animator.SetBool("IsMoving", false);
@@ -136,8 +134,9 @@ public class SpiderBehavior : Enemy
         if (!b)
         {
             StopCoroutine("CountChase");
+            isSearching = false;
             animator.SetBool("WakesUp", false);
-            chaseCoroutine = false;
+            isSearching= false;
         }
     }
 

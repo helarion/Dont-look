@@ -12275,7 +12275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2109709499, guid: 1d7f02ab7bfece44abc958f590c02467, type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 3.8838851
       objectReference: {fileID: 0}
     - target: {fileID: 5027043684092661479, guid: 1d7f02ab7bfece44abc958f590c02467,
         type: 3}
@@ -12946,7 +12946,7 @@ PrefabInstance:
     - target: {fileID: 108591155377741814, guid: aa6c5f105fddca84dac732069110c0c2,
         type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 108591155377741814, guid: aa6c5f105fddca84dac732069110c0c2,
         type: 3}
@@ -15029,6 +15029,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 482added6146dde40adf32028675b556, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &635820679 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5947339118586994013, guid: 07c4d4f69b54a704ea5b98a00624f037,
+    type: 3}
+  m_PrefabInstance: {fileID: 451292415132600022}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03a5b70d466c8344db087afb0cc2f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &637881715
@@ -31619,7 +31631,7 @@ PrefabInstance:
     - target: {fileID: 4928751859074805586, guid: 7da9f06352071b6488bdb0fe78dd1fa9,
         type: 3}
       propertyPath: m_Intensity
-      value: 128
+      value: 8192
       objectReference: {fileID: 0}
     - target: {fileID: 4928751859074805586, guid: 7da9f06352071b6488bdb0fe78dd1fa9,
         type: 3}
@@ -34227,12 +34239,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2109709499, guid: 1d7f02ab7bfece44abc958f590c02467, type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 3.8838851
       objectReference: {fileID: 0}
     - target: {fileID: 5027043684092661479, guid: 1d7f02ab7bfece44abc958f590c02467,
         type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d7f02ab7bfece44abc958f590c02467, type: 3}
@@ -38404,12 +38416,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2109709499, guid: 1d7f02ab7bfece44abc958f590c02467, type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 3.8838851
       objectReference: {fileID: 0}
     - target: {fileID: 5027043684092661479, guid: 1d7f02ab7bfece44abc958f590c02467,
         type: 3}
       propertyPath: m_Intensity
-      value: 32
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d7f02ab7bfece44abc958f590c02467, type: 3}
@@ -49049,6 +49061,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5058967854183323154, guid: 07c4d4f69b54a704ea5b98a00624f037,
+        type: 3}
+      propertyPath: m_Name
+      value: Bipede1
+      objectReference: {fileID: 0}
     - target: {fileID: 2175598857284857689, guid: 07c4d4f69b54a704ea5b98a00624f037,
         type: 3}
       propertyPath: m_Size.z
@@ -49958,6 +49975,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3695006473054658848, guid: 1b329c8af72d9f240b1d3880b7e3730f,
         type: 3}
+      propertyPath: listE.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3695006473054658848, guid: 1b329c8af72d9f240b1d3880b7e3730f,
+        type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 1897840728}
@@ -50036,6 +50058,11 @@ PrefabInstance:
       propertyPath: CheckPointList.Array.data[6]
       value: 
       objectReference: {fileID: 1538228056}
+    - target: {fileID: 3695006473054658848, guid: 1b329c8af72d9f240b1d3880b7e3730f,
+        type: 3}
+      propertyPath: listE.Array.data[3]
+      value: 
+      objectReference: {fileID: 635820679}
     - target: {fileID: 3695006473054658849, guid: 1b329c8af72d9f240b1d3880b7e3730f,
         type: 3}
       propertyPath: m_LocalPosition.x
