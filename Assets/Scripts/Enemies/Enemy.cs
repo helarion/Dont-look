@@ -204,7 +204,6 @@ public class Enemy : MonoBehaviour
         isMoving = false;
         isCountingEndChase = false;
         isChasing = false;
-        //agent.speed = 75;
         StopChase();
         Vector3 pos = RandomSpawn();
         animator.SetBool("IsMoving", false);

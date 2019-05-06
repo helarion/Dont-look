@@ -271,13 +271,16 @@ public class PlayerController : MonoBehaviour
         }
         else if (other.CompareTag("Elevator"))
         {
-            print("enters elevator");
             Elevator elevator = other.GetComponent<Elevator>();
             if(elevator!=null)
             {
                 elevator.StartMoving();
                 print("elevator starts moving");
             }
+        }
+        else if (other.CompareTag("NeedsCentering"))
+        {
+            needsCentering = true;
         }
         else if (other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
         {
@@ -340,28 +343,22 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Hideout"))
         {
             isHidden = false;
-            needsCentering = false;
-            return;
         }
-        else if (other.CompareTag("VerticalHideout"))
+        else if(other.CompareTag("NeedsCentering"))
         {
-            isHidden = false;
             needsCentering = false;
-            return;
         }
 
-        if (other.CompareTag("Grabbable"))
+        else if (other.CompareTag("Grabbable"))
         {
             GrabbableBox gb = other.GetComponentInParent<GrabbableBox>();
             gb.setIsPlayerInGrabZone(false);
-            return;
         }
 
-        if (other.CompareTag("DetectZone"))
+        else if (other.CompareTag("DetectZone"))
         {
             Enemy e = other.GetComponentInParent<Enemy>();
             e.DetectPlayer(false);
-            return;
         }
     }
 
@@ -665,7 +662,7 @@ public class PlayerController : MonoBehaviour
         Vector3 camMove = Vector3.zero;
 
         if (hMove < deadZoneValue && hMove > -deadZoneValue) hMove = 0;
-        if (!isClimbingLadder && (!isHidden || (!needsCentering && isHidden)))
+        if (!isClimbingLadder && (!needsCentering))
         {
             if (Mathf.Abs(hMove) > 0)
                 lMovement += HorizontalMove(hMove);
@@ -742,7 +739,7 @@ public class PlayerController : MonoBehaviour
 
             if (!isClimbingLadder)
             {
-                if (isHidden && needsCentering)
+                if (needsCentering)
                 {
                     if (currentSpatialLine.begin.position.z > transform.position.z)
                     {

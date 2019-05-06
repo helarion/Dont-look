@@ -6,14 +6,17 @@ public class BlinkingLight : MonoBehaviour
 {
     [SerializeField] Light lt=null;
     [SerializeField] Light pointLt = null;
+
     [SerializeField] float startingIntensity;
-    [SerializeField] private int direction=1;
     [SerializeField] private float blinkSpeed = 20;
     [SerializeField] private float maxIntensity = 200;
     [SerializeField] private float wait = 2;
+    private int direction = 1;
+
     [SerializeField] private Color startColor;
     [SerializeField] private Color endColor;
     [SerializeField] private Color activatedColor;
+
     private Color FinishedColor;
     private float count = 0;
     private float countTime = 0;
@@ -42,10 +45,9 @@ public class BlinkingLight : MonoBehaviour
     {
         count = 0;
         pointLt.intensity = 0;
-        lt.intensity = startingIntensity;
         pointLt.color = startColor;
         isWaiting = false;
-        isBlinking = true;
+        StartBlink();
         isWaiting = false;
     }
 

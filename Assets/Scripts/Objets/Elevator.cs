@@ -27,6 +27,7 @@ public class Elevator : Objet
         if (isActivated) return;
         base.Activate();
         enterCol.enabled = true;
+        isMoving = false;
         //AkSoundEngine.PostEvent(activateSound, gameObject);
         //AkSoundEngine.PostEvent(engineSound, gameObject);
     }
@@ -35,6 +36,7 @@ public class Elevator : Objet
     {
         base.Reset();
         StopCoroutine("MoveCoroutine");
+        enterCol.enabled = false;
         transform.position = startPos;
     }
 
