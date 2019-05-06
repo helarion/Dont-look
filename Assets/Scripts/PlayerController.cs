@@ -238,12 +238,6 @@ public class PlayerController : MonoBehaviour
         else if(other.CompareTag("Hideout"))
         {
             isHidden = true;
-            needsCentering = true;
-        }
-        else if(other.CompareTag("VerticalHideout"))
-        {
-            isHidden = true;
-            needsCentering = false;
         }
         else if (other.CompareTag("Killzone"))
         {
