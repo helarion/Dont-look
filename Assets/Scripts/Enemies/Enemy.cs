@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
 {
     [Header("Movement Variables")]
     [SerializeField] public float moveSpeed = 1;
+    [SerializeField] public float bonusSpeed = 1;
     [SerializeField] private float velocityMax = 2;
 
     [Header("Chase Variables")]

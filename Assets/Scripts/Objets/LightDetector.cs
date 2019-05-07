@@ -47,7 +47,7 @@ public class LightDetector : Objet
 
                 if (hit.transform.gameObject.tag == gameObject.tag)
                 {
-                    test = true;
+                    if(GameManager.instance.player.GetConcentration())test = true;
                 }
                 //print("Touched " + hit.transform.gameObject.name);
             }

@@ -281,16 +281,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modelTransform: {fileID: 4194574731507233612}
-  raycastPosition:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   raycastClimb: {fileID: 554286558}
   animator: {fileID: 312924326}
   hipPosition: {fileID: 4194574731507233648}
   headPosition: {fileID: 0}
   armPosition: {fileID: 0}
+  currentSpatialRoom: {fileID: 0}
   jumpForce: 2.5
   rayCastLength: 0.26
   maxClimbHeight: 0
@@ -307,6 +303,8 @@ MonoBehaviour:
   ladderSpeed: 0.7
   grabSpeed: 0.5
   changingLineSpeed: 0.1
+  velocity: 0
+  yVelocity: 0
   _horizontalAccelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -407,20 +405,25 @@ MonoBehaviour:
   _horizontalDecSpeed: 10
   _verticalAccSpeed: 4
   _verticalDecSpeed: 25
-  velocity: 0
-  yVelocity: 0
   bodyRotationDeadZone: 0.5
   lightSensitivity: 0.75
   lightSpeed: 0.03
-  flashlight: {fileID: 1491706786681059038}
+  flashlightTransform: {fileID: 1491706786681059038}
   flickerPercentage: 10
   flickeringFrequency: 4
   rangeDim: 1
   flashlightAnimator: {fileID: 4194574732569649043}
+  lightTransitionSpeed: 0.1
+  concentratedLightRangeBonus: 2
+  concentratedLightIntensity: 20
+  concentratedLightColor: {r: 1, g: 0.9780685, b: 0.8066038, a: 1}
+  concentratedLightAngle: 40
+  normalLightIntensity: 16
+  normalLightRange: 16
+  normalLightColor: {r: 1, g: 1, b: 1, a: 1}
+  normalLightAngle: 75
   lightOn: 1
-  isClimbingLadder: 0
   isJumping: 0
-  currentSpatialRoom: {fileID: 0}
 --- !u!54 &4194574732181831121
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1559,6 +1562,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
+      propertyPath: m_Intensity
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
       propertyPath: m_Range
       value: 16
       objectReference: {fileID: 0}
@@ -1586,11 +1594,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ColorTemperature
       value: 5313
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 128
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8574542227f87dd4b92c5ebe482bc9fa, type: 3}

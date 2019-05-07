@@ -62,9 +62,9 @@ public class BipedeBehavior : Enemy
         if (b)
         {
             isLooked = true;
-            agent.isStopped = true;
-            isMoving = false;
-            animator.SetBool("IsLooked", true);
+            if (GameManager.instance.player.GetConcentration()) LitConcentrated();
+            else LitNormal();
+
             animator.SetBool("IsMoving", isMoving);
         }
         else
@@ -75,6 +75,21 @@ public class BipedeBehavior : Enemy
             animator.SetBool("IsLooked", false);
             animator.SetBool("IsMoving", isMoving);
         }
+    }
+
+    private void LitNormal()
+    {
+        agent.isStopped = false;
+        isMoving = true;
+        agent.speed = moveSpeed -= bonusSpeed;
+    }
+
+    private void LitConcentrated()
+    {
+        agent.isStopped = true;
+        isMoving = false;
+        animator.SetBool("IsLooked", true);
+        
     }
 
     public override void Respawn()

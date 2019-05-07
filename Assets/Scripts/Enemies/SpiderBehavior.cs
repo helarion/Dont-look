@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class SpiderBehavior : Enemy
 {
-    [SerializeField] private float bonusSpeed = 1;
     [SerializeField] private float delaySpot = 1;
     [SerializeField] private float lengthDetection = 10;
     [SerializeField] private bool clickToSetDestination = false;

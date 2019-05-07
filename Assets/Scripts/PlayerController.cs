@@ -5,20 +5,31 @@ using Tobii.Gaming;
 public class PlayerController : MonoBehaviour
 {
     #region variables
-    private Light lt;
-    private Light camLt;
-    private Rigidbody rb;
-    private Collider cl;
-    private Vector3 lookAtPos;
-    private Vector2 cursorPos;
 
-    [Header("Model and light objects")]
+    #region SavedVariables
+    [Header("Models & saved objects")]
     [SerializeField] private Transform modelTransform;
     [SerializeField] private Transform raycastClimb;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform hipPosition;
     [SerializeField] private Transform headPosition;
     [SerializeField] private Transform armPosition;
+
+    private CameraBlock currentCameraBlock = null;
+    private AudioRoom currentAudioRoom = null;
+    [HideInInspector] public SpatialRoom currentSpatialRoom = null;
+    SpatialSas currentSpatialSas = null;
+    SpatialLine currentSpatialLine = null;
+    private Rigidbody objectGrabbed = null;
+    private float objectGrabbedWidth = 0;
+    private Rigidbody rb;
+    private Collider cl;
+    private Vector3 lookAtPos;
+    private Vector2 cursorPos;
+
+    #endregion
+
+    #region JumpVariables
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 1.5f;
@@ -30,6 +41,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private GroundDetector groundDetector;
     private int jumpDirection = 0;
+
+    #endregion
+
+    #region MovementVariables
 
     [Header("Movement")]
     [SerializeField] private float walkTime;
@@ -59,8 +74,11 @@ public class PlayerController : MonoBehaviour
     private float hMove;
     private int inverse = 1;
 
-    [Header("Acceleration Decceleration Curves")]
+    #endregion
 
+    #region AccelerationDecelerationVariables
+
+    [Header("Acceleration Decceleration Curves")]
     [SerializeField] private AnimationCurve _horizontalAccelerationCurve;
     [SerializeField] private AnimationCurve _verticalAccelerationCurve;
     [SerializeField] private AnimationCurve _horizontalDecelerationCurve;
@@ -75,23 +93,35 @@ public class PlayerController : MonoBehaviour
     [Range(-1, 1)]
     private float _verticalAccDecLerpValue;
 
+    #endregion
+
+    #region LightVariables
     [Header("Light")]
     [SerializeField] private float bodyRotationDeadZone = 0.5f;
     [Range(0, 1)]
     [SerializeField] private float lightSensitivity = 1;
     [SerializeField] private float lightSpeed = 1;
-    [SerializeField] private float normalLightrange;
-    [SerializeField] private float concentratedLightRange;
-    [SerializeField] private float normalLightIntensity;
-    [SerializeField] private float concentratedLightIntensity;
-    [SerializeField] private Transform flashlight;
+    [SerializeField] private Transform flashlightTransform;
     [SerializeField] private int flickerPercentage = 10;
     [SerializeField] private int flickeringFrequency = 1;
     [SerializeField] public float rangeDim;
     [SerializeField] public Animator flashlightAnimator;
+    [SerializeField] private float lightTransitionSpeed=0.1f;
+
+    [SerializeField] private float concentratedLightRangeBonus;
+    [SerializeField] private float concentratedLightIntensity;
+    [SerializeField] private Color concentratedLightColor;
+    [SerializeField] private float concentratedLightAngle;
+    [SerializeField] private float normalLightIntensity;
+    [SerializeField] private float normalLightRange;
+    [SerializeField] private Color normalLightColor;
+    [SerializeField] private float normalLightAngle;
     private bool isConcentrating=false;
     public bool lightOn = true;
+    private Light flashlight;
+    #endregion
 
+    #region StaetsVariables
     [Header("State")]
     private bool isHidden = false;
     private bool isAlive = true;
@@ -104,20 +134,12 @@ public class PlayerController : MonoBehaviour
     private bool hasPlayedHeart = false;
     private bool needsCentering = false;
     private bool isInElevator = false;
+    #endregion
 
-    private CameraBlock currentCameraBlock = null;
-    private AudioRoom currentAudioRoom = null;
-    [HideInInspector] public SpatialRoom currentSpatialRoom = null;
-    SpatialSas currentSpatialSas = null;
-    SpatialLine currentSpatialLine = null;
-    private Rigidbody objectGrabbed = null;
-
-    private float objectGrabbedWidth = 0;
+    //Vector3 headLookAt;
 
     enum LookDirection { Left, Right, Front, Back};
     LookDirection currentLookDirection = LookDirection.Right;
-
-    Vector3 headLookAt;
 
     enum InputMode { PC, Pad};
     InputMode inputMode = InputMode.Pad;
@@ -131,13 +153,18 @@ public class PlayerController : MonoBehaviour
         isAlive = true;
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
-        lt = flashlight.GetComponent<Light>();
+        flashlight = flashlightTransform.GetComponent<Light>();
         //camLt = cameraLight.GetComponent<Light>();
-        lt.type = LightType.Spot;
+        flashlight.type = LightType.Spot;
         ClosedEyes(false);
         Cursor.visible = false;
         moveSpeed = walkSpeed;
-
+        /*
+        normalLightColor = flashlight.color;
+        normalLightIntensity = flashlight.intensity;
+        normalLightrange = flashlight.range;
+        normalLightAngle = flashlight.spotAngle;
+        */
         cursorPos = Input.mousePosition;
         lastPosition = transform.position;
         localModelPosition = modelTransform.localPosition;
@@ -149,9 +176,9 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         CheckTrackerConnected();
-        if (!isAlive || GameManager.instance.GetIsPaused()) return;
+        if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing) return;
         LightAim();
-        if (isClimbing) return;
+        LightMode();
         GroundedCheck();
         FallingCheck();
         MoveInputUpdate();
@@ -166,14 +193,6 @@ public class PlayerController : MonoBehaviour
 
         lastPosition = transform.position;
 
-
-        if (isClimbingLadder)
-        {
-            if(vMove > 0 || vMove < 0) animator.SetFloat("ClimbSpeed", Mathf.Abs(vMove));
-            else animator.SetFloat("ClimbSpeed", 0);
-        }
-
-        if (isClimbingLadder) return;
         ClimbCheck();
         if (isJumping || stopMove || isFalling) return;
         Move();
@@ -286,20 +305,11 @@ public class PlayerController : MonoBehaviour
         {
             needsCentering = true;
         }
-        else if (other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
-        {
-            if (!isClimbingLadder)
-            {
-                StartClimbLadder(other.transform.position);
-                if (!other.GetComponentInParent<Ladder>().isReusable) other.isTrigger = false;
-            }
-            else StopClimbLadder();
-        }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (!stopMove && !isClimbing && !isClimbingLadder && !animator.GetBool("IsJumping"))
+        if (!stopMove && !isClimbing && !animator.GetBool("IsJumping"))
         {
             if (other.CompareTag("JumpZoneRight") && hMove > 0)
             {
@@ -384,6 +394,7 @@ public class PlayerController : MonoBehaviour
         return result;
     }
 
+    /*
     private void OnAnimatorIK(int layerIndex)
     {
         animator.SetLookAtWeight(1);
@@ -422,7 +433,7 @@ public class PlayerController : MonoBehaviour
         }
         animator.SetIKPosition(AvatarIKGoal.LeftHand, armPos);*/
         //animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.LookRotation(headLookAt - armPos) * Quaternion.Euler(45, -30, 0));
-    }
+   // }
 
     #endregion
 
@@ -459,6 +470,29 @@ public class PlayerController : MonoBehaviour
         else
         {
             UIManager.instance.DisableControlPanel(false);
+        }
+    }
+
+    private void LightMode()
+    {
+        if(GameManager.instance.controls.GetButton("Concentrate"))
+        {
+            isConcentrating = true;
+
+            flashlight.range = Mathf.Lerp(flashlight.range,normalLightRange+concentratedLightRangeBonus,lightTransitionSpeed);
+            flashlight.intensity = Mathf.Lerp(flashlight.intensity,concentratedLightIntensity,lightTransitionSpeed);
+            flashlight.color = Color.Lerp(flashlight.color, concentratedLightColor, lightTransitionSpeed);
+            flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, concentratedLightAngle, lightTransitionSpeed);
+            flashlightAnimator.enabled = false;
+        }
+        else
+        {
+            isConcentrating = false;
+            flashlight.range = Mathf.Lerp(flashlight.range, normalLightRange, lightTransitionSpeed);
+            flashlight.intensity = Mathf.Lerp(flashlight.intensity, normalLightIntensity, lightTransitionSpeed);
+            flashlight.color = Color.Lerp(flashlight.color, normalLightColor, lightTransitionSpeed);
+            flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle, lightTransitionSpeed);
+            if (lightOn) flashlightAnimator.enabled = true;
         }
     }
 
@@ -532,24 +566,20 @@ public class PlayerController : MonoBehaviour
 
         //cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
 
-        if(!isClimbing && !isClimbingLadder)
+        if(!isClimbing)
         {
-            flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.deltaTime * lightSpeed * 100);
+            flashlightTransform.rotation = Quaternion.Slerp(flashlightTransform.rotation, Quaternion.LookRotation(lookAtPos - flashlightTransform.position), Time.deltaTime * lightSpeed * 100);
         }
-        else if(isClimbingLadder)
+        else
         {
-            flashlight.eulerAngles = Vector3.Lerp(flashlight.eulerAngles, new Vector3(-90,0,0), Time.deltaTime * lightSpeed * 10);
-        }
-        else if(isClimbing)
-        {
-            flashlight.eulerAngles = Vector3.Lerp(flashlight.eulerAngles, new Vector3(0, 0, 0), Time.deltaTime * lightSpeed * 10);
+            flashlightTransform.eulerAngles = Vector3.Lerp(flashlightTransform.eulerAngles, new Vector3(0, 0, 0), Time.deltaTime * lightSpeed * 10);
         }
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
-        lt.enabled = !isClosed;
+        flashlight.enabled = !isClosed;
         lightOn = !isClosed;
 
         if(isClosed)
@@ -615,48 +645,6 @@ public class PlayerController : MonoBehaviour
         ResetVelocity();
         //StartFlickering();
     }
-    #endregion
-
-    #region Ladder
-
-    public void StartClimbLadder(Vector3 v)
-    {
-        StoppedHMove = false;
-        transform.position = v;
-        modelTransform.eulerAngles = new Vector3(0, 0, 0);
-        SetIsClimbingLadder(true);
-        ResetVelocity();
-        animator.SetBool("OnLadder", true);
-    }
-
-    public void StopClimbLadder()
-    {
-        animator.SetFloat("ClimbSpeed", 1);
-        StoppedHMove = false;
-        modelTransform.eulerAngles = new Vector3(0, 90, 0);
-        SetIsClimbingLadder(false);
-        animator.SetBool("OnLadder", false);
-        Vector3 newPosition = transform.position;
-        transform.position = newPosition;
-    }
-
-    private IEnumerator LadderPush()
-    {
-        float count = 0;
-        while (count < 1f)
-        {
-            Vector3 lMovement = new Vector3(0, GameManager.instance.controls.GetAxisRaw("Move Vertical"), 0);
-            if ((lMovement.y > 0) || lMovement.y < 0)
-            {
-                Vector3 move = transform.position + lMovement;
-                transform.position = Vector3.Lerp(transform.position, move, Time.deltaTime / ladderSpeed);
-                count += Time.deltaTime;
-            }
-            yield return new WaitForEndOfFrame();
-        }
-        yield return null;
-    }
-
     #endregion
 
     #region Movement
@@ -891,7 +879,7 @@ public class PlayerController : MonoBehaviour
 
     private void BodyRotation()
     {
-        Quaternion save = lt.transform.rotation;
+        Quaternion save = flashlight.transform.rotation;
         float speed = 0.1f;
         if (vMove > 0 && isChangingSpatialLine)
         {
@@ -922,7 +910,7 @@ public class PlayerController : MonoBehaviour
                 else inverse = -1;
             }
         }
-        lt.transform.rotation = save;
+        flashlight.transform.rotation = save;
         animator.SetFloat("Inverse", inverse);
     }
 
@@ -1039,7 +1027,7 @@ public class PlayerController : MonoBehaviour
 
     private void FallingCheck()
     {
-        if(yVelocity < 0 && !isClimbing && !isClimbingLadder && !isInElevator)
+        if(yVelocity < 0 && !isClimbing && !isInElevator)
         {
             animator.SetBool("IsFalling", true);
         }
@@ -1128,6 +1116,11 @@ public class PlayerController : MonoBehaviour
         return transform.position;
     }
 
+    public bool GetConcentration()
+    {
+        return isConcentrating;
+    }
+
     // Renvoie la position du curseur sur l'écran (souris ou eye tracker) dans l'intervalle [-1;1]
 
     public Vector2 getCursorPosNormalized()
@@ -1154,7 +1147,7 @@ public class PlayerController : MonoBehaviour
 
     public Light getLight()
     {
-        return lt;
+        return flashlight;
     }
 
     public void SetCurrentAudioRoom(AudioRoom ar)
@@ -1174,7 +1167,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetLightRange(float newRange)
     {
-        lt.range = newRange;
+        normalLightRange = newRange;
     }
 
     public void SetIsGrabbing(bool b, Rigidbody obj, float objWidth)
