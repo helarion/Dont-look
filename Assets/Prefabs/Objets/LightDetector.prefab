@@ -619,9 +619,8 @@ MonoBehaviour:
   lt: {fileID: 2109709499}
   pointLt: {fileID: 5027043684092661479}
   startingIntensity: 50
-  direction: 1
   blinkSpeed: 40
-  maxIntensity: 60
+  maxIntensity: 100
   wait: 1.5
   startColor: {r: 1, g: 0, b: 0, a: 0}
   endColor: {r: 0.059675325, g: 0.9622642, b: 0, a: 0}
@@ -639,7 +638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActivated: 0
-  target: {fileID: 0}
+  targets: []
   delayActivate: 0.5
   blinkLight: {fileID: 5026061470162382335}
   chargingSound: 
