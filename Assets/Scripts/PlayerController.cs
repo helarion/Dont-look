@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Model and light objects")]
     [SerializeField] private Transform modelTransform;
-    [SerializeField] private Transform[] raycastPosition = null;
     [SerializeField] private Transform raycastClimb;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform hipPosition;
@@ -29,6 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpLength = 3;
     [SerializeField] private float jumpLengthSpeed = 1;
     [SerializeField] private bool isGrounded = false;
+    [SerializeField] private GroundDetector groundDetector;
     private int jumpDirection = 0;
 
     [Header("Movement")]
@@ -1035,19 +1035,7 @@ public class PlayerController : MonoBehaviour
             ignoreIsGroundedOneTime = false;
             return;
         }*/
-        RaycastHit hitInfo;
-        foreach (Transform t in raycastPosition)
-        {
-            if (Physics.Raycast(t.position, -Vector3.up, out hitInfo, rayCastLength))
-            {
-                //print("raycasthit: "+hitInfo.collider.name);
-                if (!hitInfo.collider.isTrigger)
-                {
-                    isGrounded = true;
-                    break;
-                }
-            }
-        }
+        isGrounded = groundDetector.GetIsGrounded();
         if (!isFalling) return;
         if (isGrounded)
         {
