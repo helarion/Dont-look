@@ -11,6 +11,7 @@ public class ScriptedSpider : Enemy
     [SerializeField] BoxCollider ladderCol;
     [SerializeField] int nbAttack = 2;
     [SerializeField] float scriptShakeIntensity;
+    [SerializeField] float scriptShakeDuration = 1;
 
     private bool objective1 = false;
     private bool objective2 = false;
@@ -40,7 +41,7 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
-            GameManager.instance.ShakeScreen(0.5f,scriptShakeIntensity);
+            GameManager.instance.ShakeScreen(scriptShakeDuration,scriptShakeIntensity);
             lamp.Swing();
         }
     }
@@ -82,14 +83,5 @@ public class ScriptedSpider : Enemy
         GameManager.instance.DeleteEnemyFromList(this);
         Destroy(gameObject);        
         yield return null;
-    }
-
-    // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
-    public override void IsLit(bool b)
-    {
-        if (b)
-        {
-            GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
-        }
     }
 }

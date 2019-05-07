@@ -22,16 +22,10 @@ public class ShadowSpider : Enemy
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
     {
+        base.IsLit(b);
         if (b)
         {
-            if (!hasPlayedLook)
-            {
-                AkSoundEngine.PostEvent(WwiseLook, gameObject);
-                hasPlayedLook = true;
-            }
-            GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
             MoveTo(endPos.position);
-            isMoving = true;
         }
     }
 }

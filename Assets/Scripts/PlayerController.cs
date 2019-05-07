@@ -268,7 +268,10 @@ public class PlayerController : MonoBehaviour
             Elevator elevator = other.GetComponent<Elevator>();
             if(elevator!=null)
             {
+                elevator.isPlayerOnBoard = true;
                 elevator.StartMoving();
+                animator.SetBool("IsMoving", false);
+
                 print("elevator starts moving");
             }
         }
@@ -342,7 +345,14 @@ public class PlayerController : MonoBehaviour
         {
             needsCentering = false;
         }
-
+        else if (other.CompareTag("Elevator"))
+        {
+            Elevator elevator = other.GetComponent<Elevator>();
+            if (elevator != null)
+            {
+                elevator.isPlayerOnBoard = false;
+            }
+        }
         else if (other.CompareTag("Grabbable"))
         {
             GrabbableBox gb = other.GetComponentInParent<GrabbableBox>();

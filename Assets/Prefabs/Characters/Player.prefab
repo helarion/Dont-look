@@ -478,15 +478,14 @@ MonoBehaviour:
   lightSensitivity: 0.75
   lightSpeed: 0.03
   flashlight: {fileID: 1491706786681059038}
-  lamp: {fileID: 0}
-  pointLight: {fileID: 0}
   flickerPercentage: 10
-  flickeringFrequency: 1
+  flickeringFrequency: 4
   rangeDim: 1
   flashlightAnimator: {fileID: 4194574732569649043}
   lightOn: 1
   isClimbingLadder: 0
   isJumping: 0
+  currentSpatialRoom: {fileID: 0}
 --- !u!54 &4194574732181831121
 Rigidbody:
   m_ObjectHideFlags: 0

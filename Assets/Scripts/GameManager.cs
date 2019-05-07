@@ -22,10 +22,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float cameraMoveOffset = 20;
 
     [Header("ScreenShake")]
-    [SerializeField] private float shakeDuration = 0f;
-    [SerializeField] private float shakeAmount = 0.7f;
+    //[SerializeField] private float shakeDuration = 0f;
+    //[SerializeField] private float shakeAmount = 0.7f;
     [SerializeField] private float decreaseFactor = 1.0f;
-    [SerializeField] private float maxValue = 0.1f;
+    //[SerializeField] private float maxValue = 0.1f;
+    [HideInInspector] public CameraHandler camHandler;
 
     [Header("Layers")]
     [SerializeField] private LayerMask wallsAndMobsLayer;
@@ -47,7 +48,7 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     private bool isTrackerEnabled = true;
     private bool isPlayingHeart = false;
-    [HideInInspector] public CameraHandler camHandler;
+
     #endregion
 
     #region startupdate
@@ -91,7 +92,8 @@ public class GameManager : MonoBehaviour
             else PauseGame();
         }
         if (isPaused) return;
-        CheckShake();
+        //mainCamera.transform.localPosition = originalPos;
+        //CheckShake();
         TP();
     }
 
@@ -305,13 +307,13 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-
     #region camera
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
         float speed = cameraSpeed;
         if (player.velocity > 0) speed /= (player.velocity * cameraMoveOffset);
+        mainCamera.transform.localPosition = Vector3.Lerp(originalPos, newPos, Time.deltaTime / speed);
         originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
     }
 
@@ -325,12 +327,11 @@ public class GameManager : MonoBehaviour
 
     #region shake
     // Shaking screen for duration set previously
-    private void CheckShake()
+   /* private void CheckShake()
     {
         if (shakeDuration > 0)
         {
             mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
-
             shakeDuration -= Time.deltaTime * decreaseFactor;
         }
         else
@@ -338,9 +339,29 @@ public class GameManager : MonoBehaviour
             shakeDuration = 0f;
             mainCamera.transform.localPosition = originalPos;
         }
+    }*/
+
+    private IEnumerator ShakeScreenCoroutine(float duration, float amplitude)
+    {
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * amplitude;
+            elapsed += Time.deltaTime * decreaseFactor;
+            yield return null;
+        }
+
+        mainCamera.transform.localPosition = originalPos;
     }
 
     // SHAKESCREEN POUR LA DUREE ENTREE
+    public void ShakeScreen(float duration, float intensity)
+    {
+        StartCoroutine(ShakeScreenCoroutine(duration, intensity));
+    }
+
+    /*
     public void ShakeScreen(float duration, float intensity)
     {
         if (shakeDuration > 0)
@@ -350,6 +371,7 @@ public class GameManager : MonoBehaviour
         else shakeAmount = intensity;
         shakeDuration = duration; 
     }
+    */
 
     #endregion
 

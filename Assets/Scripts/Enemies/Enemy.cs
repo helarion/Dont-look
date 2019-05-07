@@ -11,8 +11,10 @@ public class Enemy : MonoBehaviour
     [Header("Chase Variables")]
     [SerializeField] private bool delete = false;
     [SerializeField] public float lookShakeIntensity=0.08f;
+    [SerializeField] private float lookShakeTime = 1;
     [SerializeField] private float chaseShakeIntensity=0.02f;
-    [SerializeField] private float delayBeforeChase = 1;
+    [SerializeField] private float chaseShakeTime = 1;
+    [SerializeField] public float delayBeforeChase = 1;
     [SerializeField] public float delayChase = 3;
 
     private bool hasPlayedChase = false;
@@ -47,7 +49,11 @@ public class Enemy : MonoBehaviour
     {
         velocity = ((transform.position - lastPosition).magnitude * 10) * moveSpeed;
         lastPosition = transform.position;
-        animator.SetFloat("Velocity", velocity);
+
+        float distanceMax = 2;
+        float rate = velocity / distanceMax;
+        rate = Mathf.Clamp(rate,0, 1);
+        animator.SetFloat("Velocity", rate);
     }
 
     private void Start()
@@ -73,19 +79,9 @@ public class Enemy : MonoBehaviour
             hasPlayedChase = true;
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, GameManager.instance.gameObject);
         }
-        StartCoroutine("WaitBeforeChaseCoroutine");
-    }
-
-    IEnumerator WaitBeforeChaseCoroutine()
-    {
-        agent.speed = 1;
-        agent.isStopped = false;
-        isChasing = true;
         isMoving = true;
         animator.SetBool("IsMoving", isMoving);
-        yield return new WaitForSeconds(delayBeforeChase);
-        agent.speed = moveSpeed;
-        //AkSoundEngine.PostEvent(WwiseChasePlay.Id,gameObject);
+        isChasing = true;
     }
 
     public void StopChase()
@@ -97,8 +93,6 @@ public class Enemy : MonoBehaviour
             animator.SetBool("IsMoving", isMoving);
             //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
-            //AkSoundEngine.PostEvent(GameManager.instance.HeartStop, GameManager.instance.player.gameObject);
-            //GameManager.instance.PlayHeart();
             if (!delete) Respawn();
             else if (p.GetIsHidden())
             {
@@ -132,7 +126,7 @@ public class Enemy : MonoBehaviour
     {
         if (b)
         {
-            GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
+            GameManager.instance.ShakeScreen(lookShakeTime, lookShakeIntensity);
             if (!hasPlayedLook)
             {
                 AkSoundEngine.PostEvent(WwiseLook, gameObject);
@@ -143,7 +137,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void ChaseBehavior()
     {
-        GameManager.instance.ShakeScreen(0.01f, chaseShakeIntensity);
+        GameManager.instance.ShakeScreen(chaseShakeTime, chaseShakeIntensity);
         float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
         AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);
         bool isPathValid = agent.CalculatePath(p.transform.position, agent.path);

@@ -11,6 +11,9 @@ public class Elevator : Objet
     [SerializeField] string movingSound;
     [SerializeField] string stopSound;
     [SerializeField] BoxCollider enterCol;
+    [SerializeField] int direction = 1;
+    [SerializeField] bool isStarted = false;
+    [HideInInspector] public bool isPlayerOnBoard = false;
     private Vector3 startPos;
     //private Rigidbody rb;
 
@@ -26,8 +29,15 @@ public class Elevator : Objet
     {
         if (isActivated) return;
         base.Activate();
-        enterCol.enabled = true;
-        isMoving = false;
+        if(!isStarted)
+        {
+            enterCol.enabled = true;
+            isMoving = false;
+        }
+        else
+        {
+            StartMoving();
+        }
         //AkSoundEngine.PostEvent(activateSound, gameObject);
         //AkSoundEngine.PostEvent(engineSound, gameObject);
     }
@@ -51,17 +61,22 @@ public class Elevator : Objet
 
     IEnumerator MoveCoroutine()
     {
-        GameManager.instance.player.StopMove();
-        while(transform.position.y<endPos.position.y)
+        //GameManager.instance.player.StopMove();
+        float distance = (transform.position - endPos.position).magnitude;
+        while(distance>0)
         {
-            //rb.MovePosition(new Vector3(0, 1 * Time.deltaTime * moveSpeed, 0));
-            transform.position += transform.up * Time.deltaTime*moveSpeed;
-            //transform.position = Vector3.Lerp(startPos, endPos.position, Time.deltaTime*moveSpeed);
+            transform.position += (transform.up* direction) * Time.deltaTime*moveSpeed;
+            distance = (transform.position - endPos.position).magnitude;
             yield return new WaitForEndOfFrame();
         }
         //AkSoundEngine.PostEvent(stopSound, gameObject);
-        GameManager.instance.player.ResumeMove();
+        //GameManager.instance.player.ResumeMove();
         isMoving = false;
+        direction *= -1;
+        Vector3 save = startPos;
+        startPos = endPos.position;
+        endPos.position = save;
+        isActivated = false;
         yield return null;
     }
 }

@@ -6,14 +6,9 @@ using UnityEngine.AI;
 public class SpiderBehavior : Enemy
 {
     [SerializeField] private float bonusSpeed = 1;
-
     [SerializeField] private float delaySpot = 1;
-
     [SerializeField] private float lengthDetection = 10;
-
     [SerializeField] private bool clickToSetDestination = false;
-
-    [SerializeField] private float countLook = 0;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
@@ -25,7 +20,6 @@ public class SpiderBehavior : Enemy
     {
         Initialize();
         animator.SetFloat("WakeMult", (1f / delaySpot));
-        countLook = 0;
     }
 
     private void Update()
@@ -86,17 +80,17 @@ public class SpiderBehavior : Enemy
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
     private IEnumerator CountLook()
     {
+        float count = 0;
         animator.SetBool("WakesUp",true);
-        while (countLook<delaySpot)
+        while (count<delayBeforeChase)
         {
-            countLook+=Time.deltaTime;
-            animator.SetFloat("WakeMult", countLook);
-            //print(countLook);
+            count+=Time.deltaTime;
+            animator.SetFloat("WakeMult", count);
+            //print(count);
             yield return new WaitForEndOfFrame();
         }
         animator.SetBool("WakesUp", false);
         StartChase();
-        isCountingStartChase = false;
         yield return null;
     }
 
@@ -120,8 +114,8 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
-        countLook = 0;
-        animator.SetFloat("WakeMult", countLook);
+                isCountingStartChase = false;
+        animator.SetFloat("WakeMult", 0);
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON
@@ -137,31 +131,25 @@ public class SpiderBehavior : Enemy
         }
     }
 
-    public override void StartChase()
-    {
-        base.StartChase();
-        countLook = 0;
-    }
-
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
     {
         base.IsLit(b);
         if (b)
         {
-            agent.speed = moveSpeed+bonusSpeed;
-            if (!isCountingStartChase)
+            if (!isCountingStartChase && !isChasing)
             {
                 isCountingStartChase = true;
                 StartCoroutine("CountLook");
+            }
+            else
+            {
+                agent.speed = moveSpeed + bonusSpeed;
             }
         }
         else
         {
             if (isChasing) agent.speed = moveSpeed;
-            StopCoroutine("CountLook");
-            isCountingStartChase = false;
-            //countLook = 0; // A UTILISER SI ON VEUT QUE LE TEMPS DE SPOT SE RESET
         }
     }
 }

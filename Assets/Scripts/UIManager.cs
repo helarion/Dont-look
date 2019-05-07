@@ -64,11 +64,8 @@ public class UIManager : MonoBehaviour
         GameManager.instance.SetIsPaused(false);
     }
 
-    IEnumerator FadeOutCoroutine(object[] param)
+    IEnumerator FadeOutCoroutine(Image img, float duration, float waitBefore)
     {
-        Image img = (Image)param[0];
-        float duration = (float)param[1];
-        float waitBefore = (float)param[2];
         Color savedColor = img.color;
         savedColor.a = 1;
         img.color = savedColor;
@@ -90,11 +87,8 @@ public class UIManager : MonoBehaviour
         isFading = false;
     }
 
-    IEnumerator FadeInCoroutine(object[] param)
+    IEnumerator FadeInCoroutine(Image img, float duration, float waitBefore)
     {
-        Image img = (Image)param[0];
-        float duration = (float)param[1];
-        float waitBefore = (float)param[2];
         Color savedColor = img.color;
         savedColor.a = 0;
         img.color = savedColor;
@@ -141,22 +135,19 @@ public class UIManager : MonoBehaviour
 
     public void FadeIn(Image img, float duration, float waitBefore)
     {
-        object[] o = { img, duration, waitBefore };
-        StartCoroutine("FadeInCoroutine",o);
+        StartCoroutine(FadeInCoroutine(img,duration,waitBefore));
     }
 
 
     public void FadeInEnd()
     {
-        object[] o = { fadeImg, 2f, 0f};
-        StartCoroutine("FadeInCoroutine", o);
+        StartCoroutine(FadeInCoroutine(fadeImg,2f,0f));
         StartCoroutine("EndCoroutine");
     }
 
     public void FadeOut(Image img, float duration, float waitBefore)
     {
-        object[] o = { img, duration, waitBefore };
-        StartCoroutine("FadeOutCoroutine",o);
+        StartCoroutine(FadeOutCoroutine(img,duration,waitBefore));
     }
 
     public void DisableControlPanel(bool b)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LightDetector : Objet
 {
-    [SerializeField] private Objet target =null;
+    [SerializeField] private Objet[] targets =null;
     [SerializeField] private float delayActivate = 1.5f;
     [SerializeField] private BlinkingLight blinkLight = null;
     [SerializeField] private string chargingSound = null;
@@ -84,7 +84,10 @@ public class LightDetector : Objet
         base.Activate();
         blinkLight.Activate();
         AkSoundEngine.PostEvent(activateSound, gameObject);
-        target.Activate();
+        foreach(Objet o in targets)
+        {
+            o.Activate();
+        }
         isActivated = true;
         print("Object activated");
     }

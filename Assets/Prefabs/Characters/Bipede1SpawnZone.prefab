@@ -177,12 +177,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  isChasing: 0
   delete: 0
   lookShakeIntensity: 0.05
+  lookShakeTime: 1
   chaseShakeIntensity: 0.02
+  chaseShakeTime: 1
   delayBeforeChase: 2
   delayChase: 3
+  hasPlayedLook: 0
+  isChasing: 0
   spawnZones:
   - {fileID: 451292413311776609}
   WwiseChasePlay: 
@@ -196,7 +199,8 @@ MonoBehaviour:
   isMoving: 0
   isCountingEndChase: 0
   p: {fileID: 0}
-  walkShakeIntensity: 0.8
+  walkShakeIntensity: 0.2
+  walkShakeDuration: 0.15
 --- !u!65 &2175598857284857689
 BoxCollider:
   m_ObjectHideFlags: 0

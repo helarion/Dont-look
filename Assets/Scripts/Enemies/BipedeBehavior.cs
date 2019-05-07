@@ -5,11 +5,16 @@ using UnityEngine;
 public class BipedeBehavior : Enemy
 {
     [SerializeField] private float walkShakeIntensity=0.3f;
+    [SerializeField] private float walkShakeDuration = 1;
+
+    private float currentWalkIntensity;
+    private BoxCollider detectZone;
     // Start is called before the first frame update
     void Start()
     {
         Initialize();
         agent.speed = moveSpeed;
+        detectZone = GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
@@ -27,7 +32,7 @@ public class BipedeBehavior : Enemy
 
     public void PlayWalk()
     {
-        GameManager.instance.ShakeScreen(1, walkShakeIntensity);
+        GameManager.instance.ShakeScreen(walkShakeDuration, currentWalkIntensity);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,6 +45,10 @@ public class BipedeBehavior : Enemy
     public override void ChaseBehavior()
     {
         base.ChaseBehavior();
+        float playerDistance = (transform.position - p.transform.position).magnitude;
+        float distanceMax = (detectZone.bounds.size.x / 2);
+        float rate=((distanceMax-playerDistance)/distanceMax)+0.1f;
+        currentWalkIntensity = walkShakeIntensity * rate;
         if(!isLooked)
         {
             // goes to the player
