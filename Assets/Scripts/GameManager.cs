@@ -42,6 +42,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] int nbAudioRoomId;
     [SerializeField] float audioFadeSpeed=10;
 
+    [Header("Input Materials")]
+    [SerializeField] Material leftClickMat;
+    [SerializeField] Material rightClickMat;
+    [SerializeField] Material bButtonMat;
+    [SerializeField] Material leftTriggerMat;
+
     [HideInInspector] public Player controls; // The Rewired Player
 
     private Vector3 originalPos;
@@ -347,6 +353,7 @@ public class GameManager : MonoBehaviour
 
         while (elapsed < duration)
         {
+            Handheld.Vibrate();
             mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * amplitude;
             elapsed += Time.deltaTime * decreaseFactor;
             yield return null;

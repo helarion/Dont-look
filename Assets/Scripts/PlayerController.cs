@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Tobii.Gaming;
+using UnityEngine.Experimental.Rendering.HDPipeline;
 
 public class PlayerController : MonoBehaviour
 {
@@ -121,7 +122,7 @@ public class PlayerController : MonoBehaviour
     private Light flashlight;
     #endregion
 
-    #region StaetsVariables
+    #region StatesVariables
     [Header("State")]
     private bool isHidden = false;
     private bool isAlive = true;
@@ -134,6 +135,7 @@ public class PlayerController : MonoBehaviour
     private bool hasPlayedHeart = false;
     private bool needsCentering = false;
     private bool isInElevator = false;
+    private int controler = -1;
     #endregion
 
     //Vector3 headLookAt;
@@ -154,17 +156,10 @@ public class PlayerController : MonoBehaviour
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
         flashlight = flashlightTransform.GetComponent<Light>();
-        //camLt = cameraLight.GetComponent<Light>();
         flashlight.type = LightType.Spot;
         ClosedEyes(false);
         Cursor.visible = false;
         moveSpeed = walkSpeed;
-        /*
-        normalLightColor = flashlight.color;
-        normalLightIntensity = flashlight.intensity;
-        normalLightrange = flashlight.range;
-        normalLightAngle = flashlight.spotAngle;
-        */
         cursorPos = Input.mousePosition;
         lastPosition = transform.position;
         localModelPosition = modelTransform.localPosition;
@@ -229,6 +224,29 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.camHandler.SetNewZ(currentCameraBlock.room.newZ);
             GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
             SetLightRange(currentCameraBlock.room.newLightRange);
+            print("enter cameraBLock");
+            if(currentCameraBlock.updatedDecals.Length>0)
+            {
+                print("must change decal");
+                int i = 0;
+                foreach(DecalProjectorComponent d in currentCameraBlock.updatedDecals)
+                {
+                    if (inputMode == InputMode.PC)
+                    {
+                        print("input pc");
+                        d.m_Material = currentCameraBlock.keyboardMaterials[i];
+                    }
+                    else
+                    {
+                        print("input manette");
+                        d.m_Material = currentCameraBlock.gamePadMaterials[i];
+                    }
+                    d.enabled = false;
+                    d.enabled = true;
+                    print("mat changé");
+                    i++;
+                }
+            }
             return;
         }
 

@@ -69,6 +69,7 @@ public class BipedeBehavior : Enemy
         }
         else
         {
+            //agent.speed = moveSpeed;
             isLooked = false;
             agent.isStopped = false;
             isMoving = true;
@@ -81,7 +82,7 @@ public class BipedeBehavior : Enemy
     {
         agent.isStopped = false;
         isMoving = true;
-        agent.speed = moveSpeed -= bonusSpeed;
+        agent.speed = moveSpeed - bonusSpeed;
     }
 
     private void LitConcentrated()
