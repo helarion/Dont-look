@@ -14,6 +14,9 @@ public class Elevator : Objet
     [SerializeField] int direction = 1;
     [SerializeField] bool isStarted = false;
     [HideInInspector] public bool isPlayerOnBoard = false;
+    [SerializeField] private bool addSpatialLine = false;
+    [SerializeField] SpatialLine spatialLine;
+    [SerializeField] SpatialRoom spatialRoom;
     private Vector3 startPos;
     //private Rigidbody rb;
 
@@ -61,7 +64,7 @@ public class Elevator : Objet
 
     IEnumerator MoveCoroutine()
     {
-        //GameManager.instance.player.StopMove();
+        if(isPlayerOnBoard) GameManager.instance.player.StopMove();
         float distance = (transform.position - endPos.position).magnitude;
         while(distance>0.05f)
         {
@@ -72,12 +75,22 @@ public class Elevator : Objet
         transform.position = endPos.position;
         //AkSoundEngine.PostEvent(stopSound, gameObject);
         //GameManager.instance.player.ResumeMove();
+        ReachEnd();
+        yield return null;
+    }
+
+    private void ReachEnd()
+    {
+        if(isPlayerOnBoard) GameManager.instance.player.ResumeMove();
         isMoving = false;
         direction *= -1;
         Vector3 save = startPos;
         startPos = endPos.position;
         endPos.position = save;
         isActivated = false;
-        yield return null;
+        if (addSpatialLine)
+        {
+            // ajouter ici
+        }
     }
 }
