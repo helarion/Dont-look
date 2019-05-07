@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpLength = 3;
     [SerializeField] private float jumpLengthSpeed = 1;
     [SerializeField] private bool isGrounded = false;
+    [SerializeField] private GroundDetector groundDetector;
     private int jumpDirection = 0;
 
     [Header("Movement")]
@@ -1033,7 +1034,7 @@ public class PlayerController : MonoBehaviour
             ignoreIsGroundedOneTime = false;
             return;
         }*/
-        RaycastHit hitInfo;
+        /*RaycastHit hitInfo;
         foreach (Transform t in raycastPosition)
         {
             if (Physics.Raycast(t.position, -Vector3.up, out hitInfo, rayCastLength))
@@ -1045,7 +1046,8 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
-        }
+        }*/
+        isGrounded = groundDetector.GetIsGrounded();
         if (!isFalling) return;
         if (isGrounded)
         {
