@@ -7,12 +7,6 @@ public class GroundDetector : MonoBehaviour
     List<Collider> colliders = new List<Collider>();
     bool isGrounded = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        ;
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -30,7 +24,7 @@ public class GroundDetector : MonoBehaviour
     {
         if (!other.isTrigger)
         {
-            print("Ground detector collided with :" + other.name);
+            //print("Ground detector collided with :" + other.name);
             colliders.Add(other);
         }
     }

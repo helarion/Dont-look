@@ -165,7 +165,7 @@ public class GameManager : MonoBehaviour
         if (isPlayingHeart) return;
         isPlayingHeart = true;
         AkSoundEngine.PostEvent(HeartPlay, player.gameObject);
-        StartCoroutine("HeartCoroutine");
+        if(player.GetInputMode()==PlayerController.InputMode.Pad)StartCoroutine("HeartCoroutine");
     }
 
     public void StopHeart()
@@ -367,8 +367,11 @@ public class GameManager : MonoBehaviour
 
         while (elapsed < duration)
         {
-            controls.SetVibration(0, amplitude, duration);
-            controls.SetVibration(1, amplitude, duration);
+            if (player.GetInputMode() == PlayerController.InputMode.Pad)
+            {
+                controls.SetVibration(0, amplitude, duration);
+                controls.SetVibration(1, amplitude, duration);
+            }
             mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * amplitude;
             elapsed += Time.deltaTime * decreaseFactor;
             yield return null;

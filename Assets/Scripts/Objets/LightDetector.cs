@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class LightDetector : Objet
 {
-    [SerializeField] private Objet[] targets =null;
+    [SerializeField] public Objet[] targets =null;
     [SerializeField] private float delayActivate = 1.5f;
     [SerializeField] private BlinkingLight blinkLight = null;
     [SerializeField] private string chargingSound = null;
     [SerializeField] private string activateSound = null;
     private MeshRenderer model;
-    private bool isLooked = false;
+    [HideInInspector] public bool isLooked = false;
     private float countLook=0f;
 
     private void Start()

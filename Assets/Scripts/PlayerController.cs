@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
     enum LookDirection { Left, Right, Front, Back};
     LookDirection currentLookDirection = LookDirection.Right;
 
-    enum InputMode { PC, Pad};
+    public enum InputMode { PC, Pad};
     InputMode inputMode = InputMode.Pad;
 
     #endregion
@@ -1137,6 +1137,11 @@ public class PlayerController : MonoBehaviour
     public bool GetConcentration()
     {
         return isConcentrating;
+    }
+
+    public InputMode GetInputMode()
+    {
+        return inputMode;
     }
 
     // Renvoie la position du curseur sur l'écran (souris ou eye tracker) dans l'intervalle [-1;1]

@@ -66,7 +66,7 @@ public class Elevator : Objet
     {
         if(isPlayerOnBoard) GameManager.instance.player.StopMove();
         float distance = (transform.position - endPos.position).magnitude;
-        while(distance>0.05f)
+        while(distance>0.1f)
         {
             transform.position += (transform.up* direction) * Time.deltaTime*moveSpeed;
             distance = (transform.position - endPos.position).magnitude;
