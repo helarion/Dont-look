@@ -348,6 +348,9 @@ MonoBehaviour:
   movingSound: 
   stopSound: 
   enterCol: {fileID: 1782030476667746518}
+  direction: 1
+  isStarted: 0
+  isPlayerOnBoard: 0
 --- !u!65 &1782030476667746518
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -373,7 +376,7 @@ GameObject:
   - component: {fileID: 8962998778976318010}
   m_Layer: 9
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
