@@ -57,4 +57,22 @@ public class SpatialRoom : MonoBehaviour
             Gizmos.DrawLine(sl.begin.position, sl.end.position);
         }
     }
+
+    public void addSpatialLine(SpatialLine sl)
+    {
+        bool inserted = false;
+        foreach (SpatialLine _sl in _spatialLines)
+        {
+            if (sl.begin.position.z < _sl.begin.position.z)
+            {
+                _spatialLines.Insert(spatialLines.IndexOf(_sl), sl);
+                inserted = true;
+                break;
+            }
+        }
+        if (!inserted)
+        {
+            _spatialLines.Add(sl);
+        }
+    }
 }
