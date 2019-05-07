@@ -40,6 +40,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float ladderSpeed = 0.5f;
     [SerializeField] private float grabSpeed = 0.5f;
     [SerializeField] private float changingLineSpeed = 0.1f;
+    private bool isChangingSpatialLine = false;
+    private bool walkRoutine = false;
+    private bool StoppedHMove = false;
+    private bool stopMove = false;
+    private bool isMoving = false;
+
+    private Vector3 _verticalLastMovement = Vector3.zero;
+    private Vector3 localModelPosition;
+    private Vector3 worldModelPosition;
+    private Vector3 climbPosition;
+    private Vector3 lastPosition;
+    public float velocity;
+    public float yVelocity;
+
+    private float moveSpeed;
+    private float vMove;
+    private float hMove;
+    private int inverse = 1;
+
+    [Header("Acceleration Decceleration Curves")]
 
     [SerializeField] private AnimationCurve _horizontalAccelerationCurve;
     [SerializeField] private AnimationCurve _verticalAccelerationCurve;
@@ -55,45 +75,31 @@ public class PlayerController : MonoBehaviour
     [Range(-1, 1)]
     private float _verticalAccDecLerpValue;
 
-    private Vector3 _verticalLastMovement = Vector3.zero;
-    private Vector3 localModelPosition;
-    private Vector3 worldModelPosition;
-    private Vector3 climbPosition;
-    private Vector3 lastPosition;
-    public float velocity;
-    public float yVelocity;
-
-    private float moveSpeed;
-    private float vMove;
-    private float hMove;
-
-    private int inverse = 1;
-
     [Header("Light")]
     [SerializeField] private float bodyRotationDeadZone = 0.5f;
     [Range(0, 1)]
     [SerializeField] private float lightSensitivity = 1;
     [SerializeField] private float lightSpeed = 1;
+    [SerializeField] private float normalLightrange;
+    [SerializeField] private float concentratedLightRange;
+    [SerializeField] private float normalLightIntensity;
+    [SerializeField] private float concentratedLightIntensity;
     [SerializeField] private Transform flashlight;
     [SerializeField] private int flickerPercentage = 10;
     [SerializeField] private int flickeringFrequency = 1;
     [SerializeField] public float rangeDim;
     [SerializeField] public Animator flashlightAnimator;
+    private bool isConcentrating=false;
     public bool lightOn = true;
 
     [Header("State")]
     private bool isHidden = false;
     private bool isAlive = true;
-    [SerializeField]private bool isClimbingLadder = false;
     private bool isClimbing = false;
     private bool isGrabbing = false;
-    private bool isMoving = false;
     [SerializeField] public bool isJumping = false;
-    private bool isChangingSpatialLine = false;
     private bool isTouchingBox = false;
-    private bool walkRoutine = false;
-    private bool StoppedHMove = false;
-    private bool stopMove = false;
+
     private bool isFalling = false;
     private bool hasPlayedHeart = false;
     private bool needsCentering = false;
@@ -592,8 +598,9 @@ public class PlayerController : MonoBehaviour
         SetIsAlive(true);
         isGrabbing = false;
         isClimbing = false;
-        isClimbingLadder = false;
         isTouchingBox = false;
+        isConcentrating = false;
+        isInElevator = false;
         animator.SetBool("OnLadder", false);
         animator.SetBool("IsMoving", false);
         animator.SetBool("IsJumping", false);
@@ -668,7 +675,7 @@ public class PlayerController : MonoBehaviour
         Vector3 camMove = Vector3.zero;
 
         if (hMove < deadZoneValue && hMove > -deadZoneValue) hMove = 0;
-        if (!isClimbingLadder && (!needsCentering))
+        if (!needsCentering)
         {
             if (Mathf.Abs(hMove) > 0)
                 lMovement += HorizontalMove(hMove);
@@ -676,7 +683,7 @@ public class PlayerController : MonoBehaviour
                 lMovement += HorizontalSlowDown();
         }
 
-        if (!isGrabbing && !isClimbingLadder)
+        if (!isGrabbing)
         {
             if (!isChangingSpatialLine)
             {
@@ -726,8 +733,7 @@ public class PlayerController : MonoBehaviour
         if (lMovement != Vector3.zero || isChangingSpatialLine)
         {
             isMoving = true;
-            if (isClimbingLadder) lMovement *= 0;// ladderSpeed; //moveSpeed = ladderSpeed;
-            else if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0 && inverse==1)
+            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0 && inverse==1)
             {
                 animator.SetBool("IsRunning", true);
                 moveSpeed = runSpeed;
@@ -743,57 +749,54 @@ public class PlayerController : MonoBehaviour
                 lMovement *= grabSpeed;
             }
 
-            if (!isClimbingLadder)
+            if (needsCentering)
             {
-                if (needsCentering)
+                if (currentSpatialLine.begin.position.z > transform.position.z)
                 {
-                    if (currentSpatialLine.begin.position.z > transform.position.z)
+                    lMovement.x = Mathf.Clamp(((currentSpatialLine.end.position.x - currentSpatialLine.begin.position.x) / 2 + currentSpatialLine.begin.position.x) - transform.position.x, -1, 1);
+                    lMovement.x *= changingLineSpeed;
+                }
+                else
+                {
+                    lMovement.x = 0;
+                }
+            }
+            else if (currentSpatialSas == null)
+            {
+                Vector3 transformPosition = transform.position + lMovement;
+                if (transformPosition.x < currentSpatialLine.begin.position.x)
+                {
+                    lMovement.x = currentSpatialLine.begin.position.x - transform.position.x;
+                }
+                else if (transformPosition.x > currentSpatialLine.end.position.x)
+                {
+                    lMovement.x = currentSpatialLine.end.position.x - transform.position.x;
+                }
+            }
+
+            if (isChangingSpatialLine)
+            {
+                lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
+                lMovement.z *= changingLineSpeed;
+                Vector3 transformPosition = transform.position + lMovement;
+                if (lMovement.z > 0)
+                {
+                    if (transformPosition.z > currentSpatialLine.begin.position.z)
                     {
-                        lMovement.x = Mathf.Clamp(((currentSpatialLine.end.position.x - currentSpatialLine.begin.position.x) / 2 + currentSpatialLine.begin.position.x) - transform.position.x, -1, 1);
-                        lMovement.x *= changingLineSpeed;
-                    }
-                    else
-                    {
-                        lMovement.x = 0;
+                        lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
                     }
                 }
-                else if (currentSpatialSas == null)
+                else
                 {
-                    Vector3 transformPosition = transform.position + lMovement;
-                    if (transformPosition.x < currentSpatialLine.begin.position.x)
+                    if (transformPosition.z < currentSpatialLine.begin.position.z)
                     {
-                        lMovement.x = currentSpatialLine.begin.position.x - transform.position.x;
-                    }
-                    else if (transformPosition.x > currentSpatialLine.end.position.x)
-                    {
-                        lMovement.x = currentSpatialLine.end.position.x - transform.position.x;
+                        lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
                     }
                 }
 
-                if (isChangingSpatialLine)
+                if (Mathf.Abs(transform.position.z - currentSpatialLine.begin.position.z) < 0.001f)
                 {
-                    lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
-                    lMovement.z *= changingLineSpeed;
-                    Vector3 transformPosition = transform.position + lMovement;
-                    if (lMovement.z > 0)
-                    {
-                        if (transformPosition.z > currentSpatialLine.begin.position.z)
-                        {
-                            lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
-                        }
-                    }
-                    else
-                    {
-                        if (transformPosition.z < currentSpatialLine.begin.position.z)
-                        {
-                            lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
-                        }
-                    }
-
-                    if (Mathf.Abs(transform.position.z - currentSpatialLine.begin.position.z) < 0.001f)
-                    {
-                        isChangingSpatialLine = false;
-                    }
+                    isChangingSpatialLine = false;
                 }
             }
 
@@ -818,13 +821,11 @@ public class PlayerController : MonoBehaviour
 
     public void PlaySoundWalk()
     {
-        if (isClimbingLadder) return;
         AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
     }
 
     public void PlaySoundRun()
     {
-        if (isClimbingLadder) return;
         AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
     }
 
@@ -849,20 +850,9 @@ public class PlayerController : MonoBehaviour
         _verticalAccDecLerpValue = Mathf.Clamp(_verticalAccDecLerpValue, -1, 1);
 
         Vector3 lMovement;
-
-        if (isClimbingLadder)
-        {
-            lMovement = new Vector3(0, Mathf.Abs(lYmovValue), 0);
-        }
-        else
-        {
-            lMovement = new Vector3(0, 0, Mathf.Abs(lYmovValue));
-        }
-        
+        lMovement = new Vector3(0, 0, Mathf.Abs(lYmovValue));
         lMovement = lMovement.normalized * moveSpeed * Time.fixedDeltaTime * Mathf.Sign(_verticalAccDecLerpValue);
-
         _verticalLastMovement = lMovement;
-
         lMovement *= _verticalAccelerationCurve.Evaluate(Mathf.Abs(_verticalAccDecLerpValue));
 
         return lMovement;
@@ -901,7 +891,6 @@ public class PlayerController : MonoBehaviour
 
     private void BodyRotation()
     {
-        if (isClimbingLadder) return;
         Quaternion save = lt.transform.rotation;
         float speed = 0.1f;
         if (vMove > 0 && isChangingSpatialLine)
@@ -1186,18 +1175,6 @@ public class PlayerController : MonoBehaviour
     public void SetLightRange(float newRange)
     {
         lt.range = newRange;
-    }
-
-    public void SetIsClimbingLadder(bool b)
-    {
-        isClimbingLadder = b;
-        if (b) rb.useGravity = false;
-        else rb.useGravity = true;
-    }
-
-    public bool GetIsClimbingLadder()
-    {
-        return isClimbingLadder;
     }
 
     public void SetIsGrabbing(bool b, Rigidbody obj, float objWidth)

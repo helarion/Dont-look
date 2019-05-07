@@ -3641,6 +3641,15 @@ MonoBehaviour:
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
+    - _id: 9
+      _name: Concentrate
+      _type: 1
+      _descriptiveName: Concentrate the light
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 0
     actionCategories:
     - _name: Default
       _descriptiveName: Default
@@ -3650,7 +3659,7 @@ MonoBehaviour:
     actionCategoryMap:
       list:
       - categoryId: 0
-        actionIds: 000000000100000002000000030000000400000005000000060000000700000008000000
+        actionIds: 00000000010000000200000003000000040000000500000006000000070000000800000009000000
     inputBehaviors:
     - _id: 0
       _name: Default
@@ -3829,6 +3838,17 @@ MonoBehaviour:
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: -1
+        _elementType: 1
+        _elementIdentifierId: 11
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 0
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
     keyboardMaps:
     - id: 0
       categoryId: 0
@@ -3966,10 +3986,21 @@ MonoBehaviour:
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 9
+        _elementType: 1
+        _elementIdentifierId: 4
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 0
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
     customControllerMaps: []
     customControllers: []
     playerIdCounter: 2
-    actionIdCounter: 9
+    actionIdCounter: 10
     actionCategoryIdCounter: 1
     inputBehaviorIdCounter: 4
     mapCategoryIdCounter: 1
@@ -13103,6 +13134,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 1365543659, guid: c6781f5951b5b85429a73e8bf7f7ec2a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.7777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 1365543660, guid: c6781f5951b5b85429a73e8bf7f7ec2a, type: 3}
+      propertyPath: m_Size.z
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5246845715363569527, guid: c6781f5951b5b85429a73e8bf7f7ec2a,
         type: 3}
       propertyPath: m_Layer
@@ -13115,14 +13154,6 @@ PrefabInstance:
     - target: {fileID: 1365543658, guid: c6781f5951b5b85429a73e8bf7f7ec2a, type: 3}
       propertyPath: m_Layer
       value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1365543659, guid: c6781f5951b5b85429a73e8bf7f7ec2a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -1.7777779
-      objectReference: {fileID: 0}
-    - target: {fileID: 1365543660, guid: c6781f5951b5b85429a73e8bf7f7ec2a, type: 3}
-      propertyPath: m_Size.z
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1000416387250825, guid: c6781f5951b5b85429a73e8bf7f7ec2a, type: 3}
       propertyPath: m_Layer
