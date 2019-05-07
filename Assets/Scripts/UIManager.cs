@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,9 +16,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject ControlPanel=null;
     [SerializeField] private GameObject NoEyePanel=null;
     [SerializeField] private Slider volumeControl;
+    [SerializeField] private Slider gammaControl;
     [SerializeField] private Toggle toggleTracker;
     [SerializeField] private EventSystem eventSystem;
+    [SerializeField] private PostProcessVolume postProcess;
+    [SerializeField] private float gammaMin=-1.5f;
+    [SerializeField] private float gammaMax=1.5f;
 
+    private ColorGrading colorGrading;
     public bool isFading = false;
 
     public static UIManager instance = null;
@@ -38,7 +44,9 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        volumeControl.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        postProcess.profile.TryGetSettings(out colorGrading);
+        volumeControl.onValueChanged.AddListener(delegate { VolumeValueChangeCheck(); });
+        gammaControl.onValueChanged.AddListener(delegate { GammaValueChangeCheck(); });
         if (!GameManager.instance.isTesting)
         {
             GameManager.instance.SetIsPaused(true);
@@ -51,7 +59,16 @@ public class UIManager : MonoBehaviour
         toggleTracker.OnSelect(null);
     }
 
-    public void ValueChangeCheck()
+    public void GammaValueChangeCheck()
+    {
+        colorGrading.enabled.value = true;
+        float gamma = gammaControl.value.Remap(gammaControl.minValue, gammaControl.maxValue, gammaMin, gammaMax);
+        print("gamma:" + gamma);
+        Vector4 vec= new Vector4(gamma,gamma,gamma,gamma);
+        colorGrading.gamma.value =vec;
+    }
+
+    public void VolumeValueChangeCheck()
     {
         AkSoundEngine.SetRTPCValue("Master_Volume_Slider", volumeControl.value);
         //Debug.Log(volumeControl.value);

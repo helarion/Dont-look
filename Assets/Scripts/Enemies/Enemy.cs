@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
 {
     [Header("Movement Variables")]
     [SerializeField] public float moveSpeed = 1;
+    [SerializeField] private float velocityMax = 2;
 
     [Header("Chase Variables")]
     [SerializeField] private bool delete = false;
@@ -49,9 +50,7 @@ public class Enemy : MonoBehaviour
     {
         velocity = ((transform.position - lastPosition).magnitude * 10) * moveSpeed;
         lastPosition = transform.position;
-
-        float distanceMax = 2;
-        float rate = velocity / distanceMax;
+        float rate = velocity.Remap(0, velocityMax, 0, 1);
         rate = Mathf.Clamp(rate,0, 1);
         animator.SetFloat("Velocity", rate);
     }

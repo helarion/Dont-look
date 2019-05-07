@@ -12,6 +12,7 @@ public class ScriptedSpider : Enemy
     [SerializeField] int nbAttack = 2;
     [SerializeField] float scriptShakeIntensity;
     [SerializeField] float scriptShakeDuration = 1;
+    [SerializeField] float waitTime=1;
 
     private bool objective1 = false;
     private bool objective2 = false;
@@ -73,7 +74,7 @@ public class ScriptedSpider : Enemy
             yield return new WaitForSeconds(0.5f);
             while (agent.remainingDistance >0)
             {
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(waitTime);
             }
             step++;
             yield return new WaitForEndOfFrame();

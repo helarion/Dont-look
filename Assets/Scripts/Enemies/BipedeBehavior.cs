@@ -47,7 +47,7 @@ public class BipedeBehavior : Enemy
         base.ChaseBehavior();
         float playerDistance = (transform.position - p.transform.position).magnitude;
         float distanceMax = (detectZone.bounds.size.x / 2);
-        float rate=((distanceMax-playerDistance)/distanceMax)+0.1f;
+        float rate = playerDistance.Remap(0, distanceMax, 0.2f, 1.2f);
         currentWalkIntensity = walkShakeIntensity * rate;
         if(!isLooked)
         {

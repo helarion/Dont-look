@@ -431,3 +431,11 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 }
+
+public static class ExtensionMethods
+{
+    public static float Remap(this float value, float vMin, float vMax, float rMin, float rMax)
+    {
+        return rMin + (value - vMin) * (rMax - rMin) / (vMax - vMin);
+    }
+}

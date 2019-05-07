@@ -90,7 +90,7 @@ public class Elevator : Objet
         isActivated = false;
         if (addSpatialLine)
         {
-            // ajouter ici
+            spatialRoom.addSpatialLine(spatialLine);
         }
     }
 }
