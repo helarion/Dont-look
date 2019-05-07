@@ -63,12 +63,13 @@ public class Elevator : Objet
     {
         //GameManager.instance.player.StopMove();
         float distance = (transform.position - endPos.position).magnitude;
-        while(distance>0)
+        while(distance>0.05f)
         {
             transform.position += (transform.up* direction) * Time.deltaTime*moveSpeed;
             distance = (transform.position - endPos.position).magnitude;
             yield return new WaitForEndOfFrame();
         }
+        transform.position = endPos.position;
         //AkSoundEngine.PostEvent(stopSound, gameObject);
         //GameManager.instance.player.ResumeMove();
         isMoving = false;

@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
     private bool isFalling = false;
     private bool hasPlayedHeart = false;
     private bool needsCentering = false;
+    private bool isInElevator = false;
 
     private CameraBlock currentCameraBlock = null;
     private AudioRoom currentAudioRoom = null;
@@ -272,7 +273,7 @@ public class PlayerController : MonoBehaviour
                 elevator.isPlayerOnBoard = true;
                 elevator.StartMoving();
                 animator.SetBool("IsMoving", false);
-
+                isInElevator = true;
                 print("elevator starts moving");
             }
         }
@@ -351,6 +352,7 @@ public class PlayerController : MonoBehaviour
             Elevator elevator = other.GetComponent<Elevator>();
             if (elevator != null)
             {
+                isInElevator = false;
                 elevator.isPlayerOnBoard = false;
             }
         }
@@ -1062,16 +1064,13 @@ public class PlayerController : MonoBehaviour
 
     private void FallingCheck()
     {
-        if(!isClimbing && !isClimbingLadder)
+        if(yVelocity < 0 && !isClimbing && !isClimbingLadder && !isInElevator)
         {
-            if (yVelocity < 0)
-            {
-                animator.SetBool("IsFalling", true);
-            }
-            else
-            {
-                animator.SetBool("IsFalling", false);
-            }
+            animator.SetBool("IsFalling", true);
+        }
+        else
+        {
+            animator.SetBool("IsFalling", false);
         }
     }
 
@@ -1186,6 +1185,11 @@ public class PlayerController : MonoBehaviour
     public void SetCurrentAudioRoom(AudioRoom ar)
     {
         currentAudioRoom = ar;
+    }
+
+    public void SetIsInElevator(bool b)
+    {
+        isInElevator = b;
     }
 
     public AudioRoom GetCurrentAudioRoom()
