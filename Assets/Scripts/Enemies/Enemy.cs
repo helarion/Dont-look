@@ -14,10 +14,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private bool delete = false;
     [SerializeField] public float lookShakeIntensity=0.08f;
     [SerializeField] private float lookShakeTime = 1;
-    [SerializeField] private float chaseShakeIntensity=0.02f;
+    [SerializeField] private float minChaseShakeIntensity=0.02f;
+    [SerializeField] private float maxChaseshakeIntensity = 0.06f;
     [SerializeField] private float chaseShakeTime = 1;
     [SerializeField] public float delayBeforeChase = 1;
     [SerializeField] public float delayChase = 3;
+    [HideInInspector] public float playerDistance;
 
     private bool hasPlayedChase = false;
     [HideInInspector] public bool hasPlayedLook = false;
@@ -137,6 +139,9 @@ public class Enemy : MonoBehaviour
 
     public virtual void ChaseBehavior()
     {
+        playerDistance = (transform.position - p.transform.position).magnitude;
+        float distanceMax = 15;
+        float chaseShakeIntensity = playerDistance.Remap(0, distanceMax, minChaseShakeIntensity, maxChaseshakeIntensity);
         GameManager.instance.ShakeScreen(chaseShakeTime, chaseShakeIntensity);
         float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
         AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);

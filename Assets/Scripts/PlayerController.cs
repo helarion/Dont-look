@@ -602,12 +602,12 @@ public class PlayerController : MonoBehaviour
 
         if(isClosed)
         {
-            PlayHeart();
+            GameManager.instance.PlayHeart();
             flashlightAnimator.enabled = false;
         }
         else
         {
-            StopHeart();
+            GameManager.instance.StopHeart();
             flashlightAnimator.enabled = true;
         }
     }

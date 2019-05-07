@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float decreaseFactor = 1.0f;
     //[SerializeField] private float maxValue = 0.1f;
     [HideInInspector] public CameraHandler camHandler;
+    [SerializeField] private float heartVibration = 0.1f;
 
     [Header("Layers")]
     [SerializeField] private LayerMask wallsAndMobsLayer;
@@ -162,16 +163,29 @@ public class GameManager : MonoBehaviour
     public void PlayHeart()
     {
         if (isPlayingHeart) return;
+        isPlayingHeart = true;
+        AkSoundEngine.PostEvent(HeartPlay, player.gameObject);
         StartCoroutine("HeartCoroutine");
+    }
+
+    public void StopHeart()
+    {
+        if (!isPlayingHeart) return;
+        isPlayingHeart = false;
+        AkSoundEngine.PostEvent(HeartStop, player.gameObject);
+        StopCoroutine("HeartCoroutine");
     }
 
     private IEnumerator HeartCoroutine()
     {
-        isPlayingHeart = true;
-        AkSoundEngine.PostEvent(HeartPlay, player.gameObject);
-        yield return new WaitForSeconds(6);
-        AkSoundEngine.PostEvent(HeartStop, player.gameObject);
-        isPlayingHeart = false;
+        while(isPlayingHeart)
+        {
+            controls.SetVibration(0, heartVibration,0.3f);
+            yield return new WaitForSeconds(0.3f);
+            controls.SetVibration(1, heartVibration, 0.3f);
+            yield return new WaitForSeconds(1);
+        }
+        yield return null;
     }
 
     #endregion
@@ -353,7 +367,8 @@ public class GameManager : MonoBehaviour
 
         while (elapsed < duration)
         {
-            Handheld.Vibrate();
+            controls.SetVibration(0, amplitude, duration);
+            controls.SetVibration(1, amplitude, duration);
             mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * amplitude;
             elapsed += Time.deltaTime * decreaseFactor;
             yield return null;
