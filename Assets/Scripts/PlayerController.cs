@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour
     private bool StoppedHMove = false;
     private bool stopMove = false;
     private bool isMoving = false;
+    private bool isRunning = false;
 
     private Vector3 _verticalLastMovement = Vector3.zero;
     private Vector3 localModelPosition;
@@ -221,32 +222,7 @@ public class PlayerController : MonoBehaviour
         if (cameraBlock != null)
         {
             currentCameraBlock = cameraBlock;
-            GameManager.instance.camHandler.SetNewZ(currentCameraBlock.room.newZ);
-            GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
-            SetLightRange(currentCameraBlock.room.newLightRange);
-            //print("enter cameraBLock");
-            if(currentCameraBlock.updatedDecals.Length>0)
-            {
-                //print("must change decal");
-                int i = 0;
-                foreach(DecalProjectorComponent d in currentCameraBlock.updatedDecals)
-                {
-                    if (inputMode == InputMode.PC)
-                    {
-                       // print("input pc");
-                        d.m_Material = currentCameraBlock.keyboardMaterials[i];
-                    }
-                    else
-                    {
-                        //print("input manette");
-                        d.m_Material = currentCameraBlock.gamePadMaterials[i];
-                    }
-                    d.enabled = false;
-                    d.enabled = true;
-                    //print("mat changé");
-                    i++;
-                }
-            }
+            CameraBlockChanges();
             return;
         }
 
@@ -649,6 +625,7 @@ public class PlayerController : MonoBehaviour
         isTouchingBox = false;
         isConcentrating = false;
         isInElevator = false;
+        isRunning = false;
         animator.SetBool("OnLadder", false);
         animator.SetBool("IsMoving", false);
         animator.SetBool("IsJumping", false);
@@ -662,6 +639,37 @@ public class PlayerController : MonoBehaviour
         stopMove = false;
         ResetVelocity();
         //StartFlickering();
+    }
+
+    private void CameraBlockChanges()
+    {
+        GameManager.instance.camHandler.SetNewZ(currentCameraBlock.room.newZ);
+        GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
+        SetLightRange(currentCameraBlock.room.newLightRange);
+        GameManager.instance.SetDutchAngle(currentCameraBlock.room.newDutchAngle);
+        //print("enter cameraBLock");
+        if (currentCameraBlock.updatedDecals.Length > 0)
+        {
+            //print("must change decal");
+            int i = 0;
+            foreach (DecalProjectorComponent d in currentCameraBlock.updatedDecals)
+            {
+                if (inputMode == InputMode.PC)
+                {
+                    // print("input pc");
+                    d.m_Material = currentCameraBlock.keyboardMaterials[i];
+                }
+                else
+                {
+                    //print("input manette");
+                    d.m_Material = currentCameraBlock.gamePadMaterials[i];
+                }
+                d.enabled = false;
+                d.enabled = true;
+                //print("mat changé");
+                i++;
+            }
+        }
     }
     #endregion
 
@@ -741,11 +749,13 @@ public class PlayerController : MonoBehaviour
             isMoving = true;
             if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0 && inverse==1)
             {
+                isRunning = true;
                 animator.SetBool("IsRunning", true);
                 moveSpeed = runSpeed;
             }
             else
             {
+                isRunning = false;
                 animator.SetBool("IsRunning", false);
                 moveSpeed = walkSpeed;
             }
@@ -1142,6 +1152,11 @@ public class PlayerController : MonoBehaviour
     public InputMode GetInputMode()
     {
         return inputMode;
+    }
+
+    public bool GetIsRunning()
+    {
+        return isRunning;
     }
 
     // Renvoie la position du curseur sur l'écran (souris ou eye tracker) dans l'intervalle [-1;1]

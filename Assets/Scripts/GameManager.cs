@@ -6,7 +6,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     #region variables
-    public Camera mainCamera;
     public PlayerController player;
 
     [HideInInspector]public static GameManager instance = null;
@@ -21,13 +20,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Checkpoint[] CheckPointList;
     [SerializeField] private float cameraMoveOffset = 20;
 
-    [Header("ScreenShake")]
+    [Header("Camera")]
+    public Camera mainCamera;
+    //[SerializeField] private float maxValue = 0.1f;
     //[SerializeField] private float shakeDuration = 0f;
     //[SerializeField] private float shakeAmount = 0.7f;
     [SerializeField] private float decreaseFactor = 1.0f;
-    //[SerializeField] private float maxValue = 0.1f;
     [HideInInspector] public CameraHandler camHandler;
-    [SerializeField] private float heartVibration = 0.1f;
+    [SerializeField] private float bobbingSpeed = 0.25f;
+    [SerializeField] private float normalBobbingAmount = 0.2f;
+    [SerializeField] private float runningBobbingAmount = 0.5f;
+    private float bobTimer = 0;
+    //private float midpoint = 2;
+    [SerializeField] private float dutchAngle=0;
 
     [Header("Layers")]
     [SerializeField] private LayerMask wallsAndMobsLayer;
@@ -42,6 +47,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public AudioRoom startRoom;
     [SerializeField] int nbAudioRoomId;
     [SerializeField] float audioFadeSpeed=10;
+    [SerializeField] private float heartVibration = 0.1f;
 
     [Header("Input Materials")]
     [SerializeField] Material leftClickMat;
@@ -101,6 +107,7 @@ public class GameManager : MonoBehaviour
         if (isPaused) return;
         //mainCamera.transform.localPosition = originalPos;
         //CheckShake();
+        CameraBob();
         TP();
     }
 
@@ -252,6 +259,7 @@ public class GameManager : MonoBehaviour
         camHandler.SetNewZ(c.sRoom.newZ);
         camHandler.SetNewOffset(c.sRoom.newOffset);
         player.SetLightRange(c.sRoom.newLightRange);
+        SetDutchAngle(c.sRoom.newDutchAngle);
         StopCurrentAudioRoom();
     }
 
@@ -337,11 +345,50 @@ public class GameManager : MonoBehaviour
         originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
     }
 
-    public void RotateCamera(Quaternion newRotate)
+    private void CameraBob()
+    {
+        float bobbingAmount= normalBobbingAmount;
+        if (player.GetIsRunning()) bobbingAmount = runningBobbingAmount;
+
+        float waveslice = 0.0f;
+        float horizontal = controls.GetAxis("Move Horizontal");
+        Vector3 cSharpConversion = originalPos;
+
+        if (Mathf.Abs(horizontal) == 0)
+        {
+            bobTimer = 0.0f;
+        }
+        else
+        {
+            waveslice = Mathf.Sin(bobTimer);
+            bobTimer += bobbingSpeed;
+            if (bobTimer > Mathf.PI * 2)
+            {
+                bobTimer -=Mathf.PI * 2;
+            }
+        }
+        if (waveslice != 0)
+        {
+            float translateChange = waveslice * bobbingAmount;
+            float totalAxes = Mathf.Abs(horizontal);
+            totalAxes = Mathf.Clamp(totalAxes, 0.0f, 1.0f);
+            translateChange = totalAxes * translateChange;
+            cSharpConversion.y = originalPos.y + translateChange;
+        }
+        else
+        {
+            cSharpConversion.y = originalPos.y;
+        }
+        print("bob:" + cSharpConversion);
+        MoveCamera(cSharpConversion);
+    }
+
+public void RotateCamera(Quaternion newRotate)
     {
         //print(newRotate);
         //float speed = cameraSpeed;
         //if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
+        newRotate.z = dutchAngle.Remap(0,360,0,1);
         mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
     }
 
@@ -453,6 +500,11 @@ public class GameManager : MonoBehaviour
     public void SetIsPaused(bool b)
     {
         isPaused = b;
+    }
+    
+    public void SetDutchAngle(float angle)
+    {
+        dutchAngle = angle;
     }
     #endregion
 }

@@ -17,7 +17,7 @@ public class SpatialRoom : MonoBehaviour
     [SerializeField] public float newZ = -5.5f;
     [SerializeField] public float newLightRange = 16;
     [SerializeField] public float newOffset = 2;
-
+    [SerializeField] public float newDutchAngle = 0;
 
     // Start is called before the first frame update
     void Start()

@@ -78,8 +78,8 @@ public class SlidingDoor : Objet
 
     private void ContiniousActivate()
     {
-        distance = (transform.localPosition - endPos.localPosition).magnitude;
-        if (distance > 0.1f)
+        distance = endPos.localPosition.y-transform.localPosition.y;
+        if (distance > 0.01f)
         {
             GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
             transform.localPosition += (transform.up) * Time.deltaTime * moveUpSpeed;
@@ -89,8 +89,8 @@ public class SlidingDoor : Objet
 
     private void ContiniousDesactivate()
     {
-        distance = (transform.localPosition - startPosition).magnitude;
-        if (distance > 0.1f)
+        distance = transform.localPosition.y - startPosition.y;
+        if (distance > 0.01f)
         {
             GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
             transform.localPosition += (transform.up * -1) * Time.deltaTime * moveDownSpeed;

@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c26fb84706163654baa72dea21a79993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
   player: {fileID: 0}
   listE:
   - {fileID: 0}
@@ -63,9 +62,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   cameraMoveOffset: 40
+  mainCamera: {fileID: 0}
   decreaseFactor: 1
   camHandler: {fileID: 0}
-  heartVibration: 0.1
+  bobbingSpeed: 0.25
+  normalBobbingAmount: 0.2
+  runningBobbingAmount: 0.5
+  dutchAngle: 0
   wallsAndMobsLayer:
     serializedVersion: 2
     m_Bits: 15872
@@ -82,6 +85,7 @@ MonoBehaviour:
   startRoom: {fileID: 0}
   nbAudioRoomId: 7
   audioFadeSpeed: 30
+  heartVibration: 0.1
   leftClickMat: {fileID: 0}
   rightClickMat: {fileID: 0}
   bButtonMat: {fileID: 0}
