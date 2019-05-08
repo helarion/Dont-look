@@ -8,6 +8,7 @@ public class Objet : MonoBehaviour
     [HideInInspector] public bool isActivating = false;
 
     public virtual void Activate() {}
+    public virtual void Desactivate() {}
     public virtual void Reset()
     {
         isActivated = false;

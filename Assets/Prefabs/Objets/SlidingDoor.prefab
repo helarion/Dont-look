@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 6489734760053968977}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 95.25, y: 5.5, z: 5.75}
-  m_LocalScale: {x: 1, y: 12.5, z: 8.5}
+  m_LocalScale: {x: 2.25, y: 11.25, z: 8.5}
   m_Children:
   - {fileID: 6489734760488999049}
   - {fileID: 6489734760055282674}
@@ -48,7 +48,7 @@ GameObject:
   m_Layer: 0
   m_Name: SlidingDoorModel
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -60,8 +60,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6489734760055281679}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.15}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 6489734760053968976}
   m_RootOrder: 1
@@ -91,7 +91,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: d52e630beb6f4f044a6b754531bd0189, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -139,7 +139,8 @@ MonoBehaviour:
   isActivated: 0
   isActivating: 0
   doorOpenSound: 
-  moveSpeed: 0.2
+  moveUpSpeed: 0.15
+  moveDownSpeed: 0.05
   endPos: {fileID: 6489734760488999049}
   shakeOnIntensity: 0.08
   shakeOffIntensity: 0.04
@@ -167,7 +168,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6489734760488999050}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.85999995, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6489734760053968976}

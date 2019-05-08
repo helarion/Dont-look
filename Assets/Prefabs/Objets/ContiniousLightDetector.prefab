@@ -93,7 +93,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.1}
-  m_Center: {x: 0.2, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7673007942488257862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,12 +108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActivated: 0
   isActivating: 0
-  targets: []
-  delayActivate: 1.5
-  blinkLight: {fileID: 0}
+  target: {fileID: 0}
   chargingSound: 
-  activateSound: 
-  isLooked: 0
 --- !u!1 &2097786719093238246
 GameObject:
   m_ObjectHideFlags: 0

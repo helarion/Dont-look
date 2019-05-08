@@ -17,6 +17,12 @@ public class ActivableLamp : Objet
         lt.enabled = isActivated;
     }
 
+    public override void Desactivate()
+    {
+        isActivated = false;
+        lt.enabled = isActivated;
+    }
+
     public override void Reset()
     {
         base.Reset();

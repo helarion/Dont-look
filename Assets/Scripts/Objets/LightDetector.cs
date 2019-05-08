@@ -9,6 +9,7 @@ public class LightDetector : Objet
     [SerializeField] private BlinkingLight blinkLight = null;
     [SerializeField] private string chargingSound = null;
     [SerializeField] private string activateSound = null;
+    [SerializeField] private bool desactivate = false;
     private MeshRenderer model;
     [HideInInspector] public bool isLooked = false;
     private float countLook=0f;
@@ -80,13 +81,14 @@ public class LightDetector : Objet
 
     public override void Activate()
     {
-        if (isActivated) return;
+        if (isActivated && !desactivate) return;
         base.Activate();
         blinkLight.Activate();
         AkSoundEngine.PostEvent(activateSound, gameObject);
         foreach(Objet o in targets)
         {
-            o.Activate();
+            if (o.isActivated && desactivate) o.Desactivate();
+            else o.Activate();
         }
         isActivated = true;
         print("Object activated");
