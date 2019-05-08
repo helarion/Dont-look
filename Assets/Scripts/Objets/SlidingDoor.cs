@@ -21,6 +21,7 @@ public class SlidingDoor : Objet
 
     private void Update()
     {
+
         if (isActivating) ContiniousActivate();
         else ContiniousDesactivate();
     }

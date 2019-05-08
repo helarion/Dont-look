@@ -36,13 +36,21 @@ public class ContiniousLightDetector : Objet
 
                 if (hit.transform.gameObject.tag == gameObject.tag)
                 {
+                    //print(test);
                     if (GameManager.instance.player.GetConcentration()) test = true;
                 }
                 //print("Touched " + hit.transform.gameObject.name);
             }
         }
-        if (test) target.isActivating = true;
-        else target.isActivating = false;
+        if (test)
+        {
+            //print("isLooked");
+            target.isActivating = true;
+        }
+        else
+        {
+            target.isActivating = false;
+        }
     }
 
     public override void Reset()

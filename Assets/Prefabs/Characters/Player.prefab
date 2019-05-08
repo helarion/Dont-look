@@ -415,10 +415,10 @@ MonoBehaviour:
   flashlightAnimator: {fileID: 4194574732569649043}
   lightTransitionSpeed: 0.1
   concentratedLightRangeBonus: 2
-  concentratedLightIntensity: 20
-  concentratedLightColor: {r: 1, g: 0.9780685, b: 0.8066038, a: 1}
+  concentratedLightIntensity: 6000
+  concentratedLightColor: {r: 1, g: 0.98787063, b: 0.9009434, a: 1}
   concentratedLightAngle: 40
-  normalLightIntensity: 16
+  normalLightIntensity: 4000
   normalLightRange: 16
   normalLightColor: {r: 1, g: 1, b: 1, a: 1}
   normalLightAngle: 75
@@ -1503,12 +1503,12 @@ PrefabInstance:
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_VolumetricDimmer
-      value: 0.05
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: lightUnit
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1518,7 +1518,7 @@ PrefabInstance:
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: displayLightIntensity
-      value: 16
+      value: 4000
       objectReference: {fileID: 0}
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1548,12 +1548,12 @@ PrefabInstance:
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.9292453
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.9939654
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1563,7 +1563,7 @@ PrefabInstance:
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_Intensity
-      value: 128
+      value: 4000
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
@@ -1587,13 +1587,8 @@ PrefabInstance:
       objectReference: {fileID: 2800000, guid: e791310c0558605479cdf679df78a9ea, type: 3}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
-      propertyPath: m_Lightmapping
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
       propertyPath: m_ColorTemperature
-      value: 5313
+      value: 20000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8574542227f87dd4b92c5ebe482bc9fa, type: 3}

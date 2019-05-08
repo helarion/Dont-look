@@ -224,26 +224,26 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.camHandler.SetNewZ(currentCameraBlock.room.newZ);
             GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
             SetLightRange(currentCameraBlock.room.newLightRange);
-            print("enter cameraBLock");
+            //print("enter cameraBLock");
             if(currentCameraBlock.updatedDecals.Length>0)
             {
-                print("must change decal");
+                //print("must change decal");
                 int i = 0;
                 foreach(DecalProjectorComponent d in currentCameraBlock.updatedDecals)
                 {
                     if (inputMode == InputMode.PC)
                     {
-                        print("input pc");
+                       // print("input pc");
                         d.m_Material = currentCameraBlock.keyboardMaterials[i];
                     }
                     else
                     {
-                        print("input manette");
+                        //print("input manette");
                         d.m_Material = currentCameraBlock.gamePadMaterials[i];
                     }
                     d.enabled = false;
                     d.enabled = true;
-                    print("mat changé");
+                    //print("mat changé");
                     i++;
                 }
             }

@@ -50,6 +50,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   cameraSpeed: 0.5
   lastCheckpoint: {fileID: 0}
   isTesting: 0
@@ -59,11 +60,12 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   cameraMoveOffset: 40
-  shakeDuration: 0
-  shakeAmount: 0.08
   decreaseFactor: 1
-  maxValue: 0.1
+  camHandler: {fileID: 0}
+  heartVibration: 0.1
   wallsAndMobsLayer:
     serializedVersion: 2
     m_Bits: 15872
@@ -77,7 +79,13 @@ MonoBehaviour:
   ChaseAmbStop: Stop_Random_Rythme_Bass
   HeartPlay: Play_Random_Heart
   HeartStop: Stop_Random_Heart
-  camHandler: {fileID: 0}
+  startRoom: {fileID: 0}
+  nbAudioRoomId: 7
+  audioFadeSpeed: 30
+  leftClickMat: {fileID: 0}
+  rightClickMat: {fileID: 0}
+  bButtonMat: {fileID: 0}
+  leftTriggerMat: {fileID: 0}
 --- !u!114 &2026705480
 MonoBehaviour:
   m_ObjectHideFlags: 0
