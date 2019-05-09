@@ -14,8 +14,7 @@ public class ShadowSpider : Enemy
 
     private void Update()
     {
-        VelocityCount();
-        LightDetection();
+        //VelocityCount();
     }
 
 

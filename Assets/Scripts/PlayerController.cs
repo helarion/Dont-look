@@ -480,7 +480,7 @@ public class PlayerController : MonoBehaviour
             flashlight.range = Mathf.Lerp(flashlight.range,normalLightRange+concentratedLightRangeBonus,lightTransitionSpeed);
             flashlight.intensity = Mathf.Lerp(flashlight.intensity,concentratedLightIntensity,lightTransitionSpeed);
             flashlight.color = Color.Lerp(flashlight.color, concentratedLightColor, lightTransitionSpeed);
-            flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, concentratedLightAngle, lightTransitionSpeed);
+            flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle/concentratedLightAngle, lightTransitionSpeed);
             GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, zoomCameraFOV, lightTransitionSpeed);
             GameManager.instance.camHandler.Zoom(true);
             flashlightAnimator.enabled = false;
@@ -655,6 +655,7 @@ public class PlayerController : MonoBehaviour
         GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
         SetLightRange(currentCameraBlock.room.newLightRange);
         GameManager.instance.SetDutchAngle(currentCameraBlock.room.newDutchAngle);
+        SetLightAngle(currentCameraBlock.room.newLightAngle);
         //print("enter cameraBLock");
         if (currentCameraBlock.updatedDecals.Length > 0)
         {
@@ -1204,6 +1205,11 @@ public class PlayerController : MonoBehaviour
     public void SetIsInElevator(bool b)
     {
         isInElevator = b;
+    }
+
+    public void SetLightAngle(float newAngle)
+    {
+        normalLightAngle = newAngle;
     }
 
     public AudioRoom GetCurrentAudioRoom()

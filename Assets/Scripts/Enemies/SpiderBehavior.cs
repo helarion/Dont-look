@@ -8,10 +8,13 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float delaySpot = 1;
     [SerializeField] private float lengthDetection = 10;
     [SerializeField] private bool clickToSetDestination = false;
+    [SerializeField] private float malusSpeedStart = 2;
+    [SerializeField] private float malusStartDuration = 2;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
     private bool isCountingStartChase = false;
+    private bool lowerSpeedChase = true;
 
     NavMeshLink link;
 
@@ -24,7 +27,7 @@ public class SpiderBehavior : Enemy
     private void Update()
     {
         VelocityCount();
-        LightDetection();
+        IsLit(GameManager.instance.LightDetection(transform, needsConcentration));
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if (isChasing)
         {
@@ -76,20 +79,16 @@ public class SpiderBehavior : Enemy
         }
     }
 
-    // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
-    private IEnumerator CountLook()
+    public override void StartChase()
     {
-        float count = 0;
-        animator.SetBool("WakesUp",true);
-        while (count<delayBeforeChase)
-        {
-            count+=Time.deltaTime;
-            animator.SetFloat("WakeMult", count);
-            //print(count);
-            yield return new WaitForEndOfFrame();
-        }
-        animator.SetBool("WakesUp", false);
-        StartChase();
+        base.StartChase();
+        StartCoroutine("LowerSpeedCoroutine");
+    }
+
+    private IEnumerator LowerSpeedCoroutine()
+    {
+        yield return new WaitForSeconds(malusStartDuration);
+        lowerSpeedChase = false;
         yield return null;
     }
 
@@ -113,8 +112,10 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
-                isCountingStartChase = false;
+        lowerSpeedChase = true;
+        isCountingStartChase = false;
         animator.SetFloat("WakeMult", 0);
+        animator.SetBool("IsSleeping", true);
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON
@@ -134,21 +135,25 @@ public class SpiderBehavior : Enemy
     public override void IsLit(bool b)
     {
         base.IsLit(b);
+        float speed = moveSpeed;
+        if (lowerSpeedChase) speed -= malusSpeedStart;
         if (b)
         {
             if (!isCountingStartChase && !isChasing)
             {
                 isCountingStartChase = true;
+                animator.SetBool("IsSleeping", false);
+                animator.SetTrigger("WakesUp");
                 StartCoroutine("CountLook");
             }
             else
             {
-                agent.speed = moveSpeed + bonusSpeed;
+                agent.speed = speed + bonusSpeed;
             }
         }
         else
         {
-            if (isChasing) agent.speed = moveSpeed;
+            if (isChasing) agent.speed = speed;
         }
     }
 }

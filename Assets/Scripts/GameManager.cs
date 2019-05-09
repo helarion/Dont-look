@@ -202,6 +202,41 @@ public class GameManager : MonoBehaviour
         enemyList.Remove(e);
     }
 
+    public bool LightDetection(Transform objectPosition, bool needsConcentration)
+    {
+        bool isLit = false;
+        Vector3 playerPosition = player.transform.position;
+        playerPosition.y += 1;
+        Vector3 lightVec = player.GetLookAt() - playerPosition;
+        Vector3 playerToObjectVec = objectPosition.position - player.transform.position;
+
+        float playerToObjectLength = playerToObjectVec.magnitude;
+        Light playerLight = player.getLight();
+        float lightRange = playerLight.range;
+        float lightAngle = playerLight.spotAngle / 2.0f;
+        if (playerToObjectLength <= lightRange)
+        {
+            float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToObjectVec) / (lightVec.magnitude * playerToObjectVec.magnitude)) * Mathf.Rad2Deg;
+            if (angleFromLight <= lightAngle)
+            {
+                lightVec = Vector3.RotateTowards(lightVec, playerToObjectVec, angleFromLight, Mathf.Infinity);
+
+                RaycastHit hit;
+                Ray ray = new Ray(playerPosition, lightVec);
+                Physics.Raycast(ray, out hit, Mathf.Infinity, wallsAndMobsLayer);
+
+                if (hit.transform.gameObject.tag == objectPosition.tag)
+                {
+                    if (!needsConcentration) isLit = true;
+                    else if( player.GetConcentration()) isLit = true;
+                }
+                //print("Touched " + hit.transform.gameObject.name);
+                //print(isLit);
+            }
+        }
+        return isLit;
+    }
+
     #region death
 
     // TUE LE JOUEUR
@@ -254,6 +289,7 @@ public class GameManager : MonoBehaviour
         camHandler.SetNewOffset(c.sRoom.newOffset);
 
         player.SetLightRange(c.sRoom.newLightRange);
+        player.SetLightAngle(c.sRoom.newLightAngle);
         SetDutchAngle(c.sRoom.newDutchAngle);
         StopCurrentAudioRoom();
     }

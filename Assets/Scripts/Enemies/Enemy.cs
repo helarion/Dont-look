@@ -17,7 +17,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float minChaseShakeIntensity=0.02f;
     [SerializeField] private float maxChaseshakeIntensity = 0.06f;
     [SerializeField] private float chaseShakeTime = 1;
-    [SerializeField] public float delayBeforeChase = 1;
     [SerializeField] public float delayChase = 3;
     [HideInInspector] public float playerDistance;
 
@@ -39,6 +38,7 @@ public class Enemy : MonoBehaviour
     public bool isLooked = true;
     public bool isMoving = false;
     public bool isCountingEndChase = false;
+    [SerializeField] public bool needsConcentration = false;
 
     [HideInInspector] public PlayerController p;
 
@@ -46,6 +46,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        IsLit(GameManager.instance.LightDetection(transform,needsConcentration));
         VelocityCount();
     }
 
@@ -158,40 +159,6 @@ public class Enemy : MonoBehaviour
             isCountingEndChase = false;
             StopCoroutine("CountEndChase");
         }
-    }
-
-    public void LightDetection()
-    {
-        bool test = false;
-        Vector3 playerPosition = GameManager.instance.player.transform.position;
-        playerPosition.y += 1;
-        Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
-        Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
-
-        float playerToSpiderLength = playerToSpiderVec.magnitude;
-        Light playerLight = GameManager.instance.player.getLight();
-        float lightDim = GameManager.instance.player.rangeDim;
-        float lightRange = playerLight.range-lightDim;
-        float lightAngle = playerLight.spotAngle / 2.0f;
-        if (playerToSpiderLength <= lightRange)
-        {
-            float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToSpiderVec) / (lightVec.magnitude * playerToSpiderVec.magnitude)) * Mathf.Rad2Deg;
-            if (angleFromLight <= lightAngle)
-            {
-                lightVec = Vector3.RotateTowards(lightVec, playerToSpiderVec, angleFromLight, Mathf.Infinity);
-
-                RaycastHit hit;
-                Ray ray = new Ray(playerPosition, lightVec);
-                Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer());
-
-                if (hit.transform.gameObject.tag == gameObject.tag)
-                {
-                    test = true;
-                }
-                //print("Touched " + hit.transform.gameObject.name);
-            }
-        }
-        IsLit(test);
     }
 
     public virtual void Respawn()

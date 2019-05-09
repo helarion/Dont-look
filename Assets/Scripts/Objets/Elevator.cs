@@ -83,13 +83,13 @@ public class Elevator : Objet
     {
         if(isPlayerOnBoard) GameManager.instance.player.ResumeMove();
         isMoving = false;
-        direction *= -1;
-        Vector3 save = startPos;
-        startPos = endPos.position;
-        endPos.position = save;
-        isActivated = false;
         if (addSpatialLine)
         {
+            Vector3 save = startPos;
+            startPos = endPos.position;
+            endPos.position = save;
+            isActivated = false;
+            direction *= -1;
             spatialRoom.addSpatialLine(spatialLine);
         }
     }
