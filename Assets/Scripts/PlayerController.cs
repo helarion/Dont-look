@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawCube(lookAtPos, new Vector3(0.1f, 0.1f, 0.1f));
+        Gizmos.DrawLine(transform.position, lookAtPos);
         Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.left);
         Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.right);
         Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.forward);
