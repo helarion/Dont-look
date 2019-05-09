@@ -9,6 +9,8 @@ public class CameraHandler : MonoBehaviour
 
     [Header("Camera Variables")]
     [SerializeField] float offset=1;
+    [SerializeField] float normalOffset = 1;
+    [SerializeField] float zoomOffset = 1.5f;
     [SerializeField] float cameraYawAngleMultiplier = 10;
     [SerializeField] float minYCamera = 1.0f;
     [SerializeField] float railOffsetX;
@@ -121,6 +123,12 @@ public class CameraHandler : MonoBehaviour
             GameManager.instance.RotateCamera(newRotate);
             GameManager.instance.MoveCamera(newPosition);
         }
+    }
+
+    public void Zoom(bool b)
+    {
+        if (b) offset = zoomOffset;
+        else offset = normalOffset;
     }
 
     public void SetNewZ(float newZ)

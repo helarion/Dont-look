@@ -414,14 +414,16 @@ MonoBehaviour:
   rangeDim: 1
   flashlightAnimator: {fileID: 4194574732569649043}
   lightTransitionSpeed: 0.1
+  normalCameraFOV: 60
+  zoomCameraFOV: 50
   concentratedLightRangeBonus: 2
   concentratedLightIntensity: 6000
-  concentratedLightColor: {r: 1, g: 0.98787063, b: 0.9009434, a: 1}
-  concentratedLightAngle: 40
+  concentratedLightColor: {r: 1, g: 0.8840478, b: 0.654902, a: 1}
+  concentratedLightAngle: 25
   normalLightIntensity: 4000
   normalLightRange: 16
   normalLightColor: {r: 1, g: 1, b: 1, a: 1}
-  normalLightAngle: 75
+  normalLightAngle: 50
   lightOn: 1
   isJumping: 0
 --- !u!54 &4194574732181831121
@@ -1512,6 +1514,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
+      propertyPath: shapeRadius
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
+        type: 3}
       propertyPath: maxSmoothness
       value: 1
       objectReference: {fileID: 0}
@@ -1573,7 +1580,7 @@ PrefabInstance:
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}
       propertyPath: m_SpotAngle
-      value: 75
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3352230726995187374, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}

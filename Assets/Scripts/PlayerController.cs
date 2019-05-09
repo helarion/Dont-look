@@ -109,6 +109,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float rangeDim;
     [SerializeField] public Animator flashlightAnimator;
     [SerializeField] private float lightTransitionSpeed=0.1f;
+    [SerializeField] private float normalCameraFOV;
+    [SerializeField] private float zoomCameraFOV;
 
     [SerializeField] private float concentratedLightRangeBonus;
     [SerializeField] private float concentratedLightIntensity;
@@ -320,8 +322,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<CameraBlock>() != null)
+        CameraBlock camBlock = other.GetComponent<CameraBlock>();
+        if(camBlock != null)
         {
+            if(currentCameraBlock == camBlock)
             currentCameraBlock = null;
             return;
         }
@@ -477,6 +481,8 @@ public class PlayerController : MonoBehaviour
             flashlight.intensity = Mathf.Lerp(flashlight.intensity,concentratedLightIntensity,lightTransitionSpeed);
             flashlight.color = Color.Lerp(flashlight.color, concentratedLightColor, lightTransitionSpeed);
             flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, concentratedLightAngle, lightTransitionSpeed);
+            GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, zoomCameraFOV, lightTransitionSpeed);
+            GameManager.instance.camHandler.Zoom(true);
             flashlightAnimator.enabled = false;
         }
         else
@@ -486,6 +492,8 @@ public class PlayerController : MonoBehaviour
             flashlight.intensity = Mathf.Lerp(flashlight.intensity, normalLightIntensity, lightTransitionSpeed);
             flashlight.color = Color.Lerp(flashlight.color, normalLightColor, lightTransitionSpeed);
             flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle, lightTransitionSpeed);
+            GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, normalCameraFOV, lightTransitionSpeed);
+            GameManager.instance.camHandler.Zoom(false);
             if (lightOn) flashlightAnimator.enabled = true;
         }
     }

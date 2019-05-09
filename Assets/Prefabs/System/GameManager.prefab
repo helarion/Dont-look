@@ -65,9 +65,9 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   decreaseFactor: 1
   camHandler: {fileID: 0}
-  bobbingSpeed: 0.25
-  normalBobbingAmount: 0.2
-  runningBobbingAmount: 0.5
+  bobbingSpeed: 0.22
+  normalBobbingAmount: 0.05
+  runningBobbingAmount: 0.15
   dutchAngle: 0
   wallsAndMobsLayer:
     serializedVersion: 2
@@ -86,10 +86,6 @@ MonoBehaviour:
   nbAudioRoomId: 7
   audioFadeSpeed: 30
   heartVibration: 0.1
-  leftClickMat: {fileID: 0}
-  rightClickMat: {fileID: 0}
-  bButtonMat: {fileID: 0}
-  leftTriggerMat: {fileID: 0}
 --- !u!114 &2026705480
 MonoBehaviour:
   m_ObjectHideFlags: 0

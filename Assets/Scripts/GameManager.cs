@@ -49,12 +49,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] float audioFadeSpeed=10;
     [SerializeField] private float heartVibration = 0.1f;
 
-    [Header("Input Materials")]
-    [SerializeField] Material leftClickMat;
-    [SerializeField] Material rightClickMat;
-    [SerializeField] Material bButtonMat;
-    [SerializeField] Material leftTriggerMat;
-
     [HideInInspector] public Player controls; // The Rewired Player
 
     private Vector3 originalPos;
@@ -258,6 +252,7 @@ public class GameManager : MonoBehaviour
         player.transform.position = c.transform.position;
         camHandler.SetNewZ(c.sRoom.newZ);
         camHandler.SetNewOffset(c.sRoom.newOffset);
+
         player.SetLightRange(c.sRoom.newLightRange);
         SetDutchAngle(c.sRoom.newDutchAngle);
         StopCurrentAudioRoom();
@@ -379,7 +374,7 @@ public class GameManager : MonoBehaviour
         {
             cSharpConversion.y = originalPos.y;
         }
-        print("bob:" + cSharpConversion);
+        //print("bob:" + cSharpConversion);
         MoveCamera(cSharpConversion);
     }
 
