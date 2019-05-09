@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     //[SerializeField] private float maxValue = 0.1f;
     //[SerializeField] private float shakeDuration = 0f;
     //[SerializeField] private float shakeAmount = 0.7f;
+    public List<Vector2> shakeRequests = new List<Vector2>();
+    float timeDuringCurrentShake = 0.0f;
     [SerializeField] private float decreaseFactor = 1.0f;
     [HideInInspector] public CameraHandler camHandler;
     [SerializeField] private float bobbingSpeed = 0.25f;
@@ -88,6 +90,7 @@ public class GameManager : MonoBehaviour
         {
             enemyList.Add(e);
         }
+        StartCoroutine(ShakeScreenCoroutine());
     }
 
     private void Update()
@@ -439,29 +442,81 @@ public void RotateCamera(Quaternion newRotate)
         }
     }*/
 
-    private IEnumerator ShakeScreenCoroutine(float duration, float amplitude)
+    private IEnumerator ShakeScreenCoroutine()
     {
-        float elapsed = 0.0f;
-
-        while (elapsed < duration)
+        bool vibrated = false;
+        while (true)
         {
-            if (player.GetInputMode() == PlayerController.InputMode.Pad)
+            if (shakeRequests.Count != 0)
             {
-                controls.SetVibration(0, amplitude, duration);
-                controls.SetVibration(1, amplitude, duration);
+                print(shakeRequests[0].y);
+                if (!vibrated && player.GetInputMode() == PlayerController.InputMode.Pad)
+                {
+                    controls.SetVibration(0, shakeRequests[0].y, shakeRequests[0].x);
+                    controls.SetVibration(1, shakeRequests[0].y, shakeRequests[0].x);
+                    vibrated = true;
+                }
+                mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * shakeRequests[0].y;
+                timeDuringCurrentShake += Time.deltaTime * decreaseFactor;
+                if (timeDuringCurrentShake > shakeRequests[0].x)
+                {
+                    shakeRequests.RemoveAt(0);
+                    timeDuringCurrentShake = 0.0f;
+                    vibrated = false;
+                }
             }
-            mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * amplitude;
-            elapsed += Time.deltaTime * decreaseFactor;
             yield return null;
         }
-
-        mainCamera.transform.localPosition = originalPos;
     }
 
     // SHAKESCREEN POUR LA DUREE ENTREE
-    public void ShakeScreen(float duration, float intensity)
+    public void ShakeScreen(float duration, float intensity, int offset = 0)
     {
-        StartCoroutine(ShakeScreenCoroutine(duration, intensity));
+        if (shakeRequests.Count == offset)
+        {
+            shakeRequests.Insert(offset, new Vector2(duration, intensity));
+        }
+        else
+        {
+            if (intensity < shakeRequests[offset].y)
+            {
+                if (duration > shakeRequests[offset].x)
+                {
+                    ShakeScreen(duration - shakeRequests[offset].x, intensity, offset + 1);
+                }
+            }
+            else
+            {
+                if (offset == 0)
+                {
+                    shakeRequests[0] = new Vector2(shakeRequests[0].x - timeDuringCurrentShake, shakeRequests[0].y);
+                    timeDuringCurrentShake = 0.0f;
+                }
+                if (duration < shakeRequests[offset].x)
+                {
+                    Vector2 oldShakeRequest = shakeRequests[offset];
+                    shakeRequests.RemoveAt(offset);
+                    shakeRequests.Insert(offset, new Vector2(duration, intensity));
+                    shakeRequests.Insert(offset + 1, new Vector2(oldShakeRequest.x - duration, oldShakeRequest.y));
+                }
+                else
+                {
+                    shakeRequests.Insert(offset, new Vector2(duration, intensity));
+                    while (shakeRequests.Count > offset + 1)
+                    {
+                        if (duration > shakeRequests[offset + 1].x)
+                        {
+                            duration -= shakeRequests[offset + 1].x;
+                            shakeRequests.RemoveAt(offset + 1);
+                        }
+                        else
+                        {
+                            shakeRequests[offset + 1] = new Vector2(shakeRequests[offset + 1].x - duration, shakeRequests[offset + 1].y);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /*
@@ -544,6 +599,7 @@ public static class ExtensionMethods
 {
     public static float Remap(this float value, float vMin, float vMax, float rMin, float rMax)
     {
-        return rMin + (value - vMin) * (rMax - rMin) / (vMax - vMin);
+
+        return rMin + (Mathf.Clamp(value, vMin, vMax) - vMin) * (rMax - rMin) / (vMax - vMin);
     }
 }
