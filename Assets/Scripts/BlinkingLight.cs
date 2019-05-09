@@ -16,6 +16,7 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] private Color startColor;
     [SerializeField] private Color endColor;
     [SerializeField] private Color activatedColor;
+    [SerializeField] private bool isContinious = false;
 
     private Color FinishedColor;
     private float count = 0;
@@ -23,6 +24,11 @@ public class BlinkingLight : MonoBehaviour
     private bool isWaiting = false;
     private bool isBlinking = true;
     private bool isActivated = false;
+
+    private void Start()
+    {
+        if (isContinious) StartBlink();
+    }
 
     public void StartBlink()
     {
@@ -35,6 +41,7 @@ public class BlinkingLight : MonoBehaviour
 
     public void StartLook(float time)
     {
+        if (isContinious) return;
         count = 0;
         countTime = time;
         lt.intensity = startingIntensity;
@@ -46,7 +53,6 @@ public class BlinkingLight : MonoBehaviour
         count = 0;
         pointLt.intensity = 0;
         pointLt.color = startColor;
-        isWaiting = false;
         StartBlink();
         isWaiting = false;
     }
@@ -70,7 +76,7 @@ public class BlinkingLight : MonoBehaviour
 
     private void Update()
     {
-        if(isBlinking)
+        if(isBlinking || isContinious)
         {
             if (lt.intensity >= startingIntensity)
             {
@@ -94,6 +100,7 @@ public class BlinkingLight : MonoBehaviour
 
     public void Activate()
     {
+        if (isContinious) return;
         isActivated = true;
         pointLt.color = activatedColor;
     }

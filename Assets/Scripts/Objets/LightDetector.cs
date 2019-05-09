@@ -21,50 +21,24 @@ public class LightDetector : Objet
 
     private void Update()
     {
-        LightDetection();
+        //print(GameManager.instance.LightDetection(transform.position, true));
+        IsLit(GameManager.instance.LightDetection(transform,true));
     }
 
-    public void LightDetection()
+    private void IsLit(bool b)
     {
-        bool test = false;
-        Vector3 playerPosition = GameManager.instance.player.transform.position;
-        Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
-        Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
-
-        float playerToSpiderLength = playerToSpiderVec.magnitude;
-        Light playerLight = GameManager.instance.player.getLight();
-        float lightRange = playerLight.range;
-        float lightAngle = playerLight.spotAngle / 2.0f;
-        if (playerToSpiderLength <= lightRange)
-        {
-            float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToSpiderVec) / (lightVec.magnitude * playerToSpiderVec.magnitude)) * Mathf.Rad2Deg;
-            if (angleFromLight <= lightAngle)
-            {
-                lightVec = Vector3.RotateTowards(lightVec, playerToSpiderVec, angleFromLight, Mathf.Infinity);
-
-                RaycastHit hit;
-                Ray ray = new Ray(playerPosition, lightVec);
-                Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer());
-
-                if (hit.transform.gameObject.tag == gameObject.tag)
-                {
-                    if(GameManager.instance.player.GetConcentration())test = true;
-                }
-                //print("Touched " + hit.transform.gameObject.name);
-            }
-        }
-        if (!isLooked && !isActivated && test) StartCoroutine("CountLook");
-        else if (!test &&!isActivated)
+        if (!isLooked && !isActivated && b) StartCoroutine("CountLook");
+        else if (!b && !isActivated)
         {
             StopCoroutine("CountLook");
-            if(!isActivated && isLooked) blinkLight.StartBlink();
+            if (!isActivated && isLooked) blinkLight.StartBlink();
             isLooked = false;
             countLook = 0f;
         }
-    }
+    }      
 
-    // COROUTINE POUR COMPTER LE TEMPS QUE L'OBJET EST REGARDE PAR LE JOUEUR
-    private IEnumerator CountLook()
+// COROUTINE POUR COMPTER LE TEMPS QUE L'OBJET EST REGARDE PAR LE JOUEUR
+private IEnumerator CountLook()
     {
         isLooked = true;
         blinkLight.StartLook(delayActivate);

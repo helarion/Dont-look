@@ -21,10 +21,9 @@ public class BipedeBehavior : Enemy
     void Update()
     {
         VelocityCount();
-
+        IsLit(GameManager.instance.LightDetection(transform, needsConcentration));
         if (isChasing)
         {
-            LightDetection();
             ChaseBehavior();
         }
         //DebugPath(); 
