@@ -112,12 +112,12 @@ public class GameManager : MonoBehaviour
     {
         ar.PlayEvent();
         AkSoundEngine.SetRTPCValue("position_gd_" + ar.id, 50);
-        StartCoroutine("FadeInAudioRoutine", ar);
+        StartCoroutine(FadeInAudioRoutine(ar));
     }
 
     private void StopCurrentAudioRoom()
     {
-        StartCoroutine("FadeOutAudioRoutine");
+        StartCoroutine(FadeOutAudioRoutine());
     }
 
     private void ResetAllAudioRooms()
@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour
         if (isPlayingHeart) return;
         isPlayingHeart = true;
         AkSoundEngine.PostEvent(HeartPlay, player.gameObject);
-        if(player.GetInputMode()==PlayerController.InputMode.Pad)StartCoroutine("HeartCoroutine");
+        if(player.GetInputMode()==PlayerController.InputMode.Pad)StartCoroutine(HeartCoroutine());
     }
 
     public void StopHeart()
@@ -174,7 +174,7 @@ public class GameManager : MonoBehaviour
         if (!isPlayingHeart) return;
         isPlayingHeart = false;
         AkSoundEngine.PostEvent(HeartStop, player.gameObject);
-        StopCoroutine("HeartCoroutine");
+        StopCoroutine(HeartCoroutine());
     }
 
     private IEnumerator HeartCoroutine()
@@ -246,7 +246,7 @@ public class GameManager : MonoBehaviour
         player.Reset();
         player.SetIsAlive(false);
         UIManager.instance.FadeDeath(true);
-        StartCoroutine("DeathCoroutine");
+        StartCoroutine(DeathCoroutine());
     }
 
     // COROUTINE DE FADE OUT / IN DE LA MORT

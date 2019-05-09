@@ -48,7 +48,7 @@ public class Elevator : Objet
     public override void Reset()
     {
         base.Reset();
-        StopCoroutine("MoveCoroutine");
+        StopCoroutine(MoveCoroutine());
         enterCol.enabled = false;
         transform.position = startPos;
     }
@@ -58,7 +58,7 @@ public class Elevator : Objet
         if (!isMoving)
         {
             isMoving = true;
-            StartCoroutine("MoveCoroutine");
+            StartCoroutine(MoveCoroutine());
         }
     }
 

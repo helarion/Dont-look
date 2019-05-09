@@ -53,8 +53,9 @@ public class BlinkingLight : MonoBehaviour
         count = 0;
         pointLt.intensity = 0;
         pointLt.color = startColor;
-        StartBlink();
         isWaiting = false;
+        isActivated = false;
+        StartBlink();
     }
 
     private IEnumerator DarkWait()
@@ -85,7 +86,7 @@ public class BlinkingLight : MonoBehaviour
             else if (lt.intensity <= 0 &&!isWaiting)
             {
                 direction = 1;
-                StartCoroutine("DarkWait");
+                StartCoroutine(DarkWait());
             }
             if(!isWaiting)lt.intensity += (Time.deltaTime * blinkSpeed) * direction;
         }

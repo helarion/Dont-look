@@ -598,7 +598,7 @@ public class PlayerController : MonoBehaviour
 
     public void StartFlickering()
     {
-        StartCoroutine("RandomFlickerCoroutine");
+        StartCoroutine(RandomFlickerCoroutine());
     }
 
     private void RandomFlicker()

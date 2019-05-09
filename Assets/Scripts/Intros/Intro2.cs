@@ -20,7 +20,7 @@ public class Intro2 : MonoBehaviour
             if(GameManager.instance!=null) Destroy(GameManager.instance.gameObject);
             if(UIManager.instance!=null) Destroy(UIManager.instance.gameObject);
         }
-        StartCoroutine("FadeOutCoroutine");
+        StartCoroutine(FadeOutCoroutine());
     }
 
     IEnumerator StartCoroutine()
@@ -45,7 +45,7 @@ public class Intro2 : MonoBehaviour
         savedColor.a = 0;
         fadeImg.color = savedColor;
         yield return new WaitForSeconds(waitBefore);
-        StartCoroutine("FadeInCoroutine");
+        StartCoroutine(FadeInCoroutine());
     }
 
     IEnumerator FadeInCoroutine()
