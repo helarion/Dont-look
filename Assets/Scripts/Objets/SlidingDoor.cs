@@ -31,8 +31,8 @@ public class SlidingDoor : Objet
         if(!isActivated)
         {
             isActivated = true;
-            StopCoroutine("StopCoroutine");
-            StartCoroutine("OpenCoroutine");
+            StopCoroutine(CloseCoroutine());
+            StartCoroutine(OpenCoroutine());
         }
     }
 
@@ -41,8 +41,8 @@ public class SlidingDoor : Objet
         if (isActivated)
         {
             isActivated = false;
-            StopCoroutine("OpenCoroutine");
-            StartCoroutine("CloseCoroutine");
+            StopCoroutine(OpenCoroutine());
+            StartCoroutine(CloseCoroutine());
         }
     }
 

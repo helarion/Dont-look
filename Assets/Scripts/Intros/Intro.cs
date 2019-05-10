@@ -35,7 +35,7 @@ public class Intro : MonoBehaviour
         magelis.color = magelisColor;
         poitiers.color = poitiersColor;
 
-        StartCoroutine("FadeInImage");
+        StartCoroutine(FadeInImage());
     }
 
     private void Update()
@@ -85,7 +85,7 @@ public class Intro : MonoBehaviour
         cnam.color = cnamColor;
 
         yield return new WaitForSeconds(1);
-        StartCoroutine("FadeOutImage");
+        StartCoroutine(FadeOutImage());
     }
 
     private IEnumerator FadeOutImage()

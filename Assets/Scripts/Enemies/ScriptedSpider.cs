@@ -51,7 +51,7 @@ public class ScriptedSpider : Enemy
     {
         agent.speed = moveSpeed;
         StartChase();
-        StartCoroutine("ScriptRoutine");
+        StartCoroutine(ScriptRoutine());
     }
 
     private IEnumerator ScriptRoutine()

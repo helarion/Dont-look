@@ -52,7 +52,7 @@ public class UIManager : MonoBehaviour
             GameManager.instance.SetIsPaused(true);
             fadeImg.color = new Color(0, 0, 0, 1);
             FadeOut(fadeImg, 2, 0);
-            StartCoroutine("StartCoroutine");
+            StartCoroutine(StartCoroutine());
         }
         eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
         volumeControl.OnSelect(null);
@@ -159,7 +159,7 @@ public class UIManager : MonoBehaviour
     public void FadeInEnd()
     {
         StartCoroutine(FadeInCoroutine(fadeImg,2f,0f));
-        StartCoroutine("EndCoroutine");
+        StartCoroutine(EndCoroutine());
     }
 
     public void FadeOut(Image img, float duration, float waitBefore)

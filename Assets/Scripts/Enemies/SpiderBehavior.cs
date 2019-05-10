@@ -13,7 +13,6 @@ public class SpiderBehavior : Enemy
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
-    private bool isCountingStartChase = false;
     private bool lowerSpeedChase = true;
 
     NavMeshLink link;
@@ -67,13 +66,13 @@ public class SpiderBehavior : Enemy
         {
             if(!canSeePlayer)
             {
-                if (!isSearching) StartCoroutine("CountChase");
+                if (!isSearching) StartCoroutine(CountChase());
                 isSearching = true;
             }
         }
         else
         {
-            StopCoroutine("CountChase");
+            StopCoroutine(CountChase());
             isSearching = false;
             agent.speed = moveSpeed;
         }
@@ -82,7 +81,7 @@ public class SpiderBehavior : Enemy
     public override void StartChase()
     {
         base.StartChase();
-        StartCoroutine("LowerSpeedCoroutine");
+        StartCoroutine(LowerSpeedCoroutine());
     }
 
     private IEnumerator LowerSpeedCoroutine()
@@ -113,8 +112,6 @@ public class SpiderBehavior : Enemy
     {
         base.Respawn();
         lowerSpeedChase = true;
-        isCountingStartChase = false;
-        animator.SetFloat("WakeMult", 0);
         animator.SetBool("IsSleeping", true);
     }
 
@@ -124,7 +121,7 @@ public class SpiderBehavior : Enemy
         canSeePlayer = b;
         if (!b)
         {
-            StopCoroutine("CountChase");
+            StopCoroutine(CountChase());
             isSearching = false;
             animator.SetBool("WakesUp", false);
             isSearching= false;
@@ -139,12 +136,11 @@ public class SpiderBehavior : Enemy
         if (lowerSpeedChase) speed -= malusSpeedStart;
         if (b)
         {
-            if (!isCountingStartChase && !isChasing)
+            if (!isChasing && !isLooked)
             {
-                isCountingStartChase = true;
+                isLooked = true;
                 animator.SetBool("IsSleeping", false);
                 animator.SetTrigger("WakesUp");
-                StartCoroutine("CountLook");
             }
             else
             {

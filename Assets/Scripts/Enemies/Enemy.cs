@@ -91,13 +91,9 @@ public class Enemy : MonoBehaviour
     {
         if (isChasing)
         {
-            isMoving = false;
-            isChasing = false;
-            animator.SetBool("IsMoving", isMoving);
             //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
-            if (!delete) Respawn();
-            else if (p.GetIsHidden())
+            if(delete && p.GetIsHidden())
             {
                 GameManager.instance.DeleteEnemyFromList(this);
                 Destroy(gameObject);
@@ -125,6 +121,7 @@ public class Enemy : MonoBehaviour
     }
 
     public virtual void DetectPlayer(bool b) {}
+
     public virtual void IsLit(bool b)
     {
         if (b)
@@ -146,24 +143,30 @@ public class Enemy : MonoBehaviour
         GameManager.instance.ShakeScreen(chaseShakeTime, chaseShakeIntensity);
         float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
         AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);
+        IsPathInvalid();
+    }
+
+    private void IsPathInvalid()
+    {
         bool isPathValid = agent.CalculatePath(p.transform.position, agent.path);
-        if(!isPathValid && !isCountingEndChase)
+        print("path status:" + agent.path.status);
+        if (!isPathValid && !isCountingEndChase)
         {
             print("path invalid");
             isCountingEndChase = true;
-            StartCoroutine("CountEndChase");
+            StartCoroutine(CountEndChase());
         }
-        else if(isPathValid)
+        else if (isPathValid)
         {
             print("path valid");
             isCountingEndChase = false;
-            StopCoroutine("CountEndChase");
+            StopCoroutine(CountEndChase());
         }
     }
 
     public virtual void Respawn()
     {
-        StopChase();
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
         isLooked = false;
         hasPlayedChase = false;
         hasPlayedLook = false;

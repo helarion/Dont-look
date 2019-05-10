@@ -27,10 +27,10 @@ public class LightDetector : Objet
 
     private void IsLit(bool b)
     {
-        if (!isLooked && !isActivated && b) StartCoroutine("CountLook");
+        if (!isLooked && !isActivated && b) StartCoroutine(CountLook());
         else if (!b && !isActivated)
         {
-            StopCoroutine("CountLook");
+            StopCoroutine(CountLook());
             if (!isActivated && isLooked) blinkLight.StartBlink();
             isLooked = false;
             countLook = 0f;
