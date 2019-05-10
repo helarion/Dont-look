@@ -19,11 +19,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider gammaControl;
     [SerializeField] private Toggle toggleTracker;
     [SerializeField] private EventSystem eventSystem;
-    [SerializeField] private PostProcessVolume postProcess;
     [SerializeField] private float gammaMin=-1.5f;
     [SerializeField] private float gammaMax=1.5f;
 
     private ColorGrading colorGrading;
+    private Bloom bloom;
     public bool isFading = false;
 
     public static UIManager instance = null;
@@ -44,7 +44,10 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        postProcess.profile.TryGetSettings(out colorGrading);
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out colorGrading);
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out bloom);
+        bloom.active = true;
+        gammaControl.value = colorGrading.gamma.value.x.Remap(gammaMin, gammaMax, gammaControl.minValue, gammaControl.maxValue);
         volumeControl.onValueChanged.AddListener(delegate { VolumeValueChangeCheck(); });
         gammaControl.onValueChanged.AddListener(delegate { GammaValueChangeCheck(); });
         if (!GameManager.instance.isTesting)
