@@ -140,4 +140,9 @@ public class CameraHandler : MonoBehaviour
     {
         offset = newOffset;
     }
+
+    public void DestroyTarget()
+    {
+        target = null;
+    }
 }

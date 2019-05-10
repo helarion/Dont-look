@@ -8,20 +8,19 @@ public class SlidingDoor : Objet
     [SerializeField] private float moveUpSpeed = 0.1f;
     [SerializeField] private float moveDownSpeed = 0.05f;
     [SerializeField] private Transform endPos;
+    [SerializeField] private Transform startPosition;
     [SerializeField] private float shakeOnIntensity = 0.08f;
     [SerializeField] private float shakeOffIntensity = 0.04f;
 
-    Vector3 startPosition;
-    float distance; 
+    float distance;
 
     private void Start()
     {
-        startPosition = transform.localPosition;
+        if (isBroken) this.enabled = false;
     }
 
     private void Update()
     {
-
         if (isActivating) ContiniousActivate();
         else ContiniousDesactivate();
     }
@@ -63,7 +62,7 @@ public class SlidingDoor : Objet
 
     IEnumerator CloseCoroutine()
     {
-        distance = (transform.localPosition -startPosition).magnitude;
+        distance = (transform.localPosition -startPosition.localPosition).magnitude;
         while (distance > 0.1f)
         {
             transform.position += (transform.up*-1) * Time.deltaTime * moveDownSpeed;
@@ -89,18 +88,30 @@ public class SlidingDoor : Objet
 
     private void ContiniousDesactivate()
     {
-        distance = transform.localPosition.y - startPosition.y;
+        distance = transform.localPosition.y - startPosition.localPosition.y;
         if (distance > 0.01f)
         {
             GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
             transform.localPosition += (transform.up * -1) * Time.deltaTime * moveDownSpeed;
         }
-        else transform.localPosition = startPosition;
+        else transform.localPosition = startPosition.localPosition;
+    }
+
+    public override void Break()
+    {
+        transform.localPosition = endPos.localPosition;
+        base.Break();
     }
 
     public override void Reset()
     {
         base.Reset();
-        transform.localPosition = startPosition;
+        isActivated = false;
+        isActivating = false;
+        if(isBroken)
+        {
+            Break();
+        }
+        else transform.localPosition = startPosition.localPosition;
     }
 }

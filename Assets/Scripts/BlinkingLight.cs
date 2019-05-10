@@ -17,6 +17,7 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] private Color endColor;
     [SerializeField] private Color activatedColor;
     [SerializeField] private bool isContinious = false;
+    [SerializeField] private bool isBroken = false;
 
     private Color FinishedColor;
     private float count = 0;
@@ -28,6 +29,10 @@ public class BlinkingLight : MonoBehaviour
     private void Start()
     {
         if (isContinious) StartBlink();
+        if (isBroken)
+        {
+            Break();
+        }
     }
 
     public void StartBlink()
@@ -56,6 +61,7 @@ public class BlinkingLight : MonoBehaviour
         isWaiting = false;
         isActivated = false;
         StartBlink();
+        if (isBroken) Break();
     }
 
     private IEnumerator DarkWait()
@@ -104,5 +110,18 @@ public class BlinkingLight : MonoBehaviour
         if (isContinious) return;
         isActivated = true;
         pointLt.color = activatedColor;
+    }
+
+    public void Break()
+    {
+        pointLt.enabled = false;
+        lt.enabled = false;
+        this.enabled = false;
+    }
+
+    public void Fix()
+    {
+        pointLt.enabled = true;
+        lt.enabled = true;
     }
 }
