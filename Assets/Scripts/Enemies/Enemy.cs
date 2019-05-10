@@ -203,4 +203,14 @@ public class Enemy : MonoBehaviour
         int rand = Random.Range(0, max);
         return (spawnZones[rand].position);
     }
+
+    public NavMeshAgent GetAgent()
+    {
+        return agent;
+    }
+
+    public Transform[] GetSpawnZones()
+    {
+        return spawnZones;
+    }
 }

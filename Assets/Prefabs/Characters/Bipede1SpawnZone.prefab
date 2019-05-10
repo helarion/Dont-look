@@ -133,7 +133,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5058967854183323154}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 34.5, y: 3.25, z: 3.75}
   m_LocalScale: {x: 2.25, y: 2.25, z: 2.25}
   m_Children:
@@ -183,9 +183,8 @@ MonoBehaviour:
   lookShakeIntensity: 0.05
   lookShakeTime: 1
   minChaseShakeIntensity: 0.02
-  maxChaseshakeIntensity: 0.06
+  maxChaseShakeIntensity: 0.06
   chaseShakeTime: 1
-  delayBeforeChase: 2
   delayChase: 3
   playerDistance: 0
   hasPlayedLook: 0
@@ -195,6 +194,7 @@ MonoBehaviour:
   WwiseChasePlay: 
   WwiseChaseStop: 
   WwiseLook: 
+  scriptedObjectsActivation: []
   agent: {fileID: 0}
   animator: {fileID: 0}
   velocity: 0
@@ -696,7 +696,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5105161807322348093}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.16666667, y: -1.6666667, z: -0.16666667}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
