@@ -10,6 +10,7 @@ public class LightDetector : Objet
     [SerializeField] private string chargingSound = null;
     [SerializeField] private string activateSound = null;
     [SerializeField] private bool desactivate = false;
+    [SerializeField] private GameObject[] brokenFeature;
     private MeshRenderer model;
     [HideInInspector] public bool isLooked = false;
     private float countLook=0f;
@@ -17,6 +18,10 @@ public class LightDetector : Objet
     private void Start()
     {
         model = GetComponentInChildren<MeshRenderer>();
+        if(isBroken)
+        {
+            Break();
+        }
     }
 
     private void Update()
@@ -57,15 +62,45 @@ private IEnumerator CountLook()
     {
         if (isActivated && !desactivate) return;
         base.Activate();
+        if (isBroken)
+        {
+            blinkLight.enabled = true;
+            blinkLight.Fix();
+        }
         blinkLight.Activate();
         AkSoundEngine.PostEvent(activateSound, gameObject);
         foreach(Objet o in targets)
         {
-            if (o.isActivated && desactivate) o.Desactivate();
+            if (!o.enabled)
+            {
+                o.enabled = true;
+                o.Fix();
+            }
+            else if (o.isActivated && desactivate) o.Desactivate();
             else o.Activate();
         }
         isActivated = true;
         print("Object activated");
+    }
+
+    public override void Break()
+    {
+        foreach (GameObject g in brokenFeature)
+        {
+            g.SetActive(true);
+        }
+        blinkLight.Break();
+        base.Break();
+    }
+
+    public override void Fix()
+    {
+        foreach (GameObject g in brokenFeature)
+        {
+            g.SetActive(false);
+        }
+        blinkLight.Fix();
+        base.Fix();
     }
 
     public override void Reset()
@@ -74,5 +109,10 @@ private IEnumerator CountLook()
         blinkLight.Reset();
         isLooked = false;
         countLook = 0f;
+        if (isBroken)
+        {
+            blinkLight.Break();
+            Break();
+        }
     }
 }

@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(other.CompareTag("Finish"))
         {
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
+            GameManager.instance.camHandler.DestroyTarget();
             UIManager.instance.FadeInEnd();
         }
         else if (other.CompareTag("Elevator"))

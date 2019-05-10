@@ -158,8 +158,17 @@ public class UIManager : MonoBehaviour
 
     public void FadeInEnd()
     {
+        StartCoroutine(Wait(10));
         StartCoroutine(FadeInCoroutine(fadeImg,2f,0f));
         StartCoroutine(EndCoroutine());
+    }
+
+    IEnumerator Wait(float waitTime)
+    {
+        isFading = true;
+        yield return new WaitForSeconds(waitTime);
+        isFading = false;
+        yield return null;
     }
 
     public void FadeOut(Image img, float duration, float waitBefore)

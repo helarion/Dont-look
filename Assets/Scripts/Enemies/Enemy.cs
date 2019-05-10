@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private string WwiseChasePlay;
     [SerializeField] private string WwiseChaseStop;
     [SerializeField] public string WwiseLook;
+    [SerializeField] private Objet[] scriptedObjectsActivation;
 
 
     [HideInInspector] public NavMeshAgent agent;
@@ -95,6 +96,10 @@ public class Enemy : MonoBehaviour
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
             if(delete && p.GetIsHidden())
             {
+                foreach(Objet o in scriptedObjectsActivation)
+                {
+                    o.Activate();
+                }
                 GameManager.instance.DeleteEnemyFromList(this);
                 Destroy(gameObject);
             }
