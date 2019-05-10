@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Objet : MonoBehaviour
 {
-    [HideInInspector] public bool isActivated = false;
+    [SerializeField] public bool isActivated = false;
     //[HideInInspector] 
     public bool isActivating = false;
 
