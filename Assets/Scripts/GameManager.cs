@@ -449,7 +449,6 @@ public void RotateCamera(Quaternion newRotate)
         {
             if (shakeRequests.Count != 0)
             {
-                print(shakeRequests[0].y);
                 if (!vibrated && player.GetInputMode() == PlayerController.InputMode.Pad)
                 {
                     controls.SetVibration(0, shakeRequests[0].y, shakeRequests[0].x);
