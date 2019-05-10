@@ -571,11 +571,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -987,7 +987,7 @@ PrefabInstance:
     - target: {fileID: 3912653594282358646, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -126.85217
+      value: -126.852295
       objectReference: {fileID: 0}
     - target: {fileID: 3387428049420734382, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
@@ -1024,6 +1024,16 @@ PrefabInstance:
       propertyPath: m_enableAutoSizing
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7211547673032276693, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7211547673032276693, guid: 6b4aa82e73706094e882bf5bb69c5826,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 936411622738264322, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -1053,13 +1063,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8991335725271450557, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 0
+      propertyPath: m_isInputParsingRequired
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4646621914772306620, guid: 6b4aa82e73706094e882bf5bb69c5826,
         type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 0
+      propertyPath: m_isInputParsingRequired
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b4aa82e73706094e882bf5bb69c5826, type: 3}

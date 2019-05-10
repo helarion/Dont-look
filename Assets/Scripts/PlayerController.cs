@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lightSensitivity = 1;
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlightTransform;
+    [SerializeField] private Light pointLight;
     [SerializeField] private int flickerPercentage = 10;
     [SerializeField] private int flickeringFrequency = 1;
     [SerializeField] public float rangeDim;
@@ -582,6 +583,7 @@ public class PlayerController : MonoBehaviour
     private void ClosedEyes(bool isClosed)
     {
         flashlight.enabled = !isClosed;
+        pointLight.enabled = isClosed;
         lightOn = !isClosed;
 
         if(isClosed)

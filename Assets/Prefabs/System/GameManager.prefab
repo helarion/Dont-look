@@ -61,13 +61,15 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   cameraMoveOffset: 40
   mainCamera: {fileID: 0}
+  shakeRequests: []
   decreaseFactor: 1
   camHandler: {fileID: 0}
   bobbingSpeed: 0.22
-  normalBobbingAmount: 0.05
-  runningBobbingAmount: 0.15
+  normalBobbingAmount: 0.01
+  runningBobbingAmount: 0.05
   dutchAngle: 0
   wallsAndMobsLayer:
     serializedVersion: 2
