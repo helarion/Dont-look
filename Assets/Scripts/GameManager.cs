@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public bool isTesting = false;
     [SerializeField] private Checkpoint[] CheckPointList;
     [SerializeField] private float cameraMoveOffset = 20;
+    [SerializeField] private float lightVecOffset = 0.3f;
 
     [Header("Camera")]
     public Camera mainCamera;
@@ -210,7 +211,7 @@ public class GameManager : MonoBehaviour
     {
         bool isLit = false;
         Vector3 playerPosition = player.getLight().transform.position;
-        //playerPosition.y += 1;
+        playerPosition.y += lightVecOffset;
         Vector3 lightVec = player.GetLookAt() - playerPosition;
         Vector3 playerToObjectVec = objectPosition.position - player.transform.position;
 
@@ -542,8 +543,7 @@ public void RotateCamera(Quaternion newRotate)
         Cursor.visible = true;
         Time.timeScale = 0;
         isPaused = true;
-        UIManager.instance.pausePanel.SetActive(true);
-        //UIManager.instance.FadePause(true);
+        UIManager.instance.Pause(true);
     }
 
     public void ResumeGame()
@@ -551,8 +551,7 @@ public void RotateCamera(Quaternion newRotate)
         Cursor.visible = false;
         Time.timeScale = 1;
         isPaused = false;
-        UIManager.instance.pausePanel.SetActive(false);
-        //UIManager.instance.FadePause(false);
+        UIManager.instance.Pause(false);
     }
     #endregion
 

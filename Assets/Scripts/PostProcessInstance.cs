@@ -8,6 +8,8 @@ public class PostProcessInstance : MonoBehaviour
     [HideInInspector] public static PostProcessInstance instance = null;
     public PostProcessVolume volume;
 
+    ColorGrading colorGrading;
+
     private void Awake()
     {
         if (instance == null)
@@ -19,5 +21,11 @@ public class PostProcessInstance : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out colorGrading);
+        colorGrading.gamma.value = new Vector4(0, 0, 0, 0);
     }
 }
