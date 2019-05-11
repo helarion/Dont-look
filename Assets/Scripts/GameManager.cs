@@ -209,8 +209,8 @@ public class GameManager : MonoBehaviour
     public bool LightDetection(Transform objectPosition, bool needsConcentration)
     {
         bool isLit = false;
-        Vector3 playerPosition = player.transform.position;
-        playerPosition.y += 1;
+        Vector3 playerPosition = player.getLight().transform.position;
+        //playerPosition.y += 1;
         Vector3 lightVec = player.GetLookAt() - playerPosition;
         Vector3 playerToObjectVec = objectPosition.position - player.transform.position;
 

@@ -136,25 +136,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81af5191e4c0d4e4ab2d931120d4ab33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  isChasing: 0
+  moveSpeed: 4
+  bonusSpeed: 1
+  velocityMax: 2
   delete: 0
   lookShakeIntensity: 0.08
-  chaseShakeIntensity: 0.02
+  lookShakeTime: 1
+  minChaseShakeIntensity: 0.02
+  maxChaseShakeIntensity: 0.06
+  chaseShakeTime: 1
+  delayChase: 3
+  playerDistance: 0
+  hasPlayedLook: 0
+  isChasing: 0
   spawnZones: []
   WwiseChasePlay: 
   WwiseChaseStop: 
   WwiseLook: 
+  scriptedObjectsActivation: []
   agent: {fileID: 0}
   animator: {fileID: 0}
   velocity: 0
   _transform: {fileID: 8090900481788192753}
   isLooked: 1
   isMoving: 0
+  isCountingEndChase: 0
+  needsConcentration: 0
   p: {fileID: 0}
   endPos: {fileID: 0}
-  scriptIntensity: 0
-  hasPlayedLook: 0
 --- !u!65 &7653863277347981114
 BoxCollider:
   m_ObjectHideFlags: 0

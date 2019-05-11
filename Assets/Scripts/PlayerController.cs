@@ -583,7 +583,7 @@ public class PlayerController : MonoBehaviour
     private void ClosedEyes(bool isClosed)
     {
         flashlight.enabled = !isClosed;
-        pointLight.enabled = isClosed;
+        pointLight.enabled = !isClosed;
         lightOn = !isClosed;
 
         if(isClosed)
