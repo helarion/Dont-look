@@ -15,14 +15,14 @@ public class ShadowSpider : Enemy
 
     private void Update()
     {
-        //VelocityCount();
         velocity = overrideVelocity;
+        animator.SetFloat("Velocity", velocity);
     }
     
     public void Trigger()
     {
-        MoveTo(endPos.position);
         animator.SetBool("IsMoving", true);
+        MoveTo(endPos.position);
     }
 
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
@@ -31,7 +31,7 @@ public class ShadowSpider : Enemy
         base.IsLit(b);
         if (b)
         {
-            MoveTo(endPos.position);
+            Trigger();
         }
     }
 }

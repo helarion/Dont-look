@@ -20,7 +20,6 @@ public class SpiderBehavior : Enemy
     private void Start()
     {
         Initialize();
-        animator.SetFloat("WakeMult", (1f / delaySpot));
     }
 
     private void Update()
