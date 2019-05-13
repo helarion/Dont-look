@@ -63,6 +63,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   cameraMoveOffset: 40
+  lightVecOffset: 0.3
   mainCamera: {fileID: 0}
   shakeRequests: []
   decreaseFactor: 1
@@ -71,6 +72,8 @@ MonoBehaviour:
   normalBobbingAmount: 0.01
   runningBobbingAmount: 0.05
   dutchAngle: 0
+  contrePlongeeAngle: 20
+  contrePlongeeHauteur: 0.3
   wallsAndMobsLayer:
     serializedVersion: 2
     m_Bits: 15872

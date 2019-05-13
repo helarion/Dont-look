@@ -10,6 +10,7 @@ public class LightDetector : Objet
     [SerializeField] private string chargingSound = null;
     [SerializeField] private string activateSound = null;
     [SerializeField] private bool desactivate = false;
+    [SerializeField] private bool scriptSpider = false;
     [SerializeField] private GameObject[] brokenFeature;
     private MeshRenderer model;
     [HideInInspector] public bool isLooked = false;

@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
     private float bobTimer = 0;
     //private float midpoint = 2;
     [SerializeField] private float dutchAngle=0;
+    [SerializeField] public float contrePlongeeAngle = 15;
+    [SerializeField] private float contrePlongeeHauteur = 1.5f;
 
     [Header("Layers")]
     [SerializeField] private LayerMask wallsAndMobsLayer;
@@ -292,7 +294,8 @@ public class GameManager : MonoBehaviour
         player.transform.position = c.transform.position;
         camHandler.SetNewZ(c.sRoom.newZ);
         camHandler.SetNewOffset(c.sRoom.newOffset);
-
+        contrePlongeeAngle = c.sRoom.newContrePlongeeAngle;
+        contrePlongeeHauteur = c.sRoom.newContrePlongeeHauteur;
         player.SetLightRange(c.sRoom.newLightRange);
         player.SetLightAngle(c.sRoom.newLightAngle);
         SetDutchAngle(c.sRoom.newDutchAngle);
@@ -377,6 +380,7 @@ public class GameManager : MonoBehaviour
     {
         float speed = cameraSpeed;
         if (player.velocity > 0) speed /= (player.velocity * cameraMoveOffset);
+        newPos.y += contrePlongeeHauteur;
         mainCamera.transform.localPosition = Vector3.Lerp(originalPos, newPos, Time.deltaTime / speed);
         originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
     }
@@ -425,6 +429,7 @@ public void RotateCamera(Quaternion newRotate)
         //float speed = cameraSpeed;
         //if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
         newRotate.z = dutchAngle.Remap(0,360,0,1);
+        newRotate.x = contrePlongeeAngle.Remap(0, 360, 0, 1);
         mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
     }
 
@@ -590,6 +595,16 @@ public void RotateCamera(Quaternion newRotate)
     public void SetDutchAngle(float angle)
     {
         dutchAngle = angle;
+    }
+
+    public void SetContrePlongeeHauteur(float hauteur)
+    {
+        contrePlongeeHauteur = hauteur;
+    }
+
+    public void SetContrePlongeeAngle(float angle)
+    {
+        contrePlongeeAngle = angle;
     }
     #endregion
 }

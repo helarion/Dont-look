@@ -481,6 +481,7 @@ public class PlayerController : MonoBehaviour
             flashlight.range = Mathf.Lerp(flashlight.range,normalLightRange+concentratedLightRangeBonus,lightTransitionSpeed);
             flashlight.intensity = Mathf.Lerp(flashlight.intensity,concentratedLightIntensity,lightTransitionSpeed);
             flashlight.color = Color.Lerp(flashlight.color, concentratedLightColor, lightTransitionSpeed);
+            pointLight.color = Color.Lerp(pointLight.color, concentratedLightColor, lightTransitionSpeed);
             flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle/concentratedLightAngle, lightTransitionSpeed);
             GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, zoomCameraFOV, lightTransitionSpeed);
             GameManager.instance.camHandler.Zoom(true);
@@ -492,6 +493,7 @@ public class PlayerController : MonoBehaviour
             flashlight.range = Mathf.Lerp(flashlight.range, normalLightRange, lightTransitionSpeed);
             flashlight.intensity = Mathf.Lerp(flashlight.intensity, normalLightIntensity, lightTransitionSpeed);
             flashlight.color = Color.Lerp(flashlight.color, normalLightColor, lightTransitionSpeed);
+            pointLight.color = Color.Lerp(pointLight.color, normalLightColor, lightTransitionSpeed);
             flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle, lightTransitionSpeed);
             GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, normalCameraFOV, lightTransitionSpeed);
             GameManager.instance.camHandler.Zoom(false);
@@ -653,6 +655,8 @@ public class PlayerController : MonoBehaviour
 
     private void CameraBlockChanges()
     {
+        GameManager.instance.SetContrePlongeeAngle(currentCameraBlock.room.newContrePlongeeAngle);
+        GameManager.instance.SetContrePlongeeHauteur(currentCameraBlock.room.newContrePlongeeHauteur);
         GameManager.instance.camHandler.SetNewZ(currentCameraBlock.room.newZ);
         GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
         SetLightRange(currentCameraBlock.room.newLightRange);
@@ -684,7 +688,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Movement
+        #region Movement
 
     private void MoveInputUpdate()
     {
@@ -758,7 +762,7 @@ public class PlayerController : MonoBehaviour
         if (lMovement != Vector3.zero || isChangingSpatialLine)
         {
             isMoving = true;
-            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0 && inverse==1)
+            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)// && inverse==1)
             {
                 isRunning = true;
                 animator.SetBool("IsRunning", true);

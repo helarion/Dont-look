@@ -12,13 +12,14 @@ public class Occlusion_v2 : MonoBehaviour
     public LayerMask layerMaskOcclusion;
     private GameObject[] soundEmitter = null;
 
+
    // public AK.Wwise.Event wwiseEvent;
 
     // Use this for initialization
     void Start () {
 
         //  AkSoundEngine.PostEvent(wwiseEvent.Id, gameObject);
-        listener = GameObject.FindGameObjectWithTag("Player");
+        //listener = GameObject.FindGameObjectWithTag("Player");
         layerMaskOcclusion = LayerMask.GetMask("Son_Occlusion");
     }
 
@@ -58,8 +59,8 @@ public class Occlusion_v2 : MonoBehaviour
             current_occlusion = 0.0f;
 
         // Wwise
-        AkSoundEngine.SetRTPCValue("Occlusion_RTCP", current_occlusion, gameObject);
+        //AkSoundEngine.SetRTPCValue("Occlusion_RTCP", current_occlusion, gameObject);
 
-        //AkSoundEngine.SetObjectObstructionAndOcclusion(gameObject, listener, 0.0f, current_occlusion / 100f);
+        AkSoundEngine.SetObjectObstructionAndOcclusion(gameObject, listener, 0.0f, current_occlusion / 100f);
     }
 }
