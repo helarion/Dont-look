@@ -48,9 +48,9 @@ public class UIManager : MonoBehaviour
         PostProcessInstance.instance.volume.profile.TryGetSettings(out bloom);
         bloom.active = true;
         float gammaX = colorGrading.gamma.value.x - 1;
-        print("gamma x:" + gammaX);
+        //print("gamma x:" + gammaX);
         float value = gammaX.Remap(gammaMin, gammaMax, gammaControl.minValue, gammaControl.maxValue);
-        print("reamp value:"+value);
+        //print("reamp value:"+value);
         gammaControl.value = value;
         volumeControl.onValueChanged.AddListener(delegate { VolumeValueChangeCheck(); });
         gammaControl.onValueChanged.AddListener(delegate { GammaValueChangeCheck(); });

@@ -79,8 +79,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //AkSoundEngine.SetObjectObstructionAndOcclusion(iGameObject, MAIN_LISTENER, fCalculatedObs, fCalculatedOcc);
-        AkSoundEngine.PostEvent(startRoom.playEvent, GameManager.instance.gameObject);
         player.SetCurrentAudioRoom(startRoom);
         PlayCurrentAudioRoom(startRoom);
         CheckTracker();

@@ -21,7 +21,12 @@ ModelImporter:
     4300000: porte_haut
     4300002: porte_bas
     4300004: corps
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

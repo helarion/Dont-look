@@ -20,7 +20,7 @@ public class Occlusion_v2 : MonoBehaviour
 
         //  AkSoundEngine.PostEvent(wwiseEvent.Id, gameObject);
         //listener = GameObject.FindGameObjectWithTag("Player");
-        layerMaskOcclusion = LayerMask.GetMask("Son_Occlusion");
+        layerMaskOcclusion = LayerMask.GetMask("Walls");
     }
 
 	// Update is called once per frame
@@ -53,14 +53,17 @@ public class Occlusion_v2 : MonoBehaviour
         }
 
         // Occlusion
+        current_occlusion = Mathf.Clamp(current_occlusion, 0, max_occlusion);
+        /*
         if (current_occlusion > 100.0f)
             current_occlusion = 100.0f;
         else if (current_occlusion < 100.0f)
             current_occlusion = 0.0f;
+        */
 
+        //print(current_occlusion);
         // Wwise
-        //AkSoundEngine.SetRTPCValue("Occlusion_RTCP", current_occlusion, gameObject);
-
+        //AkSoundEngine.SetRTPCValue("Occlusion7", current_occlusion, gameObject);
         AkSoundEngine.SetObjectObstructionAndOcclusion(gameObject, listener, 0.0f, current_occlusion / 100f);
     }
 }

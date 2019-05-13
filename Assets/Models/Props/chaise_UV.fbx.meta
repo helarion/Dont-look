@@ -49,7 +49,12 @@ ModelImporter:
     2300000: chaise_pCube1
     3300000: chaise_pCube1
     4300000: chaise_pCube1
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sol
+    second: {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

@@ -9,7 +9,12 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Debris2_LP
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Debris2_LP
+    second: {fileID: 2100000, guid: 06b8e8b7316f6a548becfc705203db3e, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

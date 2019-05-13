@@ -19,7 +19,12 @@ ModelImporter:
     2300000: pCube3
     3300000: pCube3
     4300000: pCube3
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: defaultPolygonShader
+    second: {fileID: 2100000, guid: 3f0445b905d1d0344b47ab6a5cb29b4c, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

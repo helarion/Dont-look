@@ -26,7 +26,12 @@ ModelImporter:
     4300002: support_dessous1
     4300004: support_cable3
     4300006: pieds_dessus1
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: d52e630beb6f4f044a6b754531bd0189, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
