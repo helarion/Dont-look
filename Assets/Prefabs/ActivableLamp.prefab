@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 755201606597841935}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 751125570373380819}
@@ -45,9 +45,9 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.7056641, b: 0.2028302, a: 1}
   m_Intensity: 32
-  m_Range: 6
+  m_Range: 12
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -69,8 +69,8 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 9150
-  m_UseColorTemperature: 1
+  m_ColorTemperature: 4200
+  m_UseColorTemperature: 0
   m_ShadowRadius: 10
   m_ShadowAngle: 0
 --- !u!114 &756012612835112393
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_InnerSpotPercent: 0
   lightDimmer: 1
   m_VolumetricDimmer: 1
-  lightUnit: 4
+  lightUnit: 0
   sunDiskSize: 1
   sunHaloSize: 0.1
   fadeDistance: 10000
@@ -159,7 +159,7 @@ MonoBehaviour:
   useVolumetric: 1
   featuresFoldout: 1
   showAdditionalSettings: 0
-  displayLightIntensity: 8
+  displayLightIntensity: 3000
   displayAreaLightEmissiveMesh: 0
   lightLayers: 1
   shadowNearPlane: 1
@@ -285,7 +285,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756156861841457251}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: -0.00000013240823, y: -0.7071068, z: 0.7071068, w: -0.00000013240823}
   m_LocalPosition: {x: -4.25, y: 5.5, z: 4.75}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
@@ -365,38 +365,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2300006, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
     - target: {fileID: 2300004, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
-    - target: {fileID: 2300014, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
+      objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}
+    - target: {fileID: 2300006, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
-    - target: {fileID: 2300012, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: ae90b64686a9756459e19059ecaf02cf, type: 2}
-    - target: {fileID: 2300010, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
+      objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}
     - target: {fileID: 2300008, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
-    - target: {fileID: 2300016, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
+      objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}
+    - target: {fileID: 2300010, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 8cde7ffbd2c451b408fcc6541d0aafe3, type: 2}
-    - target: {fileID: 2300000, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: ae90b64686a9756459e19059ecaf02cf, type: 2}
+      objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
 --- !u!4 &8947899499515773306 stripped

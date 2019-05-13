@@ -19,7 +19,7 @@ MonoBehaviour:
     overrides: 0
     enableShadow: 1
     enableContactShadows: 0
-    enableShadowMask: 0
+    enableShadowMask: 1
     enableSSR: 0
     enableSSAO: 0
     enableSubsurfaceScattering: 1
@@ -42,7 +42,7 @@ MonoBehaviour:
     enablePostprocess: 1
     enableOpaqueObjects: 1
     enableTransparentObjects: 1
-    enableRealtimePlanarReflection: 0
+    enableRealtimePlanarReflection: 1
     enableMSAA: 0
     enableAsyncCompute: 1
     runLightListAsync: 1
@@ -148,11 +148,11 @@ MonoBehaviour:
       enableBigTilePrepass: 1
       isFptlEnabled: 1
   renderPipelineSettings:
-    supportShadowMask: 0
-    supportSSR: 0
-    supportSSAO: 0
+    supportShadowMask: 1
+    supportSSR: 1
+    supportSSAO: 1
     supportSubsurfaceScattering: 0
-    increaseSssSampleCount: 1
+    increaseSssSampleCount: 0
     supportVolumetrics: 1
     increaseResolutionOfVolumetrics: 1
     supportLightLayers: 0
@@ -202,4 +202,5 @@ MonoBehaviour:
   allowShaderVariantStripping: 1
   enableSRPBatcher: 0
   enableVariantStrippingLog: 0
-  diffusionProfileSettings: {fileID: 0}
+  diffusionProfileSettings: {fileID: 11400000, guid: 6d425e4eade3a894d949ba3d2e6bf24f,
+    type: 2}

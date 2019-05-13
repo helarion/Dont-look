@@ -19,11 +19,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider gammaControl;
     [SerializeField] private Toggle toggleTracker;
     [SerializeField] private EventSystem eventSystem;
-    [SerializeField] private PostProcessVolume postProcess;
     [SerializeField] private float gammaMin=-1.5f;
     [SerializeField] private float gammaMax=1.5f;
 
     private ColorGrading colorGrading;
+    private Bloom bloom;
     public bool isFading = false;
 
     public static UIManager instance = null;
@@ -44,7 +44,14 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        postProcess.profile.TryGetSettings(out colorGrading);
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out colorGrading);
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out bloom);
+        bloom.active = true;
+        float gammaX = colorGrading.gamma.value.x - 1;
+        print("gamma x:" + gammaX);
+        float value = gammaX.Remap(gammaMin, gammaMax, gammaControl.minValue, gammaControl.maxValue);
+        print("reamp value:"+value);
+        gammaControl.value = value;
         volumeControl.onValueChanged.AddListener(delegate { VolumeValueChangeCheck(); });
         gammaControl.onValueChanged.AddListener(delegate { GammaValueChangeCheck(); });
         if (!GameManager.instance.isTesting)
@@ -54,9 +61,6 @@ public class UIManager : MonoBehaviour
             FadeOut(fadeImg, 2, 0);
             StartCoroutine(StartCoroutine());
         }
-        eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
-        volumeControl.OnSelect(null);
-        toggleTracker.OnSelect(null);
     }
 
     public void GammaValueChangeCheck()
@@ -71,7 +75,6 @@ public class UIManager : MonoBehaviour
     public void VolumeValueChangeCheck()
     {
         AkSoundEngine.SetRTPCValue("Master_Volume_Slider", volumeControl.value);
-        //Debug.Log(volumeControl.value);
     }
 
     IEnumerator StartCoroutine()
@@ -144,6 +147,14 @@ public class UIManager : MonoBehaviour
         else FadeOut(fadeImg, 1f, 1f);
     }
 
+    public void Pause(bool b)
+    {
+        pausePanel.SetActive(b);
+        //eventSystem.firstSelectedGameObject = gammaControl.gameObject;
+        eventSystem.SetSelectedGameObject(gammaControl.gameObject);
+        gammaControl.Select();
+    }
+
     public void FadePause(bool b)
     {
         if (b) FadeIn(pauseImg, 0.5f, 0);
@@ -184,12 +195,12 @@ public class UIManager : MonoBehaviour
         if(!b)
         {
             eventSystem.firstSelectedGameObject = toggleTracker.gameObject;
-            eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+            //eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
         }
         else
         {
-            eventSystem.firstSelectedGameObject = volumeControl.gameObject;
-            eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+            eventSystem.firstSelectedGameObject = gammaControl.gameObject;
+            //eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
         }
     }
 

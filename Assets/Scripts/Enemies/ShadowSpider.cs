@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class ShadowSpider : Enemy
 {
     [SerializeField] Transform endPos;
+    [SerializeField] float overrideVelocity=1f;
 
     private void Start()
     {
@@ -14,9 +15,15 @@ public class ShadowSpider : Enemy
 
     private void Update()
     {
-        //VelocityCount();
+        velocity = overrideVelocity;
+        animator.SetFloat("Velocity", velocity);
     }
-
+    
+    public void Trigger()
+    {
+        animator.SetBool("IsMoving", true);
+        MoveTo(endPos.position);
+    }
 
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
@@ -24,7 +31,7 @@ public class ShadowSpider : Enemy
         base.IsLit(b);
         if (b)
         {
-            MoveTo(endPos.position);
+            Trigger();
         }
     }
 }
