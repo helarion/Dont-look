@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Rewired;
+using System.Collections;
 using UnityEngine;
 using Tobii.Gaming;
 using UnityEngine.Experimental.Rendering.HDPipeline;
@@ -51,6 +52,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkTime;
     [SerializeField] private float runTimeMinus;
     [SerializeField] private float deadZoneValue = 0.3f;
+    [SerializeField] private float changeLineDeadZoneValue = 0.9f;
     [SerializeField] private float runSpeed = 3;
     [SerializeField] private float walkSpeed = 1;
     [SerializeField] private float ladderSpeed = 0.5f;
@@ -75,6 +77,7 @@ public class PlayerController : MonoBehaviour
     private float vMove;
     private float hMove;
     private int inverse = 1;
+    private int changingLineDirection = 1;
 
     #endregion
 
@@ -235,6 +238,7 @@ public class PlayerController : MonoBehaviour
             currentSpatialSas = spatialSas;
             currentSpatialLine = spatialSas.spatialLine;
             isChangingSpatialLine = true;
+            changingLineDirection = 1;
             return;
         }
 
@@ -252,6 +256,7 @@ public class PlayerController : MonoBehaviour
                         zOffset = Mathf.Abs(sl.begin.position.z - transform.position.z);
                         currentSpatialLine = sl;
                         isChangingSpatialLine = true;
+                        changingLineDirection = 1;
                     }
                 }
             }
@@ -347,6 +352,7 @@ public class PlayerController : MonoBehaviour
                         zOffset = Mathf.Abs(sl.begin.position.z - currentZ);
                         currentSpatialLine = sl;
                         isChangingSpatialLine = true;
+                        changingLineDirection = 1;
                     }
                 }
             }
@@ -694,6 +700,23 @@ public class PlayerController : MonoBehaviour
     {
         hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
         vMove = GameManager.instance.controls.GetAxis("Move Vertical");
+
+        Controller controller = GameManager.instance.controls.controllers.GetLastActiveController();
+        if (controller != null)
+        {
+            switch (controller.type)
+            {
+                case ControllerType.Keyboard:
+                    inputMode = InputMode.PC;
+                    break;
+                case ControllerType.Joystick:
+                    inputMode = InputMode.Pad;
+                    break;
+                case ControllerType.Mouse:
+                    inputMode = InputMode.PC;
+                    break;
+            }
+        }
     }
 
     private void Move()
@@ -703,7 +726,7 @@ public class PlayerController : MonoBehaviour
         Vector3 lMovement = Vector3.zero;
         Vector3 camMove = Vector3.zero;
 
-        if (hMove < deadZoneValue && hMove > -deadZoneValue) hMove = 0;
+        if (hMove < deadZoneValue && hMove > -deadZoneValue && inputMode == InputMode.Pad) hMove = 0;
         if (!needsCentering)
         {
             if (Mathf.Abs(hMove) > 0)
@@ -714,39 +737,38 @@ public class PlayerController : MonoBehaviour
 
         if (!isGrabbing)
         {
-            if (!isChangingSpatialLine)
+            if (currentSpatialSas == null)
             {
-                if (currentSpatialSas == null)
+                if ((vMove >= changeLineDeadZoneValue || (vMove > 0 && inputMode == InputMode.PC)) && !(isChangingSpatialLine && changingLineDirection == 1))
                 {
-                    if (vMove > deadZoneValue)
+                    for (int i = 0; i < currentSpatialRoom._spatialLines.Count; i++)
                     {
-                        for (int i = 0; i < currentSpatialRoom._spatialLines.Count; i++)
+                        SpatialLine sl = currentSpatialRoom._spatialLines[i];
+                        if (sl.begin.position.z > currentSpatialLine.begin.position.z)
                         {
-                            SpatialLine sl = currentSpatialRoom._spatialLines[i];
-                            if (sl.begin.position.z > currentSpatialLine.begin.position.z)
+                            if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
                             {
-                                if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
-                                {
-                                    currentSpatialLine = sl;
-                                    isChangingSpatialLine = true;
-                                    break;
-                                }
+                                currentSpatialLine = sl;
+                                isChangingSpatialLine = true;
+                                changingLineDirection = 1;
+                                break;
                             }
                         }
                     }
-                    else if (vMove < -deadZoneValue)
+                }
+                else if ((vMove <= -changeLineDeadZoneValue || (vMove < 0 && inputMode == InputMode.PC)) && !(isChangingSpatialLine && changingLineDirection == -1))
+                {
+                    for (int i = currentSpatialRoom._spatialLines.Count - 1; i >= 0; i--)
                     {
-                        for (int i = currentSpatialRoom._spatialLines.Count - 1; i >= 0; i--)
+                        SpatialLine sl = currentSpatialRoom._spatialLines[i];
+                        if (sl.begin.position.z < currentSpatialLine.begin.position.z)
                         {
-                            SpatialLine sl = currentSpatialRoom._spatialLines[i];
-                            if (sl.begin.position.z < currentSpatialLine.begin.position.z)
+                            if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
                             {
-                                if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
-                                {
-                                    currentSpatialLine = sl;
-                                    isChangingSpatialLine = true;
-                                    break;
-                                }
+                                currentSpatialLine = sl;
+                                isChangingSpatialLine = true;
+                                changingLineDirection = -1;
+                                break;
                             }
                         }
                     }
