@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkTime;
     [SerializeField] private float runTimeMinus;
     [SerializeField] private float deadZoneValue = 0.3f;
+    [SerializeField] private float changeLineDeadZoneValue = 0.9f;
     [SerializeField] private float runSpeed = 3;
     [SerializeField] private float walkSpeed = 1;
     [SerializeField] private float ladderSpeed = 0.5f;
@@ -75,6 +76,7 @@ public class PlayerController : MonoBehaviour
     private float vMove;
     private float hMove;
     private int inverse = 1;
+    private int changingLineDirection = 1;
 
     #endregion
 
@@ -235,6 +237,7 @@ public class PlayerController : MonoBehaviour
             currentSpatialSas = spatialSas;
             currentSpatialLine = spatialSas.spatialLine;
             isChangingSpatialLine = true;
+            changingLineDirection = 1;
             return;
         }
 
@@ -252,6 +255,7 @@ public class PlayerController : MonoBehaviour
                         zOffset = Mathf.Abs(sl.begin.position.z - transform.position.z);
                         currentSpatialLine = sl;
                         isChangingSpatialLine = true;
+                        changingLineDirection = 1;
                     }
                 }
             }
@@ -347,6 +351,7 @@ public class PlayerController : MonoBehaviour
                         zOffset = Mathf.Abs(sl.begin.position.z - currentZ);
                         currentSpatialLine = sl;
                         isChangingSpatialLine = true;
+                        changingLineDirection = 1;
                     }
                 }
             }
@@ -710,11 +715,11 @@ public class PlayerController : MonoBehaviour
 
         if (!isGrabbing)
         {
-            if (!isChangingSpatialLine)
+            //if (!isChangingSpatialLine)
             {
                 if (currentSpatialSas == null)
                 {
-                    if (vMove > deadZoneValue)
+                    if (vMove >= changeLineDeadZoneValue && !(isChangingSpatialLine && changingLineDirection == 1))
                     {
                         for (int i = 0; i < currentSpatialRoom._spatialLines.Count; i++)
                         {
@@ -725,12 +730,13 @@ public class PlayerController : MonoBehaviour
                                 {
                                     currentSpatialLine = sl;
                                     isChangingSpatialLine = true;
+                                    changingLineDirection = 1;
                                     break;
                                 }
                             }
                         }
                     }
-                    else if (vMove < -deadZoneValue)
+                    else if (vMove <= -changeLineDeadZoneValue && !(isChangingSpatialLine && changingLineDirection == -1))
                     {
                         for (int i = currentSpatialRoom._spatialLines.Count - 1; i >= 0; i--)
                         {
@@ -741,6 +747,7 @@ public class PlayerController : MonoBehaviour
                                 {
                                     currentSpatialLine = sl;
                                     isChangingSpatialLine = true;
+                                    changingLineDirection = -1;
                                     break;
                                 }
                             }
