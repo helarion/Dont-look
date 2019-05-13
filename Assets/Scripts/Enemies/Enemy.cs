@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private string WwiseChaseStop;
     [SerializeField] public string WwiseLook;
     [SerializeField] private Objet[] scriptedObjectsActivation;
+    [SerializeField] private LightDetector scriptedLampActivation;
 
 
     [HideInInspector] public NavMeshAgent agent;
@@ -134,6 +135,7 @@ public class Enemy : MonoBehaviour
             GameManager.instance.ShakeScreen(lookShakeTime, lookShakeIntensity);
             if (!hasPlayedLook)
             {
+                if (scriptedLampActivation != null) scriptedLampActivation.ForceLit();
                 AkSoundEngine.PostEvent(WwiseLook, gameObject);
                 hasPlayedLook = true;
             }
@@ -154,16 +156,16 @@ public class Enemy : MonoBehaviour
     private void IsPathInvalid()
     {
         bool isPathValid = agent.CalculatePath(p.transform.position, agent.path);
-        print("path status:" + agent.path.status);
+        //print("path status:" + agent.path.status);
         if (!isPathValid && !isCountingEndChase)
         {
-            print("path invalid");
+            //print("path invalid");
             isCountingEndChase = true;
             StartCoroutine(CountEndChase());
         }
         else if (isPathValid)
         {
-            print("path valid");
+            //print("path valid");
             isCountingEndChase = false;
             StopCoroutine(CountEndChase());
         }

@@ -34,7 +34,7 @@ public class LightDetector : Objet
     private void IsLit(bool b)
     {
         if (!isLooked && !isActivated && b) StartCoroutine(CountLook());
-        else if (!b && !isActivated)
+        else if (!b && !isActivated &&!scriptSpider)
         {
             StopCoroutine(CountLook());
             if (!isActivated && isLooked) blinkLight.StartBlink();
@@ -59,10 +59,16 @@ private IEnumerator CountLook()
         yield return null;
     }
 
+    public void ForceLit()
+    {
+        StartCoroutine(CountLook());
+    }
+
     public override void Activate()
     {
         if (isActivated && !desactivate) return;
         base.Activate();
+        if (scriptSpider) 
         if (isBroken)
         {
             blinkLight.enabled = true;

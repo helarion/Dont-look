@@ -11,6 +11,7 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] private float blinkSpeed = 20;
     [SerializeField] private float maxIntensity = 200;
     [SerializeField] private float wait = 2;
+    [SerializeField] private float backSpeed = 0.5f;
     private int direction = 1;
 
     [SerializeField] private Color startColor;
@@ -28,7 +29,7 @@ public class BlinkingLight : MonoBehaviour
 
     private void Start()
     {
-        if (isContinious) StartBlink();
+        StartBlink();
         if (isBroken)
         {
             Break();
@@ -37,16 +38,18 @@ public class BlinkingLight : MonoBehaviour
 
     public void StartBlink()
     {
+        if (isBlinking) return;
         isBlinking = true;
-        lt.intensity = 0;
+        count = 0;
+        /*lt.intensity = 0;
         lt.color = startColor;
         pointLt.intensity = 0;
-        pointLt.color = startColor;
+        pointLt.color = startColor;*/
     }
 
     public void StartLook(float time)
     {
-        if (isContinious) return;
+        if (!isBlinking) return;
         count = 0;
         countTime = time;
         lt.intensity = startingIntensity;
@@ -83,9 +86,16 @@ public class BlinkingLight : MonoBehaviour
 
     private void Update()
     {
-        if(isBlinking || isContinious)
+        if(isBlinking)
         {
-            if (lt.intensity >= startingIntensity)
+            if(pointLt.intensity>0)
+            {
+                pointLt.intensity = Mathf.Lerp(pointLt.intensity, 0, count);
+                pointLt.color = Color.Lerp(pointLt.color, startColor, count);
+                lt.color = Color.Lerp(lt.color, startColor, count);
+                count += Time.deltaTime / backSpeed;
+            }
+            else if (lt.intensity >= startingIntensity)
             {
                 direction = -1;
             }
@@ -98,9 +108,18 @@ public class BlinkingLight : MonoBehaviour
         }
         else if(!isActivated)
         {
+            if(isContinious)
+            {
+                lt.intensity = Mathf.Lerp(startingIntensity, maxIntensity, count);
+                pointLt.color = Color.Lerp(startColor, activatedColor, count);
+                lt.color = Color.Lerp(startColor, activatedColor, count);
+            }
+            else
+            {
+                pointLt.color = Color.Lerp(startColor, endColor, count);
+            }
             pointLt.intensity = Mathf.Lerp(0, maxIntensity, count);
             lt.intensity = Mathf.Lerp(startingIntensity, maxIntensity, count);
-            pointLt.color = Color.Lerp(startColor, endColor, count);
             count += Time.deltaTime/countTime;
         }
     }

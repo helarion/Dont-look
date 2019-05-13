@@ -7,6 +7,7 @@ public class ContiniousLightDetector : Objet
     [SerializeField] public Objet target;
     [SerializeField] private string chargingSound = null;
     [SerializeField] private BlinkingLight blinkingLight;
+    [SerializeField] private float chargeTime = 0.5f;
     [SerializeField] private GameObject[] brokenFeature;
 
     private void Start()
@@ -19,7 +20,10 @@ public class ContiniousLightDetector : Objet
 
     private void Update()
     {
-        target.isActivating=GameManager.instance.LightDetection(transform,true);
+        bool isLooked = GameManager.instance.LightDetection(transform, true);
+        target.isActivating=isLooked;
+        if (isLooked) blinkingLight.StartLook(chargeTime);
+        else blinkingLight.StartBlink();
     }
 
     public override void Fix()

@@ -427,7 +427,8 @@ public void RotateCamera(Quaternion newRotate)
         //float speed = cameraSpeed;
         //if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
         newRotate.z = dutchAngle.Remap(0,360,0,1);
-        newRotate.x = contrePlongeeAngle.Remap(0, 360, 0, 1);
+
+        if(player.getCameraBlock()==null)newRotate.x = contrePlongeeAngle.Remap(0, 360, 0, 1);
         mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
     }
 

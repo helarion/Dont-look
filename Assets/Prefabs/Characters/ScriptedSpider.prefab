@@ -88,30 +88,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b868e5dba59f83c46a253c543700c651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4.5
-  isChasing: 0
+  moveSpeed: 6.5
+  bonusSpeed: 1
+  velocityMax: 2
   delete: 0
   lookShakeIntensity: 0.08
-  chaseShakeIntensity: 0.02
+  lookShakeTime: 1
+  minChaseShakeIntensity: 0.02
+  maxChaseShakeIntensity: 0.06
+  chaseShakeTime: 1
+  delayChase: 3
+  playerDistance: 0
+  hasPlayedLook: 0
+  isChasing: 0
   spawnZones:
   - {fileID: 0}
   WwiseChasePlay: 
   WwiseChaseStop: 
   WwiseLook: Play_Blend_Stinger_Araignee
+  scriptedObjectsActivation: []
   agent: {fileID: 0}
   animator: {fileID: 0}
   velocity: 0
   _transform: {fileID: 40422760194682771}
   isLooked: 1
   isMoving: 0
+  isCountingEndChase: 0
+  needsConcentration: 0
   p: {fileID: 0}
   pos1: {fileID: 0}
   pos2: {fileID: 0}
   lamp: {fileID: 0}
-  ladderCol: {fileID: 0}
   nbAttack: 1
-  scriptShakeIntensity: 1
-  hasPlayedLook: 0
+  scriptShakeIntensity: 0.15
+  scriptShakeDuration: 0.8
+  waitTime: 1
 --- !u!54 &40422760194682775
 Rigidbody:
   m_ObjectHideFlags: 0

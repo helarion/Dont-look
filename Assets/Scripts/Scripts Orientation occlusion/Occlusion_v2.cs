@@ -12,13 +12,12 @@ public class Occlusion_v2 : MonoBehaviour
     public LayerMask layerMaskOcclusion;
     private GameObject[] soundEmitter = null;
 
-
    // public AK.Wwise.Event wwiseEvent;
 
     // Use this for initialization
     void Start () {
 
-        //  AkSoundEngine.PostEvent(wwiseEvent.Id, gameObject);
+        //AkSoundEngine.PostEvent(wwiseEvent.Id, gameObject);
         //listener = GameObject.FindGameObjectWithTag("Player");
         layerMaskOcclusion = LayerMask.GetMask("Walls");
     }
@@ -54,16 +53,9 @@ public class Occlusion_v2 : MonoBehaviour
 
         // Occlusion
         current_occlusion = Mathf.Clamp(current_occlusion, 0, max_occlusion);
-        /*
-        if (current_occlusion > 100.0f)
-            current_occlusion = 100.0f;
-        else if (current_occlusion < 100.0f)
-            current_occlusion = 0.0f;
-        */
-
         //print(current_occlusion);
+
         // Wwise
-        //AkSoundEngine.SetRTPCValue("Occlusion7", current_occlusion, gameObject);
         AkSoundEngine.SetObjectObstructionAndOcclusion(gameObject, listener, 0.0f, current_occlusion / 100f);
     }
 }
