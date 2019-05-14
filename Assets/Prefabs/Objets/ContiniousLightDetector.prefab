@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2093531872288350293}
   - component: {fileID: 6403960824017733916}
   - component: {fileID: 7673007942488257862}
-  - component: {fileID: 1231735318}
+  - component: {fileID: 4572074146819229367}
   m_Layer: 9
   m_Name: ContiniousLightDetector
   m_TagString: LightDetector
@@ -68,10 +68,10 @@ MonoBehaviour:
   target: {fileID: 0}
   playChargingSound: Play_LIGHT_CHARGE
   stopChargingSound: Stop_LIGHT_CHARGE
-  blinkingLight: {fileID: 1231735318}
+  blinkingLight: {fileID: 4572074146819229367}
   chargeTime: 0.5
   brokenFeature: []
---- !u!114 &1231735318
+--- !u!114 &4572074146819229367
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,20 +80,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1656592924757465700}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f589ffba51a9534c931450717cfaca5, type: 3}
+  m_Script: {fileID: 11500000, guid: 5423e77de33a85d4fac26ba8597eae59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lt: {fileID: 6403960825091783584}
-  pointLt: {fileID: 2097786719093238268}
-  startingIntensity: 60
-  blinkSpeed: 60
-  maxIntensity: 100
-  wait: 0.5
+  rectangleLight: {fileID: 6403960825091783584}
+  pointLight: {fileID: 2097786719093238268}
+  offIntensity: 0
+  activeIntensity: 200
+  blinkSpeed: 20
+  durationBetweenBlinks: 2
   backSpeed: 0.5
-  startColor: {r: 1, g: 0, b: 0, a: 0}
-  endColor: {r: 0.059675325, g: 0.9622642, b: 0, a: 0}
-  activatedColor: {r: 0, g: 0.084089994, b: 1, a: 0}
-  isContinious: 1
+  offColor: {r: 1, g: 0, b: 0, a: 0}
+  activeColor: {r: 0, g: 0.16342616, b: 1, a: 0}
   isBroken: 0
 --- !u!1 &2097786719093238246
 GameObject:

@@ -7,7 +7,7 @@ public class ContiniousLightDetector : Objet
     [SerializeField] public Objet target;
     [SerializeField] private string playChargingSound = null;
     [SerializeField] private string stopChargingSound = null;
-    [SerializeField] private BlinkingLight blinkingLight;
+    [SerializeField] private ContinuousBlinkingLight blinkingLight;
     [SerializeField] private float chargeTime = 0.5f;
     [SerializeField] private GameObject[] brokenFeature;
 
@@ -43,7 +43,7 @@ public class ContiniousLightDetector : Objet
             {
                 hasPlayedCharge = false;
                 StartCoroutine(StoppingCoroutine());
-                blinkingLight.StopLook(chargeTime);
+                blinkingLight.StopLook();
             }
         }
     }
