@@ -34,25 +34,43 @@ public class LightDetector : Objet
 
     private void IsLit(bool b)
     {
-        if (!isLooked && !isActivated && b) StartCoroutine(CountLook());
-        else if (!b && !isActivated &&!scriptSpider)
+        if (!isLooked && !isActivated && b)
+        {
+            isLooked = true;
+            StopCoroutine(StopLook());
+            StartCoroutine(CountLook());
+        }
+        else if (!b && !isActivated && !scriptSpider)
         {
             StopCoroutine(CountLook());
-            if (!isActivated && isLooked) blinkLight.StartBlink();
+            StartCoroutine(StopLook());
             isLooked = false;
-            countLook = 0f;
+            //countLook = 0f;
         }
-    }      
+    } 
+    
+    private IEnumerator StopLook()
+    {
+        blinkLight.StopLook(delayActivate);
+        while (countLook > 0)
+        {
+            AkSoundEngine.SetRTPCValue("Pitch_Load_Light" + countLook.Remap(0, delayActivate, 0, 100), 0);
+            countLook -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        isLooked = false;
+        yield return null;
+    }
 
-// COROUTINE POUR COMPTER LE TEMPS QUE L'OBJET EST REGARDE PAR LE JOUEUR
-private IEnumerator CountLook()
+    // COROUTINE POUR COMPTER LE TEMPS QUE L'OBJET EST REGARDE PAR LE JOUEUR
+    private IEnumerator CountLook()
     {
         isLooked = true;
         blinkLight.StartLook(delayActivate);
-        //AkSoundEngine.PostEvent(playChargingSound, gameObject);
+        AkSoundEngine.PostEvent(playChargingSound, gameObject);
         while (countLook < delayActivate)
         {
-            //AkSoundEngine.SetRTPCValue("" + countLook.Remap(0,delayActivate,0,100), 0);
+            AkSoundEngine.SetRTPCValue("Pitch_Load_Light", countLook.Remap(0,delayActivate,0,100));
             countLook +=Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }

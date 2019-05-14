@@ -24,16 +24,19 @@ public class BlinkingLight : MonoBehaviour
     private float count = 0;
     private float countTime = 0;
     private bool isWaiting = false;
-    private bool isBlinking = true;
+    private bool isBlinking = false;
     private bool isActivated = false;
+    private bool isLooked = false;
 
     private void Start()
     {
-        StartBlink();
+        pointLt.intensity = 0;
+        pointLt.color = startColor;
         if (isBroken)
         {
             Break();
         }
+        StartBlink();
     }
 
     public void StartBlink()
@@ -41,19 +44,65 @@ public class BlinkingLight : MonoBehaviour
         if (isBlinking) return;
         isBlinking = true;
         count = 0;
-        /*lt.intensity = 0;
-        lt.color = startColor;
-        pointLt.intensity = 0;
-        pointLt.color = startColor;*/
+        StartCoroutine(Blink());
     }
 
     public void StartLook(float time)
     {
-        if (!isBlinking) return;
-        count = 0;
+        if (isLooked) return;
+        isLooked = true;
+        //count = 0;
         countTime = time;
-        lt.intensity = startingIntensity;
+        //lt.intensity = startingIntensity;
         isBlinking = false;
+        StopCoroutine(Blink());
+        StopCoroutine(StopLook());
+        StartCoroutine(StartLook());
+    }
+
+    public void StopLook(float time)
+    {
+        if (!isLooked) return;
+        countTime = time;
+        isLooked = false;
+        StopCoroutine(StartLook());
+        StartCoroutine(StopLook());
+    }
+
+    private IEnumerator StopLook()
+    {
+        while (count> 0)
+        {
+            pointLt.color = Color.Lerp(pointLt.color, startColor, count);
+            pointLt.intensity = Mathf.Lerp(pointLt.intensity, 0, count);
+            count -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        StartCoroutine(Blink());
+        yield return null;
+    }
+
+    private IEnumerator StartLook()
+    {
+        while (count < countTime)
+        {
+            if (isContinious)
+            {
+                lt.intensity = Mathf.Lerp(startingIntensity, maxIntensity, count);
+                pointLt.color = Color.Lerp(startColor, activatedColor, count);
+                pointLt.intensity = Mathf.Lerp(pointLt.intensity, maxIntensity, count);
+                lt.color = Color.Lerp(startColor, activatedColor, count);
+            }
+            else
+            {
+                pointLt.color = Color.Lerp(pointLt.color, endColor, count);
+            }
+            pointLt.intensity = Mathf.Lerp(0, maxIntensity, count);
+            lt.intensity = Mathf.Lerp(startingIntensity, maxIntensity, count);
+            count += Time.deltaTime / countTime;
+            yield return new WaitForEndOfFrame();
+        }
+        yield return null;
     }
 
     public void Reset()
@@ -84,11 +133,11 @@ public class BlinkingLight : MonoBehaviour
         }
     }
 
-    private void Update()
+    private IEnumerator Blink()
     {
-        if(isBlinking)
+        while(isBlinking)
         {
-            if(pointLt.intensity>0)
+            if (pointLt.intensity > 0)
             {
                 pointLt.intensity = Mathf.Lerp(pointLt.intensity, 0, count);
                 pointLt.color = Color.Lerp(pointLt.color, startColor, count);
@@ -99,29 +148,15 @@ public class BlinkingLight : MonoBehaviour
             {
                 direction = -1;
             }
-            else if (lt.intensity <= 0 &&!isWaiting)
+            else if (lt.intensity <= 0 && !isWaiting)
             {
                 direction = 1;
                 StartCoroutine(DarkWait());
             }
-            if(!isWaiting)lt.intensity += (Time.deltaTime * blinkSpeed) * direction;
+            if (!isWaiting) lt.intensity += (Time.deltaTime * blinkSpeed) * direction;
+            yield return new WaitForEndOfFrame();
         }
-        else if(!isActivated)
-        {
-            if(isContinious)
-            {
-                lt.intensity = Mathf.Lerp(startingIntensity, maxIntensity, count);
-                pointLt.color = Color.Lerp(startColor, activatedColor, count);
-                lt.color = Color.Lerp(startColor, activatedColor, count);
-            }
-            else
-            {
-                pointLt.color = Color.Lerp(startColor, endColor, count);
-            }
-            pointLt.intensity = Mathf.Lerp(0, maxIntensity, count);
-            lt.intensity = Mathf.Lerp(startingIntensity, maxIntensity, count);
-            count += Time.deltaTime/countTime;
-        }
+        yield return null;
     }
 
     public void Activate()
