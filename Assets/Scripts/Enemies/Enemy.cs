@@ -153,7 +153,7 @@ public class Enemy : MonoBehaviour
         IsPathInvalid();
     }
 
-    private void IsPathInvalid()
+    public virtual void IsPathInvalid()
     {
         bool isPathValid = agent.CalculatePath(p.transform.position, agent.path);
         //print("path status:" + agent.path.status);

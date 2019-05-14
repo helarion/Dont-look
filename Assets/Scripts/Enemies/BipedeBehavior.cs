@@ -9,6 +9,7 @@ public class BipedeBehavior : Enemy
 
     private float currentWalkIntensity;
     private BoxCollider detectZone;
+    private bool canSeePlayer = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,11 +34,20 @@ public class BipedeBehavior : Enemy
         GameManager.instance.ShakeScreen(walkShakeDuration, currentWalkIntensity);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
+        bool test = false;
         if (player == null) return;
-        StartChase();
+        test = true;
+        canSeePlayer = test;
+        if(!isChasing) StartChase();
+    }
+
+    public override void IsPathInvalid()
+    {
+        if (canSeePlayer) return;
+        base.IsPathInvalid();
     }
 
     public override void ChaseBehavior()

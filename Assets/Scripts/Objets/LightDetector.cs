@@ -24,6 +24,7 @@ public class LightDetector : Objet
         {
             Break();
         }
+        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
     }
 
     private void Update()
