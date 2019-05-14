@@ -51,7 +51,7 @@ public class LightDetector : Objet
     
     private IEnumerator StopLook()
     {
-        blinkLight.StopLook(delayActivate);
+        blinkLight.StopLook();
         while (countLook > 0)
         {
             AkSoundEngine.SetRTPCValue("Pitch_Load_Light" + countLook.Remap(0, delayActivate, 0, 100), 0);
