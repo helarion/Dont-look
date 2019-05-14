@@ -586,8 +586,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   delayActivate: 2.5
-  blinkLight: {fileID: 0}
-  chargingSound: 
+  blinkLight: {fileID: 4911734774690722052}
+  playChargingSound: 
+  StopChargingSound: 
   activateSound: 
   desactivate: 0
   scriptSpider: 0
@@ -604,8 +605,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.8, y: 1, z: 0.0926137}
+  m_Center: {x: 1.3916743e-15, y: -0.14999998, z: 0.07707991}
 --- !u!114 &4911734774690722052
 MonoBehaviour:
   m_ObjectHideFlags: 0

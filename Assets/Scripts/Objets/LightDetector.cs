@@ -7,7 +7,8 @@ public class LightDetector : Objet
     [SerializeField] public Objet[] targets =null;
     [SerializeField] private float delayActivate = 1.5f;
     [SerializeField] private BlinkingLight blinkLight = null;
-    [SerializeField] private string chargingSound = null;
+    [SerializeField] private string playChargingSound = null;
+    [SerializeField] private string StopChargingSound = null;
     [SerializeField] private string activateSound = null;
     [SerializeField] private bool desactivate = false;
     [SerializeField] private bool scriptSpider = false;
@@ -48,11 +49,12 @@ private IEnumerator CountLook()
     {
         isLooked = true;
         blinkLight.StartLook(delayActivate);
+        //AkSoundEngine.PostEvent(playChargingSound, gameObject);
         while (countLook < delayActivate)
         {
-            yield return new WaitForSeconds(0.1f);
-            countLook += 0.1f;
-            // jouer le son de lampe qui se charge
+            //AkSoundEngine.SetRTPCValue("" + countLook.Remap(0,delayActivate,0,100), 0);
+            countLook +=Time.deltaTime;
+            yield return new WaitForEndOfFrame();
         }
         Activate();
         isLooked = false;

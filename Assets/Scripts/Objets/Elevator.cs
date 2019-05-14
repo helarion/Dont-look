@@ -7,9 +7,11 @@ public class Elevator : Objet
     [SerializeField] Transform endPos;
     [SerializeField] float moveSpeed;
     [SerializeField] string activateSound;
-    [SerializeField] string engineSound;
-    [SerializeField] string movingSound;
-    [SerializeField] string stopSound;
+    [SerializeField] string playEngineSound;
+    [SerializeField] string stopEngineSound;
+    [SerializeField] string playMovingSound;
+    [SerializeField] string stopMovingSound;
+    [SerializeField] string playStopSound;
     [SerializeField] BoxCollider enterCol;
     [SerializeField] int direction = 1;
     [SerializeField] bool isStarted = false;
@@ -17,14 +19,19 @@ public class Elevator : Objet
     [SerializeField] private bool addSpatialLine = false;
     [SerializeField] SpatialLine spatialLine;
     [SerializeField] SpatialRoom spatialRoom;
+    [SerializeField] Light lamp;
+    [SerializeField] Animator lampAnimator;
     private Vector3 startPos;
-    //private Rigidbody rb;
+
+    private bool enabledStart;
 
     private bool isMoving = false;
 
     private void Start()
     {
+        enabledStart = isActivated;
         startPos = transform.position;
+        //if(isActivated)AkSoundEngine.PostEvent(engineSound, gameObject);
         //rb = GetComponent<Rigidbody>();
     }
 
@@ -34,6 +41,8 @@ public class Elevator : Objet
         base.Activate();
         if(!isStarted)
         {
+            lamp.enabled = true;
+            lampAnimator.enabled = true;
             enterCol.enabled = true;
             isMoving = false;
         }
@@ -41,22 +50,30 @@ public class Elevator : Objet
         {
             StartMoving();
         }
-        //AkSoundEngine.PostEvent(activateSound, gameObject);
-        //AkSoundEngine.PostEvent(engineSound, gameObject);
+        AkSoundEngine.PostEvent(activateSound, gameObject);
+        //AkSoundEngine.PostEvent(playEngineSound, gameObject);
     }
 
     public override void Reset()
     {
         base.Reset();
+        if (!isStarted)
+        {
+            lamp.enabled = false;
+            lampAnimator.enabled = false;
+        }
         StopCoroutine(MoveCoroutine());
         enterCol.enabled = false;
         transform.position = startPos;
+        isActivated = enabledStart;
+        //if(!isActivated) //AkSoundEngine.PostEvent(stopEngineSound, gameObject);
     }
 
     public void StartMoving()
     {
         if (!isMoving)
         {
+            //AkSoundEngine.PostEvent(playMoveSound, gameObject);
             isMoving = true;
             StartCoroutine(MoveCoroutine());
         }
@@ -73,7 +90,8 @@ public class Elevator : Objet
             yield return new WaitForEndOfFrame();
         }
         transform.position = endPos.position;
-        //AkSoundEngine.PostEvent(stopSound, gameObject);
+        //AkSoundEngine.PostEvent(stopMovingSound, gameObject);
+        //AkSoundEngine.PostEvent(playStopSound, gameObject);
         //GameManager.instance.player.ResumeMove();
         ReachEnd();
         yield return null;

@@ -306,9 +306,11 @@ MonoBehaviour:
   endPos: {fileID: 1245245558}
   moveSpeed: 3
   activateSound: 
-  engineSound: 
-  movingSound: 
-  stopSound: 
+  playEngineSound: 
+  stopEngineSound: 
+  playMovingSound: 
+  stopMovingSound: 
+  playStopSound: 
   enterCol: {fileID: 1782030476667746518}
   direction: 1
   isStarted: 1
@@ -318,6 +320,8 @@ MonoBehaviour:
     begin: {fileID: 0}
     end: {fileID: 0}
   spatialRoom: {fileID: 0}
+  lamp: {fileID: 108591155389536639}
+  lampAnimator: {fileID: 2080198689059239907}
 --- !u!65 &1782030476667746518
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -552,6 +556,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa6c5f105fddca84dac732069110c0c2, type: 3}
+--- !u!95 &2080198689059239907 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2080198689052160362, guid: aa6c5f105fddca84dac732069110c0c2,
+    type: 3}
+  m_PrefabInstance: {fileID: 11798153}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &108591155389536639 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 108591155377741814, guid: aa6c5f105fddca84dac732069110c0c2,
+    type: 3}
+  m_PrefabInstance: {fileID: 11798153}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4905803118678073 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4905803124184752, guid: aa6c5f105fddca84dac732069110c0c2,

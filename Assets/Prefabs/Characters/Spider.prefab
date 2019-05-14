@@ -106,17 +106,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  isChasing: 0
+  bonusSpeed: 4
+  velocityMax: 2
   delete: 0
   lookShakeIntensity: 0.08
-  chaseShakeIntensity: 0.02
-  delayBeforeChase: 2
+  lookShakeTime: 1
+  minChaseShakeIntensity: 0.02
+  maxChaseShakeIntensity: 0.06
+  chaseShakeTime: 1
   delayChase: 4
+  playerDistance: 0
+  hasPlayedLook: 0
+  isChasing: 0
   spawnZones:
   - {fileID: 0}
   WwiseChasePlay: 
   WwiseChaseStop: 
   WwiseLook: Play_Blend_Stinger_Araignee
+  scriptedObjectsActivation: []
+  scriptedLampActivation: {fileID: 0}
   agent: {fileID: 0}
   animator: {fileID: 0}
   velocity: 0
@@ -124,13 +132,13 @@ MonoBehaviour:
   isLooked: 1
   isMoving: 0
   isCountingEndChase: 0
+  needsConcentration: 0
   p: {fileID: 0}
-  bonusSpeed: 4
   delaySpot: 0.5
   lengthDetection: 10
   clickToSetDestination: 0
-  countLook: 0
-  hasPlayedLook: 0
+  malusSpeedStart: 2
+  malusStartDuration: 2
 --- !u!195 &2436183961040824494
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -142,7 +150,7 @@ NavMeshAgent:
   m_AgentTypeID: -1372625422
   m_Radius: 1
   m_Speed: 4
-  m_Acceleration: 300
+  m_Acceleration: 50
   avoidancePriority: 50
   m_AngularSpeed: 1000
   m_StoppingDistance: 2.5

@@ -21,7 +21,6 @@ public class BipedeBehavior : Enemy
     void Update()
     {
         VelocityCount();
-        IsLit(GameManager.instance.LightDetection(transform, needsConcentration));
         if (isChasing)
         {
             ChaseBehavior();
@@ -44,6 +43,7 @@ public class BipedeBehavior : Enemy
     public override void ChaseBehavior()
     {
         base.ChaseBehavior();
+        IsLit(GameManager.instance.LightDetection(transform, needsConcentration));
         float distanceMax = (detectZone.bounds.size.x / 2);
         float rate = playerDistance.Remap(0, distanceMax, 0.2f, 1.2f);
         currentWalkIntensity = walkShakeIntensity * rate;

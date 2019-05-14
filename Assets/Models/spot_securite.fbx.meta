@@ -17,7 +17,17 @@ ModelImporter:
     3300002: verre1
     4300000: corps1
     4300002: verre1
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: corps
+    second: {fileID: 2100000, guid: ed5511ad95f010a46bea81c680d6c3cb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: verre
+    second: {fileID: 2100000, guid: 09727307fe2c9f347ab02d430c5e5c38, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
