@@ -23,6 +23,7 @@ public class BlinkingLight : MonoBehaviour
     float maxTimeLooked = 0.0f;
 
     bool darkWait = false;
+    bool blink = false;
 
     private void Start()
     {
@@ -56,6 +57,7 @@ public class BlinkingLight : MonoBehaviour
         pointLightMid.enabled = true;
         pointLightBot.enabled = true;
         rectangleLight.enabled = true;
+        blink = true;
         StartCoroutine(BlinkCoroutine());
     }
 
@@ -74,6 +76,7 @@ public class BlinkingLight : MonoBehaviour
     public void StartLook(float time)
     {
         maxTimeLooked = time;
+        blink = false;
         StopCoroutine(StopLookCoroutine());
         StopCoroutine(BlinkCoroutine());
         StopCoroutine(DarkWaitCoroutine());
@@ -100,8 +103,6 @@ public class BlinkingLight : MonoBehaviour
 
     private IEnumerator StartLookCoroutine()
     {
-        StopCoroutine(BlinkCoroutine());
-        StopCoroutine(DarkWaitCoroutine());
         while (timeLooked < maxTimeLooked)
         {
             float rate = timeLooked / maxTimeLooked;
@@ -165,40 +166,43 @@ public class BlinkingLight : MonoBehaviour
 
     private IEnumerator BlinkCoroutine()
     {
+        blink = true;
         float intensity = 0.0f;
         bool increase = true;
-        while (true)
+        while (blink)
         {
             if (darkWait)
             {
                 yield return new WaitForEndOfFrame();
             }
-
-            pointLightTop.intensity = intensity;
-            pointLightMid.intensity = intensity;
-            pointLightBot.intensity = intensity;
-            rectangleLight.intensity = intensity;
-
-            if (increase)
-            {
-                intensity += (Time.deltaTime * offIntensity) / blinkSpeed;
-                if (intensity > offIntensity)
-                {
-                    intensity = offIntensity;
-                    increase = false;
-                }
-            }
             else
             {
-                intensity -= (Time.deltaTime * offIntensity) / blinkSpeed;
-                if (intensity < 0.0f)
+                pointLightTop.intensity = intensity;
+                pointLightMid.intensity = intensity;
+                pointLightBot.intensity = intensity;
+                rectangleLight.intensity = intensity;
+                print(intensity);
+                if (increase)
                 {
-                    intensity = 0.0f;
-                    increase = true;
-                    StartCoroutine(DarkWaitCoroutine());
+                    intensity += (Time.deltaTime * offIntensity) / blinkSpeed;
+                    if (intensity >= offIntensity)
+                    {
+                        intensity = offIntensity;
+                        increase = false;
+                    }
                 }
+                else
+                {
+                    intensity -= (Time.deltaTime * offIntensity) / blinkSpeed;
+                    if (intensity <= 0.0f)
+                    {
+                        intensity = 0.0f;
+                        increase = true;
+                        StartCoroutine(DarkWaitCoroutine());
+                    }
+                }
+                yield return new WaitForEndOfFrame();
             }
-            yield return new WaitForEndOfFrame();
         }
     }
 

@@ -17,6 +17,8 @@ public class LightDetector : Objet
     [HideInInspector] public bool isLooked = false;
     private float countLook=0f;
 
+    private bool hasPlayedCharge = false;
+
     private void Start()
     {
         model = GetComponentInChildren<MeshRenderer>();
@@ -30,29 +32,34 @@ public class LightDetector : Objet
     private void Update()
     {
         //print(GameManager.instance.LightDetection(transform.position, true));
-        IsLit(GameManager.instance.LightDetection(transform,true));
+        if (isActivated) return;
+        isLooked = GameManager.instance.LightDetection(transform, true);
+
+        if (isLooked)
+        {
+            if(!hasPlayedCharge)
+            {
+                hasPlayedCharge = true;
+                //AkSoundEngine.PostEvent(playChargingSound, gameObject);
+                StopCoroutine(StopLook());
+                StartCoroutine(CountLook());
+                blinkLight.StartLook(delayActivate);
+            }
+        }
+        else if (!scriptSpider)
+        {
+            if (hasPlayedCharge)
+            {
+                hasPlayedCharge = false;
+                StopCoroutine(CountLook());
+                StartCoroutine(StopLook());
+                blinkLight.StopLook();
+            }
+        }
     }
 
-    private void IsLit(bool b)
-    {
-        if (!isLooked && !isActivated && b)
-        {
-            isLooked = true;
-            StopCoroutine(StopLook());
-            StartCoroutine(CountLook());
-        }
-        else if (!b && !isActivated && !scriptSpider)
-        {
-            StopCoroutine(CountLook());
-            StartCoroutine(StopLook());
-            isLooked = false;
-            //countLook = 0f;
-        }
-    } 
-    
     private IEnumerator StopLook()
     {
-        blinkLight.StopLook();
         while (countLook > 0)
         {
             AkSoundEngine.SetRTPCValue("Pitch_Load_Light" + countLook.Remap(0, delayActivate, 0, 100), 0);
@@ -67,7 +74,6 @@ public class LightDetector : Objet
     private IEnumerator CountLook()
     {
         isLooked = true;
-        blinkLight.StartLook(delayActivate);
         AkSoundEngine.PostEvent(playChargingSound, gameObject);
         while (countLook < delayActivate)
         {

@@ -32,16 +32,15 @@ public class ContinuousBlinkingLight : MonoBehaviour
     {
         timeLooked = 0.0f;
         pointLight.intensity = 0.0f;
-        pointLight.color = Color.black;
+        pointLight.color = offColor;
         rectangleLight.intensity = 0.0f;
-        rectangleLight.color = Color.black;
+        rectangleLight.color = offColor;
         if (isBroken)
         {
             Break();
         }
         else
         {
-            blink = true;
             StartCoroutine(BlinkCoroutine());
             print("start blink");
         }
@@ -114,23 +113,26 @@ public class ContinuousBlinkingLight : MonoBehaviour
         {
             float rate = timeLooked / maxTimeLooked;
             rectangleLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
-            rectangleLight.color = Color.Lerp(Color.black, activeColor, rate);
+            rectangleLight.color = Color.Lerp(offColor, activeColor, rate);
             pointLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
-            pointLight.color = Color.Lerp(Color.black, activeColor, rate);
+            pointLight.color = Color.Lerp(offColor, activeColor, rate);
 
             timeLooked -= Time.deltaTime;
+            print("isstoppin");
             yield return new WaitForEndOfFrame();
         }
         rectangleLight.intensity = 0.0f;
-        rectangleLight.color = Color.black;
+        rectangleLight.color = offColor;
         pointLight.intensity = 0.0f;
-        pointLight.color = Color.black;
+        pointLight.color = offColor;
+        StartCoroutine(BlinkCoroutine());
         yield return null;
     }
 
     private IEnumerator BlinkCoroutine()
     {
         float intensity = 0.0f;
+        blink = true;
         bool increase = true;
         while (blink)
         {
@@ -148,7 +150,7 @@ public class ContinuousBlinkingLight : MonoBehaviour
                 if (increase)
                 {
                     intensity += (Time.deltaTime * offIntensity) / blinkSpeed;
-                    if (intensity > offIntensity)
+                    if (intensity >= offIntensity)
                     {
                         intensity = offIntensity;
                         increase = false;
@@ -157,7 +159,7 @@ public class ContinuousBlinkingLight : MonoBehaviour
                 else
                 {
                     intensity -= (Time.deltaTime * offIntensity) / blinkSpeed;
-                    if (intensity < 0.0f)
+                    if (intensity <= 0.0f)
                     {
                         intensity = 0.0f;
                         increase = true;

@@ -46,7 +46,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 1.193662
+  m_Intensity: 32
   m_Range: 1.0000001
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -307,7 +307,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 1.193662
+  m_Intensity: 32
   m_Range: 1.0000001
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -1147,9 +1147,9 @@ MonoBehaviour:
   pointLightTop: {fileID: 5027043684092661479}
   pointLightMid: {fileID: 1047883686}
   pointLightBot: {fileID: 815143716}
-  offIntensity: 0
+  offIntensity: 20
   activeIntensity: 200
-  blinkSpeed: 40
+  blinkSpeed: 1
   durationBetweenBlinks: 2
   backSpeed: 0.5
   offColor: {r: 1, g: 0, b: 0, a: 0}
