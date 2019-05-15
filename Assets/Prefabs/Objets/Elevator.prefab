@@ -262,6 +262,7 @@ GameObject:
   - component: {fileID: 4336349914575674}
   - component: {fileID: 1700556721083671}
   - component: {fileID: 1782030476667746518}
+  - component: {fileID: 3488020618752988200}
   m_Layer: 12
   m_Name: Elevator Room5
   m_TagString: Elevator
@@ -305,12 +306,10 @@ MonoBehaviour:
   isActivating: 0
   endPos: {fileID: 1245245558}
   moveSpeed: 3
-  activateSound: Play_LIGHT_OK_ASC
   playEngineSound: 
   stopEngineSound: 
-  playMovingSound: 
-  stopMovingSound: 
-  playStopSound: 
+  playMovingSound: Play_Seq_Motor_Asc
+  stopMovingSound: Stop_Seq_Motor_Asc
   enterCol: {fileID: 1782030476667746518}
   direction: 1
   isStarted: 1
@@ -335,6 +334,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0, z: 0.1}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &3488020618752988200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700556721083670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1598d4d2c0c41d1439e495a4b5587823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  yBonus: 5
+  time_start: 0.3
+  time_end: 0.3
+  current_occlusion: 0
+  max_occlusion: 55
+  layerMaskOcclusion:
+    serializedVersion: 2
+    m_Bits: 3584
 --- !u!1 &4440037511275161974
 GameObject:
   m_ObjectHideFlags: 0

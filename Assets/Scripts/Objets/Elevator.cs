@@ -6,12 +6,10 @@ public class Elevator : Objet
 {
     [SerializeField] Transform endPos;
     [SerializeField] float moveSpeed;
-    [SerializeField] string activateSound;
     [SerializeField] string playEngineSound;
     [SerializeField] string stopEngineSound;
     [SerializeField] string playMovingSound;
     [SerializeField] string stopMovingSound;
-    [SerializeField] string playStopSound;
     [SerializeField] BoxCollider enterCol;
     [SerializeField] int direction = 1;
     [SerializeField] bool isStarted = false;
@@ -50,7 +48,6 @@ public class Elevator : Objet
         {
             StartMoving();
         }
-        AkSoundEngine.PostEvent(activateSound, gameObject);
         //AkSoundEngine.PostEvent(playEngineSound, gameObject);
     }
 
@@ -73,7 +70,7 @@ public class Elevator : Objet
     {
         if (!isMoving)
         {
-            //AkSoundEngine.PostEvent(playMoveSound, gameObject);
+            AkSoundEngine.PostEvent(playMovingSound, gameObject);
             isMoving = true;
             StartCoroutine(MoveCoroutine());
         }
@@ -90,8 +87,7 @@ public class Elevator : Objet
             yield return new WaitForEndOfFrame();
         }
         transform.position = endPos.position;
-        //AkSoundEngine.PostEvent(stopMovingSound, gameObject);
-        //AkSoundEngine.PostEvent(playStopSound, gameObject);
+        AkSoundEngine.PostEvent(stopMovingSound, gameObject);
         //GameManager.instance.player.ResumeMove();
         ReachEnd();
         yield return null;

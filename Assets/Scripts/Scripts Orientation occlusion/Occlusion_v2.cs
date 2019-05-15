@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Occlusion_v2 : MonoBehaviour
 {
-    public GameObject listener;
+    private GameObject listener;
+    public GameObject origin;
+    public float yBonus = 1;
     public float time_start = 0.5f;
     public float time_end = 1.0f; 
     public float current_occlusion = 0.0f;
@@ -15,11 +17,9 @@ public class Occlusion_v2 : MonoBehaviour
    // public AK.Wwise.Event wwiseEvent;
 
     // Use this for initialization
-    void Start () {
-
-        //AkSoundEngine.PostEvent(wwiseEvent.Id, gameObject);
-        //listener = GameObject.FindGameObjectWithTag("Player");
-        layerMaskOcclusion = LayerMask.GetMask("Walls");
+    void Start ()
+    {
+        listener = GameManager.instance.mainCamera.gameObject;
     }
 
 	// Update is called once per frame
@@ -28,17 +28,20 @@ public class Occlusion_v2 : MonoBehaviour
         // Init
 		RaycastHit hitInfo;
 		float playerDistance;
+        Vector3 originPosition = origin.gameObject.transform.position;
+        originPosition.y += 1.5f;
 
         // Calc
         Vector3 current_position = transform.position;
         current_position.y += 1f;
-		Vector3 raycastDir = listener.transform.position - transform.position;
-		playerDistance = Vector3.Distance(transform.position, listener.transform.position);
-
+		Vector3 raycastDir = originPosition - current_position;
+		playerDistance = Vector3.Distance(current_position, originPosition);
+        if (playerDistance > 50) return;
         // Check if something occlude
-        if (Physics.Raycast(new Ray(transform.position, raycastDir), out hitInfo, playerDistance, layerMaskOcclusion))
+        if (Physics.Raycast(new Ray(current_position, raycastDir), out hitInfo, playerDistance, layerMaskOcclusion))
         {
             // Hit wall
+            print("hit:"+hitInfo.collider.gameObject.name);
             Debug.DrawRay(current_position, raycastDir, Color.red);
             if (current_occlusion < 100.0f)
                 current_occlusion += max_occlusion / (time_end / Time.deltaTime);

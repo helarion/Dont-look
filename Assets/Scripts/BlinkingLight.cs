@@ -181,7 +181,7 @@ public class BlinkingLight : MonoBehaviour
                 pointLightMid.intensity = intensity;
                 pointLightBot.intensity = intensity;
                 rectangleLight.intensity = intensity;
-                print(intensity);
+                //print(intensity);
                 if (increase)
                 {
                     intensity += (Time.deltaTime * offIntensity) / blinkSpeed;

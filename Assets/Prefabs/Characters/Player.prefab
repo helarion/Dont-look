@@ -409,6 +409,7 @@ GameObject:
   - component: {fileID: 4194574732181831121}
   - component: {fileID: 1438390244}
   - component: {fileID: 312924326}
+  - component: {fileID: 1808914322129025289}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -463,6 +464,7 @@ MonoBehaviour:
   walkTime: 0.5
   runTimeMinus: 0.1
   deadZoneValue: 0.3
+  changeLineDeadZoneValue: 0.9
   runSpeed: 6
   walkSpeed: 2.5
   ladderSpeed: 0.7
@@ -591,7 +593,6 @@ MonoBehaviour:
   normalLightColor: {r: 1, g: 1, b: 1, a: 1}
   normalLightAngle: 60
   lightOn: 1
-  isJumping: 0
 --- !u!54 &4194574732181831121
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -640,6 +641,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1808914322129025289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4194574732181831083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1598d4d2c0c41d1439e495a4b5587823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  yBonus: 1
+  time_start: 0.5
+  time_end: 0.5
+  current_occlusion: 0
+  max_occlusion: 70
+  layerMaskOcclusion:
+    serializedVersion: 2
+    m_Bits: 7680
 --- !u!1001 &4194574731507624426
 PrefabInstance:
   m_ObjectHideFlags: 0
