@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
     [Header("Sons")]
     [SerializeField] public string ChaseAmbPlay;
     [SerializeField] public string ChaseAmbStop;
+    [SerializeField] public string ChaseAmb2Play;
+    [SerializeField] public string ChaseAmb2Stop;
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
     [SerializeField] public AudioRoom startRoom;
@@ -267,6 +269,7 @@ public class GameManager : MonoBehaviour
         float lightAngle = playerLight.spotAngle / 2.0f;
         if (playerToObjectLength <= lightRange)
         {
+
             float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToObjectVec) / (lightVec.magnitude * playerToObjectVec.magnitude)) * Mathf.Rad2Deg;
             if (angleFromLight <= lightAngle)
             {
@@ -281,7 +284,7 @@ public class GameManager : MonoBehaviour
                     if (!needsConcentration) isLit = true;
                     else if( player.GetConcentration()) isLit = true;
                 }
-                //print("Touched " + hit.transform.gameObject.name);
+                print("Touched " + hit.transform.gameObject.name);
                 //print(isLit);
             }
         }

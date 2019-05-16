@@ -53,11 +53,11 @@ public class BipedeBehavior : Enemy
     public override void ChaseBehavior()
     {
         base.ChaseBehavior();
-        IsLit(GameManager.instance.LightDetection(transform, needsConcentration));
+        IsLit(GameManager.instance.LightDetection(transform, false));
         float distanceMax = (detectZone.bounds.size.x / 2);
         float rate = playerDistance.Remap(0, distanceMax, 0.2f, 1.2f);
         currentWalkIntensity = walkShakeIntensity * rate;
-        if(!isLooked)
+        if(isMoving)
         {
             // goes to the player
             MoveTo(GameManager.instance.player.transform.position);
@@ -72,8 +72,6 @@ public class BipedeBehavior : Enemy
             isLooked = true;
             if (GameManager.instance.player.GetConcentration()) LitConcentrated();
             else LitNormal();
-
-            animator.SetBool("IsMoving", isMoving);
         }
         else
         {
@@ -91,6 +89,8 @@ public class BipedeBehavior : Enemy
         agent.isStopped = false;
         isMoving = true;
         agent.speed = moveSpeed - bonusSpeed;
+        animator.SetBool("IsLooked", false);
+        animator.SetBool("IsMoving", isMoving);
     }
 
     private void LitConcentrated()
@@ -98,7 +98,7 @@ public class BipedeBehavior : Enemy
         agent.isStopped = true;
         isMoving = false;
         animator.SetBool("IsLooked", true);
-        
+        animator.SetBool("IsMoving", isMoving);
     }
 
     public override void Respawn()

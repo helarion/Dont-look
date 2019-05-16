@@ -25,7 +25,7 @@ public class SpiderBehavior : Enemy
     private void Update()
     {
         VelocityCount();
-        IsLit(GameManager.instance.LightDetection(transform, needsConcentration));
+        IsLit(GameManager.instance.LightDetection(transform, false));
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if (isChasing)
         {

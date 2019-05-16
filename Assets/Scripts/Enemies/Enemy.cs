@@ -40,7 +40,6 @@ public class Enemy : MonoBehaviour
     public bool isLooked = true;
     public bool isMoving = false;
     public bool isCountingEndChase = false;
-    [SerializeField] public bool needsConcentration = false;
 
     [HideInInspector] public PlayerController p;
 
@@ -48,7 +47,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        IsLit(GameManager.instance.LightDetection(transform,needsConcentration));
+        IsLit(GameManager.instance.LightDetection(transform,false));
         VelocityCount();
     }
 
@@ -83,6 +82,7 @@ public class Enemy : MonoBehaviour
         {
             hasPlayedChase = true;
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, GameManager.instance.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Play, GameManager.instance.gameObject);
         }
         isMoving = true;
         animator.SetBool("IsMoving", isMoving);
@@ -95,7 +95,8 @@ public class Enemy : MonoBehaviour
         {
             //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
-            if(delete && p.GetIsHidden())
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Stop, GameManager.instance.gameObject);
+            if (delete && p.GetIsHidden())
             {
                 foreach(Objet o in scriptedObjectsActivation)
                 {
@@ -174,6 +175,7 @@ public class Enemy : MonoBehaviour
     public virtual void Respawn()
     {
         AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Stop, GameManager.instance.gameObject);
         isLooked = false;
         hasPlayedChase = false;
         hasPlayedLook = false;

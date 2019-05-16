@@ -312,9 +312,9 @@ MonoBehaviour:
   stopMovingSound: Stop_Seq_Motor_Asc
   enterCol: {fileID: 1782030476667746518}
   direction: 1
-  isStarted: 1
+  isStarted: 0
   isPlayerOnBoard: 0
-  addSpatialLine: 1
+  addSpatialLine: 0
   spatialLine:
     begin: {fileID: 0}
     end: {fileID: 0}
@@ -348,10 +348,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
   yBonus: 5
-  time_start: 0.3
-  time_end: 0.3
+  time_start: 0.8
+  time_end: 0.8
   current_occlusion: 0
-  max_occlusion: 15
+  max_occlusion: 30
   layerMaskOcclusion:
     serializedVersion: 2
     m_Bits: 3584
