@@ -41,7 +41,7 @@ public class Occlusion_v2 : MonoBehaviour
         if (Physics.Raycast(new Ray(current_position, raycastDir), out hitInfo, playerDistance, layerMaskOcclusion))
         {
             // Hit wall
-            print("hit:"+hitInfo.collider.gameObject.name);
+            //print("hit:"+hitInfo.collider.gameObject.name);
             Debug.DrawRay(current_position, raycastDir, Color.red);
             if (current_occlusion < 100.0f)
                 current_occlusion += max_occlusion / (time_end / Time.deltaTime);

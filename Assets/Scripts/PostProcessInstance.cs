@@ -8,7 +8,10 @@ public class PostProcessInstance : MonoBehaviour
     [HideInInspector] public static PostProcessInstance instance = null;
     public PostProcessVolume volume;
 
-    ColorGrading colorGrading;
+    [HideInInspector] public ColorGrading colorGrading;
+    [HideInInspector] public Grain grain;
+    [HideInInspector] public Vignette vignette;
+    [HideInInspector] public Bloom bloom;
 
     private void Awake()
     {
@@ -21,11 +24,17 @@ public class PostProcessInstance : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out colorGrading);
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out grain);
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out vignette);
+        PostProcessInstance.instance.volume.profile.TryGetSettings(out bloom);
+        colorGrading.gamma.value = new Vector4(0, 0, 0, 0);
     }
 
     private void Start()
     {
-        PostProcessInstance.instance.volume.profile.TryGetSettings(out colorGrading);
-        colorGrading.gamma.value = new Vector4(0, 0, 0, 0);
+
+        
     }
 }

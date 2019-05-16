@@ -22,8 +22,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float gammaMin=-1.5f;
     [SerializeField] private float gammaMax=1.5f;
 
-    private ColorGrading colorGrading;
-    private Bloom bloom;
     public bool isFading = false;
 
     public static UIManager instance = null;
@@ -44,10 +42,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        PostProcessInstance.instance.volume.profile.TryGetSettings(out colorGrading);
-        PostProcessInstance.instance.volume.profile.TryGetSettings(out bloom);
-        bloom.active = true;
-        float gammaX = colorGrading.gamma.value.x - 1;
+        PostProcessInstance.instance.bloom.active = true;
+        float gammaX = PostProcessInstance.instance.colorGrading.gamma.value.x - 1;
         //print("gamma x:" + gammaX);
         float value = gammaX.Remap(gammaMin, gammaMax, gammaControl.minValue, gammaControl.maxValue);
         //print("reamp value:"+value);
@@ -65,11 +61,11 @@ public class UIManager : MonoBehaviour
 
     public void GammaValueChangeCheck()
     {
-        colorGrading.enabled.value = true;
+        PostProcessInstance.instance.colorGrading.enabled.value = true;
         float gamma = gammaControl.value.Remap(gammaControl.minValue, gammaControl.maxValue, gammaMin, gammaMax);
         print("gamma:" + gamma);
         Vector4 vec= new Vector4(gamma,gamma,gamma,gamma);
-        colorGrading.gamma.value =vec;
+        PostProcessInstance.instance.colorGrading.gamma.value =vec;
     }
 
     public void VolumeValueChangeCheck()
@@ -143,8 +139,8 @@ public class UIManager : MonoBehaviour
 
     public void FadeDeath(bool b)
     {
-        if(b)FadeIn(fadeImg, 1f, 0f);
-        else FadeOut(fadeImg, 1f, 1f);
+        if(b)FadeIn(fadeImg, 0.3f, 0f);
+        else FadeOut(fadeImg, 1f, 2f);
     }
 
     public void Pause(bool b)

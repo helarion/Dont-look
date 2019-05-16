@@ -39,6 +39,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] public float contrePlongeeAngle = 15;
     [SerializeField] private float contrePlongeeHauteur = 1.5f;
 
+    [Header("PostProcessValues")]
+    [SerializeField] private float maxGrain;
+    private float minVignette;
+    [SerializeField] private float maxVignette;
+    [SerializeField] private float maxTemperature = 100;
+    [SerializeField] private float distanceStartVignette=10;
+    [SerializeField] private float distanceStartGrain = 10;
+    [SerializeField] private float distanceStartTemperature = 10;
+
     [Header("Layers")]
     [SerializeField] private LayerMask wallsAndMobsLayer;
     [SerializeField] private LayerMask lookLayer;
@@ -82,6 +91,7 @@ public class GameManager : MonoBehaviour
         player.SetCurrentAudioRoom(startRoom);
         PlayCurrentAudioRoom(startRoom);
         CheckTracker();
+        minVignette = PostProcessInstance.instance.vignette.intensity.value;
         camHandler = mainCamera.GetComponent<CameraHandler>();
         controls = ReInput.players.GetPlayer(0);
         ResumeGame();
@@ -196,6 +206,39 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region PostProcess
+
+    public void UpdatePostProcess(float distance)
+    {
+        if (distance < distanceStartGrain)
+        {
+            float newGrain = distanceStartGrain - distance;
+            newGrain = newGrain.Remap(0f, distanceStartGrain, 0f, maxGrain);
+            PostProcessInstance.instance.grain.intensity.value = newGrain;
+        }
+        if (distance < distanceStartVignette)
+        {
+            float newVignette = distanceStartVignette - distance;
+            newVignette = newVignette.Remap(0f, distanceStartVignette, minVignette, maxVignette);
+            PostProcessInstance.instance.vignette.intensity.value = newVignette;
+        }
+        if (distance < distanceStartTemperature)
+        {
+            float newTemperature = distanceStartTemperature - distance;
+            newTemperature = newTemperature.Remap(0f, distanceStartTemperature, 0, maxTemperature);
+            PostProcessInstance.instance.colorGrading.temperature.value = newTemperature;
+        }
+    }
+
+    private void PostProcessReset()
+    {
+        PostProcessInstance.instance.vignette.intensity.value = minVignette;
+        PostProcessInstance.instance.grain.intensity.value = 0;
+        PostProcessInstance.instance.colorGrading.temperature.value = 0;
+    }
+
+    #endregion
+
     public void CheckTracker()
     {
         isTrackerEnabled = UIManager.instance.GetCheckTracker();
@@ -206,6 +249,9 @@ public class GameManager : MonoBehaviour
         //int index =enemyList.IndexOf(e);
         enemyList.Remove(e);
     }
+
+
+    #region Light
 
     public bool LightDetection(Transform objectPosition, bool needsConcentration)
     {
@@ -242,6 +288,8 @@ public class GameManager : MonoBehaviour
         return isLit;
     }
 
+    #endregion
+
     #region death
 
     // TUE LE JOUEUR
@@ -262,6 +310,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         RespawnEnemies();
         RespawnPlayer();
+        PostProcessReset();
         UIManager.instance.FadeDeath(false);
     }
 

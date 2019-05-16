@@ -144,11 +144,11 @@ public class Enemy : MonoBehaviour
 
     public virtual void ChaseBehavior()
     {
-        playerDistance = (transform.position - p.transform.position).magnitude;
-        float distanceMax = 15;
-        float chaseShakeIntensity = playerDistance.Remap(0, distanceMax, maxChaseShakeIntensity, minChaseShakeIntensity);
-        GameManager.instance.ShakeScreen(chaseShakeTime, chaseShakeIntensity);
         float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
+        float distanceMaxShake = 15;
+        float chaseShakeIntensity = distanceFromPlayer.Remap(0, distanceMaxShake, maxChaseShakeIntensity, minChaseShakeIntensity);
+        GameManager.instance.UpdatePostProcess(distanceFromPlayer);
+        GameManager.instance.ShakeScreen(chaseShakeTime, chaseShakeIntensity);
         AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);
         IsPathInvalid();
     }

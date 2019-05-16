@@ -28,12 +28,13 @@ public class PlayerController : MonoBehaviour
     private Collider cl;
     private Vector3 lookAtPos;
     private Vector2 cursorPos;
+    Vector3 lMovement;
 
     #endregion
 
     #region JumpVariables
 
-    [Header("Jump")]
+   [Header("Jump")]
     [SerializeField] private float jumpForce = 1.5f;
     [SerializeField] private float rayCastLength = 0.1f;
     [SerializeField] private float maxClimbHeight = 1.0f;
@@ -57,7 +58,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkSpeed = 1;
     [SerializeField] private float ladderSpeed = 0.5f;
     [SerializeField] private float grabSpeed = 0.5f;
-    [SerializeField] private float changingLineSpeed = 0.1f;
     private bool isChangingSpatialLine = false;
     private bool walkRoutine = false;
     private bool StoppedHMove = false;
@@ -200,14 +200,10 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(transform.position, lookAtPos);
-        Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.left);
-        Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.right);
-        Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.forward);
-        Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.back);
-
         Gizmos.color = Color.green;
         if (Application.isPlaying)
         {
+            //print("spatialline begin"+currentSpatialLine.begin.position);
             Gizmos.DrawLine(currentSpatialLine.begin.position, currentSpatialLine.end.position);
         }
         Gizmos.color = Color.white;
@@ -611,7 +607,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-        #region Movement
+    #region Movement
 
     private void MoveInputUpdate()
     {
@@ -639,7 +635,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         isMoving = false;
-        Vector3 lMovement = Vector3.zero;
+        lMovement = Vector3.zero;
         Vector3 camMove = Vector3.zero;
 
         if (hMove < deadZoneValue && hMove > -deadZoneValue && inputMode == InputMode.Pad) hMove = 0;
@@ -710,7 +706,7 @@ public class PlayerController : MonoBehaviour
                 if (currentSpatialLine.begin.position.z > transform.position.z)
                 {
                     lMovement.x = Mathf.Clamp(((currentSpatialLine.end.position.x - currentSpatialLine.begin.position.x) / 2 + currentSpatialLine.begin.position.x) - transform.position.x, -1, 1);
-                    lMovement.x *= changingLineSpeed;
+                    lMovement.x *= moveSpeed;
                 }
                 else
                 {
@@ -732,13 +728,18 @@ public class PlayerController : MonoBehaviour
 
             if (isChangingSpatialLine)
             {
-                lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
-                lMovement.z *= changingLineSpeed;
+                /*lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
+                lMovement.z *= moveSpeed;*/
+
+
+                lMovement += VerticalMove((transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1);
                 Vector3 transformPosition = transform.position + lMovement;
+                print("movementz"+lMovement.z);
                 if (lMovement.z > 0)
                 {
                     if (transformPosition.z > currentSpatialLine.begin.position.z)
                     {
+                        print("je tp >0");
                         lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
                     }
                 }
@@ -746,6 +747,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (transformPosition.z < currentSpatialLine.begin.position.z)
                     {
+                        print("je tp <0");
                         lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
                     }
                 }
@@ -755,20 +757,26 @@ public class PlayerController : MonoBehaviour
                     isChangingSpatialLine = false;
                 }
             }
+            else if(_horizontalAccDecLerpValue != 0)
+            {
+                lMovement += VerticalSlowDown();
+            }
 
             rb.MovePosition(transform.position + lMovement);
 
-            if (Mathf.Abs(hMove) < 0.01f && Mathf.Abs(vMove) < 0.01f)
-            {
-                isMoving = false;
-            }
-
-            /*if (Mathf.Abs(lMovement.x) < 0.01f && Mathf.Abs(lMovement.z) < 0.01f)
+            /*if (Mathf.Abs(hMove) < 0.01f && Mathf.Abs(vMove) < 0.01f)
             {
                 isMoving = false;
             }*/
-            animator.SetBool("IsMoving", isMoving);
+
+            
         }
+        if (Mathf.Abs(lMovement.x) < 0.01f && Mathf.Abs(lMovement.z) < 0.01f)
+        {
+            isMoving = false;
+        }
+        animator.SetBool("IsMoving", isMoving);
+
     }
 
     public void PlaySoundWalk()
@@ -845,13 +853,13 @@ public class PlayerController : MonoBehaviour
     {
         Quaternion save = flashlight.transform.rotation;
         float speed = 0.1f;
-        if (vMove > 0 && isChangingSpatialLine)
+        if (lMovement.z > 0 && isChangingSpatialLine)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
             inverse = 1;
             currentLookDirection = LookDirection.Front;
         }
-        else if (vMove < 0 && isChangingSpatialLine)
+        else if (lMovement.z < 0 && isChangingSpatialLine)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
             inverse = -1;
