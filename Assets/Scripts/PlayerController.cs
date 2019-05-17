@@ -705,8 +705,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (currentSpatialLine.begin.position.z > transform.position.z)
                 {
-                    lMovement.x = Mathf.Clamp(((currentSpatialLine.end.position.x - currentSpatialLine.begin.position.x) / 2 + currentSpatialLine.begin.position.x) - transform.position.x, -1, 1);
-                    lMovement.x *= moveSpeed;
+                        /*lMovement += HorizontalMove(hMove);
+                    else if (_horizontalAccDecLerpValue != 0)
+                        lMovement += HorizontalSlowDown();*/
+                    lMovement.x = Mathf.Lerp(lMovement.x, Mathf.Clamp(((currentSpatialLine.end.position.x - currentSpatialLine.begin.position.x) / 2 + currentSpatialLine.begin.position.x) - transform.position.x, -1, 1),0.2f);
+                    //lMovement.x *= moveSpeed;
                 }
                 else
                 {

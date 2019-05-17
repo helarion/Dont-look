@@ -21,14 +21,17 @@ public class Elevator : Objet
     [SerializeField] Animator lampAnimator;
     private Vector3 startPos;
 
-    private bool enabledStart;
-
     private bool isMoving = false;
 
     private void Start()
     {
-        enabledStart = isActivated;
         startPos = transform.position;
+        if(!isStarted)
+        {
+            lamp.enabled = false;
+            lampAnimator.enabled = false;
+            enterCol.enabled = false;
+        }
         //if(isActivated)AkSoundEngine.PostEvent(engineSound, gameObject);
         //rb = GetComponent<Rigidbody>();
     }
@@ -58,11 +61,11 @@ public class Elevator : Objet
         {
             lamp.enabled = false;
             lampAnimator.enabled = false;
+            enterCol.enabled = false;
         }
         StopCoroutine(MoveCoroutine());
-        enterCol.enabled = false;
         transform.position = startPos;
-        isActivated = enabledStart;
+        isActivated = isStarted;
         //if(!isActivated) //AkSoundEngine.PostEvent(stopEngineSound, gameObject);
     }
 
@@ -105,6 +108,14 @@ public class Elevator : Objet
             isActivated = false;
             direction *= -1;
             spatialRoom.addSpatialLine(spatialLine);
+        }
+        else if(isStarted)
+        {
+            Vector3 save = startPos;
+            startPos = endPos.position;
+            endPos.position = save;
+            isActivated = false;
+            direction *= -1;
         }
     }
 }
