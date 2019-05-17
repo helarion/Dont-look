@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    #region Variables
     [Header("Movement Variables")]
     [SerializeField] public float moveSpeed = 1;
     [SerializeField] public float bonusSpeed = 1;
@@ -44,10 +45,11 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public PlayerController p;
 
     private Vector3 lastPosition;
+    #endregion
 
     private void Update()
     {
-        IsLit(GameManager.instance.LightDetection(transform,false));
+        IsLit(GameManager.instance.LightDetection(gameObject,false));
         VelocityCount();
     }
 

@@ -558,15 +558,10 @@ public class PlayerController : MonoBehaviour
         isConcentrating = false;
         isInElevator = false;
         isRunning = false;
-        animator.SetBool("OnLadder", false);
         animator.SetBool("IsMoving", false);
-        animator.SetBool("IsJumping", false);
         animator.SetBool("IsRunning", false);
-        animator.SetBool("Climb", false);
         animator.SetBool("IsFalling", false);
         animator.SetBool("HasLanded", false);
-        rb.useGravity = true;
-        rb.isKinematic = false;
         StoppedHMove = false;
         stopMove = false;
         ResetVelocity();
@@ -737,12 +732,12 @@ public class PlayerController : MonoBehaviour
 
                 lMovement += VerticalMove((transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1);
                 Vector3 transformPosition = transform.position + lMovement;
-                print("movementz"+lMovement.z);
+                //print("movementz"+lMovement.z);
                 if (lMovement.z > 0)
                 {
                     if (transformPosition.z > currentSpatialLine.begin.position.z)
                     {
-                        print("je tp >0");
+                        //print("je tp >0");
                         lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
                     }
                 }
@@ -750,7 +745,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (transformPosition.z < currentSpatialLine.begin.position.z)
                     {
-                        print("je tp <0");
+                        //print("je tp <0");
                         lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
                     }
                 }
@@ -934,7 +929,6 @@ public class PlayerController : MonoBehaviour
     
     public void LandOnGround()
     {
-        animator.SetBool("IsJumping", false);
         animator.SetBool("IsFalling", false);
         animator.SetBool("HasLanded", false);
     }

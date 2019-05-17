@@ -24,7 +24,7 @@ public class ScriptedSpider : Enemy
     private void Update()
     {
         VelocityCount();
-        IsLit(GameManager.instance.LightDetection(transform, false));
+        IsLit(GameManager.instance.LightDetection(gameObject, false));
         if (isChasing)
         {
             ChaseBehavior();

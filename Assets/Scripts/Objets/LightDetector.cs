@@ -42,7 +42,7 @@ public class LightDetector : Objet
         if (isActivated) return;
 
         wasLooked = isLooked;
-        isLooked = GameManager.instance.LightDetection(transform, true);
+        isLooked = GameManager.instance.LightDetection(gameObject, true);
 
         if (isLooked || forceLit)
         {

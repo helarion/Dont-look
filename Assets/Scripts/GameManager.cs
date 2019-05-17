@@ -255,13 +255,13 @@ public class GameManager : MonoBehaviour
 
     #region Light
 
-    public bool LightDetection(Transform objectPosition, bool needsConcentration)
+    public bool LightDetection(GameObject objectPosition, bool needsConcentration)
     {
         bool isLit = false;
         Vector3 playerPosition = player.getLight().transform.position;
         playerPosition.y += lightVecOffset;
         Vector3 lightVec = player.GetLookAt() - playerPosition;
-        Vector3 playerToObjectVec = objectPosition.position - player.transform.position;
+        Vector3 playerToObjectVec = objectPosition.transform.position - player.transform.position;
 
         float playerToObjectLength = playerToObjectVec.magnitude;
         Light playerLight = player.getLight();

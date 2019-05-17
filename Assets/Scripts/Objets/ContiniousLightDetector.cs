@@ -30,7 +30,7 @@ public class ContiniousLightDetector : Objet
     private void Update()
     {
         wasLooked = isLooked;
-        isLooked = GameManager.instance.LightDetection(transform, true);
+        isLooked = GameManager.instance.LightDetection(gameObject, true);
         target.isActivating = isLooked;
         if (isLooked)
         {
