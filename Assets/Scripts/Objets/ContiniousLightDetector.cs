@@ -11,11 +11,16 @@ public class ContiniousLightDetector : Objet
     [SerializeField] private float chargeTime = 0.5f;
     [SerializeField] private GameObject[] brokenFeature;
 
-    private bool hasPlayedCharge = false;
+    bool isLooked = false;
+    bool wasLooked = false;
+
+    float timeLooked = 0.0f;
+
+    bool chargeSoundPlaying = false;
 
     private void Start()
     {
-        if(isBroken)
+        if (isBroken)
         {
             Break();
         }
@@ -24,53 +29,44 @@ public class ContiniousLightDetector : Objet
 
     private void Update()
     {
-        bool isLooked = GameManager.instance.LightDetection(transform, true);
-        target.isActivating=isLooked;
+        wasLooked = isLooked;
+        isLooked = GameManager.instance.LightDetection(transform, true);
+        target.isActivating = isLooked;
         if (isLooked)
         {
-            if (!hasPlayedCharge)
+            if (!wasLooked)
             {
-                hasPlayedCharge = true;
                 AkSoundEngine.PostEvent(playChargingSound, gameObject);
-                //AkSoundEngine.SetRTPCValue("Pitch_Load_Light",0);
-                StartCoroutine(StartingCoroutine());
+                chargeSoundPlaying = true;
                 blinkingLight.StartLook(chargeTime);
+                timeLooked = 0.0f;
+            }
+
+            if (timeLooked < chargeTime)
+            {
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, chargeTime, 0, 100));
+                timeLooked += Time.deltaTime;
             }
         }
         else
         {
-            if(hasPlayedCharge)
+            if (wasLooked)
             {
-                hasPlayedCharge = false;
-                StartCoroutine(StoppingCoroutine());
                 blinkingLight.StopLook();
+                timeLooked = chargeTime;
+            }
+
+            if (timeLooked > 0.0f)
+            {
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, chargeTime, 0, 100));
+                timeLooked -= Time.deltaTime;
+            }
+            else if (chargeSoundPlaying)
+            {
+                AkSoundEngine.PostEvent(stopChargingSound, gameObject);
+                chargeSoundPlaying = false;
             }
         }
-    }
-
-    private IEnumerator StartingCoroutine()
-    {
-        float count = 0;
-        while(count<chargeTime)
-        {
-            AkSoundEngine.SetRTPCValue("Pitch_Load_Light",count.Remap(0, chargeTime, 0, 100));
-            count += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        yield return null;
-    }
-
-    private IEnumerator StoppingCoroutine()
-    {
-        float count = chargeTime;
-        while (count > 0)
-        {
-            AkSoundEngine.SetRTPCValue("Pitch_Load_Light",count.Remap(0, chargeTime, 0, 100));
-            count -= Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        AkSoundEngine.PostEvent(stopChargingSound, gameObject);
-        yield return null;
     }
 
     public override void Fix()
