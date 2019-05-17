@@ -701,19 +701,42 @@ public class PlayerController : MonoBehaviour
                 moveSpeed = walkSpeed;
             }
 
-            if (needsCentering)
+            if (needsCentering && currentSpatialLine.begin.position.z > transform.position.z)
             {
-                if (currentSpatialLine.begin.position.z > transform.position.z)
+                float targetPosX = (currentSpatialLine.end.position.x + currentSpatialLine.begin.position.x) / 2;
+                int horizontalDirection = (transform.position.x - targetPosX) > 0 ? -1 : 1;
+                Vector3 horizontalMove = HorizontalMove(horizontalDirection);
+                if (horizontalDirection == -1)
                 {
-                        /*lMovement += HorizontalMove(hMove);
-                    else if (_horizontalAccDecLerpValue != 0)
-                        lMovement += HorizontalSlowDown();*/
-                    lMovement.x = Mathf.Lerp(lMovement.x, Mathf.Clamp(((currentSpatialLine.end.position.x - currentSpatialLine.begin.position.x) / 2 + currentSpatialLine.begin.position.x) - transform.position.x, -1, 1),0.2f);
-                    //lMovement.x *= moveSpeed;
+                    if (horizontalMove.x > 0.0f)
+                    {
+                        horizontalMove.x = 0.0f;
+                    }
                 }
                 else
                 {
-                    lMovement.x = 0;
+                    if (horizontalMove.x < 0.0f)
+                    {
+                        horizontalMove.x = 0.0f;
+                    }
+                }
+                lMovement += horizontalMove;
+                Vector3 transformPosition = transform.position + lMovement;
+                if (lMovement.x > 0.0f)
+                {
+                    if (transformPosition.x > targetPosX)
+                    {
+                        print("je tp >0");
+                        lMovement.x = targetPosX - transform.position.x;
+                    }
+                }
+                else if (lMovement.x < 0.0f)
+                {
+                    if (transformPosition.x < targetPosX)
+                    {
+                        print("je tp <0");
+                        lMovement.x = targetPosX - transform.position.x;
+                    }
                 }
             }
             else if (currentSpatialSas == null)
@@ -734,11 +757,26 @@ public class PlayerController : MonoBehaviour
                 /*lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
                 lMovement.z *= moveSpeed;*/
 
-
-                lMovement += VerticalMove((transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1);
+                int verticalDirection = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
+                Vector3 verticalMove = VerticalMove(verticalDirection);
+                if (verticalDirection == -1)
+                {
+                    if (verticalMove.z > 0.0f)
+                    {
+                        verticalMove.z = 0.0f;
+                    }
+                }
+                else
+                {
+                    if (verticalMove.z < 0.0f)
+                    {
+                        verticalMove.z = 0.0f;
+                    }
+                }
+                lMovement += verticalMove;
                 Vector3 transformPosition = transform.position + lMovement;
                 print("movementz"+lMovement.z);
-                if (lMovement.z > 0)
+                if (lMovement.z > 0.0f)
                 {
                     if (transformPosition.z > currentSpatialLine.begin.position.z)
                     {
@@ -746,7 +784,7 @@ public class PlayerController : MonoBehaviour
                         lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
                     }
                 }
-                else
+                else if (lMovement.z < 0.0f)
                 {
                     if (transformPosition.z < currentSpatialLine.begin.position.z)
                     {
