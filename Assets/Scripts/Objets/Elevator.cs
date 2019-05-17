@@ -5,6 +5,7 @@ using UnityEngine;
 public class Elevator : Objet
 {
     [SerializeField] Transform endPos;
+    [SerializeField] Transform endPosStep2;
     [SerializeField] float moveSpeed;
     [SerializeField] string playEngineSound;
     [SerializeField] string stopEngineSound;
@@ -12,21 +13,30 @@ public class Elevator : Objet
     [SerializeField] string stopMovingSound;
     [SerializeField] BoxCollider enterCol;
     [SerializeField] int direction = 1;
-    [SerializeField] bool isStarted = false;
+    bool isStarted = false;
     [HideInInspector] public bool isPlayerOnBoard = false;
     [SerializeField] private bool addSpatialLine = false;
-    [SerializeField] SpatialLine spatialLine;
+    [SerializeField] private bool removeSpatialLine = false;
+    [SerializeField] SpatialLine addedSpatialLine;
+    [SerializeField] SpatialLine removedSpatialLine;
     [SerializeField] SpatialRoom spatialRoom;
     [SerializeField] Light lamp;
     [SerializeField] Animator lampAnimator;
+    [SerializeField] bool scriptTwoSteps = false;
     private Vector3 startPos;
+    private bool startActivated=false;
 
     private bool isMoving = false;
 
     private void Start()
     {
+        startActivated = isActivated;
         startPos = transform.position;
-        if(!isStarted)
+        if (isActivated)
+        {
+            isStarted = true;
+        }
+        if (!isStarted)
         {
             lamp.enabled = false;
             lampAnimator.enabled = false;
@@ -46,6 +56,7 @@ public class Elevator : Objet
             lampAnimator.enabled = true;
             enterCol.enabled = true;
             isMoving = false;
+            isStarted = true;
         }
         else
         {
@@ -57,13 +68,15 @@ public class Elevator : Objet
     public override void Reset()
     {
         base.Reset();
-        if (!isStarted)
+        if (!startActivated)
         {
+            isStarted = false;
             lamp.enabled = false;
             lampAnimator.enabled = false;
             enterCol.enabled = false;
         }
         StopCoroutine(MoveCoroutine());
+        isMoving = false;
         transform.position = startPos;
         isActivated = isStarted;
         //if(!isActivated) //AkSoundEngine.PostEvent(stopEngineSound, gameObject);
@@ -107,7 +120,21 @@ public class Elevator : Objet
             endPos.position = save;
             isActivated = false;
             direction *= -1;
-            spatialRoom.addSpatialLine(spatialLine);
+            spatialRoom.addSpatialLine(addedSpatialLine);
+        }
+        if(removeSpatialLine)
+        {
+            //spatialRoom.
+        }
+        else if(scriptTwoSteps)
+        {
+            startPos = endPos.position;
+            endPos.position = endPosStep2.position;
+            lamp.enabled = false;
+            lampAnimator.enabled = false;
+            isActivated = false;
+            enterCol.enabled = false;
+            isStarted = false;
         }
         else if(isStarted)
         {

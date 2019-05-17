@@ -118,7 +118,7 @@ public class ContinuousBlinkingLight : MonoBehaviour
             pointLight.color = Color.Lerp(offColor, activeColor, rate);
 
             timeLooked -= Time.deltaTime;
-            print("isstoppin");
+            //print("isstoppin");
             yield return new WaitForEndOfFrame();
         }
         rectangleLight.intensity = 0.0f;

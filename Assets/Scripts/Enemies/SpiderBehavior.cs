@@ -14,6 +14,7 @@ public class SpiderBehavior : Enemy
     private bool isSearching = false;
     private bool canSeePlayer = false;
     private bool lowerSpeedChase = true;
+    private bool isTransitionning = false;
 
     NavMeshLink link;
 
@@ -34,13 +35,14 @@ public class SpiderBehavior : Enemy
 
         DebugPath(); 
 
-        if (agent.isOnOffMeshLink)
+        if (agent.isOnOffMeshLink && !isTransitionning)
         {
-            OffMeshLinkData linkData = agent.currentOffMeshLinkData;
-
-            //print("Using link right now");
-            agent.CompleteOffMeshLink();
-            agent.isStopped=false;
+            print("On Link");
+            isTransitionning = true;
+            agent.isStopped = true;
+            isMoving = false;
+            animator.SetBool("IsMoving", isMoving);
+            animator.SetTrigger("Transition");
         }
     }
 
@@ -52,6 +54,17 @@ public class SpiderBehavior : Enemy
             MoveTo(pos);
             print(pos);
         }
+    }
+
+    public void FinishedTransition()
+    {
+        print("FinishedTransition");
+        if (!isTransitionning) return;
+        agent.CompleteOffMeshLink();
+        agent.isStopped = false;
+        isMoving = true;
+        animator.SetBool("IsMoving", isMoving);
+        isTransitionning = false;
     }
 
     public override void ChaseBehavior()
