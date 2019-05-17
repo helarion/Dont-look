@@ -721,7 +721,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (transformPosition.x > targetPosX)
                     {
-                        print("je tp >0");
+                        //print("je tp >0");
                         lMovement.x = targetPosX - transform.position.x;
                     }
                 }
@@ -729,7 +729,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (transformPosition.x < targetPosX)
                     {
-                        print("je tp <0");
+                        //print("je tp <0");
                         lMovement.x = targetPosX - transform.position.x;
                     }
                 }
@@ -770,8 +770,8 @@ public class PlayerController : MonoBehaviour
                 }
                 lMovement += verticalMove;
                 Vector3 transformPosition = transform.position + lMovement;
+                //print("movementz" + lMovement.z);
                 if (lMovement.z > 0.0f)
-                print("movementz"+lMovement.z);
                 {
                     if (transformPosition.z > currentSpatialLine.begin.position.z)
                     {
@@ -792,6 +792,10 @@ public class PlayerController : MonoBehaviour
                 {
                     isChangingSpatialLine = false;
                 }
+            }
+            else if (_horizontalAccDecLerpValue != 0)
+            {
+                lMovement += VerticalSlowDown();
             }
             else if(_horizontalAccDecLerpValue != 0)
             {

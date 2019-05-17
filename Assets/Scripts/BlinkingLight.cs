@@ -13,7 +13,6 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] float activeIntensity = 200.0f;
     [SerializeField] float blinkSpeed = 20.0f;
     [SerializeField] float durationBetweenBlinks = 2.0f;
-    [SerializeField] float backSpeed = 0.5f;
 
     [SerializeField] Color offColor;
     [SerializeField] Color chargeColor;

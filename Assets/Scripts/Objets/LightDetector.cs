@@ -52,7 +52,7 @@ public class LightDetector : Objet
                 AkSoundEngine.PostEvent(playChargingSound, gameObject);
                 chargeSoundPlaying = true;
                 blinkLight.StartLook(delayActivate);
-                timeLooked = 0.0f;
+                //timeLooked = 0.0f;
             }
 
             if (timeLooked < delayActivate)
@@ -70,7 +70,7 @@ public class LightDetector : Objet
             if (wasLooked)
             {
                 blinkLight.StopLook();
-                timeLooked = delayActivate;
+                //timeLooked = delayActivate;
             }
 
             if (timeLooked > 0.0f)

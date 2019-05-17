@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private LightDetector scriptedLampActivation;
 
 
-    [HideInInspector] public NavMeshAgent agent;
+    public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
     public float velocity;
     [SerializeField] private Transform _transform;
@@ -72,7 +72,6 @@ public class Enemy : MonoBehaviour
     {
         p = GameManager.instance.player;
         animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed;
         Respawn();
     }
@@ -85,10 +84,10 @@ public class Enemy : MonoBehaviour
             hasPlayedChase = true;
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, GameManager.instance.gameObject);
             AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Play, GameManager.instance.gameObject);
+            isMoving = true;
+            animator.SetBool("IsMoving", isMoving);
+            isChasing = true;
         }
-        isMoving = true;
-        animator.SetBool("IsMoving", isMoving);
-        isChasing = true;
     }
 
     public void StopChase()
@@ -114,16 +113,16 @@ public class Enemy : MonoBehaviour
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE PASSE A CHASSER LE JOUEUR. POTENTIELLEMENT INUTILE ?
     private IEnumerator CountEndChase()
     {
-        print("Start Counting chase");
+        //print("Start Counting chase");
         float countChase = 0;
         while (countChase < delayChase)
         {
-            print("count:"+countChase);
+            //print("count:"+countChase);
             countChase += Time.deltaTime;
             yield return new WaitForEndOfFrame();
             //print(countChase);
         }
-        print("Fin du compte");
+        //print("Fin du compte");
         StopChase();
         isCountingEndChase = false;
         yield return null;

@@ -21,23 +21,13 @@ public class SpiderBehavior : Enemy
     private void Start()
     {
         Initialize();
+        agent.autoTraverseOffMeshLink = false;
     }
 
     private void Update()
     {
-        VelocityCount();
-        IsLit(GameManager.instance.LightDetection(gameObject, false));
-        // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
-        if (isChasing)
-        {
-            ChaseBehavior();
-        }
-
-        DebugPath(); 
-
         if (agent.isOnOffMeshLink)
         {
-            OffMeshLinkData link = agent.currentOffMeshLinkData;
             print("On Link");
             if (isTransitionning) return;
             print("StartTransition");
@@ -47,6 +37,16 @@ public class SpiderBehavior : Enemy
             animator.SetBool("IsMoving", isMoving);
             animator.SetTrigger("Transition");
         }
+
+        VelocityCount();
+        IsLit(GameManager.instance.LightDetection(gameObject, false));
+        // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
+        if (isChasing)
+        {
+            ChaseBehavior();
+        }
+
+        DebugPath(); 
     }
 
     private void DebugPath()
@@ -95,7 +95,6 @@ public class SpiderBehavior : Enemy
     public override void StartChase()
     {
         base.StartChase();
-        isMoving = true;
         StartCoroutine(LowerSpeedCoroutine());
     }
 

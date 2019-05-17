@@ -1149,12 +1149,13 @@ MonoBehaviour:
   pointLightMid: {fileID: 1047883686}
   pointLightBot: {fileID: 815143716}
   offIntensity: 20
-  activeIntensity: 200
+  activeIntensity: 80
   blinkSpeed: 1
-  durationBetweenBlinks: 2
+  durationBetweenBlinks: 0.2
   backSpeed: 0.5
-  offColor: {r: 1, g: 0, b: 0, a: 0}
-  activeColor: {r: 0, g: 0.27502966, b: 1, a: 0}
+  offColor: {r: 0.6037736, g: 0.031327877, b: 0.031327877, a: 0}
+  chargeColor: {r: 0.116767526, g: 0.6037736, b: 0.13586585, a: 0}
+  activeColor: {r: 0.05420078, g: 0.18952566, b: 0.5471698, a: 0}
   isBroken: 0
 --- !u!114 &5161188354410704944
 MonoBehaviour:
