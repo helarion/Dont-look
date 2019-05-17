@@ -284,7 +284,7 @@ public class GameManager : MonoBehaviour
                     if (!needsConcentration) isLit = true;
                     else if( player.GetConcentration()) isLit = true;
                 }
-                print("Touched " + hit.transform.gameObject.name);
+                //print("Touched " + hit.transform.gameObject.name);
                 //print(isLit);
             }
         }

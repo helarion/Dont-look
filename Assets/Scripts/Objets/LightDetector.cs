@@ -14,10 +14,17 @@ public class LightDetector : Objet
     [SerializeField] private bool scriptSpider = false;
     [SerializeField] private GameObject[] brokenFeature;
     private MeshRenderer model;
+
+    bool wasLooked = false;
     [HideInInspector] public bool isLooked = false;
-    private float countLook=0f;
+
+    private float timeLooked = 0.0f;
 
     private bool hasPlayedCharge = false;
+
+    bool chargeSoundPlaying = false;
+
+    bool forceLit = false;
 
     private void Start()
     {
@@ -33,62 +40,55 @@ public class LightDetector : Objet
     {
         //print(GameManager.instance.LightDetection(transform.position, true));
         if (isActivated) return;
+
+        wasLooked = isLooked;
         isLooked = GameManager.instance.LightDetection(transform, true);
 
-        if (isLooked)
+        if (isLooked || forceLit)
         {
-            if(!hasPlayedCharge)
+            if (!wasLooked)
             {
                 hasPlayedCharge = true;
-                //AkSoundEngine.PostEvent(playChargingSound, gameObject);
-                StopCoroutine(StopLook());
-                StartCoroutine(CountLook());
+                AkSoundEngine.PostEvent(playChargingSound, gameObject);
+                chargeSoundPlaying = true;
                 blinkLight.StartLook(delayActivate);
+                timeLooked = 0.0f;
+            }
+
+            if (timeLooked < delayActivate)
+            {
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, delayActivate, 0, 100));
+                timeLooked += Time.deltaTime;
+            }
+            else if (!isActivated)
+            {
+                Activate();
             }
         }
         else if (!scriptSpider)
         {
-            if (hasPlayedCharge)
+            if (wasLooked)
             {
-                hasPlayedCharge = false;
-                StopCoroutine(CountLook());
-                StartCoroutine(StopLook());
                 blinkLight.StopLook();
+                timeLooked = delayActivate;
+            }
+
+            if (timeLooked > 0.0f)
+            {
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, delayActivate, 0, 100));
+                timeLooked -= Time.deltaTime;
+            }
+            else if (chargeSoundPlaying)
+            {
+                AkSoundEngine.PostEvent(StopChargingSound, gameObject);
+                chargeSoundPlaying = false;
             }
         }
     }
 
-    private IEnumerator StopLook()
-    {
-        while (countLook > 0)
-        {
-            AkSoundEngine.SetRTPCValue("Pitch_Load_Light" + countLook.Remap(0, delayActivate, 0, 100), 0);
-            countLook -= Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        isLooked = false;
-        yield return null;
-    }
-
-    // COROUTINE POUR COMPTER LE TEMPS QUE L'OBJET EST REGARDE PAR LE JOUEUR
-    private IEnumerator CountLook()
-    {
-        isLooked = true;
-        AkSoundEngine.PostEvent(playChargingSound, gameObject);
-        while (countLook < delayActivate)
-        {
-            AkSoundEngine.SetRTPCValue("Pitch_Load_Light", countLook.Remap(0,delayActivate,0,100));
-            countLook +=Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        Activate();
-        isLooked = false;
-        yield return null;
-    }
-
     public void ForceLit()
     {
-        StartCoroutine(CountLook());
+        forceLit = true;
     }
 
     public override void Activate()
@@ -142,7 +142,7 @@ public class LightDetector : Objet
         base.Reset();
         blinkLight.Reset();
         isLooked = false;
-        countLook = 0f;
+        timeLooked = 0.0f;
         if (isBroken)
         {
             blinkLight.Break();

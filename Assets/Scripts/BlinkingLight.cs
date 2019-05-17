@@ -16,38 +16,181 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] float backSpeed = 0.5f;
 
     [SerializeField] Color offColor;
+    [SerializeField] Color chargeColor;
     [SerializeField] Color activeColor;
     [SerializeField] bool isBroken = false;
 
     float timeLooked = 0.0f;
     float maxTimeLooked = 0.0f;
 
-    bool darkWait = false;
-    bool blink = false;
+    float darkWaitTime = 0.0f;
+
+    bool increase = false;
+    float intensity = 0.0f;
+    Color color = Color.black;
+
+    enum BlinkLightState
+    {
+        BLINK,
+        DARK_WAIT,
+        START_LOOK,
+        STOP_LOOK,
+        ACTIVE,
+        BROKEN
+    }
+
+    BlinkLightState blinkLightState = BlinkLightState.BLINK;
 
     private void Start()
     {
         Reset();
     }
 
+    private void Update()
+    {
+        if (blinkLightState == BlinkLightState.BLINK)
+        {
+            pointLightTop.intensity = intensity;
+            pointLightMid.intensity = intensity;
+            pointLightBot.intensity = intensity;
+            rectangleLight.intensity = intensity;
+            color = Color.Lerp(Color.black, offColor, intensity / activeIntensity);
+            pointLightTop.color = color;
+            pointLightMid.color = color;
+            pointLightBot.color = color;
+            rectangleLight.color = color;
+
+            if (increase)
+            {
+                intensity += (Time.deltaTime * activeIntensity) / blinkSpeed;
+                if (intensity >= activeIntensity)
+                {
+                    intensity = activeIntensity;
+                    increase = false;
+                }
+            }
+            else
+            {
+                intensity -= (Time.deltaTime * activeIntensity) / blinkSpeed;
+                if (intensity <= 0.0f)
+                {
+                    intensity = 0.0f;
+                    increase = true;
+                    darkWaitTime = 0.0f;
+                    blinkLightState = BlinkLightState.DARK_WAIT;
+                }
+            }
+        }
+        else if (blinkLightState == BlinkLightState.DARK_WAIT)
+        {
+            if (darkWaitTime < durationBetweenBlinks)
+            {
+                darkWaitTime += Time.deltaTime;
+            }
+            else
+            {
+                increase = true;
+                intensity = rectangleLight.intensity;
+                color = rectangleLight.color;
+                blinkLightState = BlinkLightState.BLINK;
+            }
+        }
+        else if (blinkLightState == BlinkLightState.START_LOOK)
+        {
+            if (timeLooked < maxTimeLooked)
+            {
+                float rate = timeLooked / maxTimeLooked;
+                float rateTop = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.66f, 0.0f, 0.33f) * 3.0f;
+                float rateMid = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.33f, 0.0f, 0.33f) * 3.0f;
+                float rateBot = Mathf.Clamp01(rate * 3.0f);
+                rectangleLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
+                rectangleLight.color = Color.Lerp(Color.black, chargeColor, rate);
+                pointLightTop.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateTop);
+                pointLightMid.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateMid);
+                pointLightBot.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateBot);
+                pointLightTop.color = Color.Lerp(Color.black, chargeColor, rateTop);
+                pointLightMid.color = Color.Lerp(Color.black, chargeColor, rateMid);
+                pointLightBot.color = Color.Lerp(Color.black, chargeColor, rateBot);
+
+                timeLooked += Time.deltaTime;
+            }
+            else
+            {
+                rectangleLight.intensity = activeIntensity;
+                rectangleLight.color = chargeColor;
+                pointLightTop.intensity = activeIntensity;
+                pointLightMid.intensity = activeIntensity;
+                pointLightBot.intensity = activeIntensity;
+                pointLightTop.color = chargeColor;
+                pointLightMid.color = chargeColor;
+                pointLightBot.color = chargeColor;
+                blinkLightState = BlinkLightState.ACTIVE;
+            }
+        }
+        else if (blinkLightState == BlinkLightState.STOP_LOOK)
+        {
+            if (timeLooked > 0.0f)
+            {
+                float rate = timeLooked / maxTimeLooked;
+                float rateTop = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.66f, 0.0f, 0.33f) * 3.0f;
+                float rateMid = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.33f, 0.0f, 0.33f) * 3.0f;
+                float rateBot = Mathf.Clamp01(rate * 3.0f);
+                rectangleLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
+                rectangleLight.color = Color.Lerp(Color.black, chargeColor, rate);
+                pointLightTop.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateTop);
+                pointLightMid.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateMid);
+                pointLightBot.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateBot);
+                pointLightTop.color = Color.Lerp(Color.black, chargeColor, rateTop);
+                pointLightMid.color = Color.Lerp(Color.black, chargeColor, rateMid);
+                pointLightBot.color = Color.Lerp(Color.black, chargeColor, rateBot);
+
+                timeLooked -= Time.deltaTime;
+            }
+            else
+            {
+                rectangleLight.intensity = offIntensity;
+                rectangleLight.color = Color.black;
+                pointLightTop.intensity = offIntensity;
+                pointLightMid.intensity = offIntensity;
+                pointLightBot.intensity = offIntensity;
+                pointLightTop.color = Color.black;
+                pointLightMid.color = Color.black;
+                pointLightBot.color = Color.black;
+                darkWaitTime = 0.0f;
+                blinkLightState = BlinkLightState.DARK_WAIT;
+            }
+        }
+        else if (blinkLightState == BlinkLightState.ACTIVE)
+        {
+            ;
+        }
+        else if (blinkLightState == BlinkLightState.BROKEN)
+        {
+            ;
+        }
+    }
+
     public void Reset()
     {
         timeLooked = 0.0f;
         pointLightTop.intensity = 0.0f;
-        pointLightTop.color = offColor;
+        pointLightTop.color = Color.black;
         pointLightMid.intensity = 0.0f;
-        pointLightMid.color = offColor;
+        pointLightMid.color = Color.black;
         pointLightBot.intensity = 0.0f;
-        pointLightBot.color = offColor;
+        pointLightBot.color = Color.black;
         rectangleLight.intensity = 0.0f;
-        rectangleLight.color = offColor;
+        rectangleLight.color = Color.black;
         if (isBroken)
         {
             Break();
         }
         else
         {
-            StartCoroutine(BlinkCoroutine());
+            increase = true;
+            intensity = rectangleLight.intensity;
+            color = rectangleLight.color;
+            blinkLightState = BlinkLightState.BLINK;
         }
     }
 
@@ -57,8 +200,10 @@ public class BlinkingLight : MonoBehaviour
         pointLightMid.enabled = true;
         pointLightBot.enabled = true;
         rectangleLight.enabled = true;
-        blink = true;
-        StartCoroutine(BlinkCoroutine());
+        increase = true;
+        intensity = rectangleLight.intensity;
+        color = rectangleLight.color;
+        blinkLightState = BlinkLightState.BLINK;
     }
 
     public void Break()
@@ -67,26 +212,18 @@ public class BlinkingLight : MonoBehaviour
         pointLightMid.enabled = false;
         pointLightBot.enabled = false;
         rectangleLight.enabled = false;
-        StopCoroutine(StartLookCoroutine());
-        StopCoroutine(StopLookCoroutine());
-        StopCoroutine(BlinkCoroutine());
-        StopCoroutine(DarkWaitCoroutine());
+        blinkLightState = BlinkLightState.BROKEN;
     }
 
     public void StartLook(float time)
     {
         maxTimeLooked = time;
-        blink = false;
-        StopCoroutine(StopLookCoroutine());
-        StopCoroutine(BlinkCoroutine());
-        StopCoroutine(DarkWaitCoroutine());
-        StartCoroutine(StartLookCoroutine());
+        blinkLightState = BlinkLightState.START_LOOK;
     }
 
     public void StopLook()
     {
-        StopCoroutine(StartLookCoroutine());
-        StartCoroutine(StopLookCoroutine());
+        blinkLightState = BlinkLightState.STOP_LOOK;
     }
 
     public void Activate()
@@ -99,123 +236,6 @@ public class BlinkingLight : MonoBehaviour
         pointLightMid.color = activeColor;
         pointLightBot.intensity = activeIntensity;
         pointLightBot.color = activeColor;
-    }
-
-    private IEnumerator StartLookCoroutine()
-    {
-        while (timeLooked < maxTimeLooked)
-        {
-            float rate = timeLooked / maxTimeLooked;
-            float rateTop = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.66f, 0.0f, 0.33f) * 3.0f;
-            float rateMid = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.33f, 0.0f, 0.33f) * 3.0f;
-            float rateBot = Mathf.Clamp01(rate * 3.0f);
-            rectangleLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
-            rectangleLight.color = Color.Lerp(offColor, activeColor, rate);
-            pointLightTop.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateTop);
-            pointLightTop.color = Color.Lerp(offColor, activeColor, rateTop);
-            pointLightMid.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateMid);
-            pointLightMid.color = Color.Lerp(offColor, activeColor, rateMid);
-            pointLightBot.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateBot);
-            pointLightBot.color = Color.Lerp(offColor, activeColor, rateBot);
-
-            timeLooked += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        rectangleLight.intensity = activeIntensity;
-        rectangleLight.color = activeColor;
-        pointLightTop.intensity = activeIntensity;
-        pointLightTop.color = activeColor;
-        pointLightMid.intensity = activeIntensity;
-        pointLightMid.color = activeColor;
-        pointLightBot.intensity = activeIntensity;
-        pointLightBot.color = activeColor;
-        yield return null;
-    }
-
-    private IEnumerator StopLookCoroutine()
-    {
-        while (timeLooked > 0.0f)
-        {
-            float rate = timeLooked / maxTimeLooked;
-            float rateTop = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.66f, 0.0f, 0.33f) * 3.0f;
-            float rateMid = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.33f, 0.0f, 0.33f) * 3.0f;
-            float rateBot = Mathf.Clamp01(rate * 3.0f);
-            rectangleLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
-            rectangleLight.color = Color.Lerp(offColor, activeColor, rate);
-            pointLightTop.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateTop);
-            pointLightTop.color = Color.Lerp(offColor, activeColor, rateTop);
-            pointLightMid.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateMid);
-            pointLightMid.color = Color.Lerp(offColor, activeColor, rateMid);
-            pointLightBot.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateBot);
-            pointLightBot.color = Color.Lerp(offColor, activeColor, rateBot);
-
-            timeLooked -= Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        rectangleLight.intensity = 0.0f;
-        rectangleLight.color = offColor;
-        pointLightTop.intensity = 0.0f;
-        pointLightTop.color = offColor;
-        pointLightMid.intensity = 0.0f;
-        pointLightMid.color = offColor;
-        pointLightBot.intensity = 0.0f;
-        pointLightBot.color = offColor;
-        StartCoroutine(BlinkCoroutine());
-        yield return null;
-    }
-
-    private IEnumerator BlinkCoroutine()
-    {
-        blink = true;
-        float intensity = 0.0f;
-        bool increase = true;
-        while (blink)
-        {
-            if (darkWait)
-            {
-                yield return new WaitForEndOfFrame();
-            }
-            else
-            {
-                pointLightTop.intensity = intensity;
-                pointLightMid.intensity = intensity;
-                pointLightBot.intensity = intensity;
-                rectangleLight.intensity = intensity;
-                //print(intensity);
-                if (increase)
-                {
-                    intensity += (Time.deltaTime * offIntensity) / blinkSpeed;
-                    if (intensity >= offIntensity)
-                    {
-                        intensity = offIntensity;
-                        increase = false;
-                    }
-                }
-                else
-                {
-                    intensity -= (Time.deltaTime * offIntensity) / blinkSpeed;
-                    if (intensity <= 0.0f)
-                    {
-                        intensity = 0.0f;
-                        increase = true;
-                        StartCoroutine(DarkWaitCoroutine());
-                    }
-                }
-                yield return new WaitForEndOfFrame();
-            }
-        }
-    }
-
-    private IEnumerator DarkWaitCoroutine()
-    {
-        darkWait = true;
-        float darkWaitTime = 0.0f;
-        while (darkWaitTime < durationBetweenBlinks)
-        {
-            darkWaitTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        darkWait = false;
-        yield return null;
+        blinkLightState = BlinkLightState.ACTIVE;
     }
 }
