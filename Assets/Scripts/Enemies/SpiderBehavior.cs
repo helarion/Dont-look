@@ -10,11 +10,14 @@ public class SpiderBehavior : Enemy
     [SerializeField] private bool clickToSetDestination = false;
     [SerializeField] private float malusSpeedStart = 2;
     [SerializeField] private float malusStartDuration = 2;
+    [SerializeField] private bool isChangingPlaces = false;
+    [SerializeField] private float changingTime = 15;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
     private bool lowerSpeedChase = true;
     private bool isTransitionning = false;
+    private bool isCountingChange = false;
 
     NavMeshLink link;
 
@@ -28,9 +31,9 @@ public class SpiderBehavior : Enemy
     {
         if (agent.isOnOffMeshLink)
         {
-            print("On Link");
+            //print("On Link");
             if (isTransitionning) return;
-            print("StartTransition");
+            //print("StartTransition");
             isTransitionning = true;
             agent.isStopped = true;
             isMoving = false;
@@ -45,8 +48,19 @@ public class SpiderBehavior : Enemy
         {
             ChaseBehavior();
         }
+        else if(isChangingPlaces &&!isCountingChange)
+        {
+            isCountingChange = true;
+            StartCoroutine("CountingChange");
+        }
 
         DebugPath(); 
+    }
+
+    IEnumerator CountingChange()
+    {
+        yield return new WaitForSeconds(changingTime);
+        Respawn();
     }
 
     private void DebugPath()
@@ -72,6 +86,7 @@ public class SpiderBehavior : Enemy
 
     public override void ChaseBehavior()
     {
+        if (isTransitionning) return;
         base.ChaseBehavior();
         // goes to the player
         MoveTo(GameManager.instance.player.transform.position);
@@ -95,6 +110,8 @@ public class SpiderBehavior : Enemy
     public override void StartChase()
     {
         base.StartChase();
+        StopCoroutine("CountingChange");
+        isCountingChange = true;
         StartCoroutine(LowerSpeedCoroutine());
     }
 
@@ -125,6 +142,8 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
+        StopCoroutine("CountingChange");
+        isCountingChange = false;
         lowerSpeedChase = true;
         animator.SetBool("IsSleeping", true);
     }
@@ -152,6 +171,8 @@ public class SpiderBehavior : Enemy
         {
             if (!isChasing && !isLooked)
             {
+                StopCoroutine("CountingChange");
+                isCountingChange = true;
                 isLooked = true;
                 animator.SetBool("IsSleeping", false);
                 animator.SetTrigger("WakesUp");

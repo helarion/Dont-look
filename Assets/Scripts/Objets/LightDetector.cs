@@ -94,6 +94,7 @@ public class LightDetector : Objet
     public override void Activate()
     {
         if (isActivated && !desactivate) return;
+        print("");
         base.Activate();
         if (scriptSpider) 
         if (isBroken)
@@ -119,20 +120,21 @@ public class LightDetector : Objet
 
     public override void Break()
     {
-        foreach (GameObject g in brokenFeature)
+        /*foreach (GameObject g in brokenFeature)
         {
-            g.SetActive(true);
-        }
+            g.SetActive(false);
+        }*/
         blinkLight.Break();
         base.Break();
     }
 
     public override void Fix()
     {
+        /*
         foreach (GameObject g in brokenFeature)
         {
-            g.SetActive(false);
-        }
+            g.SetActive(true);
+        }*/
         blinkLight.Fix();
         base.Fix();
     }
@@ -140,6 +142,7 @@ public class LightDetector : Objet
     public override void Reset()
     {
         base.Reset();
+        forceLit = false;
         blinkLight.Reset();
         isLooked = false;
         timeLooked = 0.0f;

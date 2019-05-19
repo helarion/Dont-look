@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 33203810693843228}
   - component: {fileID: 23674172065670804}
   - component: {fileID: 1601335556}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,6 +304,7 @@ MonoBehaviour:
   isBroken: 0
   isActivating: 0
   endPos: {fileID: 1245245558}
+  endPosStep2: {fileID: 0}
   moveSpeed: 3
   playEngineSound: 
   stopEngineSound: 
@@ -311,15 +312,20 @@ MonoBehaviour:
   stopMovingSound: Stop_Seq_Motor_Asc
   enterCol: {fileID: 1782030476667746518}
   direction: 1
-  isStarted: 0
   isPlayerOnBoard: 0
   addSpatialLine: 0
-  spatialLine:
+  removeSpatialLine: 0
+  addedSpatialLine:
+    begin: {fileID: 0}
+    end: {fileID: 0}
+  removedSpatialLine:
     begin: {fileID: 0}
     end: {fileID: 0}
   spatialRoom: {fileID: 0}
   lamp: {fileID: 108591155389536639}
   lampAnimator: {fileID: 2080198689059239907}
+  scriptTwoSteps: 0
+  scriptMoveActivation: 0
 --- !u!65 &1782030476667746518
 BoxCollider:
   m_ObjectHideFlags: 0

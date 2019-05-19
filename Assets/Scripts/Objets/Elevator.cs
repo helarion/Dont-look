@@ -23,6 +23,7 @@ public class Elevator : Objet
     [SerializeField] Light lamp;
     [SerializeField] Animator lampAnimator;
     [SerializeField] bool scriptTwoSteps = false;
+    [SerializeField] bool scriptMoveActivation = false;
     private Vector3 startPos;
     private bool startActivated=false;
 
@@ -61,6 +62,11 @@ public class Elevator : Objet
         else
         {
             StartMoving();
+        }
+        if (scriptMoveActivation)
+        {
+            StartMoving();
+            startActivated = true;
         }
         //AkSoundEngine.PostEvent(playEngineSound, gameObject);
     }
@@ -115,18 +121,14 @@ public class Elevator : Objet
         isMoving = false;
         if (addSpatialLine)
         {
-            Vector3 save = startPos;
-            startPos = endPos.position;
-            endPos.position = save;
-            isActivated = false;
-            direction *= -1;
             spatialRoom.addSpatialLine(addedSpatialLine);
         }
         if(removeSpatialLine)
         {
             //spatialRoom.
         }
-        else if(scriptTwoSteps)
+
+        if(scriptTwoSteps)
         {
             startPos = endPos.position;
             endPos.position = endPosStep2.position;

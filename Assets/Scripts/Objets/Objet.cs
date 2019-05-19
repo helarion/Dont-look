@@ -12,7 +12,7 @@ public class Objet : MonoBehaviour
     public virtual void Desactivate() {}
     public virtual void Break()
     {
-        this.enabled = false;
+        enabled = false;
     }
     public virtual void Fix() {}
     public virtual void Reset()

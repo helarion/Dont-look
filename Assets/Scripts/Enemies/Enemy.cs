@@ -120,7 +120,7 @@ public class Enemy : MonoBehaviour
             //print("count:"+countChase);
             countChase += Time.deltaTime;
             yield return new WaitForEndOfFrame();
-            //print(countChase);
+            print(countChase);
         }
         //print("Fin du compte");
         StopChase();

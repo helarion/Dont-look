@@ -10,7 +10,7 @@ public class BipedeBehavior : Enemy
     private float currentWalkIntensity;
     private BoxCollider detectZone;
     private bool canSeePlayer = false;
-    // Start is called before the first frame update
+
     void Start()
     {
         Initialize();
@@ -18,7 +18,6 @@ public class BipedeBehavior : Enemy
         detectZone = GetComponent<BoxCollider>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         VelocityCount();
@@ -26,7 +25,6 @@ public class BipedeBehavior : Enemy
         {
             ChaseBehavior();
         }
-        //DebugPath(); 
     }
 
     public void PlayWalk()
@@ -46,17 +44,23 @@ public class BipedeBehavior : Enemy
 
     public override void IsPathInvalid()
     {
+        print("ispathinvalid");
         if (canSeePlayer) return;
+        print("cannotSeePlayer");
         base.IsPathInvalid();
+        print("ispathinvalid");
+
     }
 
     public override void ChaseBehavior()
     {
         base.ChaseBehavior();
+        IsPathInvalid();
         IsLit(GameManager.instance.LightDetection(gameObject, false));
         float distanceMax = (detectZone.bounds.size.x / 2);
         float rate = playerDistance.Remap(0, distanceMax, 0.2f, 1.2f);
         currentWalkIntensity = walkShakeIntensity * rate;
+
         if(isMoving)
         {
             // goes to the player

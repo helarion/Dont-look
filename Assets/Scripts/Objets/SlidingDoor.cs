@@ -16,7 +16,7 @@ public class SlidingDoor : Objet
 
     private void Start()
     {
-        if (isBroken) this.enabled = false;
+        if (isBroken) enabled = false;
     }
 
     private void Update()
@@ -100,13 +100,14 @@ public class SlidingDoor : Objet
     public override void Break()
     {
         transform.localPosition = endPos.localPosition;
+        enabled = false;
         base.Break();
     }
 
     public override void Reset()
     {
         base.Reset();
-        isActivated = false;
+        //isActivated = false;
         isActivating = false;
         if(isBroken)
         {
