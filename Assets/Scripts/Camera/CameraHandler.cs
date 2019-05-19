@@ -26,7 +26,7 @@ public class CameraHandler : MonoBehaviour
 
     void Update()
     {
-        if (!target || GameManager.instance.GetIsPaused()) return;
+        if (target==null || GameManager.instance.GetIsPaused()) return;
 
         Vector3 lookAtPos = player.GetLookAt();
 
@@ -143,6 +143,9 @@ public class CameraHandler : MonoBehaviour
 
     public void DestroyTarget()
     {
-        target = null;
+        print("destroy target camera");
+        GameObject g = new GameObject();
+        g.transform.position = target.position;
+        target = g.transform;
     }
 }

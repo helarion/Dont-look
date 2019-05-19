@@ -60,7 +60,8 @@ public class SpiderBehavior : Enemy
     IEnumerator CountingChange()
     {
         yield return new WaitForSeconds(changingTime);
-        Respawn();
+        if (isChangingPlaces) StopChase();
+        else Respawn();
     }
 
     private void DebugPath()

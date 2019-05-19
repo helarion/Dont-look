@@ -120,21 +120,21 @@ public class LightDetector : Objet
 
     public override void Break()
     {
-        /*foreach (GameObject g in brokenFeature)
+        foreach (GameObject g in brokenFeature)
         {
-            g.SetActive(false);
-        }*/
+            g.SetActive(true);
+        }
         blinkLight.Break();
         base.Break();
     }
 
     public override void Fix()
     {
-        /*
+        
         foreach (GameObject g in brokenFeature)
         {
-            g.SetActive(true);
-        }*/
+            g.SetActive(false);
+        }
         blinkLight.Fix();
         base.Fix();
     }

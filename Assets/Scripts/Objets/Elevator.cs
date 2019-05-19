@@ -26,6 +26,10 @@ public class Elevator : Objet
     [SerializeField] bool scriptMoveActivation = false;
     private Vector3 startPos;
     private bool startActivated=false;
+    [SerializeField] bool isBidirectional = true;
+    [SerializeField] bool isEnd = false;
+    [SerializeField] string endSong;
+
 
     private bool isMoving = false;
 
@@ -92,6 +96,7 @@ public class Elevator : Objet
     {
         if (!isMoving)
         {
+            if(isEnd) AkSoundEngine.PostEvent(endSong, gameObject);
             AkSoundEngine.PostEvent(playMovingSound, gameObject);
             isMoving = true;
             StartCoroutine(MoveCoroutine());
@@ -128,7 +133,7 @@ public class Elevator : Objet
             //spatialRoom.
         }
 
-        if(scriptTwoSteps)
+        if(scriptTwoSteps && isBidirectional)
         {
             startPos = endPos.position;
             endPos.position = endPosStep2.position;
@@ -138,7 +143,7 @@ public class Elevator : Objet
             enterCol.enabled = false;
             isStarted = false;
         }
-        else if(isStarted)
+        else if(isStarted && isBidirectional)
         {
             Vector3 save = startPos;
             startPos = endPos.position;

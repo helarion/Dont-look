@@ -10,10 +10,14 @@ public class ContiniousLightDetector : Objet
     [SerializeField] private ContinuousBlinkingLight blinkingLight;
     [SerializeField] private float chargeTime = 0.5f;
     [SerializeField] private GameObject[] brokenFeature;
+    [SerializeField] private bool scriptEndBreak = false;
+    [SerializeField] private float scriptEndTimeLook = 1.5f;
+    [SerializeField] private Elevator scriptEndElevator;
+    [SerializeField] private string breakSound;
 
     bool isLooked = false;
     bool wasLooked = false;
-
+    float count=0;
     float timeLooked = 0.0f;
 
     bool chargeSoundPlaying = false;
@@ -34,6 +38,18 @@ public class ContiniousLightDetector : Objet
         target.isActivating = isLooked;
         if (isLooked)
         {
+            count += Time.deltaTime;
+            if (scriptEndBreak && count > scriptEndTimeLook &&!isBroken)
+            {
+                target.isActivating = false;
+                isBroken = true;
+                scriptEndElevator.Activate();
+                AkSoundEngine.PostEvent(stopChargingSound, gameObject);
+                AkSoundEngine.PostEvent(breakSound, gameObject);
+                blinkingLight.Break();
+                Break();
+            }
+
             if (!wasLooked)
             {
                 AkSoundEngine.PostEvent(playChargingSound, gameObject);

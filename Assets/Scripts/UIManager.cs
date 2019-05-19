@@ -21,9 +21,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private float gammaMin=-1.5f;
     [SerializeField] private float gammaMax=1.5f;
+    [SerializeField] private float waitEndTime = 10;
 
     public bool isFading = false;
-
+    private bool isEnding = false;
     public static UIManager instance = null;
 
     void Awake()
@@ -124,6 +125,7 @@ public class UIManager : MonoBehaviour
         savedColor.a = 1;
         img.color = savedColor;
         isFading = false;
+        if(isEnding) StartCoroutine(EndCoroutine());
     }
 
     IEnumerator EndCoroutine()
@@ -165,9 +167,9 @@ public class UIManager : MonoBehaviour
 
     public void FadeInEnd()
     {
-        StartCoroutine(Wait(10));
+        isEnding = true;
+        StartCoroutine(Wait(waitEndTime));
         StartCoroutine(FadeInCoroutine(fadeImg,2f,0f));
-        StartCoroutine(EndCoroutine());
     }
 
     IEnumerator Wait(float waitTime)
