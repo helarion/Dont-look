@@ -7,6 +7,8 @@ public class BipedeBehavior : Enemy
     [SerializeField] private float walkShakeIntensity=0.3f;
     [SerializeField] private float walkShakeDuration = 1;
 
+    [SerializeField] GameObject bipedeGameObject;
+
     private float currentWalkIntensity;
     private BoxCollider detectZone;
     private bool canSeePlayer = false;
@@ -70,7 +72,7 @@ public class BipedeBehavior : Enemy
     {
         base.ChaseBehavior();
         IsPathInvalid();
-        IsLit(GameManager.instance.LightDetection(gameObject, false));
+        IsLit(GameManager.instance.LightDetection(bipedeGameObject, false));
         float distanceMax = (detectZone.bounds.size.x / 2);
         float rate = playerDistance.Remap(0, distanceMax, 0.2f, 1.2f);
         currentWalkIntensity = walkShakeIntensity * rate;

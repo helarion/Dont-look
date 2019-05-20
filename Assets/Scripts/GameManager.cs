@@ -267,10 +267,52 @@ public class GameManager : MonoBehaviour
         Light playerLight = player.getLight();
         float lightRange = playerLight.range;
         float lightAngle = playerLight.spotAngle / 2.0f;
+
+        if (objectPosition.name == "Bipede")
+        {
+            BoxCollider bipedeCollider = objectPosition.GetComponent<BoxCollider>();
+            playerToObjectVec = bipedeCollider.bounds.center - player.transform.position;
+            playerToObjectLength = playerToObjectVec.magnitude;
+
+            if (playerToObjectLength <= lightRange)
+            {
+                float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToObjectVec) / (lightVec.magnitude * playerToObjectLength)) * Mathf.Rad2Deg;
+
+                Vector3 upPoint = bipedeCollider.bounds.center;
+                upPoint.y = bipedeCollider.bounds.max.y;
+                Vector3 upVec = upPoint - player.transform.position;
+
+                Vector3 downPoint = bipedeCollider.bounds.center;
+                downPoint.y = bipedeCollider.bounds.min.y;
+                Vector3 downVec = downPoint - player.transform.position;
+                float maxAngleFromLight = Mathf.Acos(Vector3.Dot(upVec, downVec) / (upVec.magnitude * downVec.magnitude)) * Mathf.Rad2Deg;
+
+                print(maxAngleFromLight + " ? " + angleFromLight);
+                Debug.DrawLine(playerPosition, upPoint, Color.green, Time.deltaTime);
+                Debug.DrawLine(playerPosition, downPoint, Color.green, Time.deltaTime);
+                if (angleFromLight <= maxAngleFromLight)
+                {
+                    lightVec = Vector3.RotateTowards(lightVec, playerToObjectVec, angleFromLight, Mathf.Infinity);
+
+                    RaycastHit hit;
+                    Ray ray = new Ray(playerPosition, lightVec);
+                    Physics.Raycast(ray, out hit, Mathf.Infinity, wallsAndMobsLayer);
+
+                    if (hit.transform.gameObject.tag == objectPosition.tag)
+                    {
+                        if (!needsConcentration) isLit = true;
+                        else if (player.GetConcentration()) isLit = true;
+                    }
+                    //print("Touched " + hit.transform.gameObject.name);
+                    //print(isLit);
+                }
+            }
+            return isLit;
+        }
+
         if (playerToObjectLength <= lightRange)
         {
-
-            float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToObjectVec) / (lightVec.magnitude * playerToObjectVec.magnitude)) * Mathf.Rad2Deg;
+            float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToObjectVec) / (lightVec.magnitude * playerToObjectLength)) * Mathf.Rad2Deg;
             if (angleFromLight <= lightAngle)
             {
                 lightVec = Vector3.RotateTowards(lightVec, playerToObjectVec, angleFromLight, Mathf.Infinity);
