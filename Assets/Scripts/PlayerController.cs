@@ -369,6 +369,19 @@ public class PlayerController : MonoBehaviour
         return result;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        print(collision.gameObject.name);
+        if (collision.gameObject.tag == "SlidingDoor")
+        {
+            print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
+            if (collision.collider.bounds.min.y - cl.bounds.max.y > -0.25f)
+            {
+                GameManager.instance.Death();
+            }
+        }
+    }
+
     #endregion
 
     #region audio
