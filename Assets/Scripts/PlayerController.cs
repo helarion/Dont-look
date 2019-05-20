@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     #region SavedVariables
     [Header("Models & saved objects")]
-    [SerializeField] private Transform modelTransform;
+    [SerializeField] public Transform modelTransform;
     [SerializeField] private Transform raycastClimb;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform hipPosition;

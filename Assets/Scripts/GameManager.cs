@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
     {
         if (isPlayingHeart) return;
         isPlayingHeart = true;
-        AkSoundEngine.PostEvent(HeartPlay, player.gameObject);
+        AkSoundEngine.PostEvent(HeartPlay, gameObject);
         if(player.GetInputMode()==PlayerController.InputMode.Pad)StartCoroutine(HeartCoroutine());
     }
 
@@ -190,7 +190,7 @@ public class GameManager : MonoBehaviour
     {
         if (!isPlayingHeart) return;
         isPlayingHeart = false;
-        AkSoundEngine.PostEvent(HeartStop, player.gameObject);
+        AkSoundEngine.PostEvent(HeartStop, gameObject);
         StopCoroutine(HeartCoroutine());
     }
 

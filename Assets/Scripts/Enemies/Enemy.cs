@@ -82,8 +82,8 @@ public class Enemy : MonoBehaviour
         if(!hasPlayedChase)
         {
             hasPlayedChase = true;
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, GameManager.instance.gameObject);
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Play, GameManager.instance.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, p.modelTransform.gameObject);
+            //AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Play, GameManager.instance.gameObject);
             isMoving = true;
             animator.SetBool("IsMoving", isMoving);
             isChasing = true;
@@ -94,9 +94,8 @@ public class Enemy : MonoBehaviour
     {
         if (isChasing)
         {
-            //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Stop, GameManager.instance.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, p.modelTransform.gameObject);
+            //AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Stop, GameManager.instance.gameObject);
             if (delete && p.GetIsHidden())
             {
                 foreach(Objet o in scriptedObjectsActivation)
@@ -151,6 +150,7 @@ public class Enemy : MonoBehaviour
         float chaseShakeIntensity = distanceFromPlayer.Remap(0, distanceMaxShake, maxChaseShakeIntensity, minChaseShakeIntensity);
         GameManager.instance.UpdatePostProcess(distanceFromPlayer);
         GameManager.instance.ShakeScreen(chaseShakeTime, chaseShakeIntensity);
+        //distanceFromPlayer = GameManager.instance.maxDistRtpc - distanceFromPlayer;
         AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);
         IsPathInvalid();
     }
