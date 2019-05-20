@@ -78,4 +78,13 @@ public class SpatialRoom : MonoBehaviour
             _spatialLines.Add(sl);
         }
     }
+
+    public void removeSpatialLine(SpatialLine sl)
+    {
+        _spatialLines.Remove(sl);
+        if (GameManager.instance.player.currentSpatialLine == sl)
+        {
+            GameManager.instance.player.chooseNearestSpatialLine();
+        }
+    }
 }

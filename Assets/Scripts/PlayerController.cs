@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private AudioRoom currentAudioRoom = null;
     [HideInInspector] public SpatialRoom currentSpatialRoom = null;
     SpatialSas currentSpatialSas = null;
-    SpatialLine currentSpatialLine = null;
+    public SpatialLine currentSpatialLine = null;
     private Rigidbody objectGrabbed = null;
     private float objectGrabbedWidth = 0;
     private Rigidbody rb;
@@ -213,6 +213,22 @@ public class PlayerController : MonoBehaviour
 
     #region TriggersCollision
 
+    public void chooseNearestSpatialLine()
+    {
+        float zOffset = Mathf.Infinity;
+        foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
+        {
+            float offset = Mathf.Abs(sl.begin.position.z - transform.position.z);
+            if (offset < zOffset)
+            {
+                zOffset = offset;
+                currentSpatialLine = sl;
+                isChangingSpatialLine = true;
+                changingLineDirection = (sl.begin.position.z - transform.position.z) > 0 ? 1 : -1;
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         CameraBlock cameraBlock = other.GetComponent<CameraBlock>();
@@ -239,17 +255,7 @@ public class PlayerController : MonoBehaviour
             currentSpatialRoom = spatialRoom;
             if (currentSpatialSas == null)
             {
-                float zOffset = Mathf.Infinity;
-                foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
-                {
-                    if (Mathf.Abs(sl.begin.position.z - transform.position.z) < zOffset)
-                    {
-                        zOffset = Mathf.Abs(sl.begin.position.z - transform.position.z);
-                        currentSpatialLine = sl;
-                        isChangingSpatialLine = true;
-                        changingLineDirection = 1;
-                    }
-                }
+                chooseNearestSpatialLine();
             }
             return;
         }
