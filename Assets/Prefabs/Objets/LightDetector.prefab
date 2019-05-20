@@ -1057,7 +1057,6 @@ GameObject:
   - component: {fileID: 6949402514399227679}
   - component: {fileID: 1035677191}
   - component: {fileID: 4911734774690722052}
-  - component: {fileID: 5161188354410704944}
   m_Layer: 9
   m_Name: LightDetector
   m_TagString: LightDetector
@@ -1152,32 +1151,10 @@ MonoBehaviour:
   activeIntensity: 80
   blinkSpeed: 1
   durationBetweenBlinks: 0.2
-  backSpeed: 0.5
   offColor: {r: 0.6037736, g: 0.031327877, b: 0.031327877, a: 0}
   chargeColor: {r: 0.116767526, g: 0.6037736, b: 0.13586585, a: 0}
   activeColor: {r: 0.05420078, g: 0.18952566, b: 0.5471698, a: 0}
   isBroken: 0
---- !u!114 &5161188354410704944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5630086726492585343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1598d4d2c0c41d1439e495a4b5587823, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  origin: {fileID: 0}
-  yBonus: 1
-  time_start: 0.5
-  time_end: 1
-  current_occlusion: 0
-  max_occlusion: 100
-  layerMaskOcclusion:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1001 &5616409033507520663
 PrefabInstance:
   m_ObjectHideFlags: 0

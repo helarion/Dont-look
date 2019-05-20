@@ -396,6 +396,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3309159054181555967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4194574731507592976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b3f5cd214f8f04e88ad1ff65c5bddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashlightOnSound: Play_Amp_On
+  flashlightOffSound: Play_Amp_Off
 --- !u!1 &4194574732181831083
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,6 +467,9 @@ MonoBehaviour:
   headPosition: {fileID: 0}
   armPosition: {fileID: 0}
   currentSpatialRoom: {fileID: 0}
+  currentSpatialLine:
+    begin: {fileID: 0}
+    end: {fileID: 0}
   jumpForce: 2.5
   rayCastLength: 0.26
   maxClimbHeight: 0
@@ -469,7 +486,6 @@ MonoBehaviour:
   walkSpeed: 2.5
   ladderSpeed: 0.7
   grabSpeed: 0.5
-  changingLineSpeed: 0.1
   velocity: 0
   yVelocity: 0
   _horizontalAccelerationCurve:
@@ -593,6 +609,8 @@ MonoBehaviour:
   normalLightColor: {r: 1, g: 1, b: 1, a: 1}
   normalLightAngle: 60
   lightOn: 1
+  flashlightOnSound: Play_Mag_On
+  flashlightOffSound: Play_Mag_Off
 --- !u!54 &4194574732181831121
 Rigidbody:
   m_ObjectHideFlags: 0

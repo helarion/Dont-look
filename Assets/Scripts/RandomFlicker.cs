@@ -6,21 +6,56 @@ public class RandomFlicker : MonoBehaviour
 {
     [SerializeField] Animator animator;
     [SerializeField] int indexMax;
+    [SerializeField] int indexMin;
     [SerializeField] bool isEnabled=false;
+    [SerializeField] string onSound;
+    [SerializeField] string offSound;
+    [SerializeField] float maxPlayerDistance;
 
-    private void Start()
+    bool isFlickering = false;
+    float playerDistance;
+
+    private void Update()
     {
-        if(isEnabled)
+        if (!isEnabled) return;
+        playerDistance = (transform.position - GameManager.instance.player.transform.position).magnitude;
+        if(playerDistance < maxPlayerDistance)
         {
-            PlayRandomAnim();
+            animator.enabled = true;
+            if (!isFlickering)
+            {
+                PlayRandomAnim();
+            }
         }
+        else
+        {
+            animator.enabled = false;
+        }
+    }
+
+    public void PlayOnSound()
+    {
+        AkSoundEngine.PostEvent(onSound, gameObject);
+    }
+
+    public void PlayOffSound()
+    {
+        AkSoundEngine.PostEvent(offSound, gameObject);
     }
 
     public void PlayRandomAnim()
     {
-        int randomIndex = Random.Range(0, indexMax);
-        animator.SetInteger("Index", randomIndex);
-        animator.SetTrigger("Flicker");
+        print("playerDistance:"+playerDistance);
+
+        if (playerDistance < maxPlayerDistance)
+        {
+            isFlickering = true;
+            int randomIndex = Random.Range(indexMin, indexMax);
+            print("rand:" + randomIndex);
+            if (randomIndex < 0) randomIndex = 0;
+            animator.SetInteger("Index", randomIndex);
+        }
+        else isFlickering = false;
     }
 
 }

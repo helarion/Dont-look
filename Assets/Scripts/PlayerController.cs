@@ -141,6 +141,12 @@ public class PlayerController : MonoBehaviour
     private int controler = -1;
     #endregion
 
+    #region Audio
+    [Header("Audio")]
+    [SerializeField] string flashlightOnSound;
+    [SerializeField] string flashlightOffSound;
+    #endregion
+
     //Vector3 headLookAt;
 
     enum LookDirection { Left, Right, Front, Back};
@@ -191,9 +197,12 @@ public class PlayerController : MonoBehaviour
 
         lastPosition = transform.position;
 
-        if (stopMove || isFalling) return;
+        if (stopMove || isFalling)
+        {
+            animator.SetBool("IsMoving", false);
+            return;
+        }
         Move();
-
         BodyRotation();
     }
 
@@ -526,17 +535,21 @@ public class PlayerController : MonoBehaviour
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
+        if (lightOn != isClosed) return;
+
         flashlight.enabled = !isClosed;
         pointLight.enabled = !isClosed;
         lightOn = !isClosed;
 
         if(isClosed)
         {
+            AkSoundEngine.PostEvent(flashlightOffSound, gameObject);
             GameManager.instance.PlayHeart();
             flashlightAnimator.enabled = false;
         }
         else
         {
+            AkSoundEngine.PostEvent(flashlightOnSound, gameObject);
             GameManager.instance.StopHeart();
             flashlightAnimator.enabled = true;
         }

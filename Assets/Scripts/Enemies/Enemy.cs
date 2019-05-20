@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public string WwiseChasePlay;
     [SerializeField] public string WwiseChaseStop;
     [SerializeField] public string WwiseLook;
+    [SerializeField] public string WalkSound;
     [SerializeField] private Objet[] scriptedObjectsActivation;
     [SerializeField] private LightDetector scriptedLampActivation;
 
@@ -79,6 +80,11 @@ public class Enemy : MonoBehaviour
     public virtual void PlayChase()
     {
 
+    }
+
+    public virtual void PlayWalk()
+    {
+        AkSoundEngine.PostEvent(WalkSound, gameObject);
     }
 
     // COMMENCER LA CHASSE DU JOUEUR

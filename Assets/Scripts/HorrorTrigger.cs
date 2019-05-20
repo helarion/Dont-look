@@ -6,6 +6,8 @@ public class HorrorTrigger : MonoBehaviour
 {
     [SerializeField] ShadowSpider shadow;
     [SerializeField] Light lt;
+    [SerializeField] string SpotEnableSound;
+    [SerializeField] string SpotDisableSound;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -16,9 +18,12 @@ public class HorrorTrigger : MonoBehaviour
     IEnumerator Wait()
     {
         lt.enabled = true;
+        AkSoundEngine.PostEvent(SpotEnableSound, gameObject);
         yield return new WaitForSeconds(1);
         shadow.Trigger();
         yield return new WaitForSeconds(2.5f);
         lt.enabled = false;
+        AkSoundEngine.PostEvent(SpotDisableSound, gameObject);
+        Destroy(gameObject);
     }
 }

@@ -29,8 +29,14 @@ public class BipedeBehavior : Enemy
         }
     }
 
-    public void PlayWalk()
+    public void PlayBreath()
     {
+        AkSoundEngine.PostEvent(WwiseChasePlay, gameObject);
+    }
+
+    public override void PlayWalk()
+    {
+        base.PlayWalk();
         GameManager.instance.ShakeScreen(walkShakeDuration, currentWalkIntensity);
     }
 
@@ -60,11 +66,11 @@ public class BipedeBehavior : Enemy
 
     public override void IsPathInvalid()
     {
-        print("ispathinvalid");
+        //print("ispathinvalid");
         if (canSeePlayer) return;
-        print("cannotSeePlayer");
+        //print("cannotSeePlayer");
         base.IsPathInvalid();
-        print("ispathinvalid");
+        //print("ispathinvalid");
 
     }
 

@@ -181,7 +181,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 8599889144168138800}
   indexMax: 3
+  indexMin: 0
   isEnabled: 1
+  onSound: Play_Amp_On
+  offSound: Play_Amp_Off
+  maxPlayerDistance: 0
 --- !u!95 &8599889144168138800
 Animator:
   serializedVersion: 3
