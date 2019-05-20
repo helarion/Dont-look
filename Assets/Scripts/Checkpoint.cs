@@ -7,6 +7,7 @@ public class Checkpoint : MonoBehaviour
     // a stocker plus tard : les puzzles déja faits pour ne pas les réinitaliser, ou l'inverse : les puzzles à réini
     private float z;
     [SerializeField] Objet[] listObjetsReinitialises;
+    [SerializeField] WwiseTrigger[] listWwiseTriggerReinitialises;
     [SerializeField] public SpatialRoom sRoom;
     [SerializeField] public AudioRoom aRoom;
 
@@ -41,6 +42,10 @@ public class Checkpoint : MonoBehaviour
         foreach(Objet o in listObjetsReinitialises)
         {
             o.Reset();
+        }
+        foreach(WwiseTrigger t in listWwiseTriggerReinitialises)
+        {
+            t.Reset();
         }
     }
 }
