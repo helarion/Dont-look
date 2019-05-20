@@ -54,10 +54,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LayerMask climbLayer;
 
     [Header("Sons")]
-    [SerializeField] public string ChaseAmbPlay;
-    [SerializeField] public string ChaseAmbStop;
-    [SerializeField] public string ChaseAmb2Play;
-    [SerializeField] public string ChaseAmb2Stop;
+    [SerializeField] public string ChaseSpiderAmbPlay;
+    [SerializeField] public string ChaseSpiderAmbStop;
+    [SerializeField] public string ChaseBipedeAmbPlay;
+    [SerializeField] public string ChaseBipedeAmbStop;
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
     [SerializeField] public AudioRoom startRoom;

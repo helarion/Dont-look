@@ -27,8 +27,8 @@ public class Enemy : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
-    [SerializeField] private string WwiseChasePlay;
-    [SerializeField] private string WwiseChaseStop;
+    [SerializeField] public string WwiseChasePlay;
+    [SerializeField] public string WwiseChaseStop;
     [SerializeField] public string WwiseLook;
     [SerializeField] private Objet[] scriptedObjectsActivation;
     [SerializeField] private LightDetector scriptedLampActivation;
@@ -76,14 +76,18 @@ public class Enemy : MonoBehaviour
         Respawn();
     }
 
+    public virtual void PlayChase()
+    {
+
+    }
+
     // COMMENCER LA CHASSE DU JOUEUR
     public virtual void StartChase()
     {
         if(!hasPlayedChase)
         {
             hasPlayedChase = true;
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, p.modelTransform.gameObject);
-            //AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Play, GameManager.instance.gameObject);
+            PlayChase();
             isMoving = true;
             animator.SetBool("IsMoving", isMoving);
             isChasing = true;
@@ -94,8 +98,8 @@ public class Enemy : MonoBehaviour
     {
         if (isChasing)
         {
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, p.modelTransform.gameObject);
-            //AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Stop, GameManager.instance.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbStop, p.modelTransform.gameObject);
             if (delete && p.GetIsHidden())
             {
                 foreach(Objet o in scriptedObjectsActivation)
@@ -175,8 +179,8 @@ public class Enemy : MonoBehaviour
 
     public virtual void Respawn()
     {
-        AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
-        AkSoundEngine.PostEvent(GameManager.instance.ChaseAmb2Stop, GameManager.instance.gameObject);
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, GameManager.instance.gameObject);
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbStop, GameManager.instance.gameObject);
         isLooked = false;
         hasPlayedChase = false;
         hasPlayedLook = false;

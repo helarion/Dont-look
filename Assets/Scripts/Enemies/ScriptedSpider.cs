@@ -41,6 +41,7 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
+            AkSoundEngine.PostEvent(WwiseLook, gameObject);
             GameManager.instance.ShakeScreen(scriptShakeDuration,scriptShakeIntensity);
             lamp.Swing();
         }
@@ -51,6 +52,11 @@ public class ScriptedSpider : Enemy
         agent.speed = moveSpeed;
         StartChase();
         StartCoroutine(ScriptRoutine());
+    }
+
+    public override void PlayChase()
+    {
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbPlay, p.modelTransform.gameObject);
     }
 
     private IEnumerator ScriptRoutine()

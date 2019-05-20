@@ -326,6 +326,9 @@ MonoBehaviour:
   lampAnimator: {fileID: 2080198689059239907}
   scriptTwoSteps: 0
   scriptMoveActivation: 0
+  isBidirectional: 1
+  isEnd: 0
+  endSong: 
 --- !u!65 &1782030476667746518
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -449,7 +452,7 @@ GameObject:
   - component: {fileID: 8962998778976318010}
   m_Layer: 12
   m_Name: CageGround
-  m_TagString: Ground
+  m_TagString: Metal_Ascenseur
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

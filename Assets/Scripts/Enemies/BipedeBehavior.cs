@@ -32,14 +32,21 @@ public class BipedeBehavior : Enemy
         GameManager.instance.ShakeScreen(walkShakeDuration, currentWalkIntensity);
     }
 
+    public override void PlayChase()
+    {
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbPlay, p.modelTransform.gameObject);
+    }
+
     private void OnTriggerStay(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
         bool test = false;
-        if (player == null) return;
-        test = true;
+        if (player != null)
+        {
+            test = true;
+            if (!isChasing) StartChase();
+        }
         canSeePlayer = test;
-        if(!isChasing) StartChase();
     }
 
     public override void IsPathInvalid()

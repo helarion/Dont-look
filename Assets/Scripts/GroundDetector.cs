@@ -6,6 +6,7 @@ public class GroundDetector : MonoBehaviour
 {
     List<Collider> colliders = new List<Collider>();
     bool isGrounded = false;
+    string surface = "";
 
     // Update is called once per frame
     void Update()
@@ -13,6 +14,7 @@ public class GroundDetector : MonoBehaviour
         if (colliders.Count != 0)
         {
             isGrounded = true;
+            surface=colliders[0].tag;
         }
         else
         {
@@ -35,6 +37,11 @@ public class GroundDetector : MonoBehaviour
         {
             colliders.Remove(other);
         }
+    }
+
+    public string GetSurface()
+    {
+        return surface;
     }
 
     public bool GetIsGrounded()

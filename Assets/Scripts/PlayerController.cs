@@ -821,12 +821,23 @@ public class PlayerController : MonoBehaviour
 
     public void PlaySoundWalk()
     {
-        AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
+        AkSoundEngine.SetSwitch("Allure", "Walk", gameObject);
+        AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
+        AkSoundEngine.PostEvent("Play_Footsteps_All", gameObject);
     }
 
     public void PlaySoundRun()
     {
-        AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
+        AkSoundEngine.SetSwitch("Allure", "Run", gameObject);
+        AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
+        AkSoundEngine.PostEvent("Play_Footsteps_All", gameObject);
+    }
+
+    public void PlaySoundFall()
+    {
+        AkSoundEngine.SetSwitch("Allure", "Fall", gameObject);
+        AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
+        AkSoundEngine.PostEvent("Play_Footsteps_All", gameObject);
     }
 
     private Vector3 HorizontalMove(float lXmovValue)

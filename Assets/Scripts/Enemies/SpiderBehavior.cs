@@ -64,6 +64,11 @@ public class SpiderBehavior : Enemy
         else Respawn();
     }
 
+    public override void PlayChase()
+    {
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbPlay, p.modelTransform.gameObject);
+    }
+
     private void DebugPath()
     {
         if (Input.GetMouseButtonDown(0) && clickToSetDestination)
