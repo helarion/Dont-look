@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void PostProcessReset()
+    public void PostProcessReset()
     {
         PostProcessInstance.instance.vignette.intensity.value = minVignette;
         PostProcessInstance.instance.grain.intensity.value = 0;

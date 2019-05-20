@@ -40,13 +40,20 @@ public class BipedeBehavior : Enemy
     private void OnTriggerStay(Collider other)
     {
         PlayerController player = other.GetComponent<PlayerController>();
-        bool test = false;
         if (player != null)
         {
-            test = true;
+            canSeePlayer = true;
             if (!isChasing) StartChase();
         }
-        canSeePlayer = test;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        PlayerController player = other.GetComponent<PlayerController>();
+        if (player != null)
+        {
+            canSeePlayer = false;
+        }
     }
 
     public override void IsPathInvalid()

@@ -98,6 +98,7 @@ public class Enemy : MonoBehaviour
     {
         if (isChasing)
         {
+            GameManager.instance.PostProcessReset();
             AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
             AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbStop, p.modelTransform.gameObject);
             if (delete && p.GetIsHidden())
