@@ -20,8 +20,6 @@ public class LightDetector : Objet
 
     private float timeLooked = 0.0f;
 
-    private bool hasPlayedCharge = false;
-
     bool chargeSoundPlaying = false;
 
     bool forceLit = false;
@@ -29,11 +27,11 @@ public class LightDetector : Objet
     private void Start()
     {
         model = GetComponentInChildren<MeshRenderer>();
-        if(isBroken)
+        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
+        if (isBroken)
         {
             Break();
         }
-        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
     }
 
     private void Update()
@@ -45,13 +43,11 @@ public class LightDetector : Objet
 
         if (isLooked || forceLit)
         {
-            if (!wasLooked)
+            if (!wasLooked &&!chargeSoundPlaying)
             {
-                hasPlayedCharge = true;
                 AkSoundEngine.PostEvent(playChargingSound, gameObject);
                 chargeSoundPlaying = true;
                 blinkLight.StartLook(delayActivate);
-                //timeLooked = 0.0f;
             }
 
             if (timeLooked < delayActivate)

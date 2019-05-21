@@ -147,6 +147,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] string flashlightOffSound;
     #endregion
 
+    float saveMove;
+    [SerializeField] float debugSpeed = 10;
+
     //Vector3 headLookAt;
 
     enum LookDirection { Left, Right, Front, Back};
@@ -161,6 +164,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        saveMove = walkSpeed;
         isAlive = true;
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
@@ -180,6 +184,14 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         CheckTrackerConnected();
+        if(Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            walkSpeed = debugSpeed;
+        }
+        else if (Input.GetKeyDown(KeyCode.KeypadMinus))
+        {
+            walkSpeed = saveMove;
+        }
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
         LightAim();
         LightMode();
