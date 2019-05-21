@@ -210,11 +210,7 @@ public class Enemy : MonoBehaviour
         if (agent.isOnNavMesh)
         {
             agent.isStopped = false;
-            Vector3 oldDestination = agent.destination;
-            if (!agent.SetDestination(newPos))
-            {
-                agent.SetDestination(oldDestination);
-            }
+            agent.SetDestination(newPos);
             agent.isStopped = false;
         }
     }

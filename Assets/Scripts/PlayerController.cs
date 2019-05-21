@@ -297,7 +297,8 @@ public class PlayerController : MonoBehaviour
         else if(other.CompareTag("DetectZone"))
         {
             Enemy e = other.GetComponentInParent<Enemy>();
-            e.DetectPlayer(true);
+            //e.DetectPlayer(true);
+            print("COLLISION ARAIGNEE");
         }
         else if(other.CompareTag("Finish"))
         {
