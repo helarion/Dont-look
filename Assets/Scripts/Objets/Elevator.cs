@@ -106,11 +106,26 @@ public class Elevator : Objet
     IEnumerator MoveCoroutine()
     {
         if(isPlayerOnBoard) GameManager.instance.player.StopMove();
-        float distance = (transform.position - endPos.position).magnitude;
-        while(distance>0.1f)
+        float distance = transform.position.y - endPos.position.y;
+        while((direction == -1 && distance > -0.2f) || (direction == 1 && distance < 0.2f))
         {
+            if (isPlayerOnBoard)
+            {
+                GameManager.instance.player.transform.position += (transform.up * direction) * Time.deltaTime * moveSpeed;
+            }
             transform.position += (transform.up* direction) * Time.deltaTime*moveSpeed;
-            distance = (transform.position - endPos.position).magnitude;
+            distance = transform.position.y - endPos.position.y;
+            yield return new WaitForEndOfFrame();
+        }
+        Vector3 oldPos;
+        while (Mathf.Abs(transform.position.y - endPos.position.y) > 0.01f)
+        {
+            oldPos = transform.position;
+            transform.position = Vector3.Lerp(transform.position, endPos.position, Time.deltaTime * moveSpeed * 2);
+            if (isPlayerOnBoard)
+            {
+                GameManager.instance.player.transform.position += (transform.position - oldPos);
+            }
             yield return new WaitForEndOfFrame();
         }
         transform.position = endPos.position;

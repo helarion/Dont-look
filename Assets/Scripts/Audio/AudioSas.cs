@@ -35,11 +35,11 @@ public class AudioSas : MonoBehaviour
             Vector3 playerPosition = other.transform.position;
             occupied = false;
             exited = true;
-            if (direction == Direction.Down)
+            if (direction == Direction.Up)
             {
                 exitRtpcValue = playerPosition.y < col.bounds.min.y;
             }
-            else if (direction == Direction.Up)
+            else if (direction == Direction.Down)
             {
                 exitRtpcValue = playerPosition.y > col.bounds.max.y;
             }
