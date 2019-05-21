@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SlidingDoor : Objet
 {
-    [SerializeField] private string doorOpenSound;
+    [SerializeField] private string playDoorMoveSound;
+    [SerializeField] private string stopDoorMoveSound;
     [SerializeField] private float moveUpSpeed = 0.1f;
     [SerializeField] private float moveDownSpeed = 0.05f;
     [SerializeField] private Transform endPos;
@@ -12,6 +13,7 @@ public class SlidingDoor : Objet
     [SerializeField] private float shakeOnIntensity = 0.08f;
     [SerializeField] private float shakeOffIntensity = 0.04f;
 
+    bool isPlayingSound = false;
     float distance;
 
     private void Start()
@@ -80,10 +82,20 @@ public class SlidingDoor : Objet
         distance = endPos.localPosition.y-transform.localPosition.y;
         if (distance > 0.01f)
         {
+            if (!isPlayingSound)
+            {
+                isPlayingSound = true;
+                AkSoundEngine.PostEvent(playDoorMoveSound, gameObject);
+            }
             GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
             transform.localPosition += (transform.up) * Time.deltaTime * moveUpSpeed;
         }
-        else transform.localPosition = endPos.localPosition;
+        else
+        {
+            transform.localPosition = endPos.localPosition;
+            AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
+            isPlayingSound = false;
+        }
     }
 
     private void ContiniousDesactivate()
@@ -91,10 +103,20 @@ public class SlidingDoor : Objet
         distance = transform.localPosition.y - startPosition.localPosition.y;
         if (distance > 0.01f)
         {
+            if (!isPlayingSound)
+            {
+                isPlayingSound = true;
+                AkSoundEngine.PostEvent(playDoorMoveSound, gameObject);
+            }
             GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
             transform.localPosition += (transform.up * -1) * Time.deltaTime * moveDownSpeed;
         }
-        else transform.localPosition = startPosition.localPosition;
+        else
+        {
+            transform.localPosition = startPosition.localPosition;
+            AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
+            isPlayingSound = false;
+        }
     }
 
     public override void Break()
@@ -109,6 +131,7 @@ public class SlidingDoor : Objet
         base.Reset();
         //isActivated = false;
         isActivating = false;
+        AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
         if(isBroken)
         {
             Break();

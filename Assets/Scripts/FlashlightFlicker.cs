@@ -9,11 +9,11 @@ public class FlashlightFlicker : MonoBehaviour
 
     public void PlayOnSound()
     {
-        AkSoundEngine.PostEvent(flashlightOnSound, gameObject);
+        //AkSoundEngine.PostEvent(flashlightOnSound, gameObject);
     }
 
     public void PlayOffSound()
     {
-        AkSoundEngine.PostEvent(flashlightOffSound, gameObject);
+        //AkSoundEngine.PostEvent(flashlightOffSound, gameObject);
     }
 }

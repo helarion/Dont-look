@@ -18,6 +18,7 @@ public class BipedeArrival : Objet
     [SerializeField] GameObject door;
     [SerializeField] GameObject brokenDoor;
     [SerializeField] GameObject debris;
+    [SerializeField] string playDoorExplosion;
 
     [SerializeField] BipedeBehavior bipede;
     [SerializeField] Transform bipedeTeleportTransform;
@@ -56,6 +57,8 @@ public class BipedeArrival : Objet
 
     IEnumerator BipedeArrivalCoroutine()
     {
+        AkSoundEngine.PostEvent(playDoorExplosion, door);
+        yield return new WaitForSeconds(10.2f);
         GameManager.instance.ShakeScreen(firstShakeDuration, firstShakeIntensity);
         door.gameObject.SetActive(false);
         doorSas.gameObject.SetActive(false);

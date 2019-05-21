@@ -29,11 +29,6 @@ public class BipedeBehavior : Enemy
         }
     }
 
-    public void PlayBreath()
-    {
-        AkSoundEngine.PostEvent(WwiseChasePlay, gameObject);
-    }
-
     public override void PlayWalk()
     {
         base.PlayWalk();
@@ -42,7 +37,7 @@ public class BipedeBehavior : Enemy
 
     public override void PlayChase()
     {
-        AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbPlay, p.modelTransform.gameObject);
+        //AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbPlay, p.modelTransform.gameObject);
     }
 
     private void OnTriggerStay(Collider other)

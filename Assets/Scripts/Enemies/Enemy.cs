@@ -93,6 +93,7 @@ public class Enemy : MonoBehaviour
         if(!hasPlayedChase)
         {
             hasPlayedChase = true;
+            AkSoundEngine.PostEvent(WwiseChasePlay, gameObject);
             PlayChase();
             isMoving = true;
             animator.SetBool("IsMoving", isMoving);
@@ -105,6 +106,7 @@ public class Enemy : MonoBehaviour
         if (isChasing)
         {
             GameManager.instance.PostProcessReset();
+            AkSoundEngine.PostEvent(WwiseChaseStop, p.modelTransform.gameObject);
             AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
             AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbStop, p.modelTransform.gameObject);
             if (delete && p.GetIsHidden())

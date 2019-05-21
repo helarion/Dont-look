@@ -366,7 +366,7 @@ public class GameManager : MonoBehaviour
         foreach (Enemy e in enemyList)
         {
             //print("test0");
-            e.Respawn();
+            e.StopChase();
         }
         //print("test6");
     }

@@ -6,10 +6,12 @@ public class ScriptedVent : Objet
 {
     [SerializeField] GameObject normalVent;
     [SerializeField] GameObject brokenVent;
+    [SerializeField] string grilleFallSound;
 
     public override void Activate()
     {
         isActivated = true;
+        AkSoundEngine.PostEvent(grilleFallSound, gameObject);
         normalVent.SetActive(false);
         brokenVent.SetActive(true);
     }

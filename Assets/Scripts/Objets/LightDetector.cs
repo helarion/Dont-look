@@ -38,7 +38,6 @@ public class LightDetector : Objet
 
     private void Update()
     {
-        //print(GameManager.instance.LightDetection(transform.position, true));
         if (isActivated) return;
 
         wasLooked = isLooked;
@@ -94,7 +93,6 @@ public class LightDetector : Objet
     public override void Activate()
     {
         if (isActivated && !desactivate) return;
-        print("");
         base.Activate();
         if (scriptSpider) 
         if (isBroken)
