@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c26fb84706163654baa72dea21a79993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
   player: {fileID: 0}
   listE:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -59,11 +59,27 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   cameraMoveOffset: 40
-  shakeDuration: 0
-  shakeAmount: 0.08
+  lightVecOffset: 0.3
+  mainCamera: {fileID: 0}
+  shakeRequests: []
   decreaseFactor: 1
-  maxValue: 0.1
+  camHandler: {fileID: 0}
+  bobbingSpeed: 0.22
+  normalBobbingAmount: 0.01
+  runningBobbingAmount: 0.05
+  dutchAngle: 0
+  contrePlongeeAngle: 20
+  contrePlongeeHauteur: 0.3
+  maxGrain: 0.6
+  maxVignette: 0.9
+  maxTemperature: 100
+  distanceStartVignette: 10
+  distanceStartGrain: 8
+  distanceStartTemperature: 10
   wallsAndMobsLayer:
     serializedVersion: 2
     m_Bits: 15872
@@ -77,7 +93,10 @@ MonoBehaviour:
   ChaseAmbStop: Stop_Random_Rythme_Bass
   HeartPlay: Play_Random_Heart
   HeartStop: Stop_Random_Heart
-  camHandler: {fileID: 0}
+  startRoom: {fileID: 0}
+  nbAudioRoomId: 7
+  audioFadeSpeed: 30
+  heartVibration: 0.1
 --- !u!114 &2026705480
 MonoBehaviour:
   m_ObjectHideFlags: 0

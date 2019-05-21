@@ -5,49 +5,68 @@ using UnityEngine.AI;
 
 public class SpiderBehavior : Enemy
 {
-    [SerializeField] private float bonusSpeed = 1;
-
     [SerializeField] private float delaySpot = 1;
-
     [SerializeField] private float lengthDetection = 10;
-
     [SerializeField] private bool clickToSetDestination = false;
-
-    [SerializeField] private float countLook = 0;
+    [SerializeField] private float malusSpeedStart = 2;
+    [SerializeField] private float malusStartDuration = 2;
+    [SerializeField] private bool isChangingPlaces = false;
+    [SerializeField] private float changingTime = 15;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
-    private bool isCountingStartChase = false;
+    private bool lowerSpeedChase = true;
+    private bool isTransitionning = false;
+    private bool isCountingChange = false;
 
     NavMeshLink link;
 
     private void Start()
     {
         Initialize();
-        animator.SetFloat("WakeMult", (1f / delaySpot));
-        countLook = 0;
+        agent.autoTraverseOffMeshLink = false;
     }
 
     private void Update()
     {
+        if (agent.isOnOffMeshLink)
+        {
+            //print("On Link");
+            if (isTransitionning) return;
+            //print("StartTransition");
+            isTransitionning = true;
+            agent.isStopped = true;
+            isMoving = false;
+            animator.SetBool("IsMoving", isMoving);
+            animator.SetTrigger("Transition");
+        }
+
         VelocityCount();
-        LightDetection();
+        IsLit(GameManager.instance.LightDetection(gameObject, false));
         // SI L'ARAIGNEE CHASSE : SON COMPORTEMENT D'ALLER VERS LE JOUEUR ( PATHFINDING )
         if (isChasing)
         {
             ChaseBehavior();
         }
+        else if(isChangingPlaces &&!isCountingChange)
+        {
+            isCountingChange = true;
+            StartCoroutine("CountingChange");
+        }
 
         DebugPath(); 
+    }
 
-        if (agent.isOnOffMeshLink)
-        {
-            OffMeshLinkData linkData = agent.currentOffMeshLinkData;
+    IEnumerator CountingChange()
+    {
+        yield return new WaitForSeconds(changingTime);
+        if (isChangingPlaces) StopChase();
+        else Respawn();
+    }
 
-            //print("Using link right now");
-            agent.CompleteOffMeshLink();
-            agent.isStopped=false;
-        }
+    public override void PlayChase()
+    {
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbPlay, p.modelTransform.gameObject);
     }
 
     private void DebugPath()
@@ -60,43 +79,52 @@ public class SpiderBehavior : Enemy
         }
     }
 
+    public void FinishedTransition()
+    {
+        print("FinishedTransition");
+        if (!isTransitionning) return;
+        agent.CompleteOffMeshLink();
+        agent.isStopped = false;
+        isMoving = true;
+        animator.SetBool("IsMoving", isMoving);
+        isTransitionning = false;
+    }
+
     public override void ChaseBehavior()
     {
+        if (isTransitionning) return;
         base.ChaseBehavior();
         // goes to the player
-        isMoving = true;
         MoveTo(GameManager.instance.player.transform.position);
 
         if (!p.lightOn && !p.GetIsMoving() && p.GetIsHidden())
         {
             if(!canSeePlayer)
             {
-                if (!isSearching) StartCoroutine("CountChase");
+                if (!isSearching) StartCoroutine(CountChase());
                 isSearching = true;
             }
         }
         else
         {
-            StopCoroutine("CountChase");
+            StopCoroutine(CountChase());
             isSearching = false;
             agent.speed = moveSpeed;
         }
     }
 
-    // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE EST REGARDEE PAR LE JOUEUR
-    private IEnumerator CountLook()
+    public override void StartChase()
     {
-        animator.SetBool("WakesUp",true);
-        while (countLook<delaySpot)
-        {
-            countLook+=Time.deltaTime;
-            animator.SetFloat("WakeMult", countLook);
-            //print(countLook);
-            yield return new WaitForEndOfFrame();
-        }
-        animator.SetBool("WakesUp", false);
-        StartChase();
-        isCountingStartChase = false;
+        base.StartChase();
+        StopCoroutine("CountingChange");
+        isCountingChange = true;
+        StartCoroutine(LowerSpeedCoroutine());
+    }
+
+    private IEnumerator LowerSpeedCoroutine()
+    {
+        yield return new WaitForSeconds(malusStartDuration);
+        lowerSpeedChase = false;
         yield return null;
     }
 
@@ -120,8 +148,10 @@ public class SpiderBehavior : Enemy
     public override void Respawn()
     {
         base.Respawn();
-        countLook = 0;
-        animator.SetFloat("WakeMult", countLook);
+        StopCoroutine("CountingChange");
+        isCountingChange = false;
+        lowerSpeedChase = true;
+        animator.SetBool("IsSleeping", true);
     }
 
     // APPELER POUR DIRE SI L'ARAIGNEE PEUT ENCORE DETECTER LE JOUEUR OU NON
@@ -130,38 +160,37 @@ public class SpiderBehavior : Enemy
         canSeePlayer = b;
         if (!b)
         {
-            StopCoroutine("CountChase");
+            StopCoroutine(CountChase());
             isSearching = false;
             animator.SetBool("WakesUp", false);
             isSearching= false;
         }
     }
 
-    public override void StartChase()
-    {
-        base.StartChase();
-        countLook = 0;
-    }
-
     // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
     public override void IsLit(bool b)
     {
         base.IsLit(b);
+        float speed = moveSpeed;
+        if (lowerSpeedChase) speed -= malusSpeedStart;
         if (b)
         {
-            agent.speed = moveSpeed+bonusSpeed;
-            if (!isCountingStartChase)
+            if (!isChasing && !isLooked)
             {
-                isCountingStartChase = true;
-                StartCoroutine("CountLook");
+                StopCoroutine("CountingChange");
+                isCountingChange = true;
+                isLooked = true;
+                animator.SetBool("IsSleeping", false);
+                animator.SetTrigger("WakesUp");
+            }
+            else
+            {
+                agent.speed = speed + bonusSpeed;
             }
         }
         else
         {
-            if (isChasing) agent.speed = moveSpeed;
-            StopCoroutine("CountLook");
-            isCountingStartChase = false;
-            //countLook = 0; // A UTILISER SI ON VEUT QUE LE TEMPS DE SPOT SE RESET
+            if (isChasing) agent.speed = speed;
         }
     }
 }

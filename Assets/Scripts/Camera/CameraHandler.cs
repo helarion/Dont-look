@@ -9,6 +9,8 @@ public class CameraHandler : MonoBehaviour
 
     [Header("Camera Variables")]
     [SerializeField] float offset=1;
+    [SerializeField] float normalOffset = 1;
+    [SerializeField] float zoomOffset = 1.5f;
     [SerializeField] float cameraYawAngleMultiplier = 10;
     [SerializeField] float minYCamera = 1.0f;
     [SerializeField] float railOffsetX;
@@ -24,7 +26,7 @@ public class CameraHandler : MonoBehaviour
 
     void Update()
     {
-        if (!target || GameManager.instance.GetIsPaused()) return;
+        if (target==null || GameManager.instance.GetIsPaused()) return;
 
         Vector3 lookAtPos = player.GetLookAt();
 
@@ -123,6 +125,12 @@ public class CameraHandler : MonoBehaviour
         }
     }
 
+    public void Zoom(bool b)
+    {
+        if (b) offset = zoomOffset;
+        else offset = normalOffset;
+    }
+
     public void SetNewZ(float newZ)
     {
         zStartPosition = newZ;
@@ -131,5 +139,13 @@ public class CameraHandler : MonoBehaviour
     public void SetNewOffset(float newOffset)
     {
         offset = newOffset;
+    }
+
+    public void DestroyTarget()
+    {
+        print("destroy target camera");
+        GameObject g = new GameObject();
+        g.transform.position = target.position;
+        target = g.transform;
     }
 }

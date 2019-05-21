@@ -6,7 +6,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     #region variables
-    public Camera mainCamera;
     public PlayerController player;
 
     [HideInInspector]public static GameManager instance = null;
@@ -20,12 +19,34 @@ public class GameManager : MonoBehaviour
     [SerializeField] public bool isTesting = false;
     [SerializeField] private Checkpoint[] CheckPointList;
     [SerializeField] private float cameraMoveOffset = 20;
+    [SerializeField] private float lightVecOffset = 0.3f;
 
-    [Header("ScreenShake")]
-    [SerializeField] private float shakeDuration = 0f;
-    [SerializeField] private float shakeAmount = 0.7f;
+    [Header("Camera")]
+    public Camera mainCamera;
+    //[SerializeField] private float maxValue = 0.1f;
+    //[SerializeField] private float shakeDuration = 0f;
+    //[SerializeField] private float shakeAmount = 0.7f;
+    public List<Vector2> shakeRequests = new List<Vector2>();
+    float timeDuringCurrentShake = 0.0f;
     [SerializeField] private float decreaseFactor = 1.0f;
-    [SerializeField] private float maxValue = 0.1f;
+    [HideInInspector] public CameraHandler camHandler;
+    [SerializeField] private float bobbingSpeed = 0.25f;
+    [SerializeField] private float normalBobbingAmount = 0.2f;
+    [SerializeField] private float runningBobbingAmount = 0.5f;
+    private float bobTimer = 0;
+    //private float midpoint = 2;
+    [SerializeField] private float dutchAngle=0;
+    [SerializeField] public float contrePlongeeAngle = 15;
+    [SerializeField] private float contrePlongeeHauteur = 1.5f;
+
+    [Header("PostProcessValues")]
+    [SerializeField] private float maxGrain;
+    private float minVignette;
+    [SerializeField] private float maxVignette;
+    [SerializeField] private float maxTemperature = 100;
+    [SerializeField] private float distanceStartVignette=10;
+    [SerializeField] private float distanceStartGrain = 10;
+    [SerializeField] private float distanceStartTemperature = 10;
 
     [Header("Layers")]
     [SerializeField] private LayerMask wallsAndMobsLayer;
@@ -33,13 +54,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LayerMask climbLayer;
 
     [Header("Sons")]
-    [SerializeField] public string ChaseAmbPlay;
-    [SerializeField] public string ChaseAmbStop;
+    [SerializeField] public string ChaseSpiderAmbPlay;
+    [SerializeField] public string ChaseSpiderAmbStop;
+    [SerializeField] public string ChaseBipedeAmbPlay;
+    [SerializeField] public string ChaseBipedeAmbStop;
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
     [SerializeField] public AudioRoom startRoom;
     [SerializeField] int nbAudioRoomId;
     [SerializeField] float audioFadeSpeed=10;
+    [SerializeField] private float heartVibration = 0.1f;
 
     [HideInInspector] public Player controls; // The Rewired Player
 
@@ -47,7 +71,7 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     private bool isTrackerEnabled = true;
     private bool isPlayingHeart = false;
-    [HideInInspector] public CameraHandler camHandler;
+
     #endregion
 
     #region startupdate
@@ -66,10 +90,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        AkSoundEngine.PostEvent(startRoom.playEvent, GameManager.instance.gameObject);
         player.SetCurrentAudioRoom(startRoom);
         PlayCurrentAudioRoom(startRoom);
         CheckTracker();
+        minVignette = PostProcessInstance.instance.vignette.intensity.value;
         camHandler = mainCamera.GetComponent<CameraHandler>();
         controls = ReInput.players.GetPlayer(0);
         ResumeGame();
@@ -80,6 +104,7 @@ public class GameManager : MonoBehaviour
         {
             enemyList.Add(e);
         }
+        StartCoroutine(ShakeScreenCoroutine());
     }
 
     private void Update()
@@ -91,7 +116,9 @@ public class GameManager : MonoBehaviour
             else PauseGame();
         }
         if (isPaused) return;
-        CheckShake();
+        //mainCamera.transform.localPosition = originalPos;
+        //CheckShake();
+        CameraBob();
         TP();
     }
 
@@ -102,12 +129,12 @@ public class GameManager : MonoBehaviour
     {
         ar.PlayEvent();
         AkSoundEngine.SetRTPCValue("position_gd_" + ar.id, 50);
-        StartCoroutine("FadeInAudioRoutine", ar);
+        StartCoroutine(FadeInAudioRoutine(ar));
     }
 
     private void StopCurrentAudioRoom()
     {
-        StartCoroutine("FadeOutAudioRoutine");
+        StartCoroutine(FadeOutAudioRoutine());
     }
 
     private void ResetAllAudioRooms()
@@ -154,16 +181,62 @@ public class GameManager : MonoBehaviour
     public void PlayHeart()
     {
         if (isPlayingHeart) return;
-        StartCoroutine("HeartCoroutine");
+        isPlayingHeart = true;
+        AkSoundEngine.PostEvent(HeartPlay, gameObject);
+        if(player.GetInputMode()==PlayerController.InputMode.Pad)StartCoroutine(HeartCoroutine());
+    }
+
+    public void StopHeart()
+    {
+        if (!isPlayingHeart) return;
+        isPlayingHeart = false;
+        AkSoundEngine.PostEvent(HeartStop, gameObject);
+        StopCoroutine(HeartCoroutine());
     }
 
     private IEnumerator HeartCoroutine()
     {
-        isPlayingHeart = true;
-        AkSoundEngine.PostEvent(HeartPlay, player.gameObject);
-        yield return new WaitForSeconds(6);
-        AkSoundEngine.PostEvent(HeartStop, player.gameObject);
-        isPlayingHeart = false;
+        while(isPlayingHeart)
+        {
+            controls.SetVibration(0, heartVibration,0.3f);
+            yield return new WaitForSeconds(0.3f);
+            controls.SetVibration(1, heartVibration, 0.3f);
+            yield return new WaitForSeconds(1);
+        }
+        yield return null;
+    }
+
+    #endregion
+
+    #region PostProcess
+
+    public void UpdatePostProcess(float distance)
+    {
+        if (distance < distanceStartGrain)
+        {
+            float newGrain = distanceStartGrain - distance;
+            newGrain = newGrain.Remap(0f, distanceStartGrain, 0f, maxGrain);
+            PostProcessInstance.instance.grain.intensity.value = newGrain;
+        }
+        if (distance < distanceStartVignette)
+        {
+            float newVignette = distanceStartVignette - distance;
+            newVignette = newVignette.Remap(0f, distanceStartVignette, minVignette, maxVignette);
+            PostProcessInstance.instance.vignette.intensity.value = newVignette;
+        }
+        if (distance < distanceStartTemperature)
+        {
+            float newTemperature = distanceStartTemperature - distance;
+            newTemperature = newTemperature.Remap(0f, distanceStartTemperature, 0, maxTemperature);
+            PostProcessInstance.instance.colorGrading.temperature.value = newTemperature;
+        }
+    }
+
+    public void PostProcessReset()
+    {
+        PostProcessInstance.instance.vignette.intensity.value = minVignette;
+        PostProcessInstance.instance.grain.intensity.value = 0;
+        PostProcessInstance.instance.colorGrading.temperature.value = 0;
     }
 
     #endregion
@@ -179,6 +252,89 @@ public class GameManager : MonoBehaviour
         enemyList.Remove(e);
     }
 
+
+    #region Light
+
+    public bool LightDetection(GameObject objectPosition, bool needsConcentration)
+    {
+        bool isLit = false;
+        Vector3 playerPosition = player.getLight().transform.position;
+        playerPosition.y += lightVecOffset;
+        Vector3 lightVec = player.GetLookAt() - playerPosition;
+        Vector3 playerToObjectVec = objectPosition.transform.position - player.transform.position;
+
+        float playerToObjectLength = playerToObjectVec.magnitude;
+        Light playerLight = player.getLight();
+        float lightRange = playerLight.range;
+        float lightAngle = playerLight.spotAngle / 2.0f;
+
+        if (objectPosition.name == "Bipede")
+        {
+            BoxCollider bipedeCollider = objectPosition.GetComponent<BoxCollider>();
+            playerToObjectVec = bipedeCollider.bounds.center - player.transform.position;
+            playerToObjectLength = playerToObjectVec.magnitude;
+
+            if (playerToObjectLength <= lightRange)
+            {
+                float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToObjectVec) / (lightVec.magnitude * playerToObjectLength)) * Mathf.Rad2Deg;
+
+                Vector3 upPoint = bipedeCollider.bounds.center;
+                upPoint.y = bipedeCollider.bounds.max.y;
+                Vector3 upVec = upPoint - player.transform.position;
+
+                Vector3 downPoint = bipedeCollider.bounds.center;
+                downPoint.y = bipedeCollider.bounds.min.y;
+                Vector3 downVec = downPoint - player.transform.position;
+                float maxAngleFromLight = Mathf.Acos(Vector3.Dot(upVec, downVec) / (upVec.magnitude * downVec.magnitude)) * Mathf.Rad2Deg;
+
+                print(maxAngleFromLight + " ? " + angleFromLight);
+                Debug.DrawLine(playerPosition, upPoint, Color.green, Time.deltaTime);
+                Debug.DrawLine(playerPosition, downPoint, Color.green, Time.deltaTime);
+                if (angleFromLight <= maxAngleFromLight)
+                {
+                    lightVec = Vector3.RotateTowards(lightVec, playerToObjectVec, angleFromLight, Mathf.Infinity);
+
+                    RaycastHit hit;
+                    Ray ray = new Ray(playerPosition, lightVec);
+                    Physics.Raycast(ray, out hit, Mathf.Infinity, wallsAndMobsLayer);
+
+                    if (hit.transform.gameObject.tag == objectPosition.tag)
+                    {
+                        if (!needsConcentration) isLit = true;
+                        else if (player.GetConcentration()) isLit = true;
+                    }
+                    //print("Touched " + hit.transform.gameObject.name);
+                    //print(isLit);
+                }
+            }
+            return isLit;
+        }
+
+        if (playerToObjectLength <= lightRange)
+        {
+            float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToObjectVec) / (lightVec.magnitude * playerToObjectLength)) * Mathf.Rad2Deg;
+            if (angleFromLight <= lightAngle)
+            {
+                lightVec = Vector3.RotateTowards(lightVec, playerToObjectVec, angleFromLight, Mathf.Infinity);
+
+                RaycastHit hit;
+                Ray ray = new Ray(playerPosition, lightVec);
+                Physics.Raycast(ray, out hit, Mathf.Infinity, wallsAndMobsLayer);
+
+                if (hit.transform.gameObject.tag == objectPosition.tag)
+                {
+                    if (!needsConcentration) isLit = true;
+                    else if( player.GetConcentration()) isLit = true;
+                }
+                //print("Touched " + hit.transform.gameObject.name);
+                //print(isLit);
+            }
+        }
+        return isLit;
+    }
+
+    #endregion
+
     #region death
 
     // TUE LE JOUEUR
@@ -188,7 +344,7 @@ public class GameManager : MonoBehaviour
         player.Reset();
         player.SetIsAlive(false);
         UIManager.instance.FadeDeath(true);
-        StartCoroutine("DeathCoroutine");
+        StartCoroutine(DeathCoroutine());
     }
 
     // COROUTINE DE FADE OUT / IN DE LA MORT
@@ -199,6 +355,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         RespawnEnemies();
         RespawnPlayer();
+        PostProcessReset();
         UIManager.instance.FadeDeath(false);
     }
 
@@ -229,7 +386,11 @@ public class GameManager : MonoBehaviour
         player.transform.position = c.transform.position;
         camHandler.SetNewZ(c.sRoom.newZ);
         camHandler.SetNewOffset(c.sRoom.newOffset);
+        contrePlongeeAngle = c.sRoom.newContrePlongeeAngle;
+        contrePlongeeHauteur = c.sRoom.newContrePlongeeHauteur;
         player.SetLightRange(c.sRoom.newLightRange);
+        player.SetLightAngle(c.sRoom.newLightAngle);
+        SetDutchAngle(c.sRoom.newDutchAngle);
         StopCurrentAudioRoom();
     }
 
@@ -305,32 +466,73 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-
     #region camera
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
         float speed = cameraSpeed;
         if (player.velocity > 0) speed /= (player.velocity * cameraMoveOffset);
+        newPos.y += contrePlongeeHauteur;
+        mainCamera.transform.localPosition = Vector3.Lerp(originalPos, newPos, Time.deltaTime / speed);
         originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
     }
 
-    public void RotateCamera(Quaternion newRotate)
+    private void CameraBob()
+    {
+        float bobbingAmount= normalBobbingAmount;
+        if (player.GetIsRunning()) bobbingAmount = runningBobbingAmount;
+
+        float waveslice = 0.0f;
+        float horizontal = controls.GetAxis("Move Horizontal");
+        Vector3 cSharpConversion = originalPos;
+
+        if (Mathf.Abs(horizontal) == 0)
+        {
+            bobTimer = 0.0f;
+        }
+        else
+        {
+            waveslice = Mathf.Sin(bobTimer);
+            bobTimer += bobbingSpeed;
+            if (bobTimer > Mathf.PI * 2)
+            {
+                bobTimer -=Mathf.PI * 2;
+            }
+        }
+        if (waveslice != 0)
+        {
+            float translateChange = waveslice * bobbingAmount;
+            float totalAxes = Mathf.Abs(horizontal);
+            totalAxes = Mathf.Clamp(totalAxes, 0.0f, 1.0f);
+            translateChange = totalAxes * translateChange;
+            cSharpConversion.y = originalPos.y + translateChange;
+        }
+        else
+        {
+            cSharpConversion.y = originalPos.y;
+        }
+        //print("bob:" + cSharpConversion);
+        MoveCamera(cSharpConversion);
+    }
+
+public void RotateCamera(Quaternion newRotate)
     {
         //print(newRotate);
         //float speed = cameraSpeed;
         //if(player.velocity >0) speed /= (player.velocity * cameraMoveOffset);
+        newRotate.z = dutchAngle.Remap(0,360,0,1);
+
+        if(player.getCameraBlock()==null)newRotate.x = contrePlongeeAngle.Remap(0, 360, 0, 1);
         mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, newRotate, Time.deltaTime/cameraSpeed);
     }
 
     #region shake
     // Shaking screen for duration set previously
-    private void CheckShake()
+   /* private void CheckShake()
     {
         if (shakeDuration > 0)
         {
             mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
-
             shakeDuration -= Time.deltaTime * decreaseFactor;
         }
         else
@@ -338,9 +540,85 @@ public class GameManager : MonoBehaviour
             shakeDuration = 0f;
             mainCamera.transform.localPosition = originalPos;
         }
+    }*/
+
+    private IEnumerator ShakeScreenCoroutine()
+    {
+        bool vibrated = false;
+        while (true)
+        {
+            if (shakeRequests.Count != 0)
+            {
+                if (!vibrated && player.GetInputMode() == PlayerController.InputMode.Pad)
+                {
+                    controls.SetVibration(0, shakeRequests[0].y, shakeRequests[0].x);
+                    controls.SetVibration(1, shakeRequests[0].y, shakeRequests[0].x);
+                    vibrated = true;
+                }
+                mainCamera.transform.localPosition = originalPos + Random.insideUnitSphere * shakeRequests[0].y;
+                timeDuringCurrentShake += Time.deltaTime * decreaseFactor;
+                if (timeDuringCurrentShake > shakeRequests[0].x)
+                {
+                    shakeRequests.RemoveAt(0);
+                    timeDuringCurrentShake = 0.0f;
+                    vibrated = false;
+                }
+            }
+            yield return null;
+        }
     }
 
     // SHAKESCREEN POUR LA DUREE ENTREE
+    public void ShakeScreen(float duration, float intensity, int offset = 0)
+    {
+        if (shakeRequests.Count == offset)
+        {
+            shakeRequests.Insert(offset, new Vector2(duration, intensity));
+        }
+        else
+        {
+            if (intensity < shakeRequests[offset].y)
+            {
+                if (duration > shakeRequests[offset].x)
+                {
+                    ShakeScreen(duration - shakeRequests[offset].x, intensity, offset + 1);
+                }
+            }
+            else
+            {
+                if (offset == 0)
+                {
+                    shakeRequests[0] = new Vector2(shakeRequests[0].x - timeDuringCurrentShake, shakeRequests[0].y);
+                    timeDuringCurrentShake = 0.0f;
+                }
+                if (duration < shakeRequests[offset].x)
+                {
+                    Vector2 oldShakeRequest = shakeRequests[offset];
+                    shakeRequests.RemoveAt(offset);
+                    shakeRequests.Insert(offset, new Vector2(duration, intensity));
+                    shakeRequests.Insert(offset + 1, new Vector2(oldShakeRequest.x - duration, oldShakeRequest.y));
+                }
+                else
+                {
+                    shakeRequests.Insert(offset, new Vector2(duration, intensity));
+                    while (shakeRequests.Count > offset + 1)
+                    {
+                        if (duration > shakeRequests[offset + 1].x)
+                        {
+                            duration -= shakeRequests[offset + 1].x;
+                            shakeRequests.RemoveAt(offset + 1);
+                        }
+                        else
+                        {
+                            shakeRequests[offset + 1] = new Vector2(shakeRequests[offset + 1].x - duration, shakeRequests[offset + 1].y);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /*
     public void ShakeScreen(float duration, float intensity)
     {
         if (shakeDuration > 0)
@@ -350,6 +628,7 @@ public class GameManager : MonoBehaviour
         else shakeAmount = intensity;
         shakeDuration = duration; 
     }
+    */
 
     #endregion
 
@@ -362,8 +641,7 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
         Time.timeScale = 0;
         isPaused = true;
-        UIManager.instance.pausePanel.SetActive(true);
-        //UIManager.instance.FadePause(true);
+        UIManager.instance.Pause(true);
     }
 
     public void ResumeGame()
@@ -371,8 +649,7 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         Time.timeScale = 1;
         isPaused = false;
-        UIManager.instance.pausePanel.SetActive(false);
-        //UIManager.instance.FadePause(false);
+        UIManager.instance.Pause(false);
     }
     #endregion
 
@@ -407,5 +684,29 @@ public class GameManager : MonoBehaviour
     {
         isPaused = b;
     }
+    
+    public void SetDutchAngle(float angle)
+    {
+        dutchAngle = angle;
+    }
+
+    public void SetContrePlongeeHauteur(float hauteur)
+    {
+        contrePlongeeHauteur = hauteur;
+    }
+
+    public void SetContrePlongeeAngle(float angle)
+    {
+        contrePlongeeAngle = angle;
+    }
     #endregion
+}
+
+public static class ExtensionMethods
+{
+    public static float Remap(this float value, float vMin, float vMax, float rMin, float rMax)
+    {
+
+        return rMin + (Mathf.Clamp(value, vMin, vMax) - vMin) * (rMax - rMin) / (vMax - vMin);
+    }
 }

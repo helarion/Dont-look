@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,11 +16,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject ControlPanel=null;
     [SerializeField] private GameObject NoEyePanel=null;
     [SerializeField] private Slider volumeControl;
+    [SerializeField] private Slider gammaControl;
     [SerializeField] private Toggle toggleTracker;
     [SerializeField] private EventSystem eventSystem;
+    [SerializeField] private float gammaMin=-1.5f;
+    [SerializeField] private float gammaMax=1.5f;
+    [SerializeField] private float waitEndTime = 10;
 
     public bool isFading = false;
-
+    private bool isEnding = false;
     public static UIManager instance = null;
 
     void Awake()
@@ -38,23 +43,35 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        volumeControl.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        PostProcessInstance.instance.bloom.active = true;
+        float gammaX = PostProcessInstance.instance.colorGrading.gamma.value.x - 1;
+        //print("gamma x:" + gammaX);
+        float value = gammaX.Remap(gammaMin, gammaMax, gammaControl.minValue, gammaControl.maxValue);
+        //print("reamp value:"+value);
+        gammaControl.value = value;
+        volumeControl.onValueChanged.AddListener(delegate { VolumeValueChangeCheck(); });
+        gammaControl.onValueChanged.AddListener(delegate { GammaValueChangeCheck(); });
         if (!GameManager.instance.isTesting)
         {
             GameManager.instance.SetIsPaused(true);
             fadeImg.color = new Color(0, 0, 0, 1);
             FadeOut(fadeImg, 2, 0);
-            StartCoroutine("StartCoroutine");
+            StartCoroutine(StartCoroutine());
         }
-        eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
-        volumeControl.OnSelect(null);
-        toggleTracker.OnSelect(null);
     }
 
-    public void ValueChangeCheck()
+    public void GammaValueChangeCheck()
+    {
+        PostProcessInstance.instance.colorGrading.enabled.value = true;
+        float gamma = gammaControl.value.Remap(gammaControl.minValue, gammaControl.maxValue, gammaMin, gammaMax);
+        print("gamma:" + gamma);
+        Vector4 vec= new Vector4(gamma,gamma,gamma,gamma);
+        PostProcessInstance.instance.colorGrading.gamma.value =vec;
+    }
+
+    public void VolumeValueChangeCheck()
     {
         AkSoundEngine.SetRTPCValue("Master_Volume_Slider", volumeControl.value);
-        //Debug.Log(volumeControl.value);
     }
 
     IEnumerator StartCoroutine()
@@ -64,11 +81,8 @@ public class UIManager : MonoBehaviour
         GameManager.instance.SetIsPaused(false);
     }
 
-    IEnumerator FadeOutCoroutine(object[] param)
+    IEnumerator FadeOutCoroutine(Image img, float duration, float waitBefore)
     {
-        Image img = (Image)param[0];
-        float duration = (float)param[1];
-        float waitBefore = (float)param[2];
         Color savedColor = img.color;
         savedColor.a = 1;
         img.color = savedColor;
@@ -90,11 +104,8 @@ public class UIManager : MonoBehaviour
         isFading = false;
     }
 
-    IEnumerator FadeInCoroutine(object[] param)
+    IEnumerator FadeInCoroutine(Image img, float duration, float waitBefore)
     {
-        Image img = (Image)param[0];
-        float duration = (float)param[1];
-        float waitBefore = (float)param[2];
         Color savedColor = img.color;
         savedColor.a = 0;
         img.color = savedColor;
@@ -114,6 +125,7 @@ public class UIManager : MonoBehaviour
         savedColor.a = 1;
         img.color = savedColor;
         isFading = false;
+        if(isEnding) StartCoroutine(EndCoroutine());
     }
 
     IEnumerator EndCoroutine()
@@ -129,8 +141,16 @@ public class UIManager : MonoBehaviour
 
     public void FadeDeath(bool b)
     {
-        if(b)FadeIn(fadeImg, 1f, 0f);
-        else FadeOut(fadeImg, 1f, 1f);
+        if(b)FadeIn(fadeImg, 0.3f, 0f);
+        else FadeOut(fadeImg, 1f, 2f);
+    }
+
+    public void Pause(bool b)
+    {
+        pausePanel.SetActive(b);
+        //eventSystem.firstSelectedGameObject = gammaControl.gameObject;
+        eventSystem.SetSelectedGameObject(gammaControl.gameObject);
+        gammaControl.Select();
     }
 
     public void FadePause(bool b)
@@ -141,22 +161,28 @@ public class UIManager : MonoBehaviour
 
     public void FadeIn(Image img, float duration, float waitBefore)
     {
-        object[] o = { img, duration, waitBefore };
-        StartCoroutine("FadeInCoroutine",o);
+        StartCoroutine(FadeInCoroutine(img,duration,waitBefore));
     }
 
 
     public void FadeInEnd()
     {
-        object[] o = { fadeImg, 2f, 0f};
-        StartCoroutine("FadeInCoroutine", o);
-        StartCoroutine("EndCoroutine");
+        isEnding = true;
+        StartCoroutine(Wait(waitEndTime));
+        StartCoroutine(FadeInCoroutine(fadeImg,2f,0f));
+    }
+
+    IEnumerator Wait(float waitTime)
+    {
+        isFading = true;
+        yield return new WaitForSeconds(waitTime);
+        isFading = false;
+        yield return null;
     }
 
     public void FadeOut(Image img, float duration, float waitBefore)
     {
-        object[] o = { img, duration, waitBefore };
-        StartCoroutine("FadeOutCoroutine",o);
+        StartCoroutine(FadeOutCoroutine(img,duration,waitBefore));
     }
 
     public void DisableControlPanel(bool b)
@@ -167,12 +193,12 @@ public class UIManager : MonoBehaviour
         if(!b)
         {
             eventSystem.firstSelectedGameObject = toggleTracker.gameObject;
-            eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+            //eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
         }
         else
         {
-            eventSystem.firstSelectedGameObject = volumeControl.gameObject;
-            eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+            eventSystem.firstSelectedGameObject = gammaControl.gameObject;
+            //eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
         }
     }
 

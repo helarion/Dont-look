@@ -8,9 +8,10 @@ public class ScriptedSpider : Enemy
     [SerializeField] Transform pos1;
     [SerializeField] Transform pos2;
     [SerializeField] ScriptLamp lamp;
-    [SerializeField] BoxCollider ladderCol;
     [SerializeField] int nbAttack = 2;
     [SerializeField] float scriptShakeIntensity;
+    [SerializeField] float scriptShakeDuration = 1;
+    [SerializeField] float waitTime=1;
 
     private bool objective1 = false;
     private bool objective2 = false;
@@ -23,7 +24,7 @@ public class ScriptedSpider : Enemy
     private void Update()
     {
         VelocityCount();
-        LightDetection();
+        IsLit(GameManager.instance.LightDetection(gameObject, false));
         if (isChasing)
         {
             ChaseBehavior();
@@ -40,7 +41,8 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
-            GameManager.instance.ShakeScreen(0.5f,scriptShakeIntensity);
+            AkSoundEngine.PostEvent(WwiseLook, gameObject);
+            GameManager.instance.ShakeScreen(scriptShakeDuration,scriptShakeIntensity);
             lamp.Swing();
         }
     }
@@ -49,7 +51,12 @@ public class ScriptedSpider : Enemy
     {
         agent.speed = moveSpeed;
         StartChase();
-        StartCoroutine("ScriptRoutine");
+        StartCoroutine(ScriptRoutine());
+    }
+
+    public override void PlayChase()
+    {
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbPlay, p.modelTransform.gameObject);
     }
 
     private IEnumerator ScriptRoutine()
@@ -72,24 +79,14 @@ public class ScriptedSpider : Enemy
             yield return new WaitForSeconds(0.5f);
             while (agent.remainingDistance >0)
             {
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(waitTime);
             }
             step++;
             yield return new WaitForEndOfFrame();
         }
-        ladderCol.isTrigger = true;
         StopChase();
         GameManager.instance.DeleteEnemyFromList(this);
         Destroy(gameObject);        
         yield return null;
-    }
-
-    // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
-    public override void IsLit(bool b)
-    {
-        if (b)
-        {
-            GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
-        }
     }
 }

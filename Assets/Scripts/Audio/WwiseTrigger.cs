@@ -9,7 +9,7 @@ public class WwiseTrigger : MonoBehaviour
     [SerializeField] private string triggerEvent;
     [SerializeField] bool doOnce = true;
     [SerializeField] private GameObject emitter = null;
-    bool done = false;
+    private bool done = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -40,5 +40,10 @@ public class WwiseTrigger : MonoBehaviour
         Gizmos.DrawLine(topRightCorner, bottomRightCorner);
         Gizmos.DrawLine(bottomRightCorner, bottomLeftCorner);
         Gizmos.DrawLine(bottomLeftCorner, topLeftCorner);
+    }
+
+    public void Reset()
+    {
+        done = false;
     }
 }

@@ -4,96 +4,152 @@ using UnityEngine;
 
 public class LightDetector : Objet
 {
-    [SerializeField] private Objet target =null;
+    [SerializeField] public Objet[] targets =null;
     [SerializeField] private float delayActivate = 1.5f;
     [SerializeField] private BlinkingLight blinkLight = null;
-    [SerializeField] private string chargingSound = null;
+    [SerializeField] private string playChargingSound = null;
+    [SerializeField] private string StopChargingSound = null;
     [SerializeField] private string activateSound = null;
+    [SerializeField] private bool desactivate = false;
+    [SerializeField] private bool scriptSpider = false;
+    [SerializeField] private GameObject[] brokenFeature;
     private MeshRenderer model;
-    private bool isLooked = false;
-    private float countLook=0f;
+
+    bool wasLooked = false;
+    [HideInInspector] public bool isLooked = false;
+
+    private float timeLooked = 0.0f;
+
+    private bool hasPlayedCharge = false;
+
+    bool chargeSoundPlaying = false;
+
+    bool forceLit = false;
 
     private void Start()
     {
         model = GetComponentInChildren<MeshRenderer>();
+        if(isBroken)
+        {
+            Break();
+        }
+        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
     }
 
     private void Update()
     {
-        LightDetection();
-    }
+        //print(GameManager.instance.LightDetection(transform.position, true));
+        if (isActivated) return;
 
-    public void LightDetection()
-    {
-        bool test = false;
-        Vector3 playerPosition = GameManager.instance.player.transform.position;
-        Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
-        Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
+        wasLooked = isLooked;
+        isLooked = GameManager.instance.LightDetection(gameObject, true);
 
-        float playerToSpiderLength = playerToSpiderVec.magnitude;
-        Light playerLight = GameManager.instance.player.getLight();
-        float lightRange = playerLight.range;
-        float lightAngle = playerLight.spotAngle / 2.0f;
-        if (playerToSpiderLength <= lightRange)
+        if (isLooked || forceLit)
         {
-            float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToSpiderVec) / (lightVec.magnitude * playerToSpiderVec.magnitude)) * Mathf.Rad2Deg;
-            if (angleFromLight <= lightAngle)
+            if (!wasLooked)
             {
-                lightVec = Vector3.RotateTowards(lightVec, playerToSpiderVec, angleFromLight, Mathf.Infinity);
+                hasPlayedCharge = true;
+                AkSoundEngine.PostEvent(playChargingSound, gameObject);
+                chargeSoundPlaying = true;
+                blinkLight.StartLook(delayActivate);
+                //timeLooked = 0.0f;
+            }
 
-                RaycastHit hit;
-                Ray ray = new Ray(playerPosition, lightVec);
-                Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer());
-
-                if (hit.transform.gameObject.tag == gameObject.tag)
-                {
-                    test = true;
-                }
-                //print("Touched " + hit.transform.gameObject.name);
+            if (timeLooked < delayActivate)
+            {
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, delayActivate, 0, 100));
+                timeLooked += Time.deltaTime;
+            }
+            else if (!isActivated)
+            {
+                Activate();
             }
         }
-        if (!isLooked && !isActivated && test) StartCoroutine("CountLook");
-        else if (!test &&!isActivated)
+        else if (!scriptSpider)
         {
-            StopCoroutine("CountLook");
-            if(!isActivated && isLooked) blinkLight.StartBlink();
-            isLooked = false;
-            countLook = 0f;
+            if (wasLooked)
+            {
+                blinkLight.StopLook();
+                //timeLooked = delayActivate;
+            }
+
+            if (timeLooked > 0.0f)
+            {
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, delayActivate, 0, 100));
+                timeLooked -= Time.deltaTime;
+            }
+            else if (chargeSoundPlaying)
+            {
+                AkSoundEngine.PostEvent(StopChargingSound, gameObject);
+                chargeSoundPlaying = false;
+            }
         }
     }
 
-    // COROUTINE POUR COMPTER LE TEMPS QUE L'OBJET EST REGARDE PAR LE JOUEUR
-    private IEnumerator CountLook()
+    public void ForceLit()
     {
-        isLooked = true;
-        blinkLight.StartLook(delayActivate);
-        while (countLook < delayActivate)
-        {
-            yield return new WaitForSeconds(0.1f);
-            countLook += 0.1f;
-            // jouer le son de lampe qui se charge
-        }
-        Activate();
-        isLooked = false;
-        yield return null;
+        forceLit = true;
     }
 
     public override void Activate()
     {
-        if (isActivated) return;
+        if (isActivated && !desactivate) return;
+        print("");
         base.Activate();
+        if (scriptSpider) 
+        if (isBroken)
+        {
+            blinkLight.enabled = true;
+            blinkLight.Fix();
+        }
         blinkLight.Activate();
         AkSoundEngine.PostEvent(activateSound, gameObject);
-        target.Activate();
+        foreach(Objet o in targets)
+        {
+            if (!o.enabled)
+            {
+                o.enabled = true;
+                o.Fix();
+            }
+            else if (o.isActivated && desactivate) o.Desactivate();
+            else o.Activate();
+        }
         isActivated = true;
         print("Object activated");
+    }
+
+    public override void Break()
+    {
+        foreach (GameObject g in brokenFeature)
+        {
+            g.SetActive(true);
+        }
+        blinkLight.Break();
+        base.Break();
+    }
+
+    public override void Fix()
+    {
+        
+        foreach (GameObject g in brokenFeature)
+        {
+            g.SetActive(false);
+        }
+        blinkLight.Fix();
+        base.Fix();
     }
 
     public override void Reset()
     {
         base.Reset();
+        forceLit = false;
         blinkLight.Reset();
         isLooked = false;
-        countLook = 0f;
+        timeLooked = 0.0f;
+        if (isBroken)
+        {
+            blinkLight.Break();
+            Break();
+        }
     }
 }

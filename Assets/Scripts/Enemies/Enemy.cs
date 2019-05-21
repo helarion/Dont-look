@@ -5,15 +5,21 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    #region Variables
     [Header("Movement Variables")]
     [SerializeField] public float moveSpeed = 1;
+    [SerializeField] public float bonusSpeed = 1;
+    [SerializeField] private float velocityMax = 2;
 
     [Header("Chase Variables")]
     [SerializeField] private bool delete = false;
     [SerializeField] public float lookShakeIntensity=0.08f;
-    [SerializeField] private float chaseShakeIntensity=0.02f;
-    [SerializeField] private float delayBeforeChase = 1;
+    [SerializeField] private float lookShakeTime = 1;
+    [SerializeField] private float minChaseShakeIntensity=0.02f;
+    [SerializeField] private float maxChaseShakeIntensity = 0.06f;
+    [SerializeField] private float chaseShakeTime = 1;
     [SerializeField] public float delayChase = 3;
+    [HideInInspector] public float playerDistance;
 
     private bool hasPlayedChase = false;
     [HideInInspector] public bool hasPlayedLook = false;
@@ -21,12 +27,15 @@ public class Enemy : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private Transform[] spawnZones=null ;
-    [SerializeField] private string WwiseChasePlay;
-    [SerializeField] private string WwiseChaseStop;
+    [SerializeField] public string WwiseChasePlay;
+    [SerializeField] public string WwiseChaseStop;
     [SerializeField] public string WwiseLook;
+    [SerializeField] public string WalkSound;
+    [SerializeField] private Objet[] scriptedObjectsActivation;
+    [SerializeField] private LightDetector scriptedLampActivation;
 
 
-    [HideInInspector] public NavMeshAgent agent;
+    public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
     public float velocity;
     [SerializeField] private Transform _transform;
@@ -37,9 +46,11 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public PlayerController p;
 
     private Vector3 lastPosition;
+    #endregion
 
     private void Update()
     {
+        IsLit(GameManager.instance.LightDetection(gameObject,false));
         VelocityCount();
     }
 
@@ -47,7 +58,9 @@ public class Enemy : MonoBehaviour
     {
         velocity = ((transform.position - lastPosition).magnitude * 10) * moveSpeed;
         lastPosition = transform.position;
-        animator.SetFloat("Velocity", velocity);
+        float rate = velocity.Remap(0, velocityMax, 0, 1);
+        rate = Mathf.Clamp(rate,0, 1);
+        animator.SetFloat("Velocity", rate);
     }
 
     private void Start()
@@ -60,9 +73,18 @@ public class Enemy : MonoBehaviour
     {
         p = GameManager.instance.player;
         animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed;
         Respawn();
+    }
+
+    public virtual void PlayChase()
+    {
+
+    }
+
+    public virtual void PlayWalk()
+    {
+        AkSoundEngine.PostEvent(WalkSound, gameObject);
     }
 
     // COMMENCER LA CHASSE DU JOUEUR
@@ -71,37 +93,26 @@ public class Enemy : MonoBehaviour
         if(!hasPlayedChase)
         {
             hasPlayedChase = true;
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbPlay, GameManager.instance.gameObject);
+            PlayChase();
+            isMoving = true;
+            animator.SetBool("IsMoving", isMoving);
+            isChasing = true;
         }
-        StartCoroutine("WaitBeforeChaseCoroutine");
-    }
-
-    IEnumerator WaitBeforeChaseCoroutine()
-    {
-        agent.speed = 1;
-        agent.isStopped = false;
-        isChasing = true;
-        isMoving = true;
-        animator.SetBool("IsMoving", isMoving);
-        yield return new WaitForSeconds(delayBeforeChase);
-        agent.speed = moveSpeed;
-        //AkSoundEngine.PostEvent(WwiseChasePlay.Id,gameObject);
     }
 
     public void StopChase()
     {
         if (isChasing)
         {
-            isMoving = false;
-            isChasing = false;
-            animator.SetBool("IsMoving", isMoving);
-            //AkSoundEngine.PostEvent(WwiseChaseStop.Id, gameObject);
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
-            //AkSoundEngine.PostEvent(GameManager.instance.HeartStop, GameManager.instance.player.gameObject);
-            //GameManager.instance.PlayHeart();
-            if (!delete) Respawn();
-            else if (p.GetIsHidden())
+            GameManager.instance.PostProcessReset();
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbStop, p.modelTransform.gameObject);
+            if (delete && p.GetIsHidden())
             {
+                foreach(Objet o in scriptedObjectsActivation)
+                {
+                    o.Activate();
+                }
                 GameManager.instance.DeleteEnemyFromList(this);
                 Destroy(gameObject);
             }
@@ -112,29 +123,31 @@ public class Enemy : MonoBehaviour
     // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE PASSE A CHASSER LE JOUEUR. POTENTIELLEMENT INUTILE ?
     private IEnumerator CountEndChase()
     {
-        print("Start Counting chase");
+        //print("Start Counting chase");
         float countChase = 0;
         while (countChase < delayChase)
         {
-            print("count:"+countChase);
+            //print("count:"+countChase);
             countChase += Time.deltaTime;
             yield return new WaitForEndOfFrame();
-            //print(countChase);
+            print(countChase);
         }
-        print("Fin du compte");
+        //print("Fin du compte");
         StopChase();
         isCountingEndChase = false;
         yield return null;
     }
 
     public virtual void DetectPlayer(bool b) {}
+
     public virtual void IsLit(bool b)
     {
         if (b)
         {
-            GameManager.instance.ShakeScreen(0.1f, lookShakeIntensity);
+            GameManager.instance.ShakeScreen(lookShakeTime, lookShakeIntensity);
             if (!hasPlayedLook)
             {
+                if (scriptedLampActivation != null) scriptedLampActivation.ForceLit();
                 AkSoundEngine.PostEvent(WwiseLook, gameObject);
                 hasPlayedLook = true;
             }
@@ -143,61 +156,38 @@ public class Enemy : MonoBehaviour
 
     public virtual void ChaseBehavior()
     {
-        GameManager.instance.ShakeScreen(0.01f, chaseShakeIntensity);
         float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
+        float distanceMaxShake = 15;
+        float chaseShakeIntensity = distanceFromPlayer.Remap(0, distanceMaxShake, maxChaseShakeIntensity, minChaseShakeIntensity);
+        GameManager.instance.UpdatePostProcess(distanceFromPlayer);
+        GameManager.instance.ShakeScreen(chaseShakeTime, chaseShakeIntensity);
+        //distanceFromPlayer = GameManager.instance.maxDistRtpc - distanceFromPlayer;
         AkSoundEngine.SetRTPCValue("DISTANCE_SPIDER", distanceFromPlayer);
-        bool isPathValid = agent.CalculatePath(p.transform.position, agent.path);
-        if(!isPathValid && !isCountingEndChase)
-        {
-            print("path invalid");
-            isCountingEndChase = true;
-            StartCoroutine("CountEndChase");
-        }
-        else if(isPathValid)
-        {
-            print("path valid");
-            isCountingEndChase = false;
-            StopCoroutine("CountEndChase");
-        }
+        IsPathInvalid();
     }
 
-    public void LightDetection()
+    public virtual void IsPathInvalid()
     {
-        bool test = false;
-        Vector3 playerPosition = GameManager.instance.player.transform.position;
-        playerPosition.y += 1;
-        Vector3 lightVec = GameManager.instance.player.GetLookAt() - playerPosition;
-        Vector3 playerToSpiderVec = transform.position - GameManager.instance.player.transform.position;
-
-        float playerToSpiderLength = playerToSpiderVec.magnitude;
-        Light playerLight = GameManager.instance.player.getLight();
-        float lightDim = GameManager.instance.player.rangeDim;
-        float lightRange = playerLight.range-lightDim;
-        float lightAngle = playerLight.spotAngle / 2.0f;
-        if (playerToSpiderLength <= lightRange)
+        bool isPathValid = agent.CalculatePath(p.transform.position, agent.path);
+        //print("path status:" + agent.path.status);
+        if (!isPathValid && !isCountingEndChase)
         {
-            float angleFromLight = Mathf.Acos(Vector3.Dot(lightVec, playerToSpiderVec) / (lightVec.magnitude * playerToSpiderVec.magnitude)) * Mathf.Rad2Deg;
-            if (angleFromLight <= lightAngle)
-            {
-                lightVec = Vector3.RotateTowards(lightVec, playerToSpiderVec, angleFromLight, Mathf.Infinity);
-
-                RaycastHit hit;
-                Ray ray = new Ray(playerPosition, lightVec);
-                Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetWallsAndMobsLayer());
-
-                if (hit.transform.gameObject.tag == gameObject.tag)
-                {
-                    test = true;
-                }
-                //print("Touched " + hit.transform.gameObject.name);
-            }
+            //print("path invalid");
+            isCountingEndChase = true;
+            StartCoroutine(CountEndChase());
         }
-        IsLit(test);
+        else if (isPathValid)
+        {
+            //print("path valid");
+            isCountingEndChase = false;
+            StopCoroutine(CountEndChase());
+        }
     }
 
     public virtual void Respawn()
     {
-        StopChase();
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, GameManager.instance.gameObject);
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbStop, GameManager.instance.gameObject);
         isLooked = false;
         hasPlayedChase = false;
         hasPlayedLook = false;
@@ -228,5 +218,15 @@ public class Enemy : MonoBehaviour
         int max = spawnZones.Length;
         int rand = Random.Range(0, max);
         return (spawnZones[rand].position);
+    }
+
+    public NavMeshAgent GetAgent()
+    {
+        return agent;
+    }
+
+    public Transform[] GetSpawnZones()
+    {
+        return spawnZones;
     }
 }

@@ -1,27 +1,40 @@
-﻿using System.Collections;
+﻿using Rewired;
+using System.Collections;
 using UnityEngine;
 using Tobii.Gaming;
+using UnityEngine.Experimental.Rendering.HDPipeline;
 
 public class PlayerController : MonoBehaviour
 {
     #region variables
-    private Light lt;
-    private Light camLt;
-    private Rigidbody rb;
-    private Collider cl;
-    private Vector3 lookAtPos;
-    private Vector2 cursorPos;
 
-    [Header("Model and light objects")]
-    [SerializeField] private Transform modelTransform;
-    [SerializeField] private Transform[] raycastPosition = null;
+    #region SavedVariables
+    [Header("Models & saved objects")]
+    [SerializeField] public Transform modelTransform;
     [SerializeField] private Transform raycastClimb;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform hipPosition;
     [SerializeField] private Transform headPosition;
     [SerializeField] private Transform armPosition;
 
-    [Header("Jump")]
+    private CameraBlock currentCameraBlock = null;
+    private AudioRoom currentAudioRoom = null;
+    [HideInInspector] public SpatialRoom currentSpatialRoom = null;
+    SpatialSas currentSpatialSas = null;
+    public SpatialLine currentSpatialLine = null;
+    private Rigidbody objectGrabbed = null;
+    private float objectGrabbedWidth = 0;
+    private Rigidbody rb;
+    private Collider cl;
+    private Vector3 lookAtPos;
+    private Vector2 cursorPos;
+    Vector3 lMovement;
+
+    #endregion
+
+    #region JumpVariables
+
+   [Header("Jump")]
     [SerializeField] private float jumpForce = 1.5f;
     [SerializeField] private float rayCastLength = 0.1f;
     [SerializeField] private float maxClimbHeight = 1.0f;
@@ -29,18 +42,48 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpLength = 3;
     [SerializeField] private float jumpLengthSpeed = 1;
     [SerializeField] private bool isGrounded = false;
+    [SerializeField] private GroundDetector groundDetector;
     private int jumpDirection = 0;
+
+    #endregion
+
+    #region MovementVariables
 
     [Header("Movement")]
     [SerializeField] private float walkTime;
     [SerializeField] private float runTimeMinus;
     [SerializeField] private float deadZoneValue = 0.3f;
+    [SerializeField] private float changeLineDeadZoneValue = 0.9f;
     [SerializeField] private float runSpeed = 3;
     [SerializeField] private float walkSpeed = 1;
     [SerializeField] private float ladderSpeed = 0.5f;
     [SerializeField] private float grabSpeed = 0.5f;
-    [SerializeField] private float changingLineSpeed = 0.1f;
+    private bool isChangingSpatialLine = false;
+    private bool walkRoutine = false;
+    private bool StoppedHMove = false;
+    private bool stopMove = false;
+    private bool isMoving = false;
+    private bool isRunning = false;
 
+    private Vector3 _verticalLastMovement = Vector3.zero;
+    private Vector3 localModelPosition;
+    private Vector3 worldModelPosition;
+    private Vector3 climbPosition;
+    private Vector3 lastPosition;
+    public float velocity;
+    public float yVelocity;
+
+    private float moveSpeed;
+    private float vMove;
+    private float hMove;
+    private int inverse = 1;
+    private int changingLineDirection = 1;
+
+    #endregion
+
+    #region AccelerationDecelerationVariables
+
+    [Header("Acceleration Decceleration Curves")]
     [SerializeField] private AnimationCurve _horizontalAccelerationCurve;
     [SerializeField] private AnimationCurve _verticalAccelerationCurve;
     [SerializeField] private AnimationCurve _horizontalDecelerationCurve;
@@ -55,64 +98,61 @@ public class PlayerController : MonoBehaviour
     [Range(-1, 1)]
     private float _verticalAccDecLerpValue;
 
-    private Vector3 _verticalLastMovement = Vector3.zero;
-    private Vector3 localModelPosition;
-    private Vector3 worldModelPosition;
-    private Vector3 climbPosition;
-    private Vector3 lastPosition;
-    public float velocity;
-    public float yVelocity;
+    #endregion
 
-    private float moveSpeed;
-    private float vMove;
-    private float hMove;
-
-    private int inverse = 1;
-
+    #region LightVariables
     [Header("Light")]
     [SerializeField] private float bodyRotationDeadZone = 0.5f;
     [Range(0, 1)]
     [SerializeField] private float lightSensitivity = 1;
     [SerializeField] private float lightSpeed = 1;
-    [SerializeField] private Transform flashlight;
+    [SerializeField] private Transform flashlightTransform;
+    [SerializeField] private Light pointLight;
     [SerializeField] private int flickerPercentage = 10;
     [SerializeField] private int flickeringFrequency = 1;
     [SerializeField] public float rangeDim;
     [SerializeField] public Animator flashlightAnimator;
-    public bool lightOn = true;
+    [SerializeField] private float lightTransitionSpeed=0.1f;
+    [SerializeField] private float normalCameraFOV;
+    [SerializeField] private float zoomCameraFOV;
 
+    [SerializeField] private float concentratedLightRangeBonus;
+    [SerializeField] private float concentratedLightIntensity;
+    [SerializeField] private Color concentratedLightColor;
+    [SerializeField] private float concentratedLightAngle;
+    [SerializeField] private float normalLightIntensity;
+    [SerializeField] private float normalLightRange;
+    [SerializeField] private Color normalLightColor;
+    [SerializeField] private float normalLightAngle;
+    private bool isConcentrating=false;
+    public bool lightOn = true;
+    private Light flashlight;
+    #endregion
+
+    #region StatesVariables
     [Header("State")]
     private bool isHidden = false;
     private bool isAlive = true;
-    [SerializeField]private bool isClimbingLadder = false;
-    private bool isClimbing = false;
-    private bool isGrabbing = false;
-    private bool isMoving = false;
-    [SerializeField] public bool isJumping = false;
-    private bool isChangingSpatialLine = false;
-    private bool isTouchingBox = false;
-    private bool walkRoutine = false;
-    private bool StoppedHMove = false;
-    private bool stopMove = false;
+
     private bool isFalling = false;
     private bool hasPlayedHeart = false;
     private bool needsCentering = false;
+    private bool isInElevator = false;
+    private int controler = -1;
+    #endregion
 
-    private CameraBlock currentCameraBlock = null;
-    private AudioRoom currentAudioRoom = null;
-    [HideInInspector] public SpatialRoom currentSpatialRoom = null;
-    SpatialSas currentSpatialSas = null;
-    SpatialLine currentSpatialLine = null;
-    private Rigidbody objectGrabbed = null;
+    #region Audio
+    [Header("Audio")]
+    [SerializeField] string flashlightOnSound;
+    [SerializeField] string flashlightOffSound;
+    #endregion
 
-    private float objectGrabbedWidth = 0;
+    //Vector3 headLookAt;
 
     enum LookDirection { Left, Right, Front, Back};
     LookDirection currentLookDirection = LookDirection.Right;
 
-    Vector3 headLookAt;
-
-    enum InputMode { PC, Pad};
+    public enum InputMode { PC, Pad};
     InputMode inputMode = InputMode.Pad;
 
     #endregion
@@ -124,13 +164,11 @@ public class PlayerController : MonoBehaviour
         isAlive = true;
         cl = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
-        lt = flashlight.GetComponent<Light>();
-        //camLt = cameraLight.GetComponent<Light>();
-        lt.type = LightType.Spot;
+        flashlight = flashlightTransform.GetComponent<Light>();
+        flashlight.type = LightType.Spot;
         ClosedEyes(false);
         Cursor.visible = false;
         moveSpeed = walkSpeed;
-
         cursorPos = Input.mousePosition;
         lastPosition = transform.position;
         localModelPosition = modelTransform.localPosition;
@@ -144,7 +182,7 @@ public class PlayerController : MonoBehaviour
         CheckTrackerConnected();
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
         LightAim();
-        if (isClimbing) return;
+        LightMode();
         GroundedCheck();
         FallingCheck();
         MoveInputUpdate();
@@ -152,39 +190,29 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isAlive || GameManager.instance.GetIsPaused() || isClimbing) return;
+        if (!isAlive || GameManager.instance.GetIsPaused()) return;
 
         velocity = (transform.position - lastPosition).magnitude;
         yVelocity = (transform.position.y - lastPosition.y);
 
         lastPosition = transform.position;
 
-
-        if (isClimbingLadder)
+        if (stopMove || isFalling)
         {
-            if(vMove > 0 || vMove < 0) animator.SetFloat("ClimbSpeed", Mathf.Abs(vMove));
-            else animator.SetFloat("ClimbSpeed", 0);
+            animator.SetBool("IsMoving", false);
+            return;
         }
-
-        if (isClimbingLadder) return;
-        ClimbCheck();
-        if (isJumping || stopMove || isFalling) return;
         Move();
-
         BodyRotation();
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawCube(lookAtPos, new Vector3(0.1f, 0.1f, 0.1f));
-        Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.left);
-        Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.right);
-        Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.forward);
-        Gizmos.DrawLine(raycastClimb.position, raycastClimb.position + Vector3.back);
-
+        Gizmos.DrawLine(transform.position, lookAtPos);
         Gizmos.color = Color.green;
         if (Application.isPlaying)
         {
+            //print("spatialline begin"+currentSpatialLine.begin.position);
             Gizmos.DrawLine(currentSpatialLine.begin.position, currentSpatialLine.end.position);
         }
         Gizmos.color = Color.white;
@@ -194,15 +222,29 @@ public class PlayerController : MonoBehaviour
 
     #region TriggersCollision
 
+    public void chooseNearestSpatialLine()
+    {
+        float zOffset = Mathf.Infinity;
+        foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
+        {
+            float offset = Mathf.Abs(sl.begin.position.z - transform.position.z);
+            if (offset < zOffset)
+            {
+                zOffset = offset;
+                currentSpatialLine = sl;
+                isChangingSpatialLine = true;
+                changingLineDirection = (sl.begin.position.z - transform.position.z) > 0 ? 1 : -1;
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         CameraBlock cameraBlock = other.GetComponent<CameraBlock>();
         if (cameraBlock != null)
         {
             currentCameraBlock = cameraBlock;
-            GameManager.instance.camHandler.SetNewZ(currentCameraBlock.room.newZ);
-            GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
-            SetLightRange(currentCameraBlock.room.newLightRange);
+            CameraBlockChanges();
             return;
         }
 
@@ -212,6 +254,7 @@ public class PlayerController : MonoBehaviour
             currentSpatialSas = spatialSas;
             currentSpatialLine = spatialSas.spatialLine;
             isChangingSpatialLine = true;
+            changingLineDirection = 1;
             return;
         }
 
@@ -221,16 +264,7 @@ public class PlayerController : MonoBehaviour
             currentSpatialRoom = spatialRoom;
             if (currentSpatialSas == null)
             {
-                float zOffset = Mathf.Infinity;
-                foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
-                {
-                    if (Mathf.Abs(sl.begin.position.z - transform.position.z) < zOffset)
-                    {
-                        zOffset = Mathf.Abs(sl.begin.position.z - transform.position.z);
-                        currentSpatialLine = sl;
-                        isChangingSpatialLine = true;
-                    }
-                }
+                chooseNearestSpatialLine();
             }
             return;
         }
@@ -248,11 +282,6 @@ public class PlayerController : MonoBehaviour
             }
             else   GameManager.instance.Death();
         }
-        else if(other.CompareTag("Grabbable"))
-        {
-            GrabbableBox gb = other.GetComponentInParent<GrabbableBox>();
-            gb.setIsPlayerInGrabZone(true);
-        }
         else if(other.CompareTag("DetectZone"))
         {
             Enemy e = other.GetComponentInParent<Enemy>();
@@ -260,7 +289,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(other.CompareTag("Finish"))
         {
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseAmbStop, GameManager.instance.gameObject);
+            GameManager.instance.camHandler.DestroyTarget();
             UIManager.instance.FadeInEnd();
         }
         else if (other.CompareTag("Elevator"))
@@ -268,7 +297,10 @@ public class PlayerController : MonoBehaviour
             Elevator elevator = other.GetComponent<Elevator>();
             if(elevator!=null)
             {
+                elevator.isPlayerOnBoard = true;
                 elevator.StartMoving();
+                animator.SetBool("IsMoving", false);
+                isInElevator = true;
                 print("elevator starts moving");
             }
         }
@@ -276,38 +308,14 @@ public class PlayerController : MonoBehaviour
         {
             needsCentering = true;
         }
-        else if (other.CompareTag("UpLadder") || other.CompareTag("DownLadder"))
-        {
-            if (!isClimbingLadder)
-            {
-                StartClimbLadder(other.transform.position);
-                if (!other.GetComponentInParent<Ladder>().isReusable) other.isTrigger = false;
-            }
-            else StopClimbLadder();
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (!stopMove && !isClimbing && !isClimbingLadder && !animator.GetBool("IsJumping"))
-        {
-            if (other.CompareTag("JumpZoneRight") && hMove > 0)
-            {
-                jumpDirection = 1;
-                Jump();
-            }
-            else if (other.CompareTag("JumpZoneLeft") && hMove < 0)
-            {
-                jumpDirection = 0;
-                Jump();
-            }
-        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<CameraBlock>() != null)
+        CameraBlock camBlock = other.GetComponent<CameraBlock>();
+        if(camBlock != null)
         {
+            if(currentCameraBlock == camBlock)
             currentCameraBlock = null;
             return;
         }
@@ -328,6 +336,7 @@ public class PlayerController : MonoBehaviour
                         zOffset = Mathf.Abs(sl.begin.position.z - currentZ);
                         currentSpatialLine = sl;
                         isChangingSpatialLine = true;
+                        changingLineDirection = 1;
                     }
                 }
             }
@@ -342,11 +351,14 @@ public class PlayerController : MonoBehaviour
         {
             needsCentering = false;
         }
-
-        else if (other.CompareTag("Grabbable"))
+        else if (other.CompareTag("Elevator"))
         {
-            GrabbableBox gb = other.GetComponentInParent<GrabbableBox>();
-            gb.setIsPlayerInGrabZone(false);
+            Elevator elevator = other.GetComponent<Elevator>();
+            if (elevator != null)
+            {
+                isInElevator = false;
+                elevator.isPlayerOnBoard = false;
+            }
         }
 
         else if (other.CompareTag("DetectZone"))
@@ -366,44 +378,17 @@ public class PlayerController : MonoBehaviour
         return result;
     }
 
-    private void OnAnimatorIK(int layerIndex)
+    private void OnCollisionEnter(Collision collision)
     {
-        animator.SetLookAtWeight(1);
-        Vector3 headLookAtGoal = lookAtPos;
-        if (currentLookDirection == LookDirection.Left)
+        print(collision.gameObject.name);
+        if (collision.gameObject.tag == "SlidingDoor")
         {
-            headLookAtGoal = rotatePointAround(lookAtPos, headPosition.position, Vector3.up, 90);
+            print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
+            if (collision.collider.bounds.min.y - cl.bounds.max.y > -0.25f)
+            {
+                GameManager.instance.Death();
+            }
         }
-        else if (currentLookDirection == LookDirection.Right)
-        {
-            headLookAtGoal = rotatePointAround(lookAtPos, headPosition.position, Vector3.up, -90);
-        }
-        else if (currentLookDirection == LookDirection.Front)
-        {
-            headLookAtGoal = rotatePointAround(lookAtPos, headPosition.position, Vector3.up, 0);
-        }
-        else if (currentLookDirection == LookDirection.Back)
-        {
-            headLookAtGoal = rotatePointAround(lookAtPos, headPosition.position, Vector3.up, 180);
-        }
-        headLookAt = Vector3.Lerp(headLookAt, headLookAtGoal, Time.deltaTime * 3);
-        animator.SetLookAtPosition(headLookAt);
-
-        /*animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-        //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-        Vector3 armPos;
-        if (currentLookDirection == LookDirection.Left)
-        {
-            armPos = hipPosition.position + new Vector3(0.05f, 1.0f, 0.1f) + Vector3.ClampMagnitude(lookAtPos - new Vector3(0.05f, 0.75f, 0.1f) - hipPosition.position, 0.25f);
-            armPos = rotatePointAround(armPos, hipPosition.position, Vector3.up, -90);
-        }
-        else
-        {
-            armPos = hipPosition.position + new Vector3(-0.05f, 1.0f, -0.1f) + Vector3.ClampMagnitude(lookAtPos - new Vector3(-0.05f, 0.75f, -0.1f) - hipPosition.position, 0.25f);
-            armPos = rotatePointAround(armPos, hipPosition.position, Vector3.up, 90);
-        }
-        animator.SetIKPosition(AvatarIKGoal.LeftHand, armPos);*/
-        //animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.LookRotation(headLookAt - armPos) * Quaternion.Euler(45, -30, 0));
     }
 
     #endregion
@@ -441,6 +426,35 @@ public class PlayerController : MonoBehaviour
         else
         {
             UIManager.instance.DisableControlPanel(false);
+        }
+    }
+
+    private void LightMode()
+    {
+        if(GameManager.instance.controls.GetButton("Concentrate"))
+        {
+            isConcentrating = true;
+
+            flashlight.range = Mathf.Lerp(flashlight.range,normalLightRange+concentratedLightRangeBonus,lightTransitionSpeed);
+            flashlight.intensity = Mathf.Lerp(flashlight.intensity,concentratedLightIntensity,lightTransitionSpeed);
+            flashlight.color = Color.Lerp(flashlight.color, concentratedLightColor, lightTransitionSpeed);
+            pointLight.color = Color.Lerp(pointLight.color, concentratedLightColor, lightTransitionSpeed);
+            flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle/concentratedLightAngle, lightTransitionSpeed);
+            GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, zoomCameraFOV, lightTransitionSpeed);
+            GameManager.instance.camHandler.Zoom(true);
+            flashlightAnimator.enabled = false;
+        }
+        else
+        {
+            isConcentrating = false;
+            flashlight.range = Mathf.Lerp(flashlight.range, normalLightRange, lightTransitionSpeed);
+            flashlight.intensity = Mathf.Lerp(flashlight.intensity, normalLightIntensity, lightTransitionSpeed);
+            flashlight.color = Color.Lerp(flashlight.color, normalLightColor, lightTransitionSpeed);
+            pointLight.color = Color.Lerp(pointLight.color, normalLightColor, lightTransitionSpeed);
+            flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle, lightTransitionSpeed);
+            GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, normalCameraFOV, lightTransitionSpeed);
+            GameManager.instance.camHandler.Zoom(false);
+            if (lightOn) flashlightAnimator.enabled = true;
         }
     }
 
@@ -514,41 +528,36 @@ public class PlayerController : MonoBehaviour
 
         //cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
 
-        if(!isClimbing && !isClimbingLadder)
-        {
-            flashlight.rotation = Quaternion.Slerp(flashlight.rotation, Quaternion.LookRotation(lookAtPos - flashlight.position), Time.deltaTime * lightSpeed * 100);
-        }
-        else if(isClimbingLadder)
-        {
-            flashlight.eulerAngles = Vector3.Lerp(flashlight.eulerAngles, new Vector3(-90,0,0), Time.deltaTime * lightSpeed * 10);
-        }
-        else if(isClimbing)
-        {
-            flashlight.eulerAngles = Vector3.Lerp(flashlight.eulerAngles, new Vector3(0, 0, 0), Time.deltaTime * lightSpeed * 10);
-        }
+
+        flashlightTransform.rotation = Quaternion.Slerp(flashlightTransform.rotation, Quaternion.LookRotation(lookAtPos - flashlightTransform.position), Time.deltaTime * lightSpeed * 100);
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
     private void ClosedEyes(bool isClosed)
     {
-        lt.enabled = !isClosed;
+        if (lightOn != isClosed) return;
+
+        flashlight.enabled = !isClosed;
+        pointLight.enabled = !isClosed;
         lightOn = !isClosed;
 
         if(isClosed)
         {
-            PlayHeart();
+            AkSoundEngine.PostEvent(flashlightOffSound, gameObject);
+            GameManager.instance.PlayHeart();
             flashlightAnimator.enabled = false;
         }
         else
         {
-            StopHeart();
+            AkSoundEngine.PostEvent(flashlightOnSound, gameObject);
+            GameManager.instance.StopHeart();
             flashlightAnimator.enabled = true;
         }
     }
 
     public void StartFlickering()
     {
-        StartCoroutine("RandomFlickerCoroutine");
+        StartCoroutine(RandomFlickerCoroutine());
     }
 
     private void RandomFlicker()
@@ -578,66 +587,51 @@ public class PlayerController : MonoBehaviour
     {
         isHidden = false;
         SetIsAlive(true);
-        isGrabbing = false;
-        isClimbing = false;
-        isClimbingLadder = false;
-        isTouchingBox = false;
-        animator.SetBool("OnLadder", false);
+        isConcentrating = false;
+        isInElevator = false;
+        isRunning = false;
         animator.SetBool("IsMoving", false);
-        animator.SetBool("IsJumping", false);
         animator.SetBool("IsRunning", false);
-        animator.SetBool("Climb", false);
         animator.SetBool("IsFalling", false);
         animator.SetBool("HasLanded", false);
-        rb.useGravity = true;
-        rb.isKinematic = false;
         StoppedHMove = false;
         stopMove = false;
         ResetVelocity();
-        //StartFlickering();
-    }
-    #endregion
-
-    #region Ladder
-
-    public void StartClimbLadder(Vector3 v)
-    {
-        StoppedHMove = false;
-        transform.position = v;
-        modelTransform.eulerAngles = new Vector3(0, 0, 0);
-        SetIsClimbingLadder(true);
-        ResetVelocity();
-        animator.SetBool("OnLadder", true);
     }
 
-    public void StopClimbLadder()
+    private void CameraBlockChanges()
     {
-        animator.SetFloat("ClimbSpeed", 1);
-        StoppedHMove = false;
-        modelTransform.eulerAngles = new Vector3(0, 90, 0);
-        SetIsClimbingLadder(false);
-        animator.SetBool("OnLadder", false);
-        Vector3 newPosition = transform.position;
-        transform.position = newPosition;
-    }
-
-    private IEnumerator LadderPush()
-    {
-        float count = 0;
-        while (count < 1f)
+        GameManager.instance.SetContrePlongeeAngle(currentCameraBlock.room.newContrePlongeeAngle);
+        GameManager.instance.SetContrePlongeeHauteur(currentCameraBlock.room.newContrePlongeeHauteur);
+        GameManager.instance.camHandler.SetNewZ(currentCameraBlock.room.newZ);
+        GameManager.instance.camHandler.SetNewOffset(currentCameraBlock.room.newOffset);
+        SetLightRange(currentCameraBlock.room.newLightRange);
+        GameManager.instance.SetDutchAngle(currentCameraBlock.room.newDutchAngle);
+        SetLightAngle(currentCameraBlock.room.newLightAngle);
+        //print("enter cameraBLock");
+        if (currentCameraBlock.updatedDecals.Length > 0)
         {
-            Vector3 lMovement = new Vector3(0, GameManager.instance.controls.GetAxisRaw("Move Vertical"), 0);
-            if ((lMovement.y > 0) || lMovement.y < 0)
+            //print("must change decal");
+            int i = 0;
+            foreach (DecalProjectorComponent d in currentCameraBlock.updatedDecals)
             {
-                Vector3 move = transform.position + lMovement;
-                transform.position = Vector3.Lerp(transform.position, move, Time.deltaTime / ladderSpeed);
-                count += Time.deltaTime;
+                if (inputMode == InputMode.PC)
+                {
+                    // print("input pc");
+                    d.m_Material = currentCameraBlock.keyboardMaterials[i];
+                }
+                else
+                {
+                    //print("input manette");
+                    d.m_Material = currentCameraBlock.gamePadMaterials[i];
+                }
+                d.enabled = false;
+                d.enabled = true;
+                //print("mat changé");
+                i++;
             }
-            yield return new WaitForEndOfFrame();
         }
-        yield return null;
     }
-
     #endregion
 
     #region Movement
@@ -646,17 +640,33 @@ public class PlayerController : MonoBehaviour
     {
         hMove = GameManager.instance.controls.GetAxis("Move Horizontal");
         vMove = GameManager.instance.controls.GetAxis("Move Vertical");
+
+        Controller controller = GameManager.instance.controls.controllers.GetLastActiveController();
+        if (controller != null)
+        {
+            switch (controller.type)
+            {
+                case ControllerType.Keyboard:
+                    inputMode = InputMode.PC;
+                    break;
+                case ControllerType.Joystick:
+                    inputMode = InputMode.Pad;
+                    break;
+                case ControllerType.Mouse:
+                    inputMode = InputMode.PC;
+                    break;
+            }
+        }
     }
 
     private void Move()
     {
-        if (isJumping) return;
         isMoving = false;
-        Vector3 lMovement = Vector3.zero;
+        lMovement = Vector3.zero;
         Vector3 camMove = Vector3.zero;
 
-        if (hMove < deadZoneValue && hMove > -deadZoneValue) hMove = 0;
-        if (!isClimbingLadder && (!needsCentering))
+        if (hMove < deadZoneValue && hMove > -deadZoneValue && inputMode == InputMode.Pad) hMove = 0;
+        if (!needsCentering)
         {
             if (Mathf.Abs(hMove) > 0)
                 lMovement += HorizontalMove(hMove);
@@ -664,156 +674,202 @@ public class PlayerController : MonoBehaviour
                 lMovement += HorizontalSlowDown();
         }
 
-        if (!isGrabbing && !isClimbingLadder)
+        if (currentSpatialSas == null)
         {
-            if (!isChangingSpatialLine)
+            if ((vMove >= changeLineDeadZoneValue || (vMove > 0 && inputMode == InputMode.PC)) && !(isChangingSpatialLine && changingLineDirection == 1))
             {
-                if (currentSpatialSas == null)
+                for (int i = 0; i < currentSpatialRoom._spatialLines.Count; i++)
                 {
-                    if (vMove > deadZoneValue)
+                    SpatialLine sl = currentSpatialRoom._spatialLines[i];
+                    if (sl.begin.position.z > currentSpatialLine.begin.position.z)
                     {
-                        for (int i = 0; i < currentSpatialRoom._spatialLines.Count; i++)
+                        if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
                         {
-                            SpatialLine sl = currentSpatialRoom._spatialLines[i];
-                            if (sl.begin.position.z > currentSpatialLine.begin.position.z)
-                            {
-                                if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
-                                {
-                                    currentSpatialLine = sl;
-                                    isChangingSpatialLine = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else if (vMove < -deadZoneValue)
-                    {
-                        for (int i = currentSpatialRoom._spatialLines.Count - 1; i >= 0; i--)
-                        {
-                            SpatialLine sl = currentSpatialRoom._spatialLines[i];
-                            if (sl.begin.position.z < currentSpatialLine.begin.position.z)
-                            {
-                                if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
-                                {
-                                    currentSpatialLine = sl;
-                                    isChangingSpatialLine = true;
-                                    break;
-                                }
-                            }
+                            currentSpatialLine = sl;
+                            isChangingSpatialLine = true;
+                            changingLineDirection = 1;
+                            break;
                         }
                     }
                 }
             }
-        
-            /*if (vMove !=0)
-                lMovement += VerticalMove(vMove);
-            else if (_verticalAccDecLerpValue != 0)
-                lMovement += VerticalSlowDown();*/
+            else if ((vMove <= -changeLineDeadZoneValue || (vMove < 0 && inputMode == InputMode.PC)) && !(isChangingSpatialLine && changingLineDirection == -1))
+            {
+                for (int i = currentSpatialRoom._spatialLines.Count - 1; i >= 0; i--)
+                {
+                    SpatialLine sl = currentSpatialRoom._spatialLines[i];
+                    if (sl.begin.position.z < currentSpatialLine.begin.position.z)
+                    {
+                        if (transform.position.x >= sl.begin.position.x && transform.position.x <= sl.end.position.x)
+                        {
+                            currentSpatialLine = sl;
+                            isChangingSpatialLine = true;
+                            changingLineDirection = -1;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         if (lMovement != Vector3.zero || isChangingSpatialLine)
         {
             isMoving = true;
-            if (isClimbingLadder) lMovement *= 0;// ladderSpeed; //moveSpeed = ladderSpeed;
-            else if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0 && inverse==1)
+            if (GameManager.instance.controls.GetAxisRaw("Sprint") != 0)// && inverse==1)
             {
+                isRunning = true;
                 animator.SetBool("IsRunning", true);
                 moveSpeed = runSpeed;
             }
             else
             {
+                isRunning = false;
                 animator.SetBool("IsRunning", false);
                 moveSpeed = walkSpeed;
             }
 
-            if (isGrabbing)
+            if (needsCentering && currentSpatialLine.begin.position.z > transform.position.z)
             {
-                lMovement *= grabSpeed;
+                float targetPosX = (currentSpatialLine.end.position.x + currentSpatialLine.begin.position.x) / 2;
+                int horizontalDirection = (transform.position.x - targetPosX) > 0 ? -1 : 1;
+                Vector3 horizontalMove = HorizontalMove(horizontalDirection);
+                if (horizontalDirection == -1)
+                {
+                    if (horizontalMove.x > 0.0f)
+                    {
+                        horizontalMove.x = 0.0f;
+                    }
+                }
+                else
+                {
+                    if (horizontalMove.x < 0.0f)
+                    {
+                        horizontalMove.x = 0.0f;
+                    }
+                }
+                lMovement += horizontalMove;
+                Vector3 transformPosition = transform.position + lMovement;
+                if (lMovement.x > 0.0f)
+                {
+                    if (transformPosition.x > targetPosX)
+                    {
+                        //print("je tp >0");
+                        lMovement.x = targetPosX - transform.position.x;
+                    }
+                }
+                else if (lMovement.x < 0.0f)
+                {
+                    if (transformPosition.x < targetPosX)
+                    {
+                        //print("je tp <0");
+                        lMovement.x = targetPosX - transform.position.x;
+                    }
+                }
+            }
+            else if (currentSpatialSas == null)
+            {
+                Vector3 transformPosition = transform.position + lMovement;
+                if (transformPosition.x < currentSpatialLine.begin.position.x)
+                {
+                    lMovement.x = currentSpatialLine.begin.position.x - transform.position.x;
+                }
+                else if (transformPosition.x > currentSpatialLine.end.position.x)
+                {
+                    lMovement.x = currentSpatialLine.end.position.x - transform.position.x;
+                }
             }
 
-            if (!isClimbingLadder)
+            if (isChangingSpatialLine)
             {
-                if (needsCentering)
+                /*lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
+                lMovement.z *= moveSpeed;*/
+
+                int verticalDirection = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
+                Vector3 verticalMove = VerticalMove(verticalDirection);
+                if (verticalDirection == -1)
                 {
-                    if (currentSpatialLine.begin.position.z > transform.position.z)
+                    if (verticalMove.z > 0.0f)
                     {
-                        lMovement.x = Mathf.Clamp(((currentSpatialLine.end.position.x - currentSpatialLine.begin.position.x) / 2 + currentSpatialLine.begin.position.x) - transform.position.x, -1, 1);
-                        lMovement.x *= changingLineSpeed;
-                    }
-                    else
-                    {
-                        lMovement.x = 0;
+                        verticalMove.z = 0.0f;
                     }
                 }
-                else if (currentSpatialSas == null)
+                else
                 {
-                    Vector3 transformPosition = transform.position + lMovement;
-                    if (transformPosition.x < currentSpatialLine.begin.position.x)
+                    if (verticalMove.z < 0.0f)
                     {
-                        lMovement.x = currentSpatialLine.begin.position.x - transform.position.x;
+                        verticalMove.z = 0.0f;
                     }
-                    else if (transformPosition.x > currentSpatialLine.end.position.x)
+                }
+                lMovement += verticalMove;
+                Vector3 transformPosition = transform.position + lMovement;
+                //print("movementz" + lMovement.z);
+                if (lMovement.z > 0.0f)
+                {
+                    if (transformPosition.z > currentSpatialLine.begin.position.z)
                     {
-                        lMovement.x = currentSpatialLine.end.position.x - transform.position.x;
+                        //print("je tp >0");
+                        lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
+                    }
+                }
+                else if (lMovement.z < 0.0f)
+                {
+                    if (transformPosition.z < currentSpatialLine.begin.position.z)
+                    {
+                        //print("je tp <0");
+                        lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
                     }
                 }
 
-                if (isChangingSpatialLine)
+                if (Mathf.Abs(transform.position.z - currentSpatialLine.begin.position.z) < 0.001f)
                 {
-                    lMovement.z = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
-                    lMovement.z *= changingLineSpeed;
-                    Vector3 transformPosition = transform.position + lMovement;
-                    if (lMovement.z > 0)
-                    {
-                        if (transformPosition.z > currentSpatialLine.begin.position.z)
-                        {
-                            lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
-                        }
-                    }
-                    else
-                    {
-                        if (transformPosition.z < currentSpatialLine.begin.position.z)
-                        {
-                            lMovement.z = currentSpatialLine.begin.position.z - transform.position.z;
-                        }
-                    }
-
-                    if (Mathf.Abs(transform.position.z - currentSpatialLine.begin.position.z) < 0.001f)
-                    {
-                        isChangingSpatialLine = false;
-                    }
+                    isChangingSpatialLine = false;
                 }
+            }
+            else if (_horizontalAccDecLerpValue != 0)
+            {
+                lMovement += VerticalSlowDown();
+            }
+            else if(_horizontalAccDecLerpValue != 0)
+            {
+                lMovement += VerticalSlowDown();
             }
 
             rb.MovePosition(transform.position + lMovement);
 
-            if (isGrabbing)
+            /*if (Mathf.Abs(hMove) < 0.01f && Mathf.Abs(vMove) < 0.01f)
             {
-                int direction = (transform.position.x - objectGrabbed.position.x) > 0 ? -1 : 1;
-                objectGrabbed.MovePosition(transform.position + new Vector3(objectGrabbedWidth * direction, 0, 0));
-            }
+                isMoving = false;
+            }*/
 
-            /*Vector3 camPos = GameManager.instance.mainCamera.transform.position;
-            lMovement.z = 0;
-            GameManager.instance.MoveCamera(camPos + (lMovement*50));*/
+            
         }
         if (Mathf.Abs(lMovement.x) < 0.01f && Mathf.Abs(lMovement.z) < 0.01f)
         {
             isMoving = false;
         }
         animator.SetBool("IsMoving", isMoving);
+
     }
 
     public void PlaySoundWalk()
     {
-        if (isClimbingLadder) return;
-        AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Walk", gameObject);
+        AkSoundEngine.SetSwitch("Allure", "Walk", gameObject);
+        AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
+        AkSoundEngine.PostEvent("Play_Footsteps_All", gameObject);
     }
 
     public void PlaySoundRun()
     {
-        if (isClimbingLadder) return;
-        AkSoundEngine.PostEvent("Play_Placeholder_Footsteps_Concrete_Run", gameObject);
+        AkSoundEngine.SetSwitch("Allure", "Run", gameObject);
+        AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
+        AkSoundEngine.PostEvent("Play_Footsteps_All", gameObject);
+    }
+
+    public void PlaySoundFall()
+    {
+        AkSoundEngine.SetSwitch("Allure", "Fall", gameObject);
+        AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
+        AkSoundEngine.PostEvent("Play_Footsteps_All", gameObject);
     }
 
     private Vector3 HorizontalMove(float lXmovValue)
@@ -837,20 +893,9 @@ public class PlayerController : MonoBehaviour
         _verticalAccDecLerpValue = Mathf.Clamp(_verticalAccDecLerpValue, -1, 1);
 
         Vector3 lMovement;
-
-        if (isClimbingLadder)
-        {
-            lMovement = new Vector3(0, Mathf.Abs(lYmovValue), 0);
-        }
-        else
-        {
-            lMovement = new Vector3(0, 0, Mathf.Abs(lYmovValue));
-        }
-        
+        lMovement = new Vector3(0, 0, Mathf.Abs(lYmovValue));
         lMovement = lMovement.normalized * moveSpeed * Time.fixedDeltaTime * Mathf.Sign(_verticalAccDecLerpValue);
-
         _verticalLastMovement = lMovement;
-
         lMovement *= _verticalAccelerationCurve.Evaluate(Mathf.Abs(_verticalAccDecLerpValue));
 
         return lMovement;
@@ -889,16 +934,15 @@ public class PlayerController : MonoBehaviour
 
     private void BodyRotation()
     {
-        if (isClimbingLadder) return;
-        Quaternion save = lt.transform.rotation;
+        Quaternion save = flashlight.transform.rotation;
         float speed = 0.1f;
-        if (vMove > 0 && isChangingSpatialLine)
+        if (lMovement.z > 0 && isChangingSpatialLine)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), speed);
             inverse = 1;
             currentLookDirection = LookDirection.Front;
         }
-        else if (vMove < 0 && isChangingSpatialLine)
+        else if (lMovement.z < 0 && isChangingSpatialLine)
         {
             modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), speed);
             inverse = -1;
@@ -921,7 +965,7 @@ public class PlayerController : MonoBehaviour
                 else inverse = -1;
             }
         }
-        lt.transform.rotation = save;
+        flashlight.transform.rotation = save;
         animator.SetFloat("Inverse", inverse);
     }
 
@@ -935,114 +979,17 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Climb
-
-    private void ClimbCheck()
-    {
-        Vector3 climbDirection = Vector3.zero;
-        Vector3 angle = Vector3.zero;
-
-        if (hMove > 0)
-        {
-            climbDirection = Vector3.right;
-            angle = new Vector3(0, 90, 0);
-        }
-        else if (hMove < 0)
-        {
-            climbDirection = Vector3.left;
-            angle = new Vector3(0, -90, 0);
-        }
-        else if (vMove > 0)
-        {
-            climbDirection = Vector3.forward;
-            angle = new Vector3(0, 0, 0);
-        }
-        else if (vMove < 0)
-        {
-            climbDirection = Vector3.back;
-            angle = new Vector3(0, -180, 0);
-        }
-
-        if (isJumping)
-        {
-            if (jumpDirection == 0)
-            {
-                climbDirection = Vector3.left;
-                angle = new Vector3(0, -90, 0);
-            }
-            else if (jumpDirection == 1)
-            {
-                climbDirection = Vector3.right;
-                angle = new Vector3(0, 90, 0);
-            }
-        }
-
-        //print(climbDirection);
-
-        RaycastHit hitInfo;
-        if (Physics.Raycast(raycastClimb.position, climbDirection, out hitInfo, maxClimbLength, GameManager.instance.GetClimbLayer()))
-        {
-            if (hitInfo.collider.bounds.max.y - cl.bounds.max.y < maxClimbHeight)
-            {
-                modelTransform.localEulerAngles = angle;
-                isClimbing = true;
-                rb.isKinematic = true;
-                animator.SetBool("IsFalling", false);
-                animator.SetBool("Climb", true);
-            }
-        }
-    }
-
-    public void StopClimb()
-    {
-        Vector3 newPos = hipPosition.position;
-        newPos.y -= 0.3f;
-        transform.position = newPos;
-        modelTransform.localPosition = localModelPosition;
-        lastPosition = transform.position;
-
-        rb.isKinematic = false;
-        isClimbing = false;
-        isGrounded = true;
-        animator.SetBool("Climb", false);
-        animator.SetBool("IsMoving", false);
-        velocity = 0;
-        animator.SetBool("IsFalling", false);
-        animator.SetBool("HasLanded", false);
-    }
-
-    #endregion
-
-    #region Jump
+    #region Ground & Fall
     private void GroundedCheck()
     {
         if (!isGrounded) isFalling = true;
         isGrounded = false;
-        /*if (ignoreIsGroundedOneTime)
-        {
-            ignoreIsGroundedOneTime = false;
-            return;
-        }*/
-        RaycastHit hitInfo;
-        foreach (Transform t in raycastPosition)
-        {
-            if (Physics.Raycast(t.position, -Vector3.up, out hitInfo, rayCastLength))
-            {
-                //print("raycasthit: "+hitInfo.collider.name);
-                if (!hitInfo.collider.isTrigger)
-                {
-                    isGrounded = true;
-                    break;
-                }
-            }
-        }
+        isGrounded = groundDetector.GetIsGrounded();
         if (!isFalling) return;
         if (isGrounded)
         {
-            isJumping = false;
             isFalling = false;
             stopMove = false;
-            animator.SetBool("IsJumping", false);
             animator.SetBool("IsFalling", false);
             animator.SetBool("HasLanded", true);
         }
@@ -1050,16 +997,13 @@ public class PlayerController : MonoBehaviour
 
     private void FallingCheck()
     {
-        if(!isClimbing && !isClimbingLadder)
+        if(yVelocity < 0 && !isInElevator &&!stopMove)
         {
-            if (yVelocity < 0)
-            {
-                animator.SetBool("IsFalling", true);
-            }
-            else
-            {
-                animator.SetBool("IsFalling", false);
-            }
+            animator.SetBool("IsFalling", true);
+        }
+        else
+        {
+            animator.SetBool("IsFalling", false);
         }
     }
 
@@ -1070,41 +1014,8 @@ public class PlayerController : MonoBehaviour
     
     public void LandOnGround()
     {
-        animator.SetBool("IsJumping", false);
         animator.SetBool("IsFalling", false);
         animator.SetBool("HasLanded", false);
-    }
-
-    public void JumpStart()
-    {
-        isJumping = true;
-        rb.velocity = Vector3.zero;
-        float direction = jumpLength;
-        if (jumpDirection == 0) direction *= -1;
-        Vector3 jumpVector = new Vector3(direction, jumpForce);
-        rb.AddForce(jumpVector, ForceMode.VelocityChange);
-       // ignoreIsGroundedOneTime = true;
-    }
-
-    public void Jump()
-    {
-        GroundedCheck();
-        if (!isGrounded) return;
-        stopMove = true;
-        rb.velocity = Vector3.zero;
-        Vector3 angle=Vector3.zero;
-        if (jumpDirection == 0)
-        {
-            angle = new Vector3(0, -90, 0);
-        }
-        else if (jumpDirection == 1)
-        {
-            angle = new Vector3(0, 90, 0);
-        }
-        modelTransform.localEulerAngles = angle;
-        animator.SetTrigger("Jump");
-        animator.SetBool("IsJumping",true);
-
     }
 
     public void ResetVelocity()
@@ -1142,6 +1053,21 @@ public class PlayerController : MonoBehaviour
         return transform.position;
     }
 
+    public bool GetConcentration()
+    {
+        return isConcentrating;
+    }
+
+    public InputMode GetInputMode()
+    {
+        return inputMode;
+    }
+
+    public bool GetIsRunning()
+    {
+        return isRunning;
+    }
+
     // Renvoie la position du curseur sur l'écran (souris ou eye tracker) dans l'intervalle [-1;1]
 
     public Vector2 getCursorPosNormalized()
@@ -1168,12 +1094,22 @@ public class PlayerController : MonoBehaviour
 
     public Light getLight()
     {
-        return lt;
+        return flashlight;
     }
 
     public void SetCurrentAudioRoom(AudioRoom ar)
     {
         currentAudioRoom = ar;
+    }
+
+    public void SetIsInElevator(bool b)
+    {
+        isInElevator = b;
+    }
+
+    public void SetLightAngle(float newAngle)
+    {
+        normalLightAngle = newAngle;
     }
 
     public AudioRoom GetCurrentAudioRoom()
@@ -1183,31 +1119,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetLightRange(float newRange)
     {
-        lt.range = newRange;
-    }
-
-    public void SetIsClimbingLadder(bool b)
-    {
-        isClimbingLadder = b;
-        if (b) rb.useGravity = false;
-        else rb.useGravity = true;
-    }
-
-    public bool GetIsClimbingLadder()
-    {
-        return isClimbingLadder;
-    }
-
-    public void SetIsGrabbing(bool b, Rigidbody obj, float objWidth)
-    {
-        isGrabbing = b;
-        objectGrabbed = obj;
-        objectGrabbedWidth = objWidth;
-    }
-
-    public bool GetIsGrabbing()
-    {
-        return isGrabbing;
+        normalLightRange = newRange;
     }
 
     public CameraBlock getCameraBlock()
