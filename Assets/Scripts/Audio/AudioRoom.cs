@@ -63,14 +63,14 @@ public class AudioRoom : MonoBehaviour
                 else if (entry.direction == AudioSas.Direction.Up)
                 {
                     float rate = (GameManager.instance.player.transform.position.y - entry.getCollider().bounds.min.y - postOffset) / (entry.getCollider().bounds.max.y - entry.getCollider().bounds.min.y);
-                    rtpcVolumeFilter = Mathf.Clamp(25 * rate, 0, 100);
+                    rtpcVolumeFilter = Mathf.Clamp(25 * (1 - rate), 0, 100);
                     rtpcPan = Mathf.Clamp(50, 0, 100);
                 }
                 //la salle est en bas
                 else if (entry.direction == AudioSas.Direction.Down)
                 {
                     float rate = (GameManager.instance.player.transform.position.y - entry.getCollider().bounds.min.y + postOffset) / (entry.getCollider().bounds.max.y - entry.getCollider().bounds.min.y);
-                    rtpcVolumeFilter = Mathf.Clamp(25 * (1 - rate), 0, 100);
+                    rtpcVolumeFilter = Mathf.Clamp(25 * rate, 0, 100);
                     rtpcPan = Mathf.Clamp(50, 0, 100);
                 }
                 AkSoundEngine.SetRTPCValue("position_relative_volume_"+id, rtpcVolumeFilter);

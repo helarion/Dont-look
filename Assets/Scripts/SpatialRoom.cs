@@ -22,6 +22,10 @@ public class SpatialRoom : MonoBehaviour
     [SerializeField] public float newContrePlongeeAngle = 20;
     [SerializeField] public float newContrePlongeeHauteur = 0.5f;
 
+    [Header("Spider")]
+    [SerializeField] public Transform spiderGoalLeft;
+    [SerializeField] public Transform spiderGoalRight;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -21,6 +21,8 @@ public class SpiderBehavior : Enemy
 
     NavMeshLink link;
 
+    SpatialRoom currentSpatialRoom = null;
+
     private void Start()
     {
         Initialize();
@@ -55,6 +57,15 @@ public class SpiderBehavior : Enemy
         }
 
         DebugPath(); 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        SpatialRoom spatialRoom = other.GetComponent<SpatialRoom>();
+        if (spatialRoom != null)
+        {
+            currentSpatialRoom = spatialRoom;
+        }
     }
 
     IEnumerator CountingChange()
@@ -101,7 +112,18 @@ public class SpiderBehavior : Enemy
         {
             if(!canSeePlayer)
             {
-                if (!isSearching) StartCoroutine(CountChase());
+                if (!isSearching)
+                {
+                    if (transform.position.x - GameManager.instance.player.transform.position.x > 0)
+                    {
+                        MoveTo(currentSpatialRoom.spiderGoalLeft.position);
+                    }
+                    else
+                    {
+                        MoveTo(currentSpatialRoom.spiderGoalRight.position);
+                    }
+                    StartCoroutine(CountChase());
+                }
                 isSearching = true;
             }
         }
@@ -134,7 +156,7 @@ public class SpiderBehavior : Enemy
         float countChase = 0;
         while (countChase < delayChase)
         {
-            agent.speed = moveSpeed - bonusSpeed;
+            agent.speed = moveSpeed;
             countChase += Time.deltaTime;
             yield return new WaitForEndOfFrame();
             //print(countChase);
