@@ -24,11 +24,11 @@ public class ContiniousLightDetector : Objet
 
     private void Start()
     {
+        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
         if (isBroken)
         {
             Break();
         }
-        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
     }
 
     private void Update()
