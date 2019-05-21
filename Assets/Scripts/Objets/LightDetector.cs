@@ -27,6 +27,7 @@ public class LightDetector : Objet
     private void Start()
     {
         model = GetComponentInChildren<MeshRenderer>();
+        timeLooked = 0.0f;
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
         if (isBroken)
         {
@@ -52,7 +53,7 @@ public class LightDetector : Objet
 
             if (timeLooked < delayActivate)
             {
-                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, delayActivate, 0, 100));
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0.0f, delayActivate, 0, 100));
                 timeLooked += Time.deltaTime;
             }
             else if (!isActivated)
