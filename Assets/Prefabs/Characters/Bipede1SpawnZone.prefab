@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 5947339118586994013}
   - component: {fileID: 2175598857284857689}
   - component: {fileID: 1939393465406787909}
+  - component: {fileID: 8012003396945251152}
   m_Layer: 9
   m_Name: Bipede1
   m_TagString: Bipede
@@ -240,6 +241,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8012003396945251152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5058967854183323154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1598d4d2c0c41d1439e495a4b5587823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  yBonus: 0
+  time_start: 0.5
+  time_end: 0.5
+  current_occlusion: 0
+  max_occlusion: 30
+  layerMaskOcclusion:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &5105161807322348065
 GameObject:
   m_ObjectHideFlags: 0
@@ -3146,7 +3168,7 @@ SkinnedMeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
-  m_Quality: 0
+  m_Quality: 4
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 4300002, guid: 30d114ae9f225fc428d061ff47b495cd, type: 3}

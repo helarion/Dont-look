@@ -82,7 +82,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 32
-  m_Range: 6
+  m_Range: 8
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -310,6 +310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 2080198689052160362}
   indexMax: 3
+  indexMin: 0
   isEnabled: 0
   onSound: Play_Amp_On
   offSound: Play_Amp_Off

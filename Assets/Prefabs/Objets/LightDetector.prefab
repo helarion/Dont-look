@@ -45,7 +45,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 1}
   m_Intensity: 32
   m_Range: 1.0000001
   m_SpotAngle: 30
@@ -306,7 +306,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 1}
   m_Intensity: 32
   m_Range: 1.0000001
   m_SpotAngle: 30
@@ -828,7 +828,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 1}
   m_Intensity: 32
   m_Range: 1.0000001
   m_SpotAngle: 30
@@ -1148,12 +1148,12 @@ MonoBehaviour:
   pointLightMid: {fileID: 1047883686}
   pointLightBot: {fileID: 815143716}
   offIntensity: 20
-  activeIntensity: 80
+  activeIntensity: 40
   blinkSpeed: 1
   durationBetweenBlinks: 0.2
-  offColor: {r: 0.6037736, g: 0.031327877, b: 0.031327877, a: 0}
-  chargeColor: {r: 0.116767526, g: 0.6037736, b: 0.13586585, a: 0}
-  activeColor: {r: 0.05420078, g: 0.18952566, b: 0.5471698, a: 0}
+  offColor: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 0}
+  chargeColor: {r: 0.09411765, g: 0.7372549, b: 0.61960787, a: 0}
+  activeColor: {r: 0.5686275, g: 0, b: 1, a: 0}
   isBroken: 0
 --- !u!1001 &5616409033507520663
 PrefabInstance:

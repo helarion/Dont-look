@@ -56,7 +56,7 @@ public class ScriptedSpider : Enemy
 
     public override void PlayChase()
     {
-        AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbPlay, p.modelTransform.gameObject);
+        //AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbPlay, p.modelTransform.gameObject);
     }
 
     private IEnumerator ScriptRoutine()

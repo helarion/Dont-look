@@ -72,6 +72,10 @@ MonoBehaviour:
   blinkingLight: {fileID: 4572074146819229367}
   chargeTime: 0.5
   brokenFeature: []
+  scriptEndBreak: 0
+  scriptEndTimeLook: 1.5
+  scriptEndElevator: {fileID: 0}
+  breakSound: 
 --- !u!114 &4572074146819229367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,9 +94,8 @@ MonoBehaviour:
   activeIntensity: 200
   blinkSpeed: 1
   durationBetweenBlinks: 0.8
-  backSpeed: 0.5
-  offColor: {r: 1, g: 0, b: 0, a: 0}
-  activeColor: {r: 0, g: 0.16342616, b: 1, a: 0}
+  offColor: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 0}
+  activeColor: {r: 0.5686275, g: 0, b: 1, a: 0}
   isBroken: 0
 --- !u!114 &3715954228943833033
 MonoBehaviour:
@@ -160,7 +163,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 1}
   m_Intensity: 0
   m_Range: 1.0000001
   m_SpotAngle: 30
