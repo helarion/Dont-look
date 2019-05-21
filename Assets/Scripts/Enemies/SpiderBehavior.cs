@@ -12,6 +12,8 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float malusStartDuration = 2;
     [SerializeField] private bool isChangingPlaces = false;
     [SerializeField] private float changingTime = 15;
+    [SerializeField] private float canSeePlayerDistance = 0.5f;
+    [SerializeField] private float stopChaseDistance = 15;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
@@ -105,33 +107,37 @@ public class SpiderBehavior : Enemy
     {
         if (isTransitionning) return;
         base.ChaseBehavior();
-        // goes to the player
-        MoveTo(GameManager.instance.player.transform.position);
 
-        if (!p.lightOn && !p.GetIsMoving() && p.GetIsHidden())
+        canSeePlayer = (transform.position - GameManager.instance.player.transform.position).magnitude < canSeePlayerDistance && !isSearching;
+
+        print(!p.lightOn + " " + !p.GetIsMoving() + " " + p.GetIsHidden() + " " + !canSeePlayer);
+
+        if (!isSearching)
         {
-            if(!canSeePlayer)
+            MoveTo(GameManager.instance.player.transform.position);
+
+            if (!p.lightOn && !p.GetIsMoving() && p.GetIsHidden() && !canSeePlayer)
             {
-                if (!isSearching)
+                if (transform.position.x - GameManager.instance.player.transform.position.x > 0)
                 {
-                    if (transform.position.x - GameManager.instance.player.transform.position.x > 0)
-                    {
-                        MoveTo(currentSpatialRoom.spiderGoalLeft.position);
-                    }
-                    else
-                    {
-                        MoveTo(currentSpatialRoom.spiderGoalRight.position);
-                    }
-                    StartCoroutine(CountChase());
+                    MoveTo(currentSpatialRoom.spiderGoalLeft.position);
                 }
+                else
+                {
+                    MoveTo(currentSpatialRoom.spiderGoalRight.position);
+                }
+                StartCoroutine(CountChase());
                 isSearching = true;
             }
         }
         else
         {
-            StopCoroutine(CountChase());
-            isSearching = false;
-            agent.speed = moveSpeed;
+            if (p.lightOn || p.GetIsMoving() || !p.GetIsHidden() || canSeePlayer)
+            {
+                StopCoroutine(CountChase());
+                isSearching = false;
+                agent.speed = moveSpeed;
+            }
         }
     }
 
@@ -154,7 +160,7 @@ public class SpiderBehavior : Enemy
     private IEnumerator CountChase()
     {
         float countChase = 0;
-        while (countChase < delayChase)
+        while ((transform.position - GameManager.instance.player.transform.position).magnitude < stopChaseDistance || (transform.position.x > agent.destination.x == transform.position.x > GameManager.instance.player.transform.position.x))
         {
             agent.speed = moveSpeed;
             countChase += Time.deltaTime;
