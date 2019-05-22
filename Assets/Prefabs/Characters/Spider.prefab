@@ -110,7 +110,7 @@ MonoBehaviour:
   WwiseChasePlay: 
   WwiseChaseStop: 
   WwiseLook: Play_Blend_Stinger_Araignee
-  WalkSound: 
+  WalkSound: Play_Footsteps_Araignee_Metal
   scriptedObjectsActivation: []
   scriptedLampActivation: {fileID: 0}
   agent: {fileID: 2436183961040824494}
@@ -128,6 +128,8 @@ MonoBehaviour:
   malusStartDuration: 2
   isChangingPlaces: 0
   changingTime: 15
+  canSeePlayerDistance: 0.5
+  stopChaseDistance: 15
 --- !u!195 &2436183961040824494
 NavMeshAgent:
   m_ObjectHideFlags: 0
