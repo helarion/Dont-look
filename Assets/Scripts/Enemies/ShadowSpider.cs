@@ -11,12 +11,12 @@ public class ShadowSpider : Enemy
     private void Start()
     {
         Initialize();
+        velocity = 0;
+        animator.SetFloat("Velocity", velocity);
     }
 
     private void Update()
     {
-        velocity = overrideVelocity;
-        animator.SetFloat("Velocity", velocity);
         if(isMoving)
         {
             if(agent.remainingDistance<=0)
@@ -28,18 +28,10 @@ public class ShadowSpider : Enemy
     
     public void Trigger()
     {
+        velocity = overrideVelocity;
+        animator.SetFloat("Velocity", velocity);
         animator.SetBool("IsMoving", true);
         isMoving = true;
         MoveTo(endPos.position);
-    }
-
-    // APPELER LORSQUE L'ARAIGNEE EST ECLAIREE
-    public override void IsLit(bool b)
-    {
-        base.IsLit(b);
-        if (b)
-        {
-            Trigger();
-        }
     }
 }
