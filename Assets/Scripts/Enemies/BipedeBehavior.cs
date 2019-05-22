@@ -124,6 +124,7 @@ public class BipedeBehavior : Enemy
         isMoving = false;
         animator.SetBool("IsLooked", true);
         animator.SetBool("IsMoving", isMoving);
+        transform.position += Vector3.ClampMagnitude(transform.position - GameManager.instance.player.transform.position, 0.5f * Time.deltaTime);
     }
 
     public override void Respawn()
