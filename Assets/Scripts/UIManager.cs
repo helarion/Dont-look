@@ -103,6 +103,7 @@ public class UIManager : MonoBehaviour
         savedColor.a = 0;
         img.color = savedColor;
         isFading = false;
+        AkSoundEngine.PostEvent(GameManager.instance.playRandomSounds, GameManager.instance.gameObject);
     }
 
     IEnumerator FadeInCoroutine(Image img, float duration, float waitBefore)

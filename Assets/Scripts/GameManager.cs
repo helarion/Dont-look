@@ -57,9 +57,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] public string ChaseSpiderAmbPlay;
     [SerializeField] public string ChaseSpiderAmbStop;
     [SerializeField] public string ChaseSpiderKillStop;
-
     [SerializeField] public string ChaseBipedeAmbPlay;
     [SerializeField] public string ChaseBipedeAmbStop;
+
+    [SerializeField] public string playRandomSounds;
+    [SerializeField] public string stopRandomSounds;
 
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
@@ -178,6 +180,7 @@ public class GameManager : MonoBehaviour
         }
         AkSoundEngine.SetRTPCValue("position_relative_volume_" + player.GetCurrentAudioRoom().id, 0);
         ResetAllAudioRooms();
+        yield return new WaitForSeconds(5);
         PlayCurrentAudioRoom(lastCheckpoint.aRoom);
         yield return null;
     }
@@ -345,6 +348,7 @@ public class GameManager : MonoBehaviour
     public void Death()
     {
         if (!player.getIsAlive()) return;
+        AkSoundEngine.PostEvent(stopRandomSounds, gameObject);
         player.Reset();
         player.SetIsAlive(false);
         UIManager.instance.FadeDeath(true);
