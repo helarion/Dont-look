@@ -16,6 +16,7 @@ public class ContiniousLightDetector : Objet
     [SerializeField] private string breakSound;
     [SerializeField] private string fixSound;
 
+    bool broken = false;
     bool isLooked = false;
     bool wasLooked = false;
     float count=0;
@@ -34,7 +35,7 @@ public class ContiniousLightDetector : Objet
 
     private void Update()
     {
-        if (isBroken) return;
+        if (broken) return;
 
         wasLooked = isLooked;
         isLooked = GameManager.instance.LightDetection(gameObject, true);
@@ -90,6 +91,7 @@ public class ContiniousLightDetector : Objet
 
     public override void Fix()
     {
+        broken = false;
         base.Fix();
         AkSoundEngine.PostEvent(fixSound, gameObject);
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
@@ -102,6 +104,7 @@ public class ContiniousLightDetector : Objet
 
     public override void Break()
     {
+        broken = true;
         foreach(GameObject g in brokenFeature)
         {
             g.SetActive(true);
@@ -112,6 +115,7 @@ public class ContiniousLightDetector : Objet
 
     public override void Reset()
     {
+        broken = false;
         base.Reset();
         target.Reset();
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
