@@ -12,6 +12,7 @@ public class BipedeBehavior : Enemy
     private float currentWalkIntensity;
     private BoxCollider detectZone;
     private bool canSeePlayer = false;
+    public bool isStopped = false;
 
     void Start()
     {
@@ -97,6 +98,7 @@ public class BipedeBehavior : Enemy
         else
         {
             //agent.speed = moveSpeed;
+            isStopped = false;
             isLooked = false;
             agent.isStopped = false;
             isMoving = true;
@@ -109,6 +111,7 @@ public class BipedeBehavior : Enemy
     {
         agent.isStopped = false;
         isMoving = true;
+        isStopped = false;
         agent.speed = moveSpeed - bonusSpeed;
         animator.SetBool("IsLooked", false);
         animator.SetBool("IsMoving", isMoving);
@@ -117,6 +120,7 @@ public class BipedeBehavior : Enemy
     private void LitConcentrated()
     {
         agent.isStopped = true;
+        isStopped = true;
         isMoving = false;
         animator.SetBool("IsLooked", true);
         animator.SetBool("IsMoving", isMoving);
