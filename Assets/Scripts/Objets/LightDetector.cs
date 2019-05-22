@@ -15,6 +15,8 @@ public class LightDetector : Objet
     [SerializeField] private GameObject[] brokenFeature;
     private MeshRenderer model;
 
+    bool broken = false;
+
     bool wasLooked = false;
     [HideInInspector] public bool isLooked = false;
 
@@ -37,7 +39,7 @@ public class LightDetector : Objet
 
     private void Update()
     {
-        if (isActivated || isBroken) return;
+        if (isActivated || broken) return;
 
         wasLooked = isLooked;
         isLooked = GameManager.instance.LightDetection(gameObject, true);
@@ -119,6 +121,7 @@ public class LightDetector : Objet
 
     public override void Break()
     {
+        broken = true;
         foreach (GameObject g in brokenFeature)
         {
             g.SetActive(true);
@@ -129,7 +132,7 @@ public class LightDetector : Objet
 
     public override void Fix()
     {
-        
+        broken = false;
         foreach (GameObject g in brokenFeature)
         {
             g.SetActive(false);
@@ -144,6 +147,7 @@ public class LightDetector : Objet
         forceLit = false;
         blinkLight.Reset();
         isLooked = false;
+        broken = false;
         chargeSoundPlaying = false;
         timeLooked = 0.0f;
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
