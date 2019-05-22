@@ -110,8 +110,6 @@ public class SpiderBehavior : Enemy
 
         canSeePlayer = (transform.position - GameManager.instance.player.transform.position).magnitude < canSeePlayerDistance && !isSearching;
 
-        print(!p.lightOn + " " + !p.GetIsMoving() + " " + p.GetIsHidden() + " " + !canSeePlayer);
-
         if (!isSearching)
         {
             MoveTo(GameManager.instance.player.transform.position);
@@ -120,10 +118,12 @@ public class SpiderBehavior : Enemy
             {
                 if (transform.position.x - GameManager.instance.player.transform.position.x > 0)
                 {
+                    print("je vais vers la gauche");
                     MoveTo(currentSpatialRoom.spiderGoalLeft.position);
                 }
                 else
                 {
+                    print("je vais vers la droite");
                     MoveTo(currentSpatialRoom.spiderGoalRight.position);
                 }
                 StartCoroutine(CountChase());

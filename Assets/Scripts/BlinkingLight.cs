@@ -102,6 +102,7 @@ public class BlinkingLight : MonoBehaviour
                 float rateTop = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.66f, 0.0f, 0.33f) * 3.0f;
                 float rateMid = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.33f, 0.0f, 0.33f) * 3.0f;
                 float rateBot = Mathf.Clamp01(rate * 3.0f);
+                print(rate + " " + rateTop + " " + rateMid + " " + rateBot);
                 rectangleLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
                 rectangleLight.color = Color.Lerp(Color.black, chargeColor, rate);
                 pointLightTop.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateTop);
