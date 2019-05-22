@@ -17,11 +17,19 @@ public class ShadowSpider : Enemy
     {
         velocity = overrideVelocity;
         animator.SetFloat("Velocity", velocity);
+        if(isMoving)
+        {
+            if(agent.remainingDistance<=0)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
     
     public void Trigger()
     {
         animator.SetBool("IsMoving", true);
+        isMoving = true;
         MoveTo(endPos.position);
     }
 
