@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider gammaControl;
     [SerializeField] private Toggle toggleTracker;
     [SerializeField] private EventSystem eventSystem;
+    [SerializeField] private float waitBeforeDeath=5;
     [SerializeField] private float gammaMin=-1.5f;
     [SerializeField] private float gammaMax=1.5f;
     [SerializeField] private float waitEndTime = 10;
@@ -142,7 +143,7 @@ public class UIManager : MonoBehaviour
     public void FadeDeath(bool b)
     {
         if(b)FadeIn(fadeImg, 0.3f, 0f);
-        else FadeOut(fadeImg, 1f, 2f);
+        else FadeOut(fadeImg, 1.5f, waitBeforeDeath);
     }
 
     public void Pause(bool b)

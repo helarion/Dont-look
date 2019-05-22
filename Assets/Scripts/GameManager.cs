@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public string ChaseBipedeAmbStop;
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
+    [SerializeField] string deathSound;
     [SerializeField] public AudioRoom startRoom;
     [SerializeField] int nbAudioRoomId;
     [SerializeField] float audioFadeSpeed=10;
@@ -345,6 +346,7 @@ public class GameManager : MonoBehaviour
         player.SetIsAlive(false);
         UIManager.instance.FadeDeath(true);
         StartCoroutine(DeathCoroutine());
+        AkSoundEngine.PostEvent(deathSound, gameObject);
     }
 
     // COROUTINE DE FADE OUT / IN DE LA MORT

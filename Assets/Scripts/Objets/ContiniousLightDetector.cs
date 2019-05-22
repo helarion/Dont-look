@@ -14,6 +14,7 @@ public class ContiniousLightDetector : Objet
     [SerializeField] private float scriptEndTimeLook = 1.5f;
     [SerializeField] private Elevator scriptEndElevator;
     [SerializeField] private string breakSound;
+    [SerializeField] private string fixSound;
 
     bool isLooked = false;
     bool wasLooked = false;
@@ -88,6 +89,7 @@ public class ContiniousLightDetector : Objet
     public override void Fix()
     {
         base.Fix();
+        AkSoundEngine.PostEvent(fixSound, gameObject);
         foreach (GameObject g in brokenFeature)
         {
             g.SetActive(false);

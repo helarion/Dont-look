@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
             BipedeBehavior b = other.GetComponentInParent<BipedeBehavior>();
             if(b!=null)
             {
-                if(!b.isLooked) GameManager.instance.Death();
+                if(!b.isStopped) GameManager.instance.Death();
             }
             else   GameManager.instance.Death();
         }

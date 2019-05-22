@@ -48,7 +48,6 @@ public class Elevator : Objet
             enterCol.enabled = false;
         }
         //if(isActivated)AkSoundEngine.PostEvent(engineSound, gameObject);
-        //rb = GetComponent<Rigidbody>();
     }
 
     public override void Activate()
@@ -118,6 +117,7 @@ public class Elevator : Objet
             yield return new WaitForEndOfFrame();
         }
         Vector3 oldPos;
+        AkSoundEngine.PostEvent(stopMovingSound, gameObject);
         while (Mathf.Abs(transform.position.y - endPos.position.y) > 0.01f)
         {
             oldPos = transform.position;
@@ -129,7 +129,6 @@ public class Elevator : Objet
             yield return new WaitForEndOfFrame();
         }
         transform.position = endPos.position;
-        AkSoundEngine.PostEvent(stopMovingSound, gameObject);
         //GameManager.instance.player.ResumeMove();
         ReachEnd();
         yield return null;

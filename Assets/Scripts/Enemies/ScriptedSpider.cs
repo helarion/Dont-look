@@ -8,6 +8,7 @@ public class ScriptedSpider : Enemy
     [SerializeField] Transform pos1;
     [SerializeField] Transform pos2;
     [SerializeField] ScriptLamp lamp;
+    [SerializeField] CameraBlock cameraBlock;
     [SerializeField] int nbAttack = 2;
     [SerializeField] float scriptShakeIntensity;
     [SerializeField] float scriptShakeDuration = 1;
@@ -84,6 +85,7 @@ public class ScriptedSpider : Enemy
             step++;
             yield return new WaitForEndOfFrame();
         }
+        Destroy(cameraBlock.gameObject);
         StopChase();
         GameManager.instance.DeleteEnemyFromList(this);
         Destroy(gameObject);        

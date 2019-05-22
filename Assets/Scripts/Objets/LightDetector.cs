@@ -27,6 +27,7 @@ public class LightDetector : Objet
     private void Start()
     {
         model = GetComponentInChildren<MeshRenderer>();
+        timeLooked = 0.0f;
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
         if (isBroken)
         {

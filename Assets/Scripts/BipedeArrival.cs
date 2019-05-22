@@ -6,6 +6,7 @@ public class BipedeArrival : Objet
 {
     [SerializeField] GameObject smokePrefab;
     [SerializeField] Transform smokeTransform;
+    [SerializeField] ContiniousLightDetector lightDetector;
 
     [SerializeField] float firstShakeDuration;
     [SerializeField] float firstShakeIntensity;
@@ -13,6 +14,9 @@ public class BipedeArrival : Objet
     [SerializeField] float waitBetweenBipedeAndLamps = 2;
     [SerializeField] float lampWaitTime = 1;
     [SerializeField] float newSpeed = 3;
+    [SerializeField] float newAnimSpeed = 2;
+    [SerializeField] string lampOffSound;
+    [SerializeField] float newColSize = 20;
 
     [SerializeField] SpatialSas doorSas;
     [SerializeField] GameObject door;
@@ -45,10 +49,11 @@ public class BipedeArrival : Objet
         Transform[] bipedeSpawnZone= bipede.GetSpawnZones();
         bipede.GetAgent().Warp(bipedeSpawnZone[0].position);
         bipede.StopChase();
-        bipede.GetAgent().speed = bipede.moveSpeed;
         door.gameObject.SetActive(true);
         doorSas.gameObject.SetActive(true);
         brokenDoor.gameObject.SetActive(false);
+        debris.gameObject.SetActive(false);
+        lightDetector.Reset();
         foreach(ActivableLamp l in lamps)
         {
             l.Activate();
@@ -63,20 +68,29 @@ public class BipedeArrival : Objet
         door.gameObject.SetActive(false);
         doorSas.gameObject.SetActive(false);
         brokenDoor.gameObject.SetActive(true);
+        debris.gameObject.SetActive(true);
         Instantiate(smokePrefab, smokeTransform.position, Quaternion.identity);
         yield return new WaitForSeconds(waitBetweenExplosionAndBipede);
         bipede.GetAgent().Warp(bipedeTeleportTransform.position);
-        bipede.GetAgent().speed = newSpeed;
+        bipede.moveSpeed = newSpeed;
+        bipede.animator.SetFloat("MoveSpeed", newAnimSpeed);
         yield return new WaitForSeconds(waitBetweenBipedeAndLamps);
+        AkSoundEngine.PostEvent(lampOffSound, lamps[0].gameObject);
         lamps[0].Desactivate();
         yield return new WaitForSeconds(lampWaitTime);
+        AkSoundEngine.PostEvent(lampOffSound, lamps[1].gameObject);
         lamps[1].Desactivate();
         yield return new WaitForSeconds(lampWaitTime);
+        AkSoundEngine.PostEvent(lampOffSound, lamps[2].gameObject);
         lamps[2].Desactivate();
         yield return new WaitForSeconds(lampWaitTime);
+        AkSoundEngine.PostEvent(lampOffSound, lamps[3].gameObject);
         lamps[3].Desactivate();
         yield return new WaitForSeconds(lampWaitTime);
+        AkSoundEngine.PostEvent(lampOffSound, lamps[4].gameObject);
         lamps[4].Desactivate();
+        lightDetector.enabled = true;
+        lightDetector.Fix();
         yield return null;
     }
 }
