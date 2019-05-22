@@ -552,7 +552,7 @@ public void RotateCamera(Quaternion newRotate)
         bool vibrated = false;
         while (true)
         {
-            if (shakeRequests.Count != 0)
+            if (shakeRequests.Count != 0 && !isPaused)
             {
                 if (!vibrated && player.GetInputMode() == PlayerController.InputMode.Pad)
                 {
