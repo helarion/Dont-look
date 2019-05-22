@@ -7,6 +7,7 @@ public class ScriptLamp : Objet
     [SerializeField] private Light lt = null;
     [SerializeField] private ScriptedSpider spider =null;
     [SerializeField] string swingingLampSound;
+    [SerializeField] string lampActivateSound;
     [SerializeField] GameObject swingingLight;
 
     private void Start()
@@ -23,6 +24,7 @@ public class ScriptLamp : Objet
     {
         isActivated = true;
         lt.enabled = isActivated;
+        AkSoundEngine.PostEvent(lampActivateSound, gameObject);
         spider.Script();
         //AkSoundEngine.PostEvent(swingingLampSound,gameObject);
     }

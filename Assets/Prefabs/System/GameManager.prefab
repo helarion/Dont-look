@@ -72,14 +72,14 @@ MonoBehaviour:
   normalBobbingAmount: 0.01
   runningBobbingAmount: 0.05
   dutchAngle: 0
-  contrePlongeeAngle: 20
-  contrePlongeeHauteur: 0.3
+  contrePlongeeAngle: 25
+  contrePlongeeHauteur: 0.7
   maxGrain: 0.6
   maxVignette: 0.9
   maxTemperature: 100
-  distanceStartVignette: 10
-  distanceStartGrain: 8
-  distanceStartTemperature: 10
+  distanceStartVignette: 15
+  distanceStartGrain: 12
+  distanceStartTemperature: 15
   wallsAndMobsLayer:
     serializedVersion: 2
     m_Bits: 15872
@@ -89,12 +89,15 @@ MonoBehaviour:
   climbLayer:
     serializedVersion: 2
     m_Bits: 8192
-  ChaseAmbPlay: Play_Random_Rythme_Bass
-  ChaseAmbStop: Stop_Random_Rythme_Bass
+  ChaseSpiderAmbPlay: Play_Random_CoursePoursuite
+  ChaseSpiderAmbStop: Stop_Random_CoursePoursuite
+  ChaseBipedeAmbPlay: Play_Random_Rythme_Bass
+  ChaseBipedeAmbStop: Stop_Random_Rythme_Bass
   HeartPlay: Play_Random_Heart
   HeartStop: Stop_Random_Heart
+  deathSound: 
   startRoom: {fileID: 0}
-  nbAudioRoomId: 7
+  nbAudioRoomId: 11
   audioFadeSpeed: 30
   heartVibration: 0.1
 --- !u!114 &2026705480
