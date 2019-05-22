@@ -34,6 +34,8 @@ public class ContiniousLightDetector : Objet
 
     private void Update()
     {
+        if (isBroken) return;
+
         wasLooked = isLooked;
         isLooked = GameManager.instance.LightDetection(gameObject, true);
         target.isActivating = isLooked;
@@ -90,6 +92,7 @@ public class ContiniousLightDetector : Objet
     {
         base.Fix();
         AkSoundEngine.PostEvent(fixSound, gameObject);
+        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
         foreach (GameObject g in brokenFeature)
         {
             g.SetActive(false);
@@ -111,6 +114,7 @@ public class ContiniousLightDetector : Objet
     {
         base.Reset();
         target.Reset();
+        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
         if (isBroken)
         {
             blinkingLight.Break();

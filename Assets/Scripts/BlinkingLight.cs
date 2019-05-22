@@ -8,8 +8,7 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] Light pointLightTop = null;
     [SerializeField] Light pointLightMid = null;
     [SerializeField] Light pointLightBot = null;
-
-    [SerializeField] float offIntensity = 0.0f;
+    
     [SerializeField] float activeIntensity = 200.0f;
     [SerializeField] float blinkSpeed = 20.0f;
     [SerializeField] float durationBetweenBlinks = 2.0f;
@@ -89,8 +88,8 @@ public class BlinkingLight : MonoBehaviour
             else
             {
                 increase = true;
-                intensity = rectangleLight.intensity;
-                color = rectangleLight.color;
+                intensity = 0.0f;
+                color = Color.black;
                 blinkLightState = BlinkLightState.BLINK;
             }
         }
@@ -103,11 +102,11 @@ public class BlinkingLight : MonoBehaviour
                 float rateMid = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.33f, 0.0f, 0.33f) * 3.0f;
                 float rateBot = Mathf.Clamp01(rate * 3.0f);
                 print(rate + " " + rateTop + " " + rateMid + " " + rateBot);
-                rectangleLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
+                rectangleLight.intensity = Mathf.Lerp(0.0f, activeIntensity, rate);
                 rectangleLight.color = Color.Lerp(Color.black, chargeColor, rate);
-                pointLightTop.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateTop);
-                pointLightMid.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateMid);
-                pointLightBot.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateBot);
+                pointLightTop.intensity = Mathf.Lerp(0.0f, activeIntensity, rateTop);
+                pointLightMid.intensity = Mathf.Lerp(0.0f, activeIntensity, rateMid);
+                pointLightBot.intensity = Mathf.Lerp(0.0f, activeIntensity, rateBot);
                 pointLightTop.color = Color.Lerp(Color.black, chargeColor, rateTop);
                 pointLightMid.color = Color.Lerp(Color.black, chargeColor, rateMid);
                 pointLightBot.color = Color.Lerp(Color.black, chargeColor, rateBot);
@@ -135,11 +134,11 @@ public class BlinkingLight : MonoBehaviour
                 float rateTop = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.66f, 0.0f, 0.33f) * 3.0f;
                 float rateMid = Mathf.Clamp((timeLooked / maxTimeLooked) - 0.33f, 0.0f, 0.33f) * 3.0f;
                 float rateBot = Mathf.Clamp01(rate * 3.0f);
-                rectangleLight.intensity = Mathf.Lerp(offIntensity, activeIntensity, rate);
+                rectangleLight.intensity = Mathf.Lerp(0.0f, activeIntensity, rate);
                 rectangleLight.color = Color.Lerp(Color.black, chargeColor, rate);
-                pointLightTop.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateTop);
-                pointLightMid.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateMid);
-                pointLightBot.intensity = Mathf.Lerp(offIntensity, activeIntensity, rateBot);
+                pointLightTop.intensity = Mathf.Lerp(0.0f, activeIntensity, rateTop);
+                pointLightMid.intensity = Mathf.Lerp(0.0f, activeIntensity, rateMid);
+                pointLightBot.intensity = Mathf.Lerp(0.0f, activeIntensity, rateBot);
                 pointLightTop.color = Color.Lerp(Color.black, chargeColor, rateTop);
                 pointLightMid.color = Color.Lerp(Color.black, chargeColor, rateMid);
                 pointLightBot.color = Color.Lerp(Color.black, chargeColor, rateBot);
@@ -148,11 +147,11 @@ public class BlinkingLight : MonoBehaviour
             }
             else
             {
-                rectangleLight.intensity = offIntensity;
+                rectangleLight.intensity = 0.0f;
                 rectangleLight.color = Color.black;
-                pointLightTop.intensity = offIntensity;
-                pointLightMid.intensity = offIntensity;
-                pointLightBot.intensity = offIntensity;
+                pointLightTop.intensity = 0.0f;
+                pointLightMid.intensity = 0.0f;
+                pointLightBot.intensity = 0.0f;
                 pointLightTop.color = Color.black;
                 pointLightMid.color = Color.black;
                 pointLightBot.color = Color.black;

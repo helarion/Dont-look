@@ -37,17 +37,20 @@ public class LightDetector : Objet
 
     private void Update()
     {
-        if (isActivated) return;
+        if (isActivated || isBroken) return;
 
         wasLooked = isLooked;
         isLooked = GameManager.instance.LightDetection(gameObject, true);
 
         if (isLooked || forceLit)
         { 
-            if (!wasLooked && !chargeSoundPlaying)
+            if (!wasLooked)
             {
-                AkSoundEngine.PostEvent(playChargingSound, gameObject);
-                chargeSoundPlaying = true;
+                if (!chargeSoundPlaying)
+                {
+                    AkSoundEngine.PostEvent(playChargingSound, gameObject);
+                    chargeSoundPlaying = true;
+                }
                 blinkLight.StartLook(delayActivate);
             }
 
@@ -143,6 +146,7 @@ public class LightDetector : Objet
         isLooked = false;
         chargeSoundPlaying = false;
         timeLooked = 0.0f;
+        AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
         if (isBroken)
         {
             blinkLight.Break();
