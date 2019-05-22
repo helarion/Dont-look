@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public string WwiseChasePlay;
     [SerializeField] public string WwiseChaseStop;
     [SerializeField] public string WwiseLook;
+    [SerializeField] public string lookSoundScream;
     [SerializeField] public string WalkSound;
     [SerializeField] private Objet[] scriptedObjectsActivation;
     [SerializeField] private LightDetector scriptedLampActivation;
@@ -107,8 +108,8 @@ public class Enemy : MonoBehaviour
         {
             GameManager.instance.PostProcessReset();
             AkSoundEngine.PostEvent(WwiseChaseStop, p.modelTransform.gameObject);
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbStop, p.modelTransform.gameObject);
+            if (p.getIsAlive()) AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
+            else AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderKillStop, p.modelTransform.gameObject);
             if (delete && p.GetIsHidden())
             {
                 foreach(Objet o in scriptedObjectsActivation)
@@ -151,6 +152,7 @@ public class Enemy : MonoBehaviour
             {
                 if (scriptedLampActivation != null) scriptedLampActivation.ForceLit();
                 AkSoundEngine.PostEvent(WwiseLook, gameObject);
+                AkSoundEngine.PostEvent(lookSoundScream, gameObject);
                 hasPlayedLook = true;
             }
         }

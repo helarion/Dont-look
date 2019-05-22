@@ -56,8 +56,11 @@ public class GameManager : MonoBehaviour
     [Header("Sons")]
     [SerializeField] public string ChaseSpiderAmbPlay;
     [SerializeField] public string ChaseSpiderAmbStop;
+    [SerializeField] public string ChaseSpiderKillStop;
+
     [SerializeField] public string ChaseBipedeAmbPlay;
     [SerializeField] public string ChaseBipedeAmbStop;
+
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
     [SerializeField] string deathSound;

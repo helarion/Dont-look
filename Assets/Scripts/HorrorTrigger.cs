@@ -8,6 +8,7 @@ public class HorrorTrigger : MonoBehaviour
     [SerializeField] Light lt;
     [SerializeField] string SpotEnableSound;
     [SerializeField] string SpotDisableSound;
+    [SerializeField] string sonPass;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,7 +22,9 @@ public class HorrorTrigger : MonoBehaviour
         AkSoundEngine.PostEvent(SpotEnableSound, gameObject);
         yield return new WaitForSeconds(1);
         shadow.Trigger();
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(0.5f);
+        AkSoundEngine.PostEvent(sonPass, gameObject);
+        yield return new WaitForSeconds(2);
         lt.enabled = false;
         AkSoundEngine.PostEvent(SpotDisableSound, gameObject);
         Destroy(gameObject);
