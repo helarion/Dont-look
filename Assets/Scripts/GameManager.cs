@@ -293,8 +293,7 @@ public class GameManager : MonoBehaviour
                 downPoint.y = bipedeCollider.bounds.min.y;
                 Vector3 downVec = downPoint - player.transform.position;
                 float maxAngleFromLight = Mathf.Acos(Vector3.Dot(upVec, downVec) / (upVec.magnitude * downVec.magnitude)) * Mathf.Rad2Deg;
-
-                print(maxAngleFromLight + " ? " + angleFromLight);
+                
                 Debug.DrawLine(playerPosition, upPoint, Color.green, Time.deltaTime);
                 Debug.DrawLine(playerPosition, downPoint, Color.green, Time.deltaTime);
                 if (angleFromLight <= maxAngleFromLight)
