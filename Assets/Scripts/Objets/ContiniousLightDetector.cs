@@ -5,21 +5,18 @@ using UnityEngine;
 public class ContiniousLightDetector : Objet
 {
     [SerializeField] public Objet target;
-    [SerializeField] private string playChargingSound = null;
-    [SerializeField] private string stopChargingSound = null;
-    [SerializeField] private ContinuousBlinkingLight blinkingLight;
+    [SerializeField] public string playChargingSound = null;
+    [SerializeField] public string stopChargingSound = null;
+    [SerializeField] public ContinuousBlinkingLight blinkingLight;
     [SerializeField] private float chargeTime = 0.5f;
     [SerializeField] private GameObject[] brokenFeature;
-    [SerializeField] private bool scriptEndBreak = false;
-    [SerializeField] private float scriptEndTimeLook = 1.5f;
-    [SerializeField] private Elevator scriptEndElevator;
-    [SerializeField] private string breakSound;
+    [SerializeField] public string breakSound;
     [SerializeField] private string fixSound;
 
     bool broken = false;
     bool isLooked = false;
     bool wasLooked = false;
-    float count=0;
+    [HideInInspector] public float count=0;
     float timeLooked = 0.0f;
 
     bool chargeSoundPlaying = false;
@@ -42,31 +39,7 @@ public class ContiniousLightDetector : Objet
         target.isActivating = isLooked;
         if (isLooked)
         {
-            count += Time.deltaTime;
-            if (scriptEndBreak && count > scriptEndTimeLook &&!isBroken)
-            {
-                target.isActivating = false;
-                isBroken = true;
-                scriptEndElevator.Activate();
-                AkSoundEngine.PostEvent(stopChargingSound, gameObject);
-                AkSoundEngine.PostEvent(breakSound, gameObject);
-                blinkingLight.Break();
-                Break();
-            }
-
-            if (!wasLooked)
-            {
-                AkSoundEngine.PostEvent(playChargingSound, gameObject);
-                chargeSoundPlaying = true;
-                blinkingLight.StartLook(chargeTime);
-                timeLooked = 0.0f;
-            }
-
-            if (timeLooked < chargeTime)
-            {
-                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, chargeTime, 0, 100));
-                timeLooked += Time.deltaTime;
-            }
+            LookFunction();
         }
         else
         {
@@ -86,6 +59,24 @@ public class ContiniousLightDetector : Objet
                 AkSoundEngine.PostEvent(stopChargingSound, gameObject);
                 chargeSoundPlaying = false;
             }
+        }
+    }
+
+    public virtual void LookFunction()
+    {
+        count += Time.deltaTime;
+        if (!wasLooked)
+        {
+            AkSoundEngine.PostEvent(playChargingSound, gameObject);
+            chargeSoundPlaying = true;
+            blinkingLight.StartLook(chargeTime);
+            timeLooked = 0.0f;
+        }
+
+        if (timeLooked < chargeTime)
+        {
+            AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, chargeTime, 0, 100));
+            timeLooked += Time.deltaTime;
         }
     }
 

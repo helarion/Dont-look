@@ -42,7 +42,7 @@ public class ScriptedSpider : Enemy
     {
         if (other.CompareTag("DetectZone"))
         {
-            AkSoundEngine.PostEvent(WwiseLook, gameObject);
+            AkSoundEngine.PostEvent(LookSound, gameObject);
             GameManager.instance.ShakeScreen(scriptShakeDuration,scriptShakeIntensity);
             lamp.Swing();
         }

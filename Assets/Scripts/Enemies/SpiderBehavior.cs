@@ -213,7 +213,7 @@ public class SpiderBehavior : Enemy
             }
             else
             {
-                agent.speed = speed + bonusSpeed;
+                agent.speed = speed + malusSpeed;
             }
         }
         else
