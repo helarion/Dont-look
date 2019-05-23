@@ -60,7 +60,7 @@ public class SpiderBehavior : Enemy
             StartCoroutine("CountingChange");
         }
 
-        DebugPath(); 
+        //DebugPath(); 
     }
 
     private void OnTriggerEnter(Collider other)
@@ -96,7 +96,7 @@ public class SpiderBehavior : Enemy
 
     public void FinishedTransition()
     {
-        print("FinishedTransition");
+        //print("FinishedTransition");
         if (!isTransitionning) return;
         agent.CompleteOffMeshLink();
         agent.isStopped = false;
@@ -120,12 +120,12 @@ public class SpiderBehavior : Enemy
             {
                 if (transform.position.x - GameManager.instance.player.transform.position.x > 0)
                 {
-                    print("je vais vers la gauche");
+                    //print("je vais vers la gauche");
                     MoveTo(currentSpatialRoom.spiderGoalLeft.position);
                 }
                 else
                 {
-                    print("je vais vers la droite");
+                    //print("je vais vers la droite");
                     MoveTo(currentSpatialRoom.spiderGoalRight.position);
                 }
                 StartCoroutine(CountChase());

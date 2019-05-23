@@ -143,7 +143,7 @@ public class CameraHandler : MonoBehaviour
 
     public void DestroyTarget()
     {
-        print("destroy target camera");
+        //print("destroy target camera");
         GameObject g = new GameObject();
         g.transform.position = target.position;
         target = g.transform;

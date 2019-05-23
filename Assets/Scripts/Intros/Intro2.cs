@@ -52,7 +52,7 @@ public class Intro2 : MonoBehaviour
     {
         colorGrading.enabled.value = true;
         float gamma = gammaControl.value.Remap(gammaControl.minValue, gammaControl.maxValue, gammaMin, gammaMax);
-        print("gamma:" + gamma);
+        //print("gamma:" + gamma);
         Vector4 vec = new Vector4(gamma, gamma, gamma, gamma);
         colorGrading.gamma.value = vec;
     }

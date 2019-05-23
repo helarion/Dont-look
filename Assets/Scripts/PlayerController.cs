@@ -124,6 +124,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float normalLightRange;
     [SerializeField] private Color normalLightColor;
     [SerializeField] private float normalLightAngle;
+    [SerializeField] float maxConcentrationTime = 3.0f;
+    float concentrationTime = 0.0f;
+    bool concentrationOvercharge = false;
     private bool isConcentrating=false;
     public bool lightOn = true;
     private Light flashlight;
@@ -298,7 +301,7 @@ public class PlayerController : MonoBehaviour
         {
             Enemy e = other.GetComponentInParent<Enemy>();
             //e.DetectPlayer(true);
-            print("COLLISION ARAIGNEE");
+            //print("COLLISION ARAIGNEE");
         }
         else if(other.CompareTag("Finish"))
         {
@@ -314,7 +317,7 @@ public class PlayerController : MonoBehaviour
                 elevator.StartMoving();
                 animator.SetBool("IsMoving", false);
                 isInElevator = true;
-                print("elevator starts moving");
+                //print("elevator starts moving");
             }
         }
         else if (other.CompareTag("NeedsCentering"))
@@ -393,10 +396,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print(collision.gameObject.name);
+        //print(collision.gameObject.name);
         if (collision.gameObject.tag == "SlidingDoor")
         {
-            print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
+            //print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
             if (collision.collider.bounds.min.y - cl.bounds.max.y > -0.25f)
             {
                 GameManager.instance.Death();
@@ -444,8 +447,18 @@ public class PlayerController : MonoBehaviour
 
     private void LightMode()
     {
-        if(GameManager.instance.controls.GetButton("Concentrate"))
+        if (concentrationTime > maxConcentrationTime)
         {
+            concentrationTime = maxConcentrationTime;
+            concentrationOvercharge = true;
+            flashlightAnimator.SetTrigger("Flicker1");
+            GameManager.instance.ShakeScreen(0.1f, 0.8f);
+        }
+
+        if (GameManager.instance.controls.GetButton("Concentrate") && !concentrationOvercharge)
+        {
+            concentrationTime += Time.deltaTime;
+
             isConcentrating = true;
 
             flashlight.range = Mathf.Lerp(flashlight.range,normalLightRange+concentratedLightRangeBonus,lightTransitionSpeed);
@@ -459,6 +472,16 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            if (concentrationTime > 0.0f)
+            {
+                concentrationTime -= Time.deltaTime;
+                if (concentrationTime < 0.0f)
+                {
+                    concentrationTime = 0.0f;
+                    concentrationOvercharge = false;
+                }
+            }
+
             isConcentrating = false;
             flashlight.range = Mathf.Lerp(flashlight.range, normalLightRange, lightTransitionSpeed);
             flashlight.intensity = Mathf.Lerp(flashlight.intensity, normalLightIntensity, lightTransitionSpeed);

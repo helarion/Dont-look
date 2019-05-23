@@ -148,7 +148,7 @@ public class Enemy : MonoBehaviour
         {
             countChase += Time.deltaTime;
             yield return new WaitForEndOfFrame();
-            print(countChase);
+            //print(countChase);
         }
         StopChase();
         isCountingEndChase = false;

@@ -65,7 +65,7 @@ public class UIManager : MonoBehaviour
     {
         PostProcessInstance.instance.colorGrading.enabled.value = true;
         float gamma = gammaControl.value.Remap(gammaControl.minValue, gammaControl.maxValue, gammaMin, gammaMax);
-        print("gamma:" + gamma);
+        //print("gamma:" + gamma);
         Vector4 vec= new Vector4(gamma,gamma,gamma,gamma);
         PostProcessInstance.instance.colorGrading.gamma.value =vec;
     }
