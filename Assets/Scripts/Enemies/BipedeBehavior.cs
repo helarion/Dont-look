@@ -14,15 +14,21 @@ public class BipedeBehavior : Enemy
     private bool canSeePlayer = false;
     public bool isStopped = false;
 
+    bool betweenSteps = false; // sert à savoir si l'on peut bouger ou pas, en accord avec l'animation
+
+    [SerializeField] float retreatDistance = 0.5f;
+    float retreatTime = 0.0f;
+
     void Start()
     {
         Initialize();
-        agent.speed = moveSpeed;
+        agent.speed = 0.0f;
         detectZone = GetComponent<BoxCollider>();
     }
 
     void Update()
     {
+        //print(betweenSteps + " " + agent.speed);
         VelocityCount();
         if (isChasing)
         {
@@ -34,6 +40,12 @@ public class BipedeBehavior : Enemy
     {
         base.PlayWalk();
         GameManager.instance.ShakeScreen(walkShakeDuration, currentWalkIntensity);
+        betweenSteps = !betweenSteps; // on inverse la valeur de betweenSteps, qui commence à false, passe à true entre 2 pas, puis à false le temps que l'anim boucle
+    }
+
+    public void Retreat()
+    {
+        retreatTime = 0.1f;
     }
 
     public override void PlayChase()
@@ -97,7 +109,14 @@ public class BipedeBehavior : Enemy
         }
         else
         {
-            //agent.speed = moveSpeed;
+            if (betweenSteps)
+            {
+                agent.speed = moveSpeed;
+            }
+            else
+            {
+                agent.speed = 0.0f;
+            }
             isStopped = false;
             isLooked = false;
             agent.isStopped = false;
@@ -112,7 +131,14 @@ public class BipedeBehavior : Enemy
         agent.isStopped = false;
         isMoving = true;
         isStopped = false;
-        agent.speed = moveSpeed - malusSpeed;
+        if (betweenSteps)
+        {
+            agent.speed = moveSpeed - malusSpeed;
+        }
+        else
+        {
+            agent.speed = 0.0f;
+        }
         animator.SetBool("IsLooked", false);
         animator.SetBool("IsMoving", isMoving);
     }
@@ -124,7 +150,11 @@ public class BipedeBehavior : Enemy
         isMoving = false;
         animator.SetBool("IsLooked", true);
         animator.SetBool("IsMoving", isMoving);
-        transform.position += Vector3.ClampMagnitude(transform.position - GameManager.instance.player.transform.position, 0.5f * Time.deltaTime);
+        if (retreatTime > 0.0f)
+        {
+            retreatTime -= Time.deltaTime;
+            transform.position += Vector3.ClampMagnitude(transform.position - GameManager.instance.player.transform.position, retreatDistance * Time.deltaTime);
+        }
     }
 
     public override void Respawn()
@@ -132,5 +162,12 @@ public class BipedeBehavior : Enemy
         base.Respawn();
         hasPlayedLook = false;
         isLooked = false;
+        betweenSteps = false;
+        agent.speed = 0.0f;
+        agent.isStopped = true;
+        isStopped = true;
+        isMoving = false;
+        animator.SetBool("IsLooked", false);
+        animator.SetBool("IsMoving", false);
     }
 }

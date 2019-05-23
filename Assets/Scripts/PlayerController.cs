@@ -298,7 +298,7 @@ public class PlayerController : MonoBehaviour
         {
             Enemy e = other.GetComponentInParent<Enemy>();
             //e.DetectPlayer(true);
-            print("COLLISION ARAIGNEE");
+            //print("COLLISION ARAIGNEE");
         }
         else if(other.CompareTag("Finish"))
         {
@@ -314,7 +314,7 @@ public class PlayerController : MonoBehaviour
                 elevator.StartMoving();
                 animator.SetBool("IsMoving", false);
                 isInElevator = true;
-                print("elevator starts moving");
+                //print("elevator starts moving");
             }
         }
         else if (other.CompareTag("NeedsCentering"))
@@ -393,10 +393,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print(collision.gameObject.name);
+        //print(collision.gameObject.name);
         if (collision.gameObject.tag == "SlidingDoor")
         {
-            print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
+            //print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
             if (collision.collider.bounds.min.y - cl.bounds.max.y > -0.25f)
             {
                 GameManager.instance.Death();

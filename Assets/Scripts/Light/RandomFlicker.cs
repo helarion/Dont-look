@@ -45,13 +45,13 @@ public class RandomFlicker : MonoBehaviour
 
     public void PlayRandomAnim()
     {
-        print("playerDistance:"+playerDistance);
+        //print("playerDistance:"+playerDistance);
 
         if (playerDistance < maxPlayerDistance)
         {
             isFlickering = true;
             int randomIndex = Random.Range(indexMin, indexMax);
-            print("rand:" + randomIndex);
+            //print("rand:" + randomIndex);
             if (randomIndex < 0) randomIndex = 0;
             animator.SetInteger("Index", randomIndex);
         }

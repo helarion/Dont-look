@@ -59,7 +59,7 @@ public class LightDetector : Objet
             if (timeLooked < delayActivate)
             {
                 AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, delayActivate, 0, 100));
-                print(timeLooked.Remap(0, delayActivate, 0, 100));
+                //print(timeLooked.Remap(0, delayActivate, 0, 100));
                 timeLooked += Time.deltaTime;
             }
             else if (!isActivated)
@@ -116,7 +116,7 @@ public class LightDetector : Objet
             else o.Activate();
         }
         isActivated = true;
-        print("Object activated");
+        //print("Object activated");
     }
 
     public override void Break()
