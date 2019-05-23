@@ -14,6 +14,8 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float changingTime = 15;
     [SerializeField] private float canSeePlayerDistance = 0.5f;
     [SerializeField] private float stopChaseDistance = 15;
+    [SerializeField] private string reveilSound;
+    [SerializeField] private string screamSound;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
@@ -146,6 +148,7 @@ public class SpiderBehavior : Enemy
         base.StartChase();
         StopCoroutine("CountingChange");
         isCountingChange = true;
+        AkSoundEngine.PostEvent(screamSound, gameObject);
         StartCoroutine(LowerSpeedCoroutine());
     }
 
@@ -210,6 +213,7 @@ public class SpiderBehavior : Enemy
                 isLooked = true;
                 animator.SetBool("IsSleeping", false);
                 animator.SetTrigger("WakesUp");
+                AkSoundEngine.PostEvent(reveilSound, gameObject);
             }
             else
             {

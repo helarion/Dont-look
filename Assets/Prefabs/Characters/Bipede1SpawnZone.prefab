@@ -178,37 +178,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.8
-  bonusSpeed: -0.25
+  malusSpeed: 1
   velocityMax: 2
+  velocity: 0
+  isMoving: 0
   delete: 0
   lookShakeIntensity: 0
   lookShakeTime: 0
-  minChaseShakeIntensity: 0.02
-  maxChaseShakeIntensity: 0.06
+  minChaseShakeIntensity: 0
+  maxChaseShakeIntensity: 0
   chaseShakeTime: 0.1
   delayChase: 3
   playerDistance: 0
-  hasPlayedLook: 0
   isChasing: 0
+  isLooked: 0
+  isCountingEndChase: 0
+  hasPlayedLook: 0
+  ChaseSoundPlay: Play_Presence_Bipede
+  ChaseSoundStop: Stop_Presence_Bipede
+  LookSound: Play_Bipede_Eclaire
+  lookSoundScream: 
+  WalkSound: Play_Bipede_Footsteps
   spawnZones:
   - {fileID: 451292413311776609}
-  WwiseChasePlay: Play_Respi_Bipede
-  WwiseChaseStop: Stop_Respi_Bipede
-  WwiseLook: 
-  WalkSound: Play_Bipede_Footsteps
   scriptedObjectsActivation: []
   scriptedLampActivation: {fileID: 0}
-  agent: {fileID: 5058967854183323144}
   animator: {fileID: 0}
-  velocity: 0
   _transform: {fileID: 5058967854183323159}
-  isLooked: 0
-  isMoving: 0
-  isCountingEndChase: 0
+  agent: {fileID: 5058967854183323144}
   p: {fileID: 0}
   walkShakeIntensity: 0.3
   walkShakeDuration: 0.1
+  litSound: 
+  playRespirationSound: Play_Respi_Bipede
+  stopRespirationSound: Stop_Respi_Bipede
   bipedeGameObject: {fileID: 5105161807322348093}
+  isStopped: 0
 --- !u!65 &2175598857284857689
 BoxCollider:
   m_ObjectHideFlags: 0

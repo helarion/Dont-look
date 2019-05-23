@@ -109,19 +109,24 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public virtual void StopChaseSounds()
+    {
+        AkSoundEngine.PostEvent(ChaseSoundStop, p.modelTransform.gameObject);
+        if (p.getIsAlive())
+        {
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.playRandomSounds, GameManager.instance.gameObject);
+        }
+        else AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderKillStop, p.modelTransform.gameObject);
+    }
+
     // Stops chasing player
     public void StopChase()
     {
         if (isChasing)
         {
             GameManager.instance.PostProcessReset();
-            AkSoundEngine.PostEvent(ChaseSoundStop, p.modelTransform.gameObject);
-            if (p.getIsAlive())
-            {
-                AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
-                AkSoundEngine.PostEvent(GameManager.instance.playRandomSounds, GameManager.instance.gameObject);
-            }
-            else AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderKillStop, p.modelTransform.gameObject);
+            StopChaseSounds();
             if (delete && p.GetIsHidden())
             {
                 foreach(Objet o in scriptedObjectsActivation)

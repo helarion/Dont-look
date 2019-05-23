@@ -6,6 +6,9 @@ public class BipedeBehavior : Enemy
 {
     [SerializeField] private float walkShakeIntensity=0.3f;
     [SerializeField] private float walkShakeDuration = 1;
+    [SerializeField] string litSound;
+    [SerializeField] string playRespirationSound;
+    [SerializeField] string stopRespirationSound;
 
     [SerializeField] GameObject bipedeGameObject;
 
@@ -38,7 +41,13 @@ public class BipedeBehavior : Enemy
 
     public override void PlayChase()
     {
-        //AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbPlay, p.modelTransform.gameObject);
+        AkSoundEngine.PostEvent(playRespirationSound, p.modelTransform.gameObject);
+    }
+
+    public override void StopChaseSounds()
+    {
+        base.StopChaseSounds();
+        AkSoundEngine.PostEvent(stopRespirationSound,gameObject);
     }
 
     private void OnTriggerStay(Collider other)
