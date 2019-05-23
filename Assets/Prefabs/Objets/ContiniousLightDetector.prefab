@@ -72,11 +72,9 @@ MonoBehaviour:
   blinkingLight: {fileID: 4572074146819229367}
   chargeTime: 0.5
   brokenFeature: []
-  scriptEndBreak: 0
-  scriptEndTimeLook: 1.5
-  scriptEndElevator: {fileID: 0}
   breakSound: 
   fixSound: Play_LIGHT_OK_ASC
+  count: 0
 --- !u!114 &4572074146819229367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +90,7 @@ MonoBehaviour:
   rectangleLight: {fileID: 6403960825091783584}
   pointLight: {fileID: 2097786719093238268}
   offIntensity: 20
-  activeIntensity: 200
+  activeIntensity: 50
   blinkSpeed: 1
   durationBetweenBlinks: 0.8
   offColor: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 0}

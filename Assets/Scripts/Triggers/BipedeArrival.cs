@@ -17,6 +17,7 @@ public class BipedeArrival : Objet
     [SerializeField] float newAnimSpeed = 2;
     [SerializeField] string lampOffSound;
     [SerializeField] float newColSize = 20;
+    [SerializeField] Vector3 newRotation;
 
     [SerializeField] SpatialSas doorSas;
     [SerializeField] GameObject door;
@@ -72,6 +73,7 @@ public class BipedeArrival : Objet
         Instantiate(smokePrefab, smokeTransform.position, Quaternion.identity);
         yield return new WaitForSeconds(waitBetweenExplosionAndBipede);
         bipede.GetAgent().Warp(bipedeTeleportTransform.position);
+        bipede.transform.eulerAngles = newRotation;
         bipede.moveSpeed = newSpeed;
         bipede.animator.SetFloat("MoveSpeed", newAnimSpeed);
         yield return new WaitForSeconds(waitBetweenBipedeAndLamps);

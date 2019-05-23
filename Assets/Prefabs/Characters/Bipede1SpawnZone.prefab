@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a5b70d466c8344db087afb0cc2f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 3
   malusSpeed: 1
   velocityMax: 2
   velocity: 0
@@ -188,6 +188,7 @@ MonoBehaviour:
   minChaseShakeIntensity: 0
   maxChaseShakeIntensity: 0
   chaseShakeTime: 0.1
+  ChecksIfPathInvalid: 1
   delayChase: 3
   playerDistance: 0
   isChasing: 0
@@ -212,6 +213,7 @@ MonoBehaviour:
   litSound: 
   playRespirationSound: Play_Respi_Bipede
   stopRespirationSound: Stop_Respi_Bipede
+  rotation: {x: 0, y: 180, z: 0}
   bipedeGameObject: {fileID: 5105161807322348093}
   isStopped: 0
   retreatDistance: 0.5

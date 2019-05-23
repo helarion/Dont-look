@@ -255,6 +255,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Killzone"))
+        {
+            BipedeBehavior b = other.GetComponentInParent<BipedeBehavior>();
+            if (b != null)
+            {
+                if (!b.isStopped) GameManager.instance.Death();
+            }
+            else GameManager.instance.Death();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         CameraBlock cameraBlock = other.GetComponent<CameraBlock>();
@@ -289,15 +302,6 @@ public class PlayerController : MonoBehaviour
         else if(other.CompareTag("Hideout"))
         {
             isHidden = true;
-        }
-        else if (other.CompareTag("Killzone"))
-        {
-            BipedeBehavior b = other.GetComponentInParent<BipedeBehavior>();
-            if(b!=null)
-            {
-                if(!b.isStopped) GameManager.instance.Death();
-            }
-            else   GameManager.instance.Death();
         }
         else if(other.CompareTag("DetectZone"))
         {

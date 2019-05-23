@@ -179,5 +179,6 @@ public class BipedeBehavior : Enemy
         isMoving = false;
         animator.SetBool("IsLooked", false);
         animator.SetBool("IsMoving", false);
+        transform.eulerAngles = rotation;
     }
 }
