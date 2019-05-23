@@ -125,7 +125,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Color normalLightColor;
     [SerializeField] private float normalLightAngle;
     [SerializeField] float maxConcentrationTime = 3.0f;
+    [SerializeField] float cooldownConcentrationTime = 3.0f;
     float concentrationTime = 0.0f;
+    float concentrationDechargeTime = 0.0f;
     bool concentrationOvercharge = false;
     private bool isConcentrating=false;
     public bool lightOn = true;
@@ -449,7 +451,8 @@ public class PlayerController : MonoBehaviour
     {
         if (concentrationTime > maxConcentrationTime)
         {
-            concentrationTime = maxConcentrationTime;
+            concentrationTime = 0.0f;
+            concentrationDechargeTime = cooldownConcentrationTime;
             concentrationOvercharge = true;
             flashlightAnimator.SetTrigger("Flicker1");
             GameManager.instance.ShakeScreen(0.1f, 0.8f);
@@ -457,6 +460,8 @@ public class PlayerController : MonoBehaviour
 
         if (GameManager.instance.controls.GetButton("Concentrate") && !concentrationOvercharge)
         {
+            flashlight.enabled = true;
+
             concentrationTime += Time.deltaTime;
 
             isConcentrating = true;
@@ -478,6 +483,13 @@ public class PlayerController : MonoBehaviour
                 if (concentrationTime < 0.0f)
                 {
                     concentrationTime = 0.0f;
+                }
+            }
+            else if (concentrationOvercharge)
+            {
+                concentrationDechargeTime -= Time.deltaTime;
+                if (concentrationDechargeTime < 0.0f)
+                {
                     concentrationOvercharge = false;
                 }
             }
