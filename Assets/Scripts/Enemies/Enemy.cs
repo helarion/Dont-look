@@ -95,6 +95,7 @@ public class Enemy : MonoBehaviour
         {
             AkSoundEngine.PostEvent(GameManager.instance.stopRandomSounds, GameManager.instance.gameObject);
             hasPlayedChase = true;
+            print("startchase");
             AkSoundEngine.PostEvent(WwiseChasePlay, gameObject);
             PlayChase();
             isMoving = true;
@@ -108,7 +109,8 @@ public class Enemy : MonoBehaviour
         if (isChasing)
         {
             GameManager.instance.PostProcessReset();
-            AkSoundEngine.PostEvent(WwiseChaseStop, p.modelTransform.gameObject);
+            print("stopchase");
+            AkSoundEngine.PostEvent(WwiseChaseStop, gameObject);
             if (p.getIsAlive())
             {
                 AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
