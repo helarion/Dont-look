@@ -124,6 +124,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float normalLightRange;
     [SerializeField] private Color normalLightColor;
     [SerializeField] private float normalLightAngle;
+    [SerializeField] float maxConcentrationTime = 3.0f;
+    float concentrationTime = 0.0f;
+    bool concentrationOvercharge = false;
     private bool isConcentrating=false;
     public bool lightOn = true;
     private Light flashlight;
@@ -444,8 +447,18 @@ public class PlayerController : MonoBehaviour
 
     private void LightMode()
     {
-        if(GameManager.instance.controls.GetButton("Concentrate"))
+        if (concentrationTime > maxConcentrationTime)
         {
+            concentrationTime = maxConcentrationTime;
+            concentrationOvercharge = true;
+            flashlightAnimator.SetTrigger("Flicker1");
+            GameManager.instance.ShakeScreen(0.1f, 0.8f);
+        }
+
+        if (GameManager.instance.controls.GetButton("Concentrate") && !concentrationOvercharge)
+        {
+            concentrationTime += Time.deltaTime;
+
             isConcentrating = true;
 
             flashlight.range = Mathf.Lerp(flashlight.range,normalLightRange+concentratedLightRangeBonus,lightTransitionSpeed);
@@ -459,6 +472,16 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            if (concentrationTime > 0.0f)
+            {
+                concentrationTime -= Time.deltaTime;
+                if (concentrationTime < 0.0f)
+                {
+                    concentrationTime = 0.0f;
+                    concentrationOvercharge = false;
+                }
+            }
+
             isConcentrating = false;
             flashlight.range = Mathf.Lerp(flashlight.range, normalLightRange, lightTransitionSpeed);
             flashlight.intensity = Mathf.Lerp(flashlight.intensity, normalLightIntensity, lightTransitionSpeed);
