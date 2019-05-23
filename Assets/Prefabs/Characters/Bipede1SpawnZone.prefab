@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a5b70d466c8344db087afb0cc2f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.8
+  moveSpeed: 2
   malusSpeed: 1
   velocityMax: 2
   velocity: 0
@@ -194,8 +194,8 @@ MonoBehaviour:
   isLooked: 0
   isCountingEndChase: 0
   hasPlayedLook: 0
-  ChaseSoundPlay: Play_Presence_Bipede
-  ChaseSoundStop: Stop_Presence_Bipede
+  ChaseSoundPlay: Play_Bipede_Presence
+  ChaseSoundStop: Stop_Bipede_Presence
   LookSound: Play_Bipede_Eclaire
   lookSoundScream: 
   WalkSound: Play_Bipede_Footsteps
@@ -206,7 +206,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   _transform: {fileID: 5058967854183323159}
   agent: {fileID: 5058967854183323144}
-  p: {fileID: 0}
+  player: {fileID: 0}
   walkShakeIntensity: 0.3
   walkShakeDuration: 0.1
   litSound: 
@@ -214,6 +214,7 @@ MonoBehaviour:
   stopRespirationSound: Stop_Respi_Bipede
   bipedeGameObject: {fileID: 5105161807322348093}
   isStopped: 0
+  retreatDistance: 0.5
 --- !u!65 &2175598857284857689
 BoxCollider:
   m_ObjectHideFlags: 0

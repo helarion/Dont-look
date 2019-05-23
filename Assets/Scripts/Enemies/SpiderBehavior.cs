@@ -81,14 +81,14 @@ public class SpiderBehavior : Enemy
 
     public override void PlayChase()
     {
-        AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbPlay, p.modelTransform.gameObject);
+        AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbPlay, player.modelTransform.gameObject);
     }
 
     private void DebugPath()
     {
         if (Input.GetMouseButtonDown(0) && clickToSetDestination)
         {
-            Vector3 pos = p.GetLookAt();
+            Vector3 pos = player.GetLookAt();
             MoveTo(pos);
             print(pos);
         }
@@ -116,7 +116,7 @@ public class SpiderBehavior : Enemy
         {
             MoveTo(GameManager.instance.player.transform.position);
 
-            if (!p.lightOn && !p.GetIsMoving() && p.GetIsHidden() && !canSeePlayer)
+            if (!player.lightOn && !player.GetIsMoving() && player.GetIsHidden() && !canSeePlayer)
             {
                 if (transform.position.x - GameManager.instance.player.transform.position.x > 0)
                 {
@@ -134,7 +134,7 @@ public class SpiderBehavior : Enemy
         }
         else
         {
-            if (p.lightOn || p.GetIsMoving() || !p.GetIsHidden() || canSeePlayer)
+            if (player.lightOn || player.GetIsMoving() || !player.GetIsHidden() || canSeePlayer)
             {
                 StopCoroutine(CountChase());
                 isSearching = false;

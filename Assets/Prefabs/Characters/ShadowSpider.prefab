@@ -87,8 +87,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  bonusSpeed: 1
+  malusSpeed: 1
   velocityMax: 2
+  velocity: 0
+  isMoving: 0
   delete: 0
   lookShakeIntensity: 0.08
   lookShakeTime: 1
@@ -97,23 +99,21 @@ MonoBehaviour:
   chaseShakeTime: 1
   delayChase: 3
   playerDistance: 0
-  hasPlayedLook: 0
   isChasing: 0
-  spawnZones: []
-  WwiseChasePlay: 
-  WwiseChaseStop: 
-  WwiseLook: 
+  isLooked: 1
+  isCountingEndChase: 0
+  hasPlayedLook: 0
+  ChaseSoundPlay: Play_Presence_Araignee
+  ChaseSoundStop: Stop_Presence_Araignee
+  LookSound: 
   lookSoundScream: 
   WalkSound: Play_Footsteps_Araignee_Metal
+  spawnZones: []
   scriptedObjectsActivation: []
   scriptedLampActivation: {fileID: 0}
-  agent: {fileID: 6846170109616916396}
   animator: {fileID: 0}
-  velocity: 0
   _transform: {fileID: 0}
-  isLooked: 1
-  isMoving: 0
-  isCountingEndChase: 0
+  agent: {fileID: 6846170109616916396}
   p: {fileID: 0}
   endPos: {fileID: 0}
   overrideVelocity: 1

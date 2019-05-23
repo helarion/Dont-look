@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public Animator animator;
     [SerializeField] private Transform _transform;
     public NavMeshAgent agent;
-    [HideInInspector] public PlayerController p;
+    [HideInInspector] public PlayerController player;
 
     #endregion
 
@@ -83,7 +83,7 @@ public class Enemy : MonoBehaviour
 
     public void Initialize()
     {
-        p = GameManager.instance.player;
+        player = GameManager.instance.player;
         animator = GetComponent<Animator>();
         agent.speed = moveSpeed;
         Respawn();
@@ -111,13 +111,13 @@ public class Enemy : MonoBehaviour
 
     public virtual void StopChaseSounds()
     {
-        AkSoundEngine.PostEvent(ChaseSoundStop, p.modelTransform.gameObject);
-        if (p.getIsAlive())
+        AkSoundEngine.PostEvent(ChaseSoundStop, gameObject);
+        if (player.getIsAlive())
         {
-            AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
+            AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, player.modelTransform.gameObject);
             AkSoundEngine.PostEvent(GameManager.instance.playRandomSounds, GameManager.instance.gameObject);
         }
-        else AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderKillStop, p.modelTransform.gameObject);
+        else AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderKillStop, player.modelTransform.gameObject);
     }
 
     // Stops chasing player
@@ -127,7 +127,7 @@ public class Enemy : MonoBehaviour
         {
             GameManager.instance.PostProcessReset();
             StopChaseSounds();
-            if (delete && p.GetIsHidden())
+            if (delete && player.GetIsHidden())
             {
                 foreach(Objet o in scriptedObjectsActivation)
                 {
@@ -172,7 +172,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void ChaseBehavior()
     {
-        float distanceFromPlayer = (transform.position - p.transform.position).magnitude;
+        float distanceFromPlayer = (transform.position - player.transform.position).magnitude;
         float distanceMaxShake = 15;
         float chaseShakeIntensity = distanceFromPlayer.Remap(0, distanceMaxShake, maxChaseShakeIntensity, minChaseShakeIntensity);
         GameManager.instance.UpdatePostProcess(distanceFromPlayer);
@@ -184,7 +184,8 @@ public class Enemy : MonoBehaviour
 
     public virtual void IsPathInvalid()
     {
-        bool isPathValid = agent.CalculatePath(p.transform.position, agent.path);
+        bool isPathValid = agent.CalculatePath(player.transform.position, agent.path);
+        print("isPathValid:" + isPathValid);
         //print("path status:" + agent.path.status);
         if (!isPathValid && !isCountingEndChase)
         {
@@ -216,7 +217,6 @@ public class Enemy : MonoBehaviour
         agent.Warp(pos);
         MoveTo(pos);
     }
-
 
     public void MoveTo(Vector3 newPos)
     {

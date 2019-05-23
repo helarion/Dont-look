@@ -53,7 +53,7 @@ public class BipedeBehavior : Enemy
 
     public override void PlayChase()
     {
-        AkSoundEngine.PostEvent(playRespirationSound, p.modelTransform.gameObject);
+        AkSoundEngine.PostEvent(playRespirationSound, gameObject);
     }
 
     public override void StopChaseSounds()
