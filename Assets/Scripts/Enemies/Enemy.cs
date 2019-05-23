@@ -7,54 +7,71 @@ public class Enemy : MonoBehaviour
 {
     #region Variables
     [Header("Movement Variables")]
-    [SerializeField] public float moveSpeed = 1;
-    [SerializeField] public float bonusSpeed = 1;
-    [SerializeField] private float velocityMax = 2;
+    [SerializeField] public float moveSpeed = 1; //initial speed
+    [SerializeField] public float malusSpeed = 1; //malus applied to speed when looked
+    [SerializeField] private float velocityMax = 2; //maximum movement animation velocity
+    private Vector3 lastPosition; //last position of the monster to calculate velocity
+    public float velocity; //move animation current velocity
+    public bool isMoving = false; //if the monster is moving
 
     [Header("Chase Variables")]
-    [SerializeField] private bool delete = false;
-    [SerializeField] public float lookShakeIntensity=0.08f;
-    [SerializeField] private float lookShakeTime = 1;
-    [SerializeField] private float minChaseShakeIntensity=0.02f;
-    [SerializeField] private float maxChaseShakeIntensity = 0.06f;
-    [SerializeField] private float chaseShakeTime = 1;
-    [SerializeField] public float delayChase = 3;
-    [HideInInspector] public float playerDistance;
+    [SerializeField] private bool delete = false; //if we want the monster to disappear after losting the child
 
-    private bool hasPlayedChase = false;
-    [HideInInspector] public bool hasPlayedLook = false;
-    [HideInInspector] public bool isChasing = false;
+    [SerializeField] public float lookShakeIntensity=0.08f; //intensity of the screenshake when monster looked
+    [SerializeField] private float lookShakeTime = 1; //duration of the screenshake when monster looked
+    [SerializeField] private float minChaseShakeIntensity=0.02f; //min screenshake when monster chasing
+    [SerializeField] private float maxChaseShakeIntensity = 0.06f; //max screenshake when monster chasing
+    [SerializeField] private float chaseShakeTime = 1; //duration of screenshake when monster chasing
 
-    [Header("Debug")]
-    [SerializeField] private Transform[] spawnZones=null ;
-    [SerializeField] public string WwiseChasePlay;
-    [SerializeField] public string WwiseChaseStop;
-    [SerializeField] public string WwiseLook;
-    [SerializeField] public string lookSoundScream;
-    [SerializeField] public string WalkSound;
-    [SerializeField] private Objet[] scriptedObjectsActivation;
-    [SerializeField] private LightDetector scriptedLampActivation;
+    [SerializeField] public float delayChase = 3; //delay before monster stop chase if he cannot reach player
+    [HideInInspector] public float playerDistance; //distance between the monster and the player
 
+    [HideInInspector] public bool isChasing = false; //if monster is curently chasing
+    public bool isLooked = true; //if the monster is looked
+    public bool isCountingEndChase = false; //if the monster cannot reach the player anymore
 
-    public NavMeshAgent agent;
+    [Header("Sound")]
+    private bool hasPlayedChase = false; //if the chase amb has been played
+    [HideInInspector] public bool hasPlayedLook = false; //if the look sound has been played
+    // wwise events
+    [SerializeField] public string ChaseSoundPlay; //play monster sounds when chasing
+    [SerializeField] public string ChaseSoundStop; //stop 
+    [SerializeField] public string LookSound; //play deep sound when monster looked
+    [SerializeField] public string lookSoundScream; //play loud sound when monster looked
+    [SerializeField] public string WalkSound; //play walk sound
+
+    [Header("Gamobjects")]
+    [SerializeField] private Transform[] spawnZones=null ; //list of spawn zones
+    [SerializeField] private Objet[] scriptedObjectsActivation; //if spider needs to activate objets when start to chase
+    [SerializeField] private LightDetector scriptedLampActivation; //if spider needs to activate lightdetector when start to chase
+
     [HideInInspector] public Animator animator;
-    public float velocity;
     [SerializeField] private Transform _transform;
-    public bool isLooked = true;
-    public bool isMoving = false;
-    public bool isCountingEndChase = false;
-
+    public NavMeshAgent agent;
     [HideInInspector] public PlayerController p;
 
-    private Vector3 lastPosition;
     #endregion
+
+    public virtual void PlayChase() { }
+    public virtual void DetectPlayer(bool b) { }
+
+    #region StartUpdate
+    private void Start()
+    {
+        lastPosition = transform.position;
+        Initialize();
+    }
 
     private void Update()
     {
-        IsLit(GameManager.instance.LightDetection(gameObject,false));
+        //checks if the monster is lit
+        IsLit(GameManager.instance.LightDetection(gameObject, false));
+        //calculate current velocity
         VelocityCount();
     }
+    #endregion
 
+    // outputs monster velocity from previous position to current
     public void VelocityCount()
     {
         velocity = ((transform.position - lastPosition).magnitude * 10) * moveSpeed;
@@ -62,12 +79,6 @@ public class Enemy : MonoBehaviour
         float rate = velocity.Remap(0, velocityMax, 0, 1);
         rate = Mathf.Clamp(rate,0, 1);
         animator.SetFloat("Velocity", rate);
-    }
-
-    private void Start()
-    {
-        lastPosition = transform.position;
-        Initialize();
     }
 
     public void Initialize()
@@ -78,25 +89,19 @@ public class Enemy : MonoBehaviour
         Respawn();
     }
 
-    public virtual void PlayChase()
-    {
-
-    }
-
     public virtual void PlayWalk()
     {
         AkSoundEngine.PostEvent(WalkSound, gameObject);
     }
 
-    // COMMENCER LA CHASSE DU JOUEUR
+    // Starts chasing player
     public virtual void StartChase()
     {
         if(!hasPlayedChase)
         {
             AkSoundEngine.PostEvent(GameManager.instance.stopRandomSounds, GameManager.instance.gameObject);
             hasPlayedChase = true;
-            print("startchase");
-            AkSoundEngine.PostEvent(WwiseChasePlay, gameObject);
+            AkSoundEngine.PostEvent(ChaseSoundPlay, gameObject);
             PlayChase();
             isMoving = true;
             animator.SetBool("IsMoving", isMoving);
@@ -104,13 +109,13 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // Stops chasing player
     public void StopChase()
     {
         if (isChasing)
         {
             GameManager.instance.PostProcessReset();
-            print("stopchase");
-            AkSoundEngine.PostEvent(WwiseChaseStop, gameObject);
+            AkSoundEngine.PostEvent(ChaseSoundStop, gameObject);
             if (p.getIsAlive())
             {
                 AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, p.modelTransform.gameObject);
@@ -130,25 +135,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // COROUTINE POUR COMPTER LE TEMPS QUE L'ARAIGNEE PASSE A CHASSER LE JOUEUR. POTENTIELLEMENT INUTILE ?
+    // count to delay when cannot reach player
     private IEnumerator CountEndChase()
     {
-        //print("Start Counting chase");
         float countChase = 0;
         while (countChase < delayChase)
         {
-            //print("count:"+countChase);
             countChase += Time.deltaTime;
             yield return new WaitForEndOfFrame();
             print(countChase);
         }
-        //print("Fin du compte");
         StopChase();
         isCountingEndChase = false;
         yield return null;
     }
-
-    public virtual void DetectPlayer(bool b) {}
 
     public virtual void IsLit(bool b)
     {
@@ -158,7 +158,7 @@ public class Enemy : MonoBehaviour
             if (!hasPlayedLook)
             {
                 if (scriptedLampActivation != null) scriptedLampActivation.ForceLit();
-                AkSoundEngine.PostEvent(WwiseLook, gameObject);
+                AkSoundEngine.PostEvent(LookSound, gameObject);
                 AkSoundEngine.PostEvent(lookSoundScream, gameObject);
                 hasPlayedLook = true;
             }
@@ -224,6 +224,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    #region GetSet
     public Vector3 RandomSpawn()
     {
         int max = spawnZones.Length;
@@ -240,4 +241,5 @@ public class Enemy : MonoBehaviour
     {
         return spawnZones;
     }
+    #endregion
 }

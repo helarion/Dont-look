@@ -112,7 +112,7 @@ public class BipedeBehavior : Enemy
         agent.isStopped = false;
         isMoving = true;
         isStopped = false;
-        agent.speed = moveSpeed - bonusSpeed;
+        agent.speed = moveSpeed - malusSpeed;
         animator.SetBool("IsLooked", false);
         animator.SetBool("IsMoving", isMoving);
     }

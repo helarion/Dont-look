@@ -14,7 +14,6 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float changingTime = 15;
     [SerializeField] private float canSeePlayerDistance = 0.5f;
     [SerializeField] private float stopChaseDistance = 15;
-    [SerializeField] private string lookSoundScream;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
@@ -214,7 +213,7 @@ public class SpiderBehavior : Enemy
             }
             else
             {
-                agent.speed = speed + bonusSpeed;
+                agent.speed = speed + malusSpeed;
             }
         }
         else
