@@ -22,6 +22,7 @@ public class Elevator : Objet
     [SerializeField] SpatialRoom spatialRoom;
     [SerializeField] Light lamp;
     [SerializeField] Animator lampAnimator;
+    [SerializeField] RandomFlicker randomFlicker;
     [SerializeField] bool scriptTwoSteps = false;
     [SerializeField] bool scriptMoveActivation = false;
     private Vector3 startPos;
@@ -45,6 +46,7 @@ public class Elevator : Objet
         {
             lamp.enabled = false;
             lampAnimator.enabled = false;
+            randomFlicker.enabled=false;
             enterCol.enabled = false;
         }
         //if(isActivated)AkSoundEngine.PostEvent(engineSound, gameObject);
@@ -58,6 +60,7 @@ public class Elevator : Objet
         {
             lamp.enabled = true;
             lampAnimator.enabled = true;
+            randomFlicker.enabled = true;
             enterCol.enabled = true;
             isMoving = false;
             isStarted = true;

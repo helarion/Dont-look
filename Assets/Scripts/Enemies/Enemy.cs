@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float minChaseShakeIntensity=0.02f; //min screenshake when monster chasing
     [SerializeField] private float maxChaseShakeIntensity = 0.06f; //max screenshake when monster chasing
     [SerializeField] private float chaseShakeTime = 1; //duration of screenshake when monster chasing
+    [SerializeField] private bool ChecksIfPathInvalid = true;
 
     [SerializeField] public float delayChase = 3; //delay before monster stop chase if he cannot reach player
     [HideInInspector] public float playerDistance; //distance between the monster and the player
@@ -184,6 +185,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void IsPathInvalid()
     {
+        if (!ChecksIfPathInvalid) return;
         bool isPathValid = agent.CalculatePath(player.transform.position, agent.path);
         print("isPathValid:" + isPathValid);
         //print("path status:" + agent.path.status);

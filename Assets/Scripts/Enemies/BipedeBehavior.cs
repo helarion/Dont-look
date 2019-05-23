@@ -9,6 +9,7 @@ public class BipedeBehavior : Enemy
     [SerializeField] string litSound;
     [SerializeField] string playRespirationSound;
     [SerializeField] string stopRespirationSound;
+    [SerializeField] Vector3 rotation;
 
     [SerializeField] GameObject bipedeGameObject;
 
@@ -53,7 +54,7 @@ public class BipedeBehavior : Enemy
 
     public override void PlayChase()
     {
-        AkSoundEngine.PostEvent(playRespirationSound, gameObject);
+        AkSoundEngine.PostEvent(playRespirationSound,gameObject);
     }
 
     public override void StopChaseSounds()

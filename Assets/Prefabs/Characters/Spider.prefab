@@ -103,6 +103,7 @@ MonoBehaviour:
   minChaseShakeIntensity: 0.02
   maxChaseShakeIntensity: 0.06
   chaseShakeTime: 0.1
+  ChecksIfPathInvalid: 1
   delayChase: 4
   playerDistance: 0
   isChasing: 0
@@ -144,7 +145,7 @@ NavMeshAgent:
   m_AgentTypeID: -1372625422
   m_Radius: 0.5
   m_Speed: 4
-  m_Acceleration: 45
+  m_Acceleration: 25
   avoidancePriority: 50
   m_AngularSpeed: 1000
   m_StoppingDistance: 2.5

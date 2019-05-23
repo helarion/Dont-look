@@ -14,12 +14,18 @@ public class RandomFlicker : MonoBehaviour
 
     bool isFlickering = false;
     float playerDistance;
+    bool animatorOffOnStart = false;
+
+    private void Start()
+    {
+        if (!animator.enabled) animatorOffOnStart=true;
+    }
 
     private void Update()
     {
         if (!isEnabled) return;
         playerDistance = (transform.position - GameManager.instance.player.transform.position).magnitude;
-        if(playerDistance < maxPlayerDistance)
+        if(playerDistance < maxPlayerDistance)// && !animatorOffOnStart)
         {
             animator.enabled = true;
             if (!isFlickering)

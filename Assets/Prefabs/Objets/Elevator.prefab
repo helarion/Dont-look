@@ -324,6 +324,7 @@ MonoBehaviour:
   spatialRoom: {fileID: 0}
   lamp: {fileID: 108591155389536639}
   lampAnimator: {fileID: 2080198689059239907}
+  randomFlicker: {fileID: 8864230880155184561}
   scriptTwoSteps: 0
   scriptMoveActivation: 0
   isBidirectional: 1
@@ -602,6 +603,18 @@ Light:
     type: 3}
   m_PrefabInstance: {fileID: 11798153}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8864230880155184561 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8864230880143911736, guid: aa6c5f105fddca84dac732069110c0c2,
+    type: 3}
+  m_PrefabInstance: {fileID: 11798153}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b9715107036ef40a7918d8973e9395, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &104029093
 PrefabInstance:
   m_ObjectHideFlags: 0
