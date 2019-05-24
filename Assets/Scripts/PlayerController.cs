@@ -320,6 +320,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(other.CompareTag("Finish"))
         {
+            AkSoundEngine.PostEvent("Stop_Random_Track1",GameManager.instance.gameObject);
             GameManager.instance.camHandler.DestroyTarget();
             UIManager.instance.FadeInEnd();
         }

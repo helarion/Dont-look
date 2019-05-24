@@ -65,6 +65,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] public string playRandomSounds;
     [SerializeField] public string stopRandomSounds;
 
+    [SerializeField] private string pauseGameSounds;
+    [SerializeField] private string resumeGameSounds;
+
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
     [SerializeField] string deathSound;
@@ -655,6 +658,7 @@ public void RotateCamera(Quaternion newRotate)
         Cursor.visible = true;
         Time.timeScale = 0;
         isPaused = true;
+        AkSoundEngine.PostEvent(pauseGameSounds, gameObject);
         UIManager.instance.Pause(true);
     }
 
@@ -663,6 +667,7 @@ public void RotateCamera(Quaternion newRotate)
         Cursor.visible = false;
         Time.timeScale = 1;
         isPaused = false;
+        AkSoundEngine.PostEvent(resumeGameSounds, gameObject);
         UIManager.instance.Pause(false);
     }
     #endregion

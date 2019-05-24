@@ -12,6 +12,10 @@ public class SlidingDoor : Objet
     [SerializeField] private Transform startPosition;
     [SerializeField] private float shakeOnIntensity = 0.08f;
     [SerializeField] private float shakeOffIntensity = 0.04f;
+    [SerializeField] private float minRTPC = 0;
+    [SerializeField] private float minSlidingRTPC = 40;
+    [SerializeField] private float maxSlidingRTPC = 100;
+    [SerializeField] private float timeFadeRTPC = 1.5f;
 
     bool isPlayingSound = false;
     float distance;
@@ -31,6 +35,7 @@ public class SlidingDoor : Objet
     {
         if(!isActivated)
         {
+            //AkSoundEngine.SetRTPCValue("Porte_RTPC_volume", 0);
             isActivated = true;
             StopCoroutine(CloseCoroutine());
             StartCoroutine(OpenCoroutine());
