@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform armPosition;
 
     private CameraBlock currentCameraBlock = null;
+    public bool changingCameraBlock = false;
     private AudioRoom currentAudioRoom = null;
     [HideInInspector] public SpatialRoom currentSpatialRoom = null;
     SpatialSas currentSpatialSas = null;
@@ -273,6 +274,14 @@ public class PlayerController : MonoBehaviour
         CameraBlock cameraBlock = other.GetComponent<CameraBlock>();
         if (cameraBlock != null)
         {
+            if (cameraBlock == currentCameraBlock)
+            {
+                return;
+            }
+            if (currentCameraBlock != null)
+            {
+                StartCoroutine(CameraBlockChangesCoroutine());
+            }
             currentCameraBlock = cameraBlock;
             CameraBlockChanges();
             return;
@@ -684,6 +693,20 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    IEnumerator CameraBlockChangesCoroutine()
+    {
+        changingCameraBlock = true;
+        float time = 0.0f;
+        while (time <= GameManager.instance.cameraBlockChangeMalusSpeedTime)
+        {
+            time += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        changingCameraBlock = false;
+        yield return null;
+    }
+
     #endregion
 
     #region Movement
