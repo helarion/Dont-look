@@ -16,12 +16,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject ControlPanel=null;
     [SerializeField] private GameObject NoEyePanel=null;
     [SerializeField] private Slider volumeControl;
-    [SerializeField] private Slider gammaControl;
+    [SerializeField] private Slider brightnessControl;
     [SerializeField] private Toggle toggleTracker;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private float waitBeforeDeath=5;
-    [SerializeField] private float gammaMin=-1.5f;
-    [SerializeField] private float gammaMax=1.5f;
+    [SerializeField] private float brightnessMin = -1.5f;
+    [SerializeField] private float brightnessMax = 1.5f;
     [SerializeField] private float waitEndTime = 10;
 
     [Header("Sounds")]
@@ -49,14 +49,10 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         PostProcessInstance.instance.bloom.active = true;
-        float gammaX = PostProcessInstance.instance.colorGrading.gamma.value.x - 1;
-        //print("gamma x:" + gammaX);
-        float value = gammaX.Remap(gammaMin, gammaMax, gammaControl.minValue, gammaControl.maxValue);
-        //print("reamp value:"+value);
-        gammaControl.value = value;
-        toggleTracker.onValueChanged.AddListener(delegate { CheckBoxValueChangeCheck(); });
-        volumeControl.onValueChanged.AddListener(delegate { VolumeValueChangeCheck(); });
-        gammaControl.onValueChanged.AddListener(delegate { GammaValueChangeCheck(); });
+        float brightness = PostProcessInstance.instance.colorGrading.postExposure.value;
+        float value = brightness.Remap(brightnessMin, brightnessMax, brightnessControl.minValue, brightnessControl.maxValue);
+        brightnessControl.value = value;
+
         if (!GameManager.instance.isTesting)
         {
             GameManager.instance.SetIsPaused(true);
@@ -66,14 +62,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void GammaValueChangeCheck()
+    public void BrightnessValueChangeCheck()
     {
         AkSoundEngine.PostEvent(sliderSound, gameObject);
         PostProcessInstance.instance.colorGrading.enabled.value = true;
-        float gamma = gammaControl.value.Remap(gammaControl.minValue, gammaControl.maxValue, gammaMin, gammaMax);
-        //print("gamma:" + gamma);
-        Vector4 vec= new Vector4(gamma,gamma,gamma,gamma);
-        PostProcessInstance.instance.colorGrading.gamma.value =vec;
+        float brightness = brightnessControl.value.Remap(brightnessControl.minValue, brightnessControl.maxValue, brightnessMin, brightnessMax);
+        PostProcessInstance.instance.colorGrading.postExposure.value = brightness;
     }
 
     public void VolumeValueChangeCheck()
@@ -85,6 +79,7 @@ public class UIManager : MonoBehaviour
     public void CheckBoxValueChangeCheck()
     {
         AkSoundEngine.PostEvent(checkboxSound, gameObject);
+        GameManager.instance.CheckTracker();
     }
 
     IEnumerator StartCoroutine()
@@ -163,8 +158,8 @@ public class UIManager : MonoBehaviour
     {
         pausePanel.SetActive(b);
         //eventSystem.firstSelectedGameObject = gammaControl.gameObject;
-        eventSystem.SetSelectedGameObject(gammaControl.gameObject);
-        gammaControl.Select();
+        eventSystem.SetSelectedGameObject(brightnessControl.gameObject);
+        brightnessControl.Select();
     }
 
     public void FadePause(bool b)
@@ -211,7 +206,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            eventSystem.firstSelectedGameObject = gammaControl.gameObject;
+            eventSystem.firstSelectedGameObject = brightnessControl.gameObject;
             //eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
         }
     }

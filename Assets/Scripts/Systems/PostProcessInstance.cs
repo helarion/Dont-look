@@ -29,12 +29,5 @@ public class PostProcessInstance : MonoBehaviour
         PostProcessInstance.instance.volume.profile.TryGetSettings(out grain);
         PostProcessInstance.instance.volume.profile.TryGetSettings(out vignette);
         PostProcessInstance.instance.volume.profile.TryGetSettings(out bloom);
-        colorGrading.gamma.value = new Vector4(0, 0, 0, 0);
-    }
-
-    private void Start()
-    {
-
-        
     }
 }

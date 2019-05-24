@@ -15,9 +15,10 @@ public class Intro2 : MonoBehaviour
     [SerializeField] Canvas hasEyeTracker;
     [SerializeField] Canvas noEyeTracker;
     [SerializeField] int scene=2;
-    [SerializeField] Slider gammaControl;
-    [SerializeField] private float gammaMin = -1.5f;
-    [SerializeField] private float gammaMax = 1.5f;
+    [SerializeField] Slider brightnessControl;
+    [SerializeField] private float brightnessMin = -1.5f;
+    [SerializeField] private float brightnessMax = 1.5f;
+    [SerializeField] private string sliderSound;
 
     private ColorGrading colorGrading;
     private Bloom bloom;
@@ -43,18 +44,24 @@ public class Intro2 : MonoBehaviour
             PostProcessInstance.instance.volume.profile.TryGetSettings(out colorGrading);
             PostProcessInstance.instance.volume.profile.TryGetSettings(out bloom);
             bloom.active = false;
-            gammaControl.onValueChanged.AddListener(delegate { GammaValueChangeCheck(); });
+            float brightness = PostProcessInstance.instance.colorGrading.postExposure.value;
+            float value = brightness.Remap(brightnessMin, brightnessMax, brightnessControl.minValue, brightnessControl.maxValue);
+            brightnessControl.value = value;
             StartCoroutine(BrightnessCoroutine());
         }
     }
 
-    public void GammaValueChangeCheck()
+    public void BrightnessValueChangeCheck()
     {
+        AkSoundEngine.PostEvent(sliderSound, gameObject);
+        PostProcessInstance.instance.colorGrading.enabled.value = true;
+        float brightness = brightnessControl.value.Remap(brightnessControl.minValue, brightnessControl.maxValue, brightnessMin, brightnessMax);
+        PostProcessInstance.instance.colorGrading.postExposure.value = brightness;
+        /*
         colorGrading.enabled.value = true;
-        float gamma = gammaControl.value.Remap(gammaControl.minValue, gammaControl.maxValue, gammaMin, gammaMax);
-        //print("gamma:" + gamma);
+        float gamma = brightnessControl.value.Remap(brightnessControl.minValue, brightnessControl.maxValue, gammaMin, gammaMax);
         Vector4 vec = new Vector4(gamma, gamma, gamma, gamma);
-        colorGrading.gamma.value = vec;
+        colorGrading.gamma.value = vec;*/
     }
 
     public void ButtonNext()
