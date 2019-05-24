@@ -121,6 +121,7 @@ public class Elevator : Objet
         }
         Vector3 oldPos;
         AkSoundEngine.PostEvent(stopMovingSound, gameObject);
+        if (isPlayerOnBoard) GameManager.instance.player.ResumeMove();
         while (Mathf.Abs(transform.position.y - endPos.position.y) > 0.01f)
         {
             oldPos = transform.position;
@@ -139,7 +140,6 @@ public class Elevator : Objet
 
     private void ReachEnd()
     {
-        if(isPlayerOnBoard) GameManager.instance.player.ResumeMove();
         isMoving = false;
         if (addSpatialLine)
         {

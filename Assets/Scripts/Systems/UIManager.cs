@@ -24,6 +24,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float gammaMax=1.5f;
     [SerializeField] private float waitEndTime = 10;
 
+    [Header("Sounds")]
+    [SerializeField] private string sliderSound;
+    [SerializeField] private string checkboxSound;
+
     public bool isFading = false;
     private bool isEnding = false;
     public static UIManager instance = null;
@@ -50,6 +54,7 @@ public class UIManager : MonoBehaviour
         float value = gammaX.Remap(gammaMin, gammaMax, gammaControl.minValue, gammaControl.maxValue);
         //print("reamp value:"+value);
         gammaControl.value = value;
+        toggleTracker.onValueChanged.AddListener(delegate { CheckBoxValueChangeCheck(); });
         volumeControl.onValueChanged.AddListener(delegate { VolumeValueChangeCheck(); });
         gammaControl.onValueChanged.AddListener(delegate { GammaValueChangeCheck(); });
         if (!GameManager.instance.isTesting)
@@ -63,6 +68,7 @@ public class UIManager : MonoBehaviour
 
     public void GammaValueChangeCheck()
     {
+        AkSoundEngine.PostEvent(sliderSound, gameObject);
         PostProcessInstance.instance.colorGrading.enabled.value = true;
         float gamma = gammaControl.value.Remap(gammaControl.minValue, gammaControl.maxValue, gammaMin, gammaMax);
         //print("gamma:" + gamma);
@@ -72,7 +78,13 @@ public class UIManager : MonoBehaviour
 
     public void VolumeValueChangeCheck()
     {
+        AkSoundEngine.PostEvent(sliderSound, gameObject);
         AkSoundEngine.SetRTPCValue("Master_Volume_Slider", volumeControl.value);
+    }
+
+    public void CheckBoxValueChangeCheck()
+    {
+        AkSoundEngine.PostEvent(checkboxSound, gameObject);
     }
 
     IEnumerator StartCoroutine()
