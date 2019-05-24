@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float dutchAngle=0;
     [SerializeField] public float contrePlongeeAngle = 15;
     [SerializeField] private float contrePlongeeHauteur = 1.5f;
+    [SerializeField] public float cameraBlockChangeMalusSpeedTime = 0.5f;
+    [SerializeField] float cameraBlockChangeMalusSpeedRate = 0.5f;
 
     [Header("PostProcessValues")]
     [SerializeField] private float maxGrain;
@@ -482,9 +484,13 @@ public class GameManager : MonoBehaviour
     public void MoveCamera(Vector3 newPos)
     {
         float speed = cameraSpeed;
+        if (player.changingCameraBlock)
+        {
+            speed /= cameraBlockChangeMalusSpeedRate;
+        }
         if (player.velocity > 0) speed /= (player.velocity * cameraMoveOffset);
         newPos.y += contrePlongeeHauteur;
-        mainCamera.transform.localPosition = Vector3.Lerp(originalPos, newPos, Time.deltaTime / speed);
+        mainCamera.transform.localPosition = Vector3.Lerp(originalPos, newPos, Time.deltaTime * speed);
         originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
     }
 
