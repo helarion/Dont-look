@@ -483,6 +483,7 @@ public class GameManager : MonoBehaviour
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
+        print(newPos);
         float speed = cameraSpeed;
         if (player.changingCameraBlock)
         {
@@ -513,7 +514,7 @@ public class GameManager : MonoBehaviour
             bobTimer += bobbingSpeed;
             if (bobTimer > Mathf.PI * 2)
             {
-                bobTimer -=Mathf.PI * 2;
+                bobTimer -= Mathf.PI * 2;
             }
         }
         if (waveslice != 0)
@@ -529,7 +530,7 @@ public class GameManager : MonoBehaviour
             cSharpConversion.y = originalPos.y;
         }
         //print("bob:" + cSharpConversion);
-        MoveCamera(cSharpConversion);
+        //MoveCamera(cSharpConversion);
     }
 
 public void RotateCamera(Quaternion newRotate)
@@ -588,6 +589,7 @@ public void RotateCamera(Quaternion newRotate)
     // SHAKESCREEN POUR LA DUREE ENTREE
     public void ShakeScreen(float duration, float intensity, int offset = 0)
     {
+        //print("screenshake : " + duration + ";" + intensity);
         if (shakeRequests.Count == offset)
         {
             shakeRequests.Insert(offset, new Vector2(duration, intensity));
