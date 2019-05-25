@@ -8,6 +8,8 @@ public class ContiniousLightDetector : Objet
     [SerializeField] public string playChargingSound = null;
     [SerializeField] public string stopChargingSound = null;
     [SerializeField] public ContinuousBlinkingLight blinkingLight;
+    [SerializeField] public ContinuousBlinkingLight targetBlinkLight1;
+    [SerializeField] public ContinuousBlinkingLight targetBlinkLight2;
     [SerializeField] private float chargeTime = 0.5f;
     [SerializeField] private GameObject[] brokenFeature;
     [SerializeField] public string breakSound;
@@ -91,6 +93,13 @@ public class ContiniousLightDetector : Objet
             g.SetActive(false);
         }
         blinkingLight.Fix();
+        if (targetBlinkLight1 != null)
+        {
+            targetBlinkLight1.StopBlink();
+            targetBlinkLight1.enabled = false;
+            targetBlinkLight2.StopBlink();
+            targetBlinkLight2.enabled = false;
+        }
     }
 
     public override void Break()
@@ -102,6 +111,11 @@ public class ContiniousLightDetector : Objet
         }
         blinkingLight.Break();
         base.Break();
+        if (targetBlinkLight1 != null)
+        {
+            targetBlinkLight1.enabled = true;
+            targetBlinkLight2.enabled = true;
+        }
     }
 
     public override void Reset()

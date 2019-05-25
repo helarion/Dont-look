@@ -142,6 +142,8 @@ public class ContinuousBlinkingLight : MonoBehaviour
 
     public void Reset()
     {
+        pointLight.enabled = true;
+        rectangleLight.enabled = true;
         timeLooked = 0.0f;
         pointLight.intensity = 0.0f;
         pointLight.color = Color.black;
@@ -186,5 +188,11 @@ public class ContinuousBlinkingLight : MonoBehaviour
     public void StopLook()
     {
         blinkLightState = BlinkLightState.STOP_LOOK;
+    }
+
+    public void StopBlink()
+    {
+        rectangleLight.enabled = false;
+        pointLight.color = activeColor;
     }
 }

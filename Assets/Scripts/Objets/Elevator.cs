@@ -33,7 +33,7 @@ public class Elevator : Objet
     [SerializeField] bool isBidirectional = true;
     [SerializeField] bool isEnd = false;
     [SerializeField] string endSong;
-
+    [SerializeField] ContinuousBlinkingLight blinkingLight;
 
     private bool isMoving = false;
 
@@ -77,6 +77,12 @@ public class Elevator : Objet
         {
             StartMoving();
             startActivated = true;
+        }
+        if (blinkingLight != null && blinkingLight.enabled)
+        {
+            blinkingLight.StopBlink();
+            blinkingLight.enabled = true;
+            lampAnimator.enabled = true;
         }
         //AkSoundEngine.PostEvent(playEngineSound, gameObject);
     }
@@ -158,12 +164,19 @@ public class Elevator : Objet
         {
             startPos = endPos.position;
             endPos.position = endPosStep2.position;
-            lamp.enabled = false;
             lampAnimator.enabled = false;
+            lamp.enabled = true;
             isActivated = false;
             enterCol.enabled = false;
             isStarted = false;
             AkSoundEngine.PostEvent(breakSound, gameObject);
+            if (blinkingLight != null)
+            {
+                lampAnimator.enabled = false;
+                lamp.enabled = true;
+                blinkingLight.enabled = true;
+            }
+            scriptTwoSteps = false;
         }
         else if(isStarted && isBidirectional)
         {
