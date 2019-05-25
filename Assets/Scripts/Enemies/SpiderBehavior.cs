@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -27,8 +28,11 @@ public class SpiderBehavior : Enemy
 
     SpatialRoom currentSpatialRoom = null;
 
+    Transform[] savedSpawnZone;
+
     private void Start()
     {
+        savedSpawnZone = spawnZones;
         Initialize();
         agent.autoTraverseOffMeshLink = false;
     }
@@ -75,8 +79,9 @@ public class SpiderBehavior : Enemy
     IEnumerator CountingChange()
     {
         yield return new WaitForSeconds(changingTime);
-        if (isChangingPlaces) StopChase();
-        else Respawn();
+        //if (isChangingPlaces) StopChase();
+        //else 
+        Respawn();
     }
 
     public override void PlayChase()
@@ -152,6 +157,23 @@ public class SpiderBehavior : Enemy
         StartCoroutine(LowerSpeedCoroutine());
     }
 
+    public override void StopChase()
+    {
+        if (isChasing && isChangingPlaces)
+        {
+            RemoveAt(ref spawnZones, spawnIndex);
+        }
+        base.StopChase();
+    }
+
+    public static void RemoveAt<T>(ref T[] arr, int index)
+    {
+        // replace the element at index with the last element
+        arr[index] = arr[arr.Length - 1];
+        // finally, let's decrement Array's size by one
+        Array.Resize(ref arr, arr.Length - 1);
+    }
+
     private IEnumerator LowerSpeedCoroutine()
     {
         yield return new WaitForSeconds(malusStartDuration);
@@ -178,6 +200,7 @@ public class SpiderBehavior : Enemy
     // FAIT REAPARAITRE L'ARAIGNEE ALEATOIREMENT DANS UNE DE SES ZONES DE SPAWN
     public override void Respawn()
     {
+        if (isChangingPlaces && !player.getIsAlive()) spawnZones = savedSpawnZone;
         base.Respawn();
         StopCoroutine("CountingChange");
         isCountingChange = false;

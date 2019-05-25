@@ -314,7 +314,7 @@ MonoBehaviour:
   blinkSpeed: 0.5
   durationBetweenBlinks: 0.3
   offColor: {r: 1, g: 0, b: 0, a: 0}
-  activeColor: {r: 0, g: 0, b: 0, a: 0}
+  activeColor: {r: 1, g: 1, b: 1, a: 0}
   isBroken: 0
 --- !u!1 &934694108711606243
 GameObject:
@@ -1000,7 +1000,8 @@ MonoBehaviour:
   minRTPC: 0
   minSlidingRTPC: 40
   maxSlidingRTPC: 100
-  timeFadeRTPC: 1.5
+  fadeRTPCDuration: 1.5
+  rtpcName: 
 --- !u!1 &6489734760488999050
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,7 +1085,7 @@ MonoBehaviour:
   blinkSpeed: 0.5
   durationBetweenBlinks: 0.3
   offColor: {r: 1, g: 0, b: 0, a: 0}
-  activeColor: {r: 0, g: 0, b: 0, a: 0}
+  activeColor: {r: 1, g: 1, b: 1, a: 0}
   isBroken: 0
 --- !u!54 &5418032102643887578
 Rigidbody:

@@ -20,6 +20,7 @@ public class Elevator : Objet
     [SerializeField] SpatialLine addedSpatialLine;
     [SerializeField] SpatialLine removedSpatialLine;
     [SerializeField] SpatialRoom spatialRoom;
+    [SerializeField] SpatialRoom nextSpatialRoom;
     [SerializeField] Light lamp;
     [SerializeField] Animator lampAnimator;
     [SerializeField] RandomFlicker randomFlicker;
@@ -81,7 +82,8 @@ public class Elevator : Objet
         if (blinkingLight != null && blinkingLight.enabled)
         {
             blinkingLight.StopBlink();
-            blinkingLight.enabled = true;
+            blinkingLight.enabled = false;
+            lamp.enabled = true;
             lampAnimator.enabled = true;
         }
         //AkSoundEngine.PostEvent(playEngineSound, gameObject);
@@ -157,7 +159,10 @@ public class Elevator : Objet
         }
         if(removeSpatialLine)
         {
-            //spatialRoom.
+            nextSpatialRoom.removeSpatialLine(removedSpatialLine);
+            SpatialRoom save = spatialRoom;
+            spatialRoom = nextSpatialRoom;
+            nextSpatialRoom = save;
         }
 
         if(scriptTwoSteps && isBidirectional)

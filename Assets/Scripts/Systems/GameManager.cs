@@ -483,7 +483,7 @@ public class GameManager : MonoBehaviour
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
-        print(newPos);
+        //print(newPos);
         float speed = cameraSpeed;
         if (player.changingCameraBlock)
         {

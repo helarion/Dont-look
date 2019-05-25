@@ -70,6 +70,8 @@ MonoBehaviour:
   playChargingSound: Play_LIGHT_CHARGE
   stopChargingSound: Stop_LIGHT_CHARGE
   blinkingLight: {fileID: 4572074146819229367}
+  targetBlinkLight1: {fileID: 0}
+  targetBlinkLight2: {fileID: 0}
   chargeTime: 0.5
   brokenFeature: []
   breakSound: 
@@ -90,7 +92,7 @@ MonoBehaviour:
   rectangleLight: {fileID: 6403960825091783584}
   pointLight: {fileID: 2097786719093238268}
   offIntensity: 20
-  activeIntensity: 50
+  activeIntensity: 20
   blinkSpeed: 1
   durationBetweenBlinks: 0.8
   offColor: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 0}

@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public string WalkSound; //play walk sound
 
     [Header("Gamobjects")]
-    [SerializeField] private Transform[] spawnZones=null ; //list of spawn zones
+    [SerializeField] public Transform[] spawnZones=null ; //list of spawn zones
     [SerializeField] private Objet[] scriptedObjectsActivation; //if spider needs to activate objets when start to chase
     [SerializeField] private LightDetector scriptedLampActivation; //if spider needs to activate lightdetector when start to chase
 
@@ -50,6 +50,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform _transform;
     public NavMeshAgent agent;
     [HideInInspector] public PlayerController player;
+
+    [HideInInspector] public int spawnIndex = -1;
 
     #endregion
 
@@ -122,7 +124,7 @@ public class Enemy : MonoBehaviour
     }
 
     // Stops chasing player
-    public void StopChase()
+    public virtual void StopChase()
     {
         if (isChasing)
         {
@@ -187,7 +189,7 @@ public class Enemy : MonoBehaviour
     {
         if (!ChecksIfPathInvalid) return;
         bool isPathValid = agent.CalculatePath(player.transform.position, agent.path);
-        print("isPathValid:" + isPathValid);
+        //print("isPathValid:" + isPathValid);
         //print("path status:" + agent.path.status);
         if (!isPathValid && !isCountingEndChase)
         {
@@ -235,8 +237,8 @@ public class Enemy : MonoBehaviour
     public Vector3 RandomSpawn()
     {
         int max = spawnZones.Length;
-        int rand = Random.Range(0, max);
-        return (spawnZones[rand].position);
+        spawnIndex = Random.Range(0, max);
+        return (spawnZones[spawnIndex].position);
     }
 
     public NavMeshAgent GetAgent()

@@ -7,6 +7,7 @@ public class EndLightDetector : ContiniousLightDetector
     [SerializeField] string dogDeathSound;
     [SerializeField] private float scriptEndTimeLook = 1.5f;
     [SerializeField] private Elevator scriptEndElevator;
+    [SerializeField] float waitTime=7;
 
     public override void LookFunction()
     {
@@ -14,7 +15,6 @@ public class EndLightDetector : ContiniousLightDetector
         {
             target.isActivating = false;
             isBroken = true;
-            scriptEndElevator.Activate();
             AkSoundEngine.PostEvent(stopChargingSound, gameObject);
             AkSoundEngine.PostEvent(breakSound, gameObject);
             AkSoundEngine.PostEvent(dogDeathSound, target.gameObject);
@@ -22,5 +22,11 @@ public class EndLightDetector : ContiniousLightDetector
             Break();
         }
         base.LookFunction();
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(waitTime);
+        scriptEndElevator.Activate();
     }
 }
