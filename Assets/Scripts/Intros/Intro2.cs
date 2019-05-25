@@ -19,6 +19,7 @@ public class Intro2 : MonoBehaviour
     [SerializeField] private float brightnessMin = -1.5f;
     [SerializeField] private float brightnessMax = 1.5f;
     [SerializeField] private string sliderSound;
+    [SerializeField] private string buttonSound;
 
     private ColorGrading colorGrading;
     private Bloom bloom;

@@ -15,6 +15,9 @@ public class Intro : MonoBehaviour
     [SerializeField] private Canvas logos =null;
     [SerializeField] private Image fadeImg;
 
+    [SerializeField] private string playBreathSound;
+    [SerializeField] private string stopBreathSound;
+
     private Color cnamColor;
     private Color magelisColor;
     private Color poitiersColor;
@@ -24,6 +27,7 @@ public class Intro : MonoBehaviour
     private void Start()
     {
         cam = GetComponent<Camera>();
+        AkSoundEngine.PostEvent(playBreathSound, gameObject);
         cnamColor = cnam.color;
         magelisColor = magelis.color;
         poitiersColor = poitiers.color;
@@ -108,6 +112,7 @@ public class Intro : MonoBehaviour
         poitiers.color = poitiersColor;
         cnam.color = cnamColor;
 
+        AkSoundEngine.PostEvent(stopBreathSound, gameObject);
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene(1);
     }
