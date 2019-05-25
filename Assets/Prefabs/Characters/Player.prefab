@@ -116,8 +116,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6027396, y: 0.05961752, z: 0.7148104}
-  m_Center: {x: 0.0048784018, y: -0.48374748, z: 0.0043740273}
+  m_Size: {x: 0.6071453, y: 0.05961752, z: 0.695089}
+  m_Center: {x: 0.0019469261, y: -0.48374748, z: 0.0024241805}
 --- !u!1 &1383931378
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,6 +466,7 @@ MonoBehaviour:
   hipPosition: {fileID: 4194574731507233648}
   headPosition: {fileID: 0}
   armPosition: {fileID: 0}
+  changingCameraBlock: 0
   currentSpatialRoom: {fileID: 0}
   currentSpatialLine:
     begin: {fileID: 0}
@@ -609,6 +610,7 @@ MonoBehaviour:
   normalLightColor: {r: 1, g: 1, b: 1, a: 1}
   normalLightAngle: 60
   maxConcentrationTime: 3
+  cooldownConcentrationTime: 3
   lightOn: 1
   flashlightOnSound: Play_Mag_On
   flashlightOffSound: Play_Mag_Off
