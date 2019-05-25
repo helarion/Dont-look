@@ -25,6 +25,9 @@ public class Elevator : Objet
     [SerializeField] RandomFlicker randomFlicker;
     [SerializeField] bool scriptTwoSteps = false;
     [SerializeField] bool scriptMoveActivation = false;
+    [SerializeField] bool playsActivateSound = false;
+    [SerializeField] string activateSound;
+    [SerializeField] string breakSound;
     private Vector3 startPos;
     private bool startActivated=false;
     [SerializeField] bool isBidirectional = true;
@@ -58,6 +61,7 @@ public class Elevator : Objet
         base.Activate();
         if(!isStarted)
         {
+            if (playsActivateSound) AkSoundEngine.PostEvent(activateSound, gameObject);
             lamp.enabled = true;
             lampAnimator.enabled = true;
             randomFlicker.enabled = true;
@@ -159,6 +163,7 @@ public class Elevator : Objet
             isActivated = false;
             enterCol.enabled = false;
             isStarted = false;
+            AkSoundEngine.PostEvent(breakSound, gameObject);
         }
         else if(isStarted && isBidirectional)
         {

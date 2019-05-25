@@ -644,6 +644,10 @@ MonoBehaviour:
   startPosition: {fileID: 1797420439588150304}
   shakeOnIntensity: 0
   shakeOffIntensity: 0
+  minRTPC: 0
+  minSlidingRTPC: 40
+  maxSlidingRTPC: 100
+  timeFadeRTPC: 1.5
 --- !u!1 &6489734760488999050
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,6 +945,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: bb2850fe0c23eed4ea10d7331916204b, type: 3}
       propertyPath: m_Name
       value: porte_metallique
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: bb2850fe0c23eed4ea10d7331916204b, type: 3}
+      propertyPath: m_TagString
+      value: SlidingDoor
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bb2850fe0c23eed4ea10d7331916204b, type: 3}
       propertyPath: m_LocalPosition.x
