@@ -15,113 +15,129 @@ public class SlidingDoor : Objet
     [SerializeField] private float minRTPC = 0;
     [SerializeField] private float minSlidingRTPC = 40;
     [SerializeField] private float maxSlidingRTPC = 100;
-    [SerializeField] private float timeFadeRTPC = 1.5f;
+    [SerializeField] private float fadeRTPCDuration = 1.5f;
+    [SerializeField] private string rtpcName = null;
+    float timeFadeRTPC = 0.0f;
+    float slideRtpc = 0.0f;
+    float startRtpc = 0.0f;
 
     bool isPlayingSound = false;
     float distance;
 
+    enum SlidingDoorState
+    {
+        CLOSED,
+        OPENED,
+        GOING_UP,
+        GOING_DOWN
+    }
+
+    SlidingDoorState slidingDoorState = SlidingDoorState.CLOSED;
+
     private void Start()
     {
-        if (isBroken) enabled = false;
+        AkSoundEngine.SetRTPCValue(rtpcName, 0.0f);
     }
 
     private void Update()
     {
-        if (isActivating) ContiniousActivate();
-        else ContiniousDesactivate();
+        if (isBroken) return;
+        update_state();
+        if (slidingDoorState == SlidingDoorState.GOING_UP)
+        {
+            distance = endPos.localPosition.y - transform.localPosition.y;
+            if (distance > 0.01f)
+            {
+                if (!isPlayingSound)
+                {
+                    isPlayingSound = true;
+                    AkSoundEngine.PostEvent(playDoorMoveSound, gameObject);
+                    startRtpc = slideRtpc;
+                    timeFadeRTPC = fadeRTPCDuration * (startRtpc / maxSlidingRTPC);
+                }
+                if (timeFadeRTPC < fadeRTPCDuration)
+                {
+                    timeFadeRTPC += Time.deltaTime;
+                    slideRtpc = (timeFadeRTPC / fadeRTPCDuration) * maxSlidingRTPC;
+                    AkSoundEngine.SetRTPCValue(rtpcName, slideRtpc);
+                }
+                else
+                {
+                    timeFadeRTPC = fadeRTPCDuration;
+                    slideRtpc = maxSlidingRTPC;
+                    AkSoundEngine.SetRTPCValue(rtpcName, slideRtpc);
+                }
+                GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
+                transform.localPosition += (transform.up) * Time.deltaTime * moveUpSpeed;
+            }
+            else
+            {
+                transform.localPosition = endPos.localPosition;
+                AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
+                isPlayingSound = false;
+                slidingDoorState = SlidingDoorState.OPENED;
+            }
+        }
+        else if (slidingDoorState == SlidingDoorState.GOING_DOWN)
+        {
+            distance = transform.localPosition.y - startPosition.localPosition.y;
+            if (distance > 0.01f)
+            {
+                if (!isPlayingSound)
+                {
+                    isPlayingSound = true;
+                    AkSoundEngine.PostEvent(playDoorMoveSound, gameObject);
+                    startRtpc = slideRtpc;
+                    timeFadeRTPC = fadeRTPCDuration * (Mathf.Abs(startRtpc - minSlidingRTPC) / (maxSlidingRTPC - minSlidingRTPC));
+                }
+                if (timeFadeRTPC < fadeRTPCDuration)
+                {
+                    timeFadeRTPC += Time.deltaTime;
+                    slideRtpc = Mathf.Lerp(startRtpc, minSlidingRTPC, timeFadeRTPC);
+                }
+                else
+                {
+                    timeFadeRTPC = fadeRTPCDuration;
+                    slideRtpc = minSlidingRTPC;
+                    AkSoundEngine.SetRTPCValue(rtpcName, slideRtpc);
+                }
+                GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
+                transform.localPosition += (transform.up * -1) * Time.deltaTime * moveDownSpeed;
+            }
+            else
+            {
+                transform.localPosition = startPosition.localPosition;
+                AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
+                isPlayingSound = false;
+                slidingDoorState = SlidingDoorState.CLOSED;
+            }
+        }
+    }
+
+    public void update_state()
+    {
+        if (isActivating && slidingDoorState != SlidingDoorState.GOING_UP && slidingDoorState != SlidingDoorState.OPENED)
+        {
+            Activate();
+        }
+        else if (!isActivating && (slidingDoorState == SlidingDoorState.GOING_UP || slidingDoorState == SlidingDoorState.OPENED))
+        {
+            Desactivate();
+        }
     }
 
     public override void Activate()
     {
-        if(!isActivated)
-        {
-            //AkSoundEngine.SetRTPCValue("Porte_RTPC_volume", 0);
-            isActivated = true;
-            StopCoroutine(CloseCoroutine());
-            StartCoroutine(OpenCoroutine());
-        }
+        slidingDoorState = SlidingDoorState.GOING_UP;
+        AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
+        isPlayingSound = false;
     }
 
     public override void Desactivate()
     {
-        if (isActivated)
-        {
-            isActivated = false;
-            StopCoroutine(OpenCoroutine());
-            StartCoroutine(CloseCoroutine());
-        }
-    }
-
-    IEnumerator OpenCoroutine()
-    {
-        distance = (transform.localPosition - endPos.localPosition).magnitude;
-        while (distance > 0.1f)
-        {
-            transform.position += (transform.up) * Time.deltaTime * moveUpSpeed;
-            distance = (transform.position - endPos.position).magnitude;
-            yield return new WaitForEndOfFrame();
-        }
-        transform.position = endPos.position;
-        //AkSoundEngine.PostEvent(stopSound, gameObject);
-        //GameManager.instance.player.ResumeMove();
-        yield return null;
-    }
-
-    IEnumerator CloseCoroutine()
-    {
-        distance = (transform.localPosition -startPosition.localPosition).magnitude;
-        while (distance > 0.1f)
-        {
-            transform.position += (transform.up*-1) * Time.deltaTime * moveDownSpeed;
-            distance = (transform.position - endPos.position).magnitude;
-            yield return new WaitForEndOfFrame();
-        }
-        transform.position = endPos.position;
-        //AkSoundEngine.PostEvent(stopSound, gameObject);
-        //GameManager.instance.player.ResumeMove();
-        yield return null;
-    }
-
-    private void ContiniousActivate()
-    {
-        distance = endPos.localPosition.y-transform.localPosition.y;
-        if (distance > 0.01f)
-        {
-            if (!isPlayingSound)
-            {
-                isPlayingSound = true;
-                AkSoundEngine.PostEvent(playDoorMoveSound, gameObject);
-            }
-            GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
-            transform.localPosition += (transform.up) * Time.deltaTime * moveUpSpeed;
-        }
-        else
-        {
-            transform.localPosition = endPos.localPosition;
-            AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
-            isPlayingSound = false;
-        }
-    }
-
-    private void ContiniousDesactivate()
-    {
-        distance = transform.localPosition.y - startPosition.localPosition.y;
-        if (distance > 0.01f)
-        {
-            if (!isPlayingSound)
-            {
-                isPlayingSound = true;
-                AkSoundEngine.PostEvent(playDoorMoveSound, gameObject);
-            }
-            GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
-            transform.localPosition += (transform.up * -1) * Time.deltaTime * moveDownSpeed;
-        }
-        else
-        {
-            transform.localPosition = startPosition.localPosition;
-            AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
-            isPlayingSound = false;
-        }
+        slidingDoorState = SlidingDoorState.GOING_DOWN;
+        AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
+        isPlayingSound = false;
     }
 
     public override void Break()
@@ -129,18 +145,27 @@ public class SlidingDoor : Objet
         transform.localPosition = endPos.localPosition;
         enabled = false;
         base.Break();
+        slidingDoorState = SlidingDoorState.OPENED;
     }
 
     public override void Reset()
     {
         base.Reset();
+        timeFadeRTPC = 0.0f;
+        slideRtpc = 0.0f;
+        startRtpc = 0.0f;
+        AkSoundEngine.SetRTPCValue(rtpcName, 0.0f);
         //isActivated = false;
         isActivating = false;
         AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
-        if(isBroken)
+        if (isBroken)
         {
             Break();
         }
-        else transform.localPosition = startPosition.localPosition;
+        else
+        {
+            transform.localPosition = startPosition.localPosition;
+            slidingDoorState = SlidingDoorState.CLOSED;
+        }
     }
 }
