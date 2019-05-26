@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 337310628}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &458096480
@@ -822,10 +822,14 @@ MonoBehaviour:
   hasEyeTracker: {fileID: 0}
   noEyeTracker: {fileID: 0}
   scene: 3
+  nextScene: 4
   brightnessControl: {fileID: 337310630}
   brightnessMin: -0.5
   brightnessMax: 2
   sliderSound: Play_Amp_On
+  buttonSound: 
+  playAmbiance: 
+  stopAmbiance: 
 --- !u!114 &942638198
 MonoBehaviour:
   m_ObjectHideFlags: 0

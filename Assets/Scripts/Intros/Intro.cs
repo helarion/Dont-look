@@ -14,6 +14,7 @@ public class Intro : MonoBehaviour
     [SerializeField] private Transform scene =null;
     [SerializeField] private Canvas logos =null;
     [SerializeField] private Image fadeImg;
+    [SerializeField] int nextScene;
 
     [SerializeField] private string playBreathSound;
     [SerializeField] private string stopBreathSound;
@@ -114,6 +115,6 @@ public class Intro : MonoBehaviour
 
         AkSoundEngine.PostEvent(stopBreathSound, gameObject);
         yield return new WaitForSeconds(1);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(nextScene);
     }
 }

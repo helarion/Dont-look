@@ -15,11 +15,14 @@ public class Intro2 : MonoBehaviour
     [SerializeField] Canvas hasEyeTracker;
     [SerializeField] Canvas noEyeTracker;
     [SerializeField] int scene=2;
+    [SerializeField] int nextScene;
     [SerializeField] Slider brightnessControl;
     [SerializeField] private float brightnessMin = -1.5f;
     [SerializeField] private float brightnessMax = 1.5f;
     [SerializeField] private string sliderSound;
     [SerializeField] private string buttonSound;
+    [SerializeField] string playAmbiance;
+    [SerializeField] string stopAmbiance;
 
     private ColorGrading colorGrading;
     private Bloom bloom;
@@ -29,13 +32,18 @@ public class Intro2 : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(FadeOutCoroutine());
+        if (scene==0)
+        {
+            AkSoundEngine.PostEvent(playAmbiance, gameObject);
+        }
         if (scene == -1)
         {
             AkSoundEngine.PostEvent("Play_Random_Track2", gameObject);
             if(GameManager.instance!=null) Destroy(GameManager.instance.gameObject);
             if(UIManager.instance!=null) Destroy(UIManager.instance.gameObject);
+            StartCoroutine(FadeInCoroutine());
         }
-        StartCoroutine(FadeOutCoroutine());
         if (scene == 2)
         {
             StartCoroutine(ControlersCoroutine());
@@ -171,10 +179,17 @@ public class Intro2 : MonoBehaviour
         {
             AkSoundEngine.PostEvent("Stop_Random_Track2", gameObject);
             yield return new WaitForSeconds(waitBefore);
-            Application.Quit();
+            SceneManager.LoadScene(nextScene);
         }
-        else if(isEnding)SceneManager.LoadScene(scene);
+        else if (scene == 0) SceneManager.LoadScene(nextScene);
+        else if (isEnding) SceneManager.LoadScene(nextScene);
         isFading = false;
         yield return null;
+    }
+
+    public void StartGame()
+    {
+        AkSoundEngine.PostEvent(stopAmbiance, gameObject);
+        StartCoroutine(FadeInCoroutine());
     }
 }
