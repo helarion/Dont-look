@@ -24,6 +24,8 @@ public class SlidingDoor : Objet
     bool isPlayingSound = false;
     float distance;
 
+    List<bool> setStates = new List<bool>();
+
     enum SlidingDoorState
     {
         CLOSED,
@@ -114,8 +116,27 @@ public class SlidingDoor : Objet
         }
     }
 
+    public void set_activation_state(bool state)
+    {
+        setStates.Add(state);
+    }
+
     public void update_state()
     {
+        if (setStates.Count != 0)
+        {
+            isActivating = false;
+        }
+        foreach (bool state in setStates)
+        {
+            if (state)
+            {
+                isActivating = true;
+                break;
+            }
+        }
+        setStates.Clear();
+
         if (isActivating && slidingDoorState != SlidingDoorState.GOING_UP && slidingDoorState != SlidingDoorState.OPENED)
         {
             Activate();
