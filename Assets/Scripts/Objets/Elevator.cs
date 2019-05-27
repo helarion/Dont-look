@@ -36,7 +36,9 @@ public class Elevator : Objet
     [SerializeField] string endSong;
     [SerializeField] ContinuousBlinkingLight blinkingLight;
 
+    [SerializeField] float waitTime = 12;
     private bool isMoving = false;
+    private bool isWaiting = true;
 
     private void Start()
     {
@@ -56,9 +58,21 @@ public class Elevator : Objet
         //if(isActivated)AkSoundEngine.PostEvent(engineSound, gameObject);
     }
 
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(waitTime);
+        isWaiting = false;
+        Activate();
+    }
+
     public override void Activate()
     {
         if (isActivated) return;
+        else if (isEnd && isWaiting)
+        {
+            StartCoroutine(Wait());
+            return;
+        }
         base.Activate();
         if(!isStarted)
         {

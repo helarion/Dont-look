@@ -19,6 +19,7 @@ public class BipedeBehavior : Enemy
     public bool isStopped = false;
 
     bool betweenSteps = false; // sert à savoir si l'on peut bouger ou pas, en accord avec l'animation
+    bool willPlayPresence = true;
 
     [SerializeField] float retreatDistance = 0.5f;
     float retreatTime = 0.0f;
@@ -44,11 +45,26 @@ public class BipedeBehavior : Enemy
     {
         base.PlayWalk();
         GameManager.instance.ShakeScreen(walkShakeDuration, currentWalkIntensity);
+
+        if (willPlayPresence)
+        {
+            AkSoundEngine.PostEvent(ChaseSoundPlay, gameObject);
+            willPlayPresence = false;
+        }
+        else willPlayPresence = true;
         betweenSteps = !betweenSteps; // on inverse la valeur de betweenSteps, qui commence à false, passe à true entre 2 pas, puis à false le temps que l'anim boucle
     }
 
     public void Retreat()
     {
+        base.PlayWalk();
+        GameManager.instance.ShakeScreen(walkShakeDuration, currentWalkIntensity);
+        if (willPlayPresence)
+        {
+            AkSoundEngine.PostEvent(ChaseSoundPlay, gameObject);
+            willPlayPresence = false;
+        }
+        else willPlayPresence = true;
         retreatTime = 0.1f;
     }
 
@@ -155,6 +171,7 @@ public class BipedeBehavior : Enemy
 
     private void LitConcentrated()
     {
+        if(!isStopped) AkSoundEngine.PostEvent(LookSound, gameObject);
         agent.isStopped = true;
         isStopped = true;
         isMoving = false;

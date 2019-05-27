@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 4233988890674401682}
   - component: {fileID: 5102741250434433050}
   m_Layer: 9
-  m_Name: ContiniousLightDetector END
+  m_Name: ENDContiniousLightDetector
   m_TagString: LightDetector
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -327,10 +327,10 @@ MonoBehaviour:
   rectangleLight: {fileID: 5876334021772520955}
   pointLight: {fileID: 1463471074594422695}
   offIntensity: 20
-  activeIntensity: 200
+  activeIntensity: 20
   blinkSpeed: 1
   durationBetweenBlinks: 0.8
-  offColor: {r: 0.6784314, g: 0.15686275, b: 0.24313726, a: 0}
+  offColor: {r: 0.7176471, g: 0.48005265, b: 0.20784314, a: 0}
   activeColor: {r: 0.5686275, g: 0, b: 1, a: 0}
   isBroken: 0
 --- !u!114 &4233988890674401682
@@ -373,6 +373,8 @@ MonoBehaviour:
   playChargingSound: Play_LIGHT_CHARGE
   stopChargingSound: Stop_LIGHT_CHARGE
   blinkingLight: {fileID: 3900359093184860396}
+  targetBlinkLight1: {fileID: 0}
+  targetBlinkLight2: {fileID: 0}
   chargeTime: 0.5
   brokenFeature:
   - {fileID: 4819653785874102505}
@@ -382,6 +384,7 @@ MonoBehaviour:
   dogDeathSound: Play_Mort_Chien
   scriptEndTimeLook: 1.5
   scriptEndElevator: {fileID: 0}
+  waitTime: 7
 --- !u!1 &5876334021772520949
 GameObject:
   m_ObjectHideFlags: 0
