@@ -185,7 +185,7 @@ public class BipedeBehavior : Enemy
         }
     }
 
-    public override void Respawn()
+    public override void Respawn(bool farOfPlayer = false)
     {
         base.Respawn();
         hasPlayedLook = false;

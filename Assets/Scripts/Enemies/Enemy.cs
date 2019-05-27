@@ -45,6 +45,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public Transform[] spawnZones=null ; //list of spawn zones
     [SerializeField] private Objet[] scriptedObjectsActivation; //if spider needs to activate objets when start to chase
     [SerializeField] private LightDetector scriptedLampActivation; //if spider needs to activate lightdetector when start to chase
+    [SerializeField] float spawnDistanceFromPlayer = 10.0f;
 
     [HideInInspector] public Animator animator;
     [SerializeField] private Transform _transform;
@@ -205,7 +206,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public virtual void Respawn()
+    public virtual void Respawn(bool farOfPlayer = false)
     {
         AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbStop, GameManager.instance.gameObject);
         AkSoundEngine.PostEvent(GameManager.instance.ChaseBipedeAmbStop, GameManager.instance.gameObject);
@@ -216,7 +217,7 @@ public class Enemy : MonoBehaviour
         isCountingEndChase = false;
         isChasing = false;
         StopChase();
-        Vector3 pos = RandomSpawn();
+        Vector3 pos = RandomSpawn(farOfPlayer);
         animator.SetBool("IsMoving", false);
         agent.Warp(pos);
         MoveTo(pos);
@@ -234,10 +235,17 @@ public class Enemy : MonoBehaviour
     }
 
     #region GetSet
-    public Vector3 RandomSpawn()
+    public Vector3 RandomSpawn(bool farOfPlayer)
     {
         int max = spawnZones.Length;
         spawnIndex = Random.Range(0, max);
+        if (farOfPlayer)
+        {
+            while ((spawnZones[spawnIndex].position - player.transform.position).magnitude > spawnDistanceFromPlayer)
+            {
+                spawnIndex = Random.Range(0, max);
+            }
+        }
         return (spawnZones[spawnIndex].position);
     }
 
