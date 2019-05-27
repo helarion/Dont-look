@@ -245,15 +245,19 @@ public class PlayerController : MonoBehaviour
         float zOffset = Mathf.Infinity;
         foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
         {
-            float offset = Mathf.Abs(sl.begin.position.z - transform.position.z);
-            if (offset < zOffset)
+            if (sl.begin.position.x <= transform.position.x && sl.end.position.x >= transform.position.x)
             {
-                zOffset = offset;
-                currentSpatialLine = sl;
-                isChangingSpatialLine = true;
-                changingLineDirection = (sl.begin.position.z - transform.position.z) > 0 ? 1 : -1;
+                float offset = Mathf.Abs(sl.begin.position.z - transform.position.z);
+                if (offset < zOffset)
+                {
+                    zOffset = offset;
+                    currentSpatialLine = sl;
+                    isChangingSpatialLine = true;
+                    changingLineDirection = (sl.begin.position.z - transform.position.z) > 0 ? 1 : -1;
+                }
             }
         }
+        //print(currentSpatialLine.begin.position + " - " + currentSpatialLine.end.position);
     }
 
     private void OnTriggerStay(Collider other)
@@ -356,22 +360,21 @@ public class PlayerController : MonoBehaviour
         {
             currentSpatialSas = null;
             float zOffset = Mathf.Infinity;
-            float currentZ = currentSpatialLine.begin.position.z;
-            float currentXBegin = currentSpatialLine.begin.position.x;
-            float currentXEnd = currentSpatialLine.end.position.x;
             foreach (SpatialLine sl in currentSpatialRoom._spatialLines)
             {
-                if (sl.begin.position.x < currentXEnd && sl.end.position.x > currentXBegin)
+                if (sl.begin.position.x <= transform.position.x && sl.end.position.x >= transform.position.x)
                 {
-                    if (Mathf.Abs(sl.begin.position.z - currentZ) < zOffset)
+                    float offset = Mathf.Abs(sl.begin.position.z - transform.position.z);
+                    if (offset < zOffset)
                     {
-                        zOffset = Mathf.Abs(sl.begin.position.z - currentZ);
+                        zOffset = offset;
                         currentSpatialLine = sl;
                         isChangingSpatialLine = true;
-                        changingLineDirection = 1;
+                        changingLineDirection = (sl.begin.position.z - transform.position.z) > 0 ? 1 : -1;
                     }
                 }
             }
+
             return;
         }
 

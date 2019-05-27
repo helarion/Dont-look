@@ -38,7 +38,14 @@ public class ContiniousLightDetector : Objet
 
         wasLooked = isLooked;
         isLooked = GameManager.instance.LightDetection(gameObject, true);
-        target.isActivating = isLooked;
+        if (target.GetComponent<SlidingDoor>() != null)
+        {
+            target.GetComponent<SlidingDoor>().set_activation_state(isLooked);
+        }
+        else
+        {
+            target.isActivating = isLooked;
+        }
         if (isLooked)
         {
             LookFunction();

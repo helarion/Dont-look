@@ -22,6 +22,16 @@ public class SpatialSas : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(spatialLine.begin.position, spatialLine.end.position);
+        if (!Application.isPlaying)
+        {
+            Gizmos.DrawLine(spatialLine.begin.position, spatialLine.end.position);
+        }
+        else
+        {
+            if (spatialLine != GameManager.instance.player.currentSpatialLine)
+            {
+                Gizmos.DrawLine(spatialLine.begin.position, spatialLine.end.position);
+            }
+        }
     }
 }

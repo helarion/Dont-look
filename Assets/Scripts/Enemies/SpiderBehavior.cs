@@ -81,7 +81,7 @@ public class SpiderBehavior : Enemy
         yield return new WaitForSeconds(changingTime);
         //if (isChangingPlaces) StopChase();
         //else 
-        Respawn();
+        Respawn(isChangingPlaces);
     }
 
     public override void PlayChase()
@@ -198,10 +198,10 @@ public class SpiderBehavior : Enemy
     }
 
     // FAIT REAPARAITRE L'ARAIGNEE ALEATOIREMENT DANS UNE DE SES ZONES DE SPAWN
-    public override void Respawn()
+    public override void Respawn(bool farOfPlayer)
     {
         if (isChangingPlaces && !player.getIsAlive()) spawnZones = savedSpawnZone;
-        base.Respawn();
+        base.Respawn(farOfPlayer);
         StopCoroutine("CountingChange");
         isCountingChange = false;
         lowerSpeedChase = true;
