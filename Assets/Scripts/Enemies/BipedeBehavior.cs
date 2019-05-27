@@ -22,6 +22,7 @@ public class BipedeBehavior : Enemy
     bool willPlayPresence = true;
 
     [SerializeField] float retreatDistance = 0.5f;
+    [SerializeField] float retreatStepDuration = 0.2f;
     float retreatTime = 0.0f;
 
     void Start()
@@ -65,7 +66,7 @@ public class BipedeBehavior : Enemy
             willPlayPresence = false;
         }
         else willPlayPresence = true;
-        retreatTime = 0.1f;
+        retreatTime = retreatStepDuration;
     }
 
     public override void PlayChase()
