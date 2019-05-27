@@ -241,7 +241,7 @@ public class Enemy : MonoBehaviour
         spawnIndex = Random.Range(0, max);
         if (farOfPlayer)
         {
-            while ((spawnZones[spawnIndex].position - player.transform.position).magnitude > spawnDistanceFromPlayer)
+            while ((spawnZones[spawnIndex].position - player.transform.position).magnitude < spawnDistanceFromPlayer)
             {
                 spawnIndex = Random.Range(0, max);
             }
