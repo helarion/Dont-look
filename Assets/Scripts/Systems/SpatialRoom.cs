@@ -58,10 +58,22 @@ public class SpatialRoom : MonoBehaviour
     [ExecuteInEditMode]
     private void OnDrawGizmos()
     {
-        if(!Application.isPlaying)
-        foreach (SpatialLine sl in spatialLines)
+        if (!Application.isPlaying)
         {
-            Gizmos.DrawLine(sl.begin.position, sl.end.position);
+            foreach (SpatialLine sl in spatialLines)
+            {
+                Gizmos.DrawLine(sl.begin.position, sl.end.position);
+            }
+        }
+        else
+        {
+            foreach (SpatialLine sl in _spatialLines)
+            {
+                if (sl != GameManager.instance.player.currentSpatialLine)
+                {
+                    Gizmos.DrawLine(sl.begin.position, sl.end.position);
+                }
+            }
         }
     }
 
