@@ -18,6 +18,7 @@ public class ScriptLamp : Objet
     public void Swing()
     {
         swingingLight.GetComponent<Rigidbody>().AddForce(Vector3.left * 3000);
+        AkSoundEngine.PostEvent(swingingLampSound, gameObject);
     }
 
     public override void Activate()
@@ -26,7 +27,6 @@ public class ScriptLamp : Objet
         lt.enabled = isActivated;
         AkSoundEngine.PostEvent(lampActivateSound, gameObject);
         spider.Script();
-        //AkSoundEngine.PostEvent(swingingLampSound,gameObject);
     }
 
     public override void Reset()

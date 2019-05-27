@@ -6,6 +6,8 @@ public class SlidingDoor : Objet
 {
     [SerializeField] private string playDoorMoveSound;
     [SerializeField] private string stopDoorMoveSound;
+    [SerializeField] private string playDoorHitsWallSound;
+
     [SerializeField] private float moveUpSpeed = 0.1f;
     [SerializeField] private float moveDownSpeed = 0.05f;
     [SerializeField] private Transform endPos;
@@ -76,6 +78,7 @@ public class SlidingDoor : Objet
             {
                 transform.localPosition = endPos.localPosition;
                 AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
+                AkSoundEngine.PostEvent(playDoorHitsWallSound, gameObject);
                 isPlayingSound = false;
                 slidingDoorState = SlidingDoorState.OPENED;
             }
@@ -110,6 +113,7 @@ public class SlidingDoor : Objet
             {
                 transform.localPosition = startPosition.localPosition;
                 AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
+                AkSoundEngine.PostEvent(playDoorHitsWallSound, gameObject);
                 isPlayingSound = false;
                 slidingDoorState = SlidingDoorState.CLOSED;
             }

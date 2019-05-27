@@ -56,6 +56,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LayerMask climbLayer;
 
     [Header("Sons")]
+    [SerializeField] private string Intro;
+    [SerializeField] private float waitIntroTime = 8;
+
     [SerializeField] public string ChaseSpiderAmbPlay;
     [SerializeField] public string ChaseSpiderAmbStop;
     [SerializeField] public string ChaseSpiderKillStop;
@@ -70,7 +73,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
-    [SerializeField] string deathSound;
+    [SerializeField] string monsterDeathSound;
+    [SerializeField] string doorDeathSound;
+
     [SerializeField] public AudioRoom startRoom;
     [SerializeField] int nbAudioRoomId;
     [SerializeField] float audioFadeSpeed=10;
@@ -101,21 +106,42 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        player.SetCurrentAudioRoom(startRoom);
-        PlayCurrentAudioRoom(startRoom);
         CheckTracker();
         minVignette = PostProcessInstance.instance.vignette.intensity.value;
         camHandler = mainCamera.GetComponent<CameraHandler>();
         controls = ReInput.players.GetPlayer(0);
-        ResumeGame();
         originalPos = mainCamera.transform.localPosition;
         Cursor.visible = false;
         enemyList = new List<Enemy>();
-        foreach(Enemy e in listE)
+        foreach (Enemy e in listE)
         {
             enemyList.Add(e);
         }
         StartCoroutine(ShakeScreenCoroutine());
+
+        if(!isTesting)
+        {
+            GameManager.instance.SetIsPaused(true);
+            StartCoroutine(IntroCoroutine());
+        }
+        else
+        {
+            player.SetCurrentAudioRoom(startRoom);
+            PlayCurrentAudioRoom(startRoom);
+            ResumeGame();
+            UIManager.instance.FadeOutIntro();
+        }
+    }
+
+    IEnumerator IntroCoroutine()
+    {
+        AkSoundEngine.PostEvent(Intro, gameObject);
+        yield return new WaitForSeconds(waitIntroTime);
+        player.SetCurrentAudioRoom(startRoom);
+        PlayCurrentAudioRoom(startRoom);
+        ResumeGame();
+        UIManager.instance.FadeOutIntro();
+        yield return null;
     }
 
     private void Update()
@@ -349,7 +375,7 @@ public class GameManager : MonoBehaviour
     #region death
 
     // TUE LE JOUEUR
-    public void Death()
+    public void Death(int source)
     {
         if (!player.getIsAlive()) return;
         AkSoundEngine.PostEvent(stopRandomSounds, gameObject);
@@ -357,7 +383,8 @@ public class GameManager : MonoBehaviour
         player.SetIsAlive(false);
         UIManager.instance.FadeDeath(true);
         StartCoroutine(DeathCoroutine());
-        AkSoundEngine.PostEvent(deathSound, gameObject);
+        if(source==0)AkSoundEngine.PostEvent(monsterDeathSound, gameObject);
+        else if(source==1) AkSoundEngine.PostEvent(doorDeathSound, gameObject);
     }
 
     // COROUTINE DE FADE OUT / IN DE LA MORT

@@ -328,8 +328,8 @@ MonoBehaviour:
   endPos: {fileID: 1245245558}
   endPosStep2: {fileID: 0}
   moveSpeed: 3
-  playEngineSound: 
-  stopEngineSound: 
+  playEngineSound: Play_ELEVATOR_motor
+  stopEngineSound: Stop_ELEVATOR_motor
   playMovingSound: Play_Seq_Motor_Asc
   stopMovingSound: Stop_Seq_Motor_Asc
   enterCol: {fileID: 1782030476667746518}
@@ -344,6 +344,7 @@ MonoBehaviour:
     begin: {fileID: 0}
     end: {fileID: 0}
   spatialRoom: {fileID: 0}
+  nextSpatialRoom: {fileID: 0}
   lamp: {fileID: 108591155389536639}
   lampAnimator: {fileID: 2080198689059239907}
   randomFlicker: {fileID: 8864230880155184561}
@@ -356,6 +357,7 @@ MonoBehaviour:
   isEnd: 0
   endSong: 
   blinkingLight: {fileID: 0}
+  waitTime: 12
 --- !u!65 &1782030476667746518
 BoxCollider:
   m_ObjectHideFlags: 0

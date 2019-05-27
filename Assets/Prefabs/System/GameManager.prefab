@@ -96,6 +96,8 @@ MonoBehaviour:
   climbLayer:
     serializedVersion: 2
     m_Bits: 8192
+  Intro: Play_Intro_Gamin
+  waitIntroTime: 8
   ChaseSpiderAmbPlay: Play_Random_CoursePoursuite
   ChaseSpiderAmbStop: Stop_Random_CoursePoursuite
   ChaseSpiderKillStop: Stop_Random_CoursePoursuite_01
@@ -107,7 +109,8 @@ MonoBehaviour:
   resumeGameSounds: Resume_All
   HeartPlay: Play_Random_Heart
   HeartStop: Stop_Random_Heart
-  deathSound: Play_Mort_Gamin
+  monsterDeathSound: Play_Mort_Gamin
+  doorDeathSound: Play_PORTE_MORT_GAMIN
   startRoom: {fileID: 0}
   nbAudioRoomId: 11
   audioFadeSpeed: 30

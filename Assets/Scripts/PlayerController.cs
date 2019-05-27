@@ -267,9 +267,9 @@ public class PlayerController : MonoBehaviour
             BipedeBehavior b = other.GetComponentInParent<BipedeBehavior>();
             if (b != null)
             {
-                if (!b.isStopped) GameManager.instance.Death();
+                if (!b.isStopped) GameManager.instance.Death(0);
             }
-            else GameManager.instance.Death();
+            else GameManager.instance.Death(0);
         }
     }
 
@@ -421,7 +421,7 @@ public class PlayerController : MonoBehaviour
             //print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
             if (collision.collider.bounds.min.y - cl.bounds.max.y > -0.25f)
             {
-                GameManager.instance.Death();
+                GameManager.instance.Death(1);
             }
         }
     }

@@ -55,7 +55,7 @@ public class Elevator : Objet
             randomFlicker.enabled=false;
             enterCol.enabled = false;
         }
-        //if(isActivated)AkSoundEngine.PostEvent(engineSound, gameObject);
+        if(isActivated)AkSoundEngine.PostEvent(playEngineSound, gameObject);
     }
 
     IEnumerator Wait()
@@ -77,6 +77,7 @@ public class Elevator : Objet
         if(!isStarted)
         {
             if (playsActivateSound) AkSoundEngine.PostEvent(activateSound, gameObject);
+            AkSoundEngine.PostEvent(playEngineSound, gameObject);
             lamp.enabled = true;
             lampAnimator.enabled = true;
             randomFlicker.enabled = true;
@@ -95,12 +96,13 @@ public class Elevator : Objet
         }
         if (blinkingLight != null && blinkingLight.enabled)
         {
+            AkSoundEngine.PostEvent(playEngineSound, gameObject);
             blinkingLight.StopBlink();
             blinkingLight.enabled = false;
             lamp.enabled = true;
             lampAnimator.enabled = true;
         }
-        //AkSoundEngine.PostEvent(playEngineSound, gameObject);
+        
     }
 
     public override void Reset()
@@ -117,7 +119,7 @@ public class Elevator : Objet
         isMoving = false;
         transform.position = startPos;
         isActivated = isStarted;
-        //if(!isActivated) //AkSoundEngine.PostEvent(stopEngineSound, gameObject);
+        if(!isActivated) AkSoundEngine.PostEvent(stopEngineSound, gameObject);
     }
 
     public void StartMoving()
@@ -189,6 +191,7 @@ public class Elevator : Objet
             enterCol.enabled = false;
             isStarted = false;
             AkSoundEngine.PostEvent(breakSound, gameObject);
+            AkSoundEngine.PostEvent(stopEngineSound, gameObject);
             if (blinkingLight != null)
             {
                 lampAnimator.enabled = false;

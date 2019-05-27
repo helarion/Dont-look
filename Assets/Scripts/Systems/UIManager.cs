@@ -52,14 +52,13 @@ public class UIManager : MonoBehaviour
         float brightness = PostProcessInstance.instance.colorGrading.postExposure.value;
         float value = brightness.Remap(brightnessMin, brightnessMax, brightnessControl.minValue, brightnessControl.maxValue);
         brightnessControl.value = value;
+        fadeImg.color = new Color(0, 0, 0, 1);
+    }
 
-        if (!GameManager.instance.isTesting)
-        {
-            GameManager.instance.SetIsPaused(true);
-            fadeImg.color = new Color(0, 0, 0, 1);
-            FadeOut(fadeImg, 2, 0);
-            StartCoroutine(StartCoroutine());
-        }
+    public void FadeOutIntro()
+    {
+        FadeOut(fadeImg, 2, 0);
+        StartCoroutine(StartCoroutine());
     }
 
     public void BrightnessValueChangeCheck()

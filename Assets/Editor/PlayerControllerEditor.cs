@@ -11,7 +11,7 @@ public class PlayerControllerEditor : Editor
         base.OnInspectorGUI();
         if (GUILayout.Button("Death"))
         {
-            GameManager.instance.Death();
+            GameManager.instance.Death(0);
         }
     }
 }
