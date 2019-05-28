@@ -6,6 +6,7 @@ public class LightDetector : Objet
 {
     [SerializeField] public Objet[] targets =null;
     [SerializeField] private float delayActivate = 1.5f;
+    [SerializeField] public float dechargeRate = 1.0f;
     [SerializeField] private BlinkingLight blinkLight = null;
     [SerializeField] private string playChargingSound = null;
     [SerializeField] private string StopChargingSound = null;
@@ -28,6 +29,7 @@ public class LightDetector : Objet
 
     private void Start()
     {
+        blinkLight.dechargeRate = dechargeRate;
         model = GetComponentInChildren<MeshRenderer>();
         timeLooked = 0.0f;
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
@@ -78,7 +80,7 @@ public class LightDetector : Objet
             if (timeLooked > 0.0f)
             {
                 AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, delayActivate, 0, 100));
-                timeLooked -= Time.deltaTime;
+                timeLooked -= Time.deltaTime * dechargeRate;
             }
             else if (chargeSoundPlaying)
             {

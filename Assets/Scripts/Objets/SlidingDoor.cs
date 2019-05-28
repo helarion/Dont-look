@@ -27,6 +27,7 @@ public class SlidingDoor : Objet
     float distance;
 
     List<bool> setStates = new List<bool>();
+    bool forcedState = false;
 
     enum SlidingDoorState
     {
@@ -125,19 +126,32 @@ public class SlidingDoor : Objet
         setStates.Add(state);
     }
 
+    public void force_activation_state(bool state)
+    {
+        isActivating = state;
+        forcedState = true;
+    }
+
     public void update_state()
     {
-        if (setStates.Count != 0)
+        if (!forcedState)
         {
-            isActivating = false;
-        }
-        foreach (bool state in setStates)
-        {
-            if (state)
+            if (setStates.Count != 0)
             {
-                isActivating = true;
-                break;
+                isActivating = false;
             }
+            foreach (bool state in setStates)
+            {
+                if (state)
+                {
+                    isActivating = true;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            forcedState = false;
         }
         setStates.Clear();
 
@@ -182,6 +196,7 @@ public class SlidingDoor : Objet
         AkSoundEngine.SetRTPCValue(rtpcName, 0.0f);
         //isActivated = false;
         isActivating = false;
+        forcedState = false;
         AkSoundEngine.PostEvent(stopDoorMoveSound, gameObject);
         if (isBroken)
         {
