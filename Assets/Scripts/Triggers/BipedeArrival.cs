@@ -50,6 +50,7 @@ public class BipedeArrival : Objet
         Transform[] bipedeSpawnZone= bipede.GetSpawnZones();
         bipede.GetAgent().Warp(bipedeSpawnZone[0].position);
         bipede.StopChase();
+        startedCoroutine = false;
         door.gameObject.SetActive(true);
         doorSas.gameObject.SetActive(true);
         brokenDoor.gameObject.SetActive(false);

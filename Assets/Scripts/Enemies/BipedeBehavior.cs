@@ -18,7 +18,7 @@ public class BipedeBehavior : Enemy
     private bool canSeePlayer = false;
     public bool isStopped = false;
 
-    bool betweenSteps = false; // sert à savoir si l'on peut bouger ou pas, en accord avec l'animation
+    //bool betweenSteps = false; // sert à savoir si l'on peut bouger ou pas, en accord avec l'animation
     bool willPlayPresence = true;
 
     [SerializeField] float retreatDistance = 0.5f;
@@ -53,7 +53,7 @@ public class BipedeBehavior : Enemy
             willPlayPresence = false;
         }
         else willPlayPresence = true;
-        betweenSteps = !betweenSteps; // on inverse la valeur de betweenSteps, qui commence à false, passe à true entre 2 pas, puis à false le temps que l'anim boucle
+        //betweenSteps = !betweenSteps; // on inverse la valeur de betweenSteps, qui commence à false, passe à true entre 2 pas, puis à false le temps que l'anim boucle
     }
 
     public void Retreat()
@@ -136,14 +136,14 @@ public class BipedeBehavior : Enemy
         }
         else
         {
-            if (betweenSteps)
-            {
+            //if (betweenSteps)
+            //{
                 agent.speed = moveSpeed;
-            }
+            /*}
             else
             {
                 agent.speed = 0.0f;
-            }
+            }*/
             isStopped = false;
             isLooked = false;
             agent.isStopped = false;
@@ -158,14 +158,14 @@ public class BipedeBehavior : Enemy
         agent.isStopped = false;
         isMoving = true;
         isStopped = false;
-        if (betweenSteps)
-        {
+        /*if (betweenSteps)
+        {*/
             agent.speed = moveSpeed - malusSpeed;
-        }
-        else
+        //}
+        /*else
         {
             agent.speed = 0.0f;
-        }
+        }*/
         animator.SetBool("IsLooked", false);
         animator.SetBool("IsMoving", isMoving);
     }
@@ -190,7 +190,7 @@ public class BipedeBehavior : Enemy
         base.Respawn();
         hasPlayedLook = false;
         isLooked = false;
-        betweenSteps = false;
+        //betweenSteps = false;
         agent.speed = 0.0f;
         agent.isStopped = true;
         isStopped = true;
