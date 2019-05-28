@@ -29,6 +29,8 @@ public class SlidingDoor : Objet
     List<bool> setStates = new List<bool>();
     bool forcedState = false;
 
+    bool broken = false;
+
     enum SlidingDoorState
     {
         CLOSED,
@@ -42,11 +44,15 @@ public class SlidingDoor : Objet
     private void Start()
     {
         AkSoundEngine.SetRTPCValue(rtpcName, 0.0f);
+        if (isBroken)
+        {
+            Break();
+        }
     }
 
     private void Update()
     {
-        if (isBroken) return;
+        if (broken) return;
         update_state();
         if (slidingDoorState == SlidingDoorState.GOING_UP)
         {
@@ -181,6 +187,7 @@ public class SlidingDoor : Objet
 
     public override void Break()
     {
+        broken = true;
         transform.localPosition = endPos.localPosition;
         enabled = false;
         base.Break();
@@ -207,5 +214,11 @@ public class SlidingDoor : Objet
             transform.localPosition = startPosition.localPosition;
             slidingDoorState = SlidingDoorState.CLOSED;
         }
+    }
+
+    public override void Fix()
+    {
+        base.Fix();
+        broken = false;
     }
 }
