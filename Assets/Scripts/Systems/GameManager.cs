@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float decreaseFactor = 1.0f;
     [HideInInspector] public CameraHandler camHandler;
     [SerializeField] private float bobbingSpeed = 0.25f;
+    [SerializeField] private float camSpeedModifer=8;
     [SerializeField] private float normalBobbingAmount = 0.2f;
     [SerializeField] private float runningBobbingAmount = 0.5f;
     private float bobTimer = 0;
@@ -512,7 +513,7 @@ public class GameManager : MonoBehaviour
     {
         //print(newPos);
         float speed = cameraSpeed;
-        speed /= (1 + player.velocity * 8);
+        speed /= (1 + player.velocity * camSpeedModifer);
         if (player.changingCameraBlock)
         {
             speed /= cameraBlockChangeMalusSpeedRate;

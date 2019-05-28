@@ -119,17 +119,19 @@ MonoBehaviour:
   - {fileID: 0}
   scriptedObjectsActivation: []
   scriptedLampActivation: {fileID: 0}
+  spawnDistanceFromPlayer: 10
   animator: {fileID: 0}
   _transform: {fileID: 0}
   agent: {fileID: 2436183961040824494}
   player: {fileID: 0}
+  spawnIndex: -1
   delaySpot: 0.5
   lengthDetection: 10
   clickToSetDestination: 0
   malusSpeedStart: 0
   malusStartDuration: 2
   isChangingPlaces: 0
-  changingTime: 15
+  changingTime: 5
   canSeePlayerDistance: 0.5
   stopChaseDistance: 15
   reveilSound: Play_Reveil_Araignee
