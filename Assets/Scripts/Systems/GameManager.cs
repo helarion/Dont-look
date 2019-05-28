@@ -30,10 +30,7 @@ public class GameManager : MonoBehaviour
     float timeDuringCurrentShake = 0.0f;
     [SerializeField] private float decreaseFactor = 1.0f;
     [HideInInspector] public CameraHandler camHandler;
-    [SerializeField] private float bobbingSpeed = 0.25f;
     [SerializeField] private float camSpeedModifer=8;
-    [SerializeField] private float normalBobbingAmount = 0.2f;
-    [SerializeField] private float runningBobbingAmount = 0.5f;
     private float bobTimer = 0;
     //private float midpoint = 2;
     [SerializeField] private float dutchAngle=0;
@@ -156,7 +153,6 @@ public class GameManager : MonoBehaviour
         if (isPaused) return;
         //mainCamera.transform.localPosition = originalPos;
         //CheckShake();
-        CameraBob();
         TP();
     }
 
@@ -521,44 +517,6 @@ public class GameManager : MonoBehaviour
         newPos.y += contrePlongeeHauteur;
         mainCamera.transform.localPosition = Vector3.Lerp(originalPos, newPos, Time.deltaTime * speed);
         originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);
-    }
-
-    private void CameraBob()
-    {
-        float bobbingAmount= normalBobbingAmount;
-        if (player.GetIsRunning()) bobbingAmount = runningBobbingAmount;
-
-        float waveslice = 0.0f;
-        float horizontal = controls.GetAxis("Move Horizontal");
-        Vector3 cSharpConversion = originalPos;
-
-        if (Mathf.Abs(horizontal) == 0)
-        {
-            bobTimer = 0.0f;
-        }
-        else
-        {
-            waveslice = Mathf.Sin(bobTimer);
-            bobTimer += bobbingSpeed;
-            if (bobTimer > Mathf.PI * 2)
-            {
-                bobTimer -= Mathf.PI * 2;
-            }
-        }
-        if (waveslice != 0)
-        {
-            float translateChange = waveslice * bobbingAmount;
-            float totalAxes = Mathf.Abs(horizontal);
-            totalAxes = Mathf.Clamp(totalAxes, 0.0f, 1.0f);
-            translateChange = totalAxes * translateChange;
-            cSharpConversion.y = originalPos.y + translateChange;
-        }
-        else
-        {
-            cSharpConversion.y = originalPos.y;
-        }
-        //print("bob:" + cSharpConversion);
-        //MoveCamera(cSharpConversion);
     }
 
 public void RotateCamera(Quaternion newRotate)
