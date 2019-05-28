@@ -664,7 +664,7 @@ public class PlayerController : MonoBehaviour
         ResetVelocity();
     }
 
-    private void CameraBlockChanges()
+    public void CameraBlockChanges()
     {
         GameManager.instance.SetContrePlongeeAngle(currentCameraBlock.room.newContrePlongeeAngle);
         GameManager.instance.SetContrePlongeeHauteur(currentCameraBlock.room.newContrePlongeeHauteur);

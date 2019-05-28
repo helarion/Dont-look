@@ -16,7 +16,7 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] float railOffsetX;
     [SerializeField] float railOffsetY;
     
-    private float zStartPosition;
+    public float zStartPosition;
 
     void Start()
     {
