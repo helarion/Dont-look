@@ -12,6 +12,7 @@ public class BlinkingLight : MonoBehaviour
     [SerializeField] float activeIntensity = 200.0f;
     [SerializeField] float blinkSpeed = 20.0f;
     [SerializeField] float durationBetweenBlinks = 2.0f;
+    [HideInInspector] public float dechargeRate = 1.0f;
 
     [SerializeField] Color offColor;
     [SerializeField] Color chargeColor;
@@ -143,7 +144,7 @@ public class BlinkingLight : MonoBehaviour
                 pointLightMid.color = Color.Lerp(Color.black, chargeColor, rateMid);
                 pointLightBot.color = Color.Lerp(Color.black, chargeColor, rateBot);
 
-                timeLooked -= Time.deltaTime;
+                timeLooked -= Time.deltaTime * dechargeRate;
             }
             else
             {

@@ -510,13 +510,13 @@ public class GameManager : MonoBehaviour
     // BOUGER LA CAMERA
     public void MoveCamera(Vector3 newPos)
     {
-        print(newPos);
+        //print(newPos);
         float speed = cameraSpeed;
+        speed /= (1 + player.velocity * 8);
         if (player.changingCameraBlock)
         {
             speed /= cameraBlockChangeMalusSpeedRate;
         }
-        //if (player.velocity > 0) speed /= (player.velocity * cameraMoveOffset);
         newPos.y += contrePlongeeHauteur;
         mainCamera.transform.localPosition = Vector3.Lerp(originalPos, newPos, Time.deltaTime * speed);
         originalPos = Vector3.Lerp(originalPos, newPos, Time.deltaTime/speed);

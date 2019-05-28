@@ -12,8 +12,15 @@ public class EndLightDetector : ContiniousLightDetector
     {
         if (count > scriptEndTimeLook && !isBroken)
         {
-            target.isActivating = false;
-            isBroken = true;
+            if (target.GetComponent<SlidingDoor>() != null)
+            {
+                target.GetComponent<SlidingDoor>().force_activation_state(false);
+            }
+            else
+            {
+                target.isActivating = false;
+            }
+            broken = true;
             AkSoundEngine.PostEvent(stopChargingSound, gameObject);
             AkSoundEngine.PostEvent(breakSound, gameObject);
             AkSoundEngine.PostEvent(dogDeathSound, target.gameObject);
@@ -21,6 +28,9 @@ public class EndLightDetector : ContiniousLightDetector
             Break();
             scriptEndElevator.Activate();
         }
-        base.LookFunction();
+        else
+        {
+            base.LookFunction();
+        }
     }
 }

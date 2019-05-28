@@ -15,7 +15,7 @@ public class ContiniousLightDetector : Objet
     [SerializeField] public string breakSound;
     [SerializeField] private string fixSound;
 
-    bool broken = false;
+    protected bool broken = false;
     bool isLooked = false;
     bool wasLooked = false;
     [HideInInspector] public float count=0;
@@ -32,12 +32,13 @@ public class ContiniousLightDetector : Objet
         }
     }
 
-    private void Update()
+    public virtual void Update()
     {
         if (broken) return;
-
+        
         wasLooked = isLooked;
         isLooked = GameManager.instance.LightDetection(gameObject, true);
+
         if (target.GetComponent<SlidingDoor>() != null)
         {
             target.GetComponent<SlidingDoor>().set_activation_state(isLooked);
@@ -46,6 +47,7 @@ public class ContiniousLightDetector : Objet
         {
             target.isActivating = isLooked;
         }
+
         if (isLooked)
         {
             LookFunction();
