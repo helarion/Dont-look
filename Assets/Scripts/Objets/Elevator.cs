@@ -126,7 +126,7 @@ public class Elevator : Objet
     {
         if (!isMoving)
         {
-            if(isEnd) AkSoundEngine.PostEvent(endSong, gameObject);
+            if(isEnd) AkSoundEngine.PostEvent(endSong, GameManager.instance.gameObject);
             AkSoundEngine.PostEvent(playMovingSound, gameObject);
             isMoving = true;
             StartCoroutine(MoveCoroutine());

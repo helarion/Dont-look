@@ -330,8 +330,8 @@ MonoBehaviour:
   activeIntensity: 20
   blinkSpeed: 1
   durationBetweenBlinks: 0.8
-  offColor: {r: 0.7176471, g: 0.48005265, b: 0.20784314, a: 0}
-  activeColor: {r: 0.5686275, g: 0, b: 1, a: 0}
+  offColor: {r: 0.5686275, g: 0, b: 1, a: 0}
+  activeColor: {r: 1, g: 0.50980395, b: 0.33333334, a: 0}
   isBroken: 0
 --- !u!114 &4233988890674401682
 MonoBehaviour:
@@ -384,6 +384,10 @@ MonoBehaviour:
   dogDeathSound: Play_Mort_Chien
   scriptEndTimeLook: 1.5
   scriptEndElevator: {fileID: 0}
+  waitTime: 5
+  cameraBlock: {fileID: 0}
+  newYaw: 30
+  newZ: 2
 --- !u!1 &5876334021772520949
 GameObject:
   m_ObjectHideFlags: 0

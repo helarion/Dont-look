@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float brightnessMin = -1.5f;
     [SerializeField] private float brightnessMax = 1.5f;
     [SerializeField] private float waitEndTime = 10;
+    [SerializeField] private int endScene = 6;
 
     [Header("Sounds")]
     [SerializeField] private string sliderSound;
@@ -143,7 +144,7 @@ public class UIManager : MonoBehaviour
         {
             yield return null;
         }
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene(endScene);
         yield return null;
     }
 
