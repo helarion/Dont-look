@@ -134,19 +134,19 @@ public class UIManager : MonoBehaviour
         savedColor.a = 1;
         img.color = savedColor;
         isFading = false;
-        if(isEnding) StartCoroutine(EndCoroutine());
+        if(isEnding) SceneManager.LoadScene(endScene);// StartCoroutine(EndCoroutine());
     }
 
-    IEnumerator EndCoroutine()
+    /*IEnumerator EndCoroutine()
     {
         yield return new WaitForSeconds(1f);
         while(isFading)
         {
-            yield return null;
+            yield return new WaitForSeconds(0.5f);
         }
         SceneManager.LoadScene(endScene);
         yield return null;
-    }
+    }*/
 
     public void FadeDeath(bool b)
     {

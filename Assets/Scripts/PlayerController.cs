@@ -946,6 +946,7 @@ public class PlayerController : MonoBehaviour
 
     public void PlaySoundFall()
     {
+        if (UIManager.instance.isFading) return;
         AkSoundEngine.SetSwitch("Allure", "Fall", gameObject);
         AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
         AkSoundEngine.PostEvent("Play_Footsteps_All", gameObject);

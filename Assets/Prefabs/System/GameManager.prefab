@@ -73,9 +73,7 @@ MonoBehaviour:
   shakeRequests: []
   decreaseFactor: 1
   camHandler: {fileID: 0}
-  bobbingSpeed: 0.22
-  normalBobbingAmount: 0.01
-  runningBobbingAmount: 0.05
+  camSpeedModifer: 8
   dutchAngle: 0
   contrePlongeeAngle: 25
   contrePlongeeHauteur: 0.7
@@ -97,7 +95,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8192
   Intro: Play_Intro_Gamin
-  waitIntroTime: 8
+  waitIntroTime: 10
   ChaseSpiderAmbPlay: Play_Random_CoursePoursuite
   ChaseSpiderAmbStop: Stop_Random_CoursePoursuite
   ChaseSpiderKillStop: Stop_Random_CoursePoursuite_01

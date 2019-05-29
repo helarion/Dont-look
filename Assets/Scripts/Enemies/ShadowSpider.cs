@@ -15,6 +15,11 @@ public class ShadowSpider : Enemy
         animator.SetFloat("Velocity", velocity);
     }
 
+    public override void PlayWalk()
+    {
+        
+    }
+
     private void Update()
     {
         if(isMoving)

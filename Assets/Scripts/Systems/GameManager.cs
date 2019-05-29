@@ -71,6 +71,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
+
+    [SerializeField] private string radioPlay;
+    [SerializeField] private GameObject radioObject;
+
     [SerializeField] string monsterDeathSound;
     [SerializeField] string doorDeathSound;
 
@@ -129,6 +133,7 @@ public class GameManager : MonoBehaviour
             ResumeGame();
             UIManager.instance.FadeOutIntro();
         }
+        AkSoundEngine.PostEvent(radioPlay, radioObject);
     }
 
     IEnumerator IntroCoroutine()
