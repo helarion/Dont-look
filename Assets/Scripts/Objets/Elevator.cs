@@ -179,6 +179,9 @@ public class Elevator : Objet
             SpatialRoom save = spatialRoom;
             spatialRoom = nextSpatialRoom;
             nextSpatialRoom = save;
+            SpatialLine slSave = addedSpatialLine;
+            addedSpatialLine = removedSpatialLine;
+            removedSpatialLine = slSave;
         }
 
         if(scriptTwoSteps && isBidirectional)
