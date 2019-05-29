@@ -97,7 +97,14 @@ public class SpatialRoom : MonoBehaviour
 
     public void removeSpatialLine(SpatialLine sl)
     {
-        _spatialLines.Remove(sl);
+        foreach (SpatialLine _sl in _spatialLines)
+        {
+            if (_sl.begin == sl.begin && _sl.end && sl.end)
+            {
+                _spatialLines.Remove(_sl);
+                break;
+            }
+        }
         if (GameManager.instance.player.currentSpatialLine == sl)
         {
             GameManager.instance.player.chooseNearestSpatialLine();

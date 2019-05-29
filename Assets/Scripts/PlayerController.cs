@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private CameraBlock currentCameraBlock = null;
     public bool changingCameraBlock = false;
     private AudioRoom currentAudioRoom = null;
-    [HideInInspector] public SpatialRoom currentSpatialRoom = null;
+    public SpatialRoom currentSpatialRoom = null;
     SpatialSas currentSpatialSas = null;
     public SpatialLine currentSpatialLine = null;
     private Rigidbody objectGrabbed = null;

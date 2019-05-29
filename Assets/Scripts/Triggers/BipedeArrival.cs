@@ -39,6 +39,7 @@ public class BipedeArrival : Objet
             if (!startedCoroutine)
             {
                 startedCoroutine = true;
+                bipede.isInCorridorChase = true;
                 StartCoroutine(BipedeArrivalCoroutine());
             }
         }

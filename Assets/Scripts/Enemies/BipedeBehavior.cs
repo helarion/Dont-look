@@ -18,6 +18,8 @@ public class BipedeBehavior : Enemy
     private bool canSeePlayer = false;
     public bool isStopped = false;
 
+    public bool isInCorridorChase = false;
+
     //bool betweenSteps = false; // sert à savoir si l'on peut bouger ou pas, en accord avec l'animation
     bool willPlayPresence = true;
 
@@ -139,6 +141,10 @@ public class BipedeBehavior : Enemy
             //if (betweenSteps)
             //{
                 agent.speed = moveSpeed;
+                if (isInCorridorChase)
+                {
+                    agent.speed *= (GameManager.instance.player.transform.position - transform.position).magnitude.Remap(5.0f, 60.0f, 1.0f, 2.0f);
+                }
             /*}
             else
             {
@@ -198,5 +204,6 @@ public class BipedeBehavior : Enemy
         animator.SetBool("IsLooked", false);
         animator.SetBool("IsMoving", false);
         transform.eulerAngles = rotation;
+        isInCorridorChase = false;
     }
 }
