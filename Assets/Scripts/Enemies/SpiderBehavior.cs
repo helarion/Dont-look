@@ -7,7 +7,6 @@ using UnityEngine.AI;
 public class SpiderBehavior : Enemy
 {
     [SerializeField] private float delaySpot = 1;
-    [SerializeField] private float lengthDetection = 10;
     [SerializeField] private bool clickToSetDestination = false;
     [SerializeField] private float malusSpeedStart = 2;
     [SerializeField] private float malusStartDuration = 2;
@@ -17,6 +16,7 @@ public class SpiderBehavior : Enemy
     [SerializeField] private float stopChaseDistance = 15;
     [SerializeField] private string reveilSound;
     [SerializeField] private string screamSound;
+    [SerializeField] private string stopWalkFadeOutSound;
 
     private bool isSearching = false;
     private bool canSeePlayer = false;
@@ -87,6 +87,15 @@ public class SpiderBehavior : Enemy
     public override void PlayChase()
     {
         AkSoundEngine.PostEvent(GameManager.instance.ChaseSpiderAmbPlay, player.modelTransform.gameObject);
+    }
+
+    public override void StopChaseSounds()
+    {
+        base.StopChaseSounds();
+        if(player.getIsAlive())
+        {
+            AkSoundEngine.PostEvent(stopWalkFadeOutSound, gameObject);
+        }
     }
 
     private void DebugPath()
@@ -200,7 +209,13 @@ public class SpiderBehavior : Enemy
     // FAIT REAPARAITRE L'ARAIGNEE ALEATOIREMENT DANS UNE DE SES ZONES DE SPAWN
     public override void Respawn(bool farOfPlayer)
     {
+        if (spawnZones.Length == 0) Destroy(gameObject);
         if (isChangingPlaces && !player.getIsAlive()) spawnZones = savedSpawnZone;
+        else if(isChangingPlaces && player.getIsAlive())
+        {
+            isCountingChange = false;
+            if ((transform.position - player.transform.position).magnitude < spawnDistanceFromPlayer) return;
+        }
         base.Respawn(farOfPlayer);
         StopCoroutine("CountingChange");
         isCountingChange = false;

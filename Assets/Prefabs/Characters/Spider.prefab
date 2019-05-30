@@ -119,14 +119,13 @@ MonoBehaviour:
   - {fileID: 0}
   scriptedObjectsActivation: []
   scriptedLampActivation: {fileID: 0}
-  spawnDistanceFromPlayer: 10
+  spawnDistanceFromPlayer: 20
   animator: {fileID: 0}
   _transform: {fileID: 0}
   agent: {fileID: 2436183961040824494}
   player: {fileID: 0}
   spawnIndex: -1
   delaySpot: 0.5
-  lengthDetection: 10
   clickToSetDestination: 0
   malusSpeedStart: 0
   malusStartDuration: 2
@@ -136,6 +135,7 @@ MonoBehaviour:
   stopChaseDistance: 15
   reveilSound: Play_Reveil_Araignee
   screamSound: Play_Cri_Araignee
+  stopWalkFadeOutSound: Stop_Footsteps_Araignee_Metal_Fade
 --- !u!195 &2436183961040824494
 NavMeshAgent:
   m_ObjectHideFlags: 0

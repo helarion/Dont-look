@@ -156,6 +156,8 @@ public class PlayerController : MonoBehaviour
     float saveMove;
     [SerializeField] float debugSpeed = 10;
 
+    bool overrideSurface = false;
+
     //Vector3 headLookAt;
 
     enum LookDirection { Left, Right, Front, Back};
@@ -311,7 +313,10 @@ public class PlayerController : MonoBehaviour
             }
             return;
         }
-
+        else if (other.CompareTag("Metal_Casier"))
+        {
+            overrideSurface = true;
+        }
         else if(other.CompareTag("Hideout"))
         {
             isHidden = true;
@@ -382,6 +387,10 @@ public class PlayerController : MonoBehaviour
         {
             isHidden = false;
         }
+        else if (other.CompareTag("Metal_Casier"))
+        {
+            overrideSurface = false;
+        }
         else if(other.CompareTag("NeedsCentering"))
         {
             needsCentering = false;
@@ -421,7 +430,22 @@ public class PlayerController : MonoBehaviour
             //print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
             if (collision.collider.bounds.min.y - cl.bounds.max.y > -0.25f)
             {
-                GameManager.instance.Death(1);
+                collision.gameObject.GetComponentInParent<SlidingDoor>().Stop();
+                //GameManager.instance.Death(1);
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        //print(collision.gameObject.name);
+        if (collision.gameObject.tag == "SlidingDoor")
+        {
+            //print("Collision avec SlidingDoor \"" + collision.gameObject.name + "\", bas de la porte à la hauteur : " + collision.collider.bounds.min.y + " ; haut du joueur à la hauteur : " + cl.bounds.max.y);
+            if (collision.collider.bounds.min.y - cl.bounds.max.y > -0.25f)
+            {
+                collision.gameObject.GetComponentInParent<SlidingDoor>().Resume();
+                //GameManager.instance.Death(1);
             }
         }
     }
@@ -588,11 +612,8 @@ public class PlayerController : MonoBehaviour
         cameraPosPlayer.z = transform.position.z + 2;
         float vecRate = (cameraPosPlayer - GameManager.instance.mainCamera.transform.position).magnitude / (cameraPosBack - GameManager.instance.mainCamera.transform.position).magnitude;
         lookAtPos = GameManager.instance.mainCamera.transform.position + lightAimVec * vecRate;
-        */
+        
         /* ---  --- */
-
-        //cameraLight.rotation = Quaternion.Slerp(cameraLight.rotation, Quaternion.LookRotation(lookAtPos - cameraLight.position), Time.fixedDeltaTime * lightSpeed * 100);
-
 
         flashlightTransform.rotation = Quaternion.Slerp(flashlightTransform.rotation, Quaternion.LookRotation(lookAtPos - flashlightTransform.position), Time.deltaTime * lightSpeed * 100);
     }
@@ -933,7 +954,8 @@ public class PlayerController : MonoBehaviour
     public void PlaySoundWalk()
     {
         AkSoundEngine.SetSwitch("Allure", "Walk", gameObject);
-        AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
+        if(!overrideSurface)AkSoundEngine.SetSwitch("Surface", groundDetector.GetSurface(), gameObject);
+        else AkSoundEngine.SetSwitch("Surface", "Metal_Casier", gameObject);
         AkSoundEngine.PostEvent("Play_Footsteps_All", gameObject);
     }
 
@@ -1077,7 +1099,7 @@ public class PlayerController : MonoBehaviour
 
     private void FallingCheck()
     {
-        if(yVelocity < 0 && !isInElevator &&!stopMove)
+        if(yVelocity < -0.1f && !isInElevator &&!stopMove)
         {
             animator.SetBool("IsFalling", true);
         }

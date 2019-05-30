@@ -73,7 +73,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public string HeartStop;
 
     [SerializeField] private string radioPlay;
-    [SerializeField] private GameObject radioObject;
+    [SerializeField] private GameObject radioObject1;
+    [SerializeField] private GameObject radioObject2;
 
     [SerializeField] string monsterDeathSound;
     [SerializeField] string doorDeathSound;
@@ -133,7 +134,8 @@ public class GameManager : MonoBehaviour
             ResumeGame();
             UIManager.instance.FadeOutIntro();
         }
-        AkSoundEngine.PostEvent(radioPlay, radioObject);
+        AkSoundEngine.PostEvent(radioPlay, radioObject1);
+        AkSoundEngine.PostEvent(radioPlay, radioObject2);
     }
 
     IEnumerator IntroCoroutine()
@@ -297,6 +299,7 @@ public class GameManager : MonoBehaviour
 
     public bool LightDetection(GameObject objectPosition, bool needsConcentration)
     {
+        if (!player.lightOn) return false;
         bool isLit = false;
         Vector3 playerPosition = player.getLight().transform.position;
         playerPosition.y += lightVecOffset;

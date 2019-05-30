@@ -111,8 +111,9 @@ public class Elevator : Objet
         if (!startActivated)
         {
             isStarted = false;
-            lamp.enabled = false;
+            randomFlicker.enabled = false;
             lampAnimator.enabled = false;
+            lamp.enabled = false;
             enterCol.enabled = false;
         }
         StopCoroutine(MoveCoroutine());

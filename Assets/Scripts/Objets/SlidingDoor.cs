@@ -40,6 +40,7 @@ public class SlidingDoor : Objet
     }
 
     SlidingDoorState slidingDoorState = SlidingDoorState.CLOSED;
+    SlidingDoorState saveState;
 
     private void Start()
     {
@@ -125,6 +126,17 @@ public class SlidingDoor : Objet
                 slidingDoorState = SlidingDoorState.CLOSED;
             }
         }
+    }
+
+    public void Stop()
+    {
+        saveState = slidingDoorState;
+        slidingDoorState = SlidingDoorState.CLOSED;
+    }
+
+    public void Resume()
+    {
+        slidingDoorState = saveState;
     }
 
     public void set_activation_state(bool state)

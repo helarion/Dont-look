@@ -6,12 +6,14 @@ public class TriggerEnabler : Objet
 {
     [SerializeField] WwiseTrigger wwiseTrigger;
     [SerializeField] Checkpoint checkPointTrigger;
+    [SerializeField] GameObject spider;
 
     public override void Activate()
     {
         isActivated = true;
         if (wwiseTrigger != null) wwiseTrigger.gameObject.SetActive(true);
         if (checkPointTrigger != null) checkPointTrigger.gameObject.SetActive(true);
+        if (spider != null) spider.SetActive(true);
     }
 
     public override void Reset()
@@ -22,9 +24,5 @@ public class TriggerEnabler : Objet
             wwiseTrigger.Reset();
             wwiseTrigger.gameObject.SetActive(false);
         }
-        /*else if (checkPointTrigger != null && checkPointTrigger.gameObject.activeSelf)
-        {
-            wwiseTrigger.gameObject.SetActive(false);
-        }*/
     }
 }

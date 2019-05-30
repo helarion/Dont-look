@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public Transform[] spawnZones=null ; //list of spawn zones
     [SerializeField] private Objet[] scriptedObjectsActivation; //if spider needs to activate objets when start to chase
     [SerializeField] private LightDetector scriptedLampActivation; //if spider needs to activate lightdetector when start to chase
-    [SerializeField] float spawnDistanceFromPlayer = 10.0f;
+    [SerializeField] public float spawnDistanceFromPlayer = 10.0f;
 
     [HideInInspector] public Animator animator;
     [SerializeField] private Transform _transform;
