@@ -118,14 +118,14 @@ public class Elevator : Objet
 
     IEnumerator StartEngineCoroutine()
     {
-        print("entersStartEngine");
+        //print("entersStartEngine");
         AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, 0.0f);
         float time = 0.0f;
         float value;
         while (time < engineStartSoundFadeDuration)
         {
             value = (time / engineStartSoundFadeDuration) * 10.0f;
-            print("value:"+value);
+            //print("value:"+value);
             AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, value);
             time += Time.deltaTime;
             yield return new WaitForEndOfFrame();
