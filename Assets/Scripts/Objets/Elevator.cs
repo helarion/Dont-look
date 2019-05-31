@@ -162,7 +162,6 @@ public class Elevator : Objet
             yield return new WaitForEndOfFrame();
         }
         transform.position = endPos.position;
-        //GameManager.instance.player.ResumeMove();
         ReachEnd();
         yield return null;
     }

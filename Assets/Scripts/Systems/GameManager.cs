@@ -69,6 +69,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private string pauseGameSounds;
     [SerializeField] private string resumeGameSounds;
 
+    [SerializeField] public string triggerBipede1Sound;
+
     [SerializeField] public string HeartPlay;
     [SerializeField] public string HeartStop;
 

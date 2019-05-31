@@ -8,6 +8,7 @@ public class BipedeArrival : Objet
     [SerializeField] Transform smokeTransform;
     [SerializeField] ContiniousLightDetector lightDetector;
 
+    [SerializeField] float waitTime = 0.5f;
     [SerializeField] float firstShakeDuration;
     [SerializeField] float firstShakeIntensity;
     [SerializeField] float waitBetweenExplosionAndBipede = 2;
@@ -71,7 +72,7 @@ public class BipedeArrival : Objet
     {
         AkSoundEngine.PostEvent(playDoorExplosion, door);
         doorSas.gameObject.SetActive(false);
-        yield return new WaitForSeconds(10.2f);
+        yield return new WaitForSeconds(waitTime);
         GameManager.instance.ShakeScreen(firstShakeDuration, firstShakeIntensity);
         door.gameObject.SetActive(false);
         brokenDoor.gameObject.SetActive(true);

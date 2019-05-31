@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private Image fadeImg = null;
+    [SerializeField] public CinematicBars cinematicBars;
     [SerializeField] private float fadeTime=0.5f;
     public GameObject pausePanel = null;
     [SerializeField] private Image pauseImg = null;

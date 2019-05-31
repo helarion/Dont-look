@@ -11,6 +11,8 @@ public class EndLightDetector : ContiniousLightDetector
     [SerializeField] CameraBlock cameraBlock = null;
     [SerializeField] float newYaw = 30.0f;
     [SerializeField] float newZ = 2.0f;
+    [SerializeField] float cinematicBarsTime= 1.5f;
+    [SerializeField] float cinematicBarsSize = 2;
 
     public override void LookFunction()
     {
@@ -41,6 +43,7 @@ public class EndLightDetector : ContiniousLightDetector
 
     IEnumerator DogDeathCoroutine()
     {
+        UIManager.instance.cinematicBars.Show(cinematicBarsSize, cinematicBarsTime);
         float oldYaw = cameraBlock.maxCameraYawAngle;
         float oldZ = GameManager.instance.camHandler.zStartPosition;
         GameManager.instance.player.StopMove();
@@ -50,6 +53,7 @@ public class EndLightDetector : ContiniousLightDetector
         GameManager.instance.player.ResumeMove();
         cameraBlock.maxCameraYawAngle = oldYaw;
         GameManager.instance.camHandler.SetNewZ(oldZ);
+        UIManager.instance.cinematicBars.Hide(cinematicBarsTime);
         yield return null;
     }
 }

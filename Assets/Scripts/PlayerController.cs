@@ -157,6 +157,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float debugSpeed = 10;
 
     bool overrideSurface = false;
+    bool triggerBipede = false;
 
     //Vector3 headLookAt;
 
@@ -312,6 +313,14 @@ public class PlayerController : MonoBehaviour
                 chooseNearestSpatialLine();
             }
             return;
+        }
+        else if(other.CompareTag("TriggerBipede"))
+        {
+            if(!triggerBipede)
+            {
+                triggerBipede = true;
+                AkSoundEngine.PostEvent(GameManager.instance.triggerBipede1Sound, GameManager.instance.gameObject);
+            }
         }
         else if (other.CompareTag("Metal_Casier"))
         {
@@ -682,6 +691,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("HasLanded", false);
         StoppedHMove = false;
         stopMove = false;
+        triggerBipede = false;
         ResetVelocity();
     }
 
