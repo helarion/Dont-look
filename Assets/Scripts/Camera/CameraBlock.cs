@@ -13,4 +13,5 @@ public class CameraBlock : MonoBehaviour
     [SerializeField] public DecalProjectorComponent[] updatedDecals;
     [SerializeField] public Material[] keyboardMaterials;
     [SerializeField] public Material[] gamePadMaterials;
+    [SerializeField] public Material[] eyeTrackerMaterials;
 }

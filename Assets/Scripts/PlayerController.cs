@@ -701,7 +701,11 @@ public class PlayerController : MonoBehaviour
             int i = 0;
             foreach (DecalProjectorComponent d in currentCameraBlock.updatedDecals)
             {
-                if (inputMode == InputMode.PC)
+                if(currentCameraBlock.eyeTrackerMaterials.Length>0 && TobiiAPI.IsConnected)
+                {
+                    d.m_Material = currentCameraBlock.eyeTrackerMaterials[i];
+                }
+                else if (inputMode == InputMode.PC)
                 {
                     // print("input pc");
                     d.m_Material = currentCameraBlock.keyboardMaterials[i];
