@@ -150,7 +150,7 @@ public class BipedeBehavior : Enemy
                 if (isInCorridorChase)
                 {
                     agent.speed *= (GameManager.instance.player.transform.position.x - transform.position.x).Remap(bonusSpeedMinDistance, bonusSpeedMaxDistance, bonusSpeedMinRate, bonusSpeedMaxRate);
-                print(moveSpeed + " " + agent.speed);
+                    //print(moveSpeed + " " + agent.speed);
                 }
             /*}
             else
