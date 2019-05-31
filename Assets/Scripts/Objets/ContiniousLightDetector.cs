@@ -18,6 +18,7 @@ public class ContiniousLightDetector : Objet
     protected bool broken = false;
     bool isLooked = false;
     bool wasLooked = false;
+    bool firstTimeLook = false;
     [HideInInspector] public float count=0;
     float timeLooked = 0.0f;
 
@@ -50,6 +51,11 @@ public class ContiniousLightDetector : Objet
 
         if (isLooked)
         {
+            if (!firstTimeLook)
+            {
+                firstTimeLook = true;
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
+            }
             LookFunction();
         }
         else
@@ -132,6 +138,7 @@ public class ContiniousLightDetector : Objet
         broken = false;
         base.Reset();
         target.Reset();
+        firstTimeLook = false;
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
         if (isBroken)
         {

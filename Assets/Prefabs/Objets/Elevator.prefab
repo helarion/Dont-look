@@ -352,12 +352,14 @@ MonoBehaviour:
   scriptMoveActivation: 0
   playsActivateSound: 0
   activateSound: Play_LIGHT_OK_ASC
-  breakSound: 
+  breakSound: Play_Led_Casse
   isBidirectional: 1
   isEnd: 0
   endSong: 
   blinkingLight: {fileID: 0}
   waitTime: 12
+  engineStartSoundRtpcName: Lancement_ascenseur
+  engineStartSoundFadeDuration: 3
 --- !u!65 &1782030476667746518
 BoxCollider:
   m_ObjectHideFlags: 0

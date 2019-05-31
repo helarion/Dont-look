@@ -24,7 +24,7 @@ public class LightDetector : Objet
     private float timeLooked = 0.0f;
 
     bool chargeSoundPlaying = false;
-
+    bool firstTimeLook = false;
     bool forceLit = false;
 
     private void Start()
@@ -48,6 +48,11 @@ public class LightDetector : Objet
 
         if (isLooked || forceLit)
         { 
+            if(!firstTimeLook)
+            {
+                firstTimeLook = true;
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
+            }
             if (!wasLooked)
             {
                 if (!chargeSoundPlaying)
@@ -147,6 +152,7 @@ public class LightDetector : Objet
     {
         base.Reset();
         forceLit = false;
+        firstTimeLook = false;
         blinkLight.Reset();
         isLooked = false;
         broken = false;

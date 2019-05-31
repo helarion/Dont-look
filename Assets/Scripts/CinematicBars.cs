@@ -20,7 +20,7 @@ public class CinematicBars : MonoBehaviour
         topBar = gameObject.GetComponent<RectTransform>();
         topBar.anchorMin = new Vector2(0, 1);
         topBar.anchorMax = new Vector2(1, 1);
-        topBar.sizeDelta = new Vector2(0, 300);
+        topBar.sizeDelta = new Vector2(0, 0);
 
         gameObject = new GameObject("bottomBar", typeof(Image));
         gameObject.transform.SetParent(transform, false);
@@ -28,18 +28,12 @@ public class CinematicBars : MonoBehaviour
         bottomBar = gameObject.GetComponent<RectTransform>();
         bottomBar.anchorMin = new Vector2(0, 0);
         bottomBar.anchorMax = new Vector2(1, 0);
-        bottomBar.sizeDelta = new Vector2(0, 300);
-        /*
-        CMDebug.ButtonUI(new Vector2(200,0), "Show" ,() => 
-        {
-            Show(300, .3f);
-        }
-        */
+        bottomBar.sizeDelta = new Vector2(0, 0);
     }
 
     private void Start()
     {
-        Hide(0);
+        Hide(2);
     }
 
     private void Update()

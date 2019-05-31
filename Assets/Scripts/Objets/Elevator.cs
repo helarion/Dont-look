@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Elevator : Objet
 {
+    #region variables
     [SerializeField] Transform endPos;
     [SerializeField] Transform endPosStep2;
     [SerializeField] float moveSpeed;
@@ -41,9 +42,11 @@ public class Elevator : Objet
     [SerializeField] float engineStartSoundFadeDuration = 3.0f;
     private bool isMoving = false;
     private bool isWaiting = true;
+    #endregion
 
     private void Start()
     {
+        AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, 0);
         startActivated = isActivated;
         startPos = transform.position;
         if (isActivated)
@@ -57,7 +60,11 @@ public class Elevator : Objet
             randomFlicker.enabled=false;
             enterCol.enabled = false;
         }
-        if(isActivated)AkSoundEngine.PostEvent(playEngineSound, gameObject);
+        if (isActivated)
+        {
+            AkSoundEngine.PostEvent(playEngineSound, gameObject);
+            StartCoroutine(StartEngineCoroutine());
+        }
     }
 
     IEnumerator Wait()
@@ -80,6 +87,7 @@ public class Elevator : Objet
         {
             if (playsActivateSound) AkSoundEngine.PostEvent(activateSound, gameObject);
             AkSoundEngine.PostEvent(playEngineSound, gameObject);
+            StartCoroutine(StartEngineCoroutine());
             lamp.enabled = true;
             lampAnimator.enabled = true;
             randomFlicker.enabled = true;
@@ -110,14 +118,33 @@ public class Elevator : Objet
 
     IEnumerator StartEngineCoroutine()
     {
+        print("entersStartEngine");
+        AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, 0.0f);
         float time = 0.0f;
+        float value;
         while (time < engineStartSoundFadeDuration)
         {
-            AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, (time / engineStartSoundFadeDuration) * 100.0f);
+            value = (time / engineStartSoundFadeDuration) * 10.0f;
+            print("value:"+value);
+            AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, value);
             time += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, 100.0f);
+        AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, 10.0f);
+        yield return null;
+    }
+
+    IEnumerator StopEngineCoroutine()
+    {
+        float time = 0.0f;
+        while (time < engineStartSoundFadeDuration)
+        {
+            AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, 10-(time / engineStartSoundFadeDuration) * 10.0f);
+            time += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, 0.0f);
+        AkSoundEngine.PostEvent(stopEngineSound, gameObject);
         yield return null;
     }
 
@@ -136,7 +163,10 @@ public class Elevator : Objet
         isMoving = false;
         transform.position = startPos;
         isActivated = isStarted;
-        if(!isActivated) AkSoundEngine.PostEvent(stopEngineSound, gameObject);
+        if (!isActivated)
+        {
+            StartCoroutine(StopEngineCoroutine());
+        }
     }
 
     public void StartMoving()
@@ -210,7 +240,7 @@ public class Elevator : Objet
             enterCol.enabled = false;
             isStarted = false;
             AkSoundEngine.PostEvent(breakSound, gameObject);
-            AkSoundEngine.PostEvent(stopEngineSound, gameObject);
+            StartCoroutine(StopEngineCoroutine());
             if (blinkingLight != null)
             {
                 lampAnimator.enabled = false;
