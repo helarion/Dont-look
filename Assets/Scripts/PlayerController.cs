@@ -133,6 +133,7 @@ public class PlayerController : MonoBehaviour
     private bool isConcentrating=false;
     public bool lightOn = true;
     private Light flashlight;
+    public bool blockLightControl = false;
     #endregion
 
     #region StatesVariables
@@ -508,7 +509,7 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.ShakeScreen(0.1f, 0.8f);
         }
 
-        if (GameManager.instance.controls.GetButton("Concentrate") && !concentrationOvercharge)
+        if (GameManager.instance.controls.GetButton("Concentrate") && !concentrationOvercharge && !blockLightControl)
         {
             flashlight.enabled = true;
 
@@ -558,58 +559,72 @@ public class PlayerController : MonoBehaviour
 
     private void LightAim()
     {
-        // LIGHT AIM CONTROL
-        if (GameManager.instance.GetIsTrackerEnabled() && TobiiAPI.IsConnected) // EYE TRACKER OPTION
+        if (blockLightControl)
         {
-            if (!TobiiAPI.GetGazePoint().IsRecent())
-            {
-                ClosedEyes(true);
-            }
-            else
-            {
-                ClosedEyes(false);
-            }
+            RaycastHit hit;
+            Ray ray = new Ray(flashlightTransform.position, Vector3.right);
 
-            cursorPos = TobiiAPI.GetGazePoint().Screen;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetLookLayer()))
+            {
+                lookAtPos = hit.point;
+            }
         }
         else
         {
-            // CHECK DU BOUTON POUR FERMER LES YEUX SI L'EYE TRACKER N'EST PAS ACTIVÉ
-            if (GameManager.instance.controls.GetAxis("LightOff")!=0)
+
+            // LIGHT AIM CONTROL
+            if (GameManager.instance.GetIsTrackerEnabled() && TobiiAPI.IsConnected) // EYE TRACKER OPTION
             {
-                ClosedEyes(true);
+                if (!TobiiAPI.GetGazePoint().IsRecent())
+                {
+                    ClosedEyes(true);
+                }
+                else
+                {
+                    ClosedEyes(false);
+                }
+
+                cursorPos = TobiiAPI.GetGazePoint().Screen;
             }
             else
             {
-                ClosedEyes(false);
+                // CHECK DU BOUTON POUR FERMER LES YEUX SI L'EYE TRACKER N'EST PAS ACTIVÉ
+                if (GameManager.instance.controls.GetAxis("LightOff") != 0)
+                {
+                    ClosedEyes(true);
+                }
+                else
+                {
+                    ClosedEyes(false);
+                }
+
+                float xLight = GameManager.instance.controls.GetAxis("Light Horizontal");
+                float yLight = GameManager.instance.controls.GetAxis("Light Vertical");
+
+                if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+                {
+                    cursorPos = Input.mousePosition;
+                    inputMode = InputMode.PC;
+                }
+                else if (Mathf.Abs(xLight) > 0.1f || Mathf.Abs(yLight) > 0.1f)
+                {
+                    cursorPos.x = ((xLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelWidth;
+                    cursorPos.y = ((yLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelHeight;
+                    inputMode = InputMode.Pad;
+                }
+                else if (inputMode == InputMode.Pad)
+                {
+                    cursorPos = GameManager.instance.mainCamera.WorldToScreenPoint(transform.position);
+                }
             }
 
-            float xLight = GameManager.instance.controls.GetAxis("Light Horizontal");
-            float yLight = GameManager.instance.controls.GetAxis("Light Vertical");
-            
-            if(Input.GetAxis("Mouse X")!=0 || Input.GetAxis("Mouse Y")!=0)
-            {
-                cursorPos = Input.mousePosition;
-                inputMode = InputMode.PC;
-            }
-            else if (Mathf.Abs(xLight) > 0.1f || Mathf.Abs(yLight) > 0.1f)
-            {
-                cursorPos.x = ((xLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelWidth;
-                cursorPos.y = ((yLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelHeight;
-                inputMode = InputMode.Pad;
-            }
-            else if (inputMode == InputMode.Pad)
-            {
-                cursorPos = GameManager.instance.mainCamera.WorldToScreenPoint(transform.position);
-            }
-        }
+            RaycastHit hit;
+            Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
 
-        RaycastHit hit;
-        Ray ray = GameManager.instance.mainCamera.ScreenPointToRay(cursorPos);
-
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetLookLayer()))
-        {
-            lookAtPos = hit.point;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, GameManager.instance.GetLookLayer()))
+            {
+                lookAtPos = hit.point;
+            }
         }
 
         /* --- Code pour vérouiller le z de la lampe --- */
@@ -691,7 +706,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("HasLanded", false);
         StoppedHMove = false;
         stopMove = false;
-        triggerBipede = false;
+        blockLightControl = false;
         ResetVelocity();
     }
 

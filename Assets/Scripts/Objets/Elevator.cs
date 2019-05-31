@@ -37,6 +37,8 @@ public class Elevator : Objet
     [SerializeField] ContinuousBlinkingLight blinkingLight;
 
     [SerializeField] float waitTime = 12;
+    [SerializeField] string engineStartSoundRtpcName = null;
+    [SerializeField] float engineStartSoundFadeDuration = 3.0f;
     private bool isMoving = false;
     private bool isWaiting = true;
 
@@ -97,12 +99,26 @@ public class Elevator : Objet
         if (blinkingLight != null && blinkingLight.enabled)
         {
             AkSoundEngine.PostEvent(playEngineSound, gameObject);
+            StartCoroutine(StartEngineCoroutine());
             blinkingLight.StopBlink();
             blinkingLight.enabled = false;
             lamp.enabled = true;
             lampAnimator.enabled = true;
         }
         
+    }
+
+    IEnumerator StartEngineCoroutine()
+    {
+        float time = 0.0f;
+        while (time < engineStartSoundFadeDuration)
+        {
+            AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, (time / engineStartSoundFadeDuration) * 100.0f);
+            time += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        AkSoundEngine.SetRTPCValue(engineStartSoundRtpcName, 100.0f);
+        yield return null;
     }
 
     public override void Reset()

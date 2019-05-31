@@ -27,6 +27,12 @@ public class BipedeBehavior : Enemy
     [SerializeField] float retreatStepDuration = 0.2f;
     float retreatTime = 0.0f;
 
+    [Header("Bonus speed")]
+    [SerializeField] float bonusSpeedMinDistance = 1.0f;
+    [SerializeField] float bonusSpeedMaxDistance = 20.0f;
+    [SerializeField] float bonusSpeedMinRate = 1.0f;
+    [SerializeField] float bonusSpeedMaxRate = 2.0f;
+
     void Start()
     {
         Initialize();
@@ -143,7 +149,8 @@ public class BipedeBehavior : Enemy
                 agent.speed = moveSpeed;
                 if (isInCorridorChase)
                 {
-                    agent.speed *= (GameManager.instance.player.transform.position - transform.position).magnitude.Remap(5.0f, 60.0f, 1.0f, 2.0f);
+                    agent.speed *= (GameManager.instance.player.transform.position.x - transform.position.x).Remap(bonusSpeedMinDistance, bonusSpeedMaxDistance, bonusSpeedMinRate, bonusSpeedMaxRate);
+                    //print(moveSpeed + " " + agent.speed);
                 }
             /*}
             else

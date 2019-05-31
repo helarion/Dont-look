@@ -46,11 +46,13 @@ public class EndLightDetector : ContiniousLightDetector
         UIManager.instance.cinematicBars.Show(cinematicBarsSize, cinematicBarsTime);
         float oldYaw = cameraBlock.maxCameraYawAngle;
         float oldZ = GameManager.instance.camHandler.zStartPosition;
+        GameManager.instance.player.blockLightControl = true;
         GameManager.instance.player.StopMove();
         cameraBlock.maxCameraYawAngle = newYaw;
         GameManager.instance.camHandler.SetNewZ(newZ);
         yield return new WaitForSeconds(waitTime);
         GameManager.instance.player.ResumeMove();
+        GameManager.instance.player.blockLightControl = false;
         cameraBlock.maxCameraYawAngle = oldYaw;
         GameManager.instance.camHandler.SetNewZ(oldZ);
         UIManager.instance.cinematicBars.Hide(cinematicBarsTime);
