@@ -36,15 +36,8 @@ public class PlayerController : MonoBehaviour
     #region JumpVariables
 
    [Header("Jump")]
-    [SerializeField] private float jumpForce = 1.5f;
-    [SerializeField] private float rayCastLength = 0.1f;
-    [SerializeField] private float maxClimbHeight = 1.0f;
-    [SerializeField] private float maxClimbLength = 1.0f;
-    [SerializeField] private float jumpLength = 3;
-    [SerializeField] private float jumpLengthSpeed = 1;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private GroundDetector groundDetector;
-    private int jumpDirection = 0;
 
     #endregion
 

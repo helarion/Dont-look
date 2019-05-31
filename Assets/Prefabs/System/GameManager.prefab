@@ -54,7 +54,7 @@ MonoBehaviour:
   - {fileID: 0}
   cameraSpeed: 0.5
   lastCheckpoint: {fileID: 0}
-  isTesting: 0
+  isTesting: 1
   CheckPointList:
   - {fileID: 0}
   - {fileID: 0}
@@ -73,7 +73,7 @@ MonoBehaviour:
   shakeRequests: []
   decreaseFactor: 1
   camHandler: {fileID: 0}
-  camSpeedModifer: 8
+  camSpeedModifer: 12
   dutchAngle: 0
   contrePlongeeAngle: 25
   contrePlongeeHauteur: 0.7
@@ -108,7 +108,7 @@ MonoBehaviour:
   triggerBipede1Sound: Play_Explo_Porte_Deb
   HeartPlay: Play_Random_Heart
   HeartStop: Stop_Random_Heart
-  radioPlay: 
+  radioPlay: Play_Random_Hole_Sound1
   radioObject1: {fileID: 0}
   radioObject2: {fileID: 0}
   monsterDeathSound: Play_Mort_Gamin

@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour
         PlayCurrentAudioRoom(startRoom);
         ResumeGame();
         UIManager.instance.FadeOutIntro();
+        UIManager.instance.isIntro = false;
         yield return null;
     }
 
@@ -401,6 +402,7 @@ public class GameManager : MonoBehaviour
         while (UIManager.instance.isFading)
             yield return new WaitForSeconds(0.1f);
         RespawnEnemies();
+        yield return new WaitForSeconds(0.5f);
         RespawnPlayer();
         PostProcessReset();
         UIManager.instance.FadeDeath(false);
