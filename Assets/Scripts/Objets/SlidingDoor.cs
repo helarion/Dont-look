@@ -12,8 +12,6 @@ public class SlidingDoor : Objet
     [SerializeField] private float moveDownSpeed = 0.05f;
     [SerializeField] private Transform endPos;
     [SerializeField] private Transform startPosition;
-    [SerializeField] private float shakeOnIntensity = 0.08f;
-    [SerializeField] private float shakeOffIntensity = 0.04f;
     [SerializeField] private float minRTPC = 0;
     [SerializeField] private float minSlidingRTPC = 40;
     [SerializeField] private float maxSlidingRTPC = 100;
@@ -79,7 +77,6 @@ public class SlidingDoor : Objet
                     slideRtpc = maxSlidingRTPC;
                     AkSoundEngine.SetRTPCValue(rtpcName, slideRtpc);
                 }
-                GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
                 transform.localPosition += (transform.up) * Time.deltaTime * moveUpSpeed;
             }
             else
@@ -114,7 +111,6 @@ public class SlidingDoor : Objet
                     slideRtpc = minSlidingRTPC;
                     AkSoundEngine.SetRTPCValue(rtpcName, slideRtpc);
                 }
-                GameManager.instance.ShakeScreen(0.5f, shakeOnIntensity);
                 transform.localPosition += (transform.up * -1) * Time.deltaTime * moveDownSpeed;
             }
             else

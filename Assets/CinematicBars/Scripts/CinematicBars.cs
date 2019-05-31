@@ -32,7 +32,7 @@ public class CinematicBars2 : MonoBehaviour {
         topBar = gameObject.GetComponent<RectTransform>();
         topBar.anchorMin = new Vector2(0, 1);
         topBar.anchorMax = new Vector2(1, 1);
-        topBar.sizeDelta = new Vector2(0, 0);
+        topBar.sizeDelta = new Vector2(0, 300);
         
         gameObject = new GameObject("bottomBar", typeof(Image));
         gameObject.transform.SetParent(transform, false);
@@ -40,7 +40,7 @@ public class CinematicBars2 : MonoBehaviour {
         bottomBar = gameObject.GetComponent<RectTransform>();
         bottomBar.anchorMin = new Vector2(0, 0);
         bottomBar.anchorMax = new Vector2(1, 0);
-        bottomBar.sizeDelta = new Vector2(0, 0);
+        bottomBar.sizeDelta = new Vector2(0, 300);
     }
 
     private void Update() {
