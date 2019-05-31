@@ -19,14 +19,18 @@ public class ContiniousLightDetector : Objet
     bool isLooked = false;
     bool wasLooked = false;
     bool firstTimeLook = false;
-    [HideInInspector] public float count=0;
     float timeLooked = 0.0f;
 
     bool chargeSoundPlaying = false;
 
+    //float value = 0.0f;
+
+    public float count = 0.0f;
+
     private void Start()
     {
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
+        //value = 0.0f;
         if (isBroken)
         {
             Break();
@@ -36,9 +40,11 @@ public class ContiniousLightDetector : Objet
     public virtual void Update()
     {
         if (broken) return;
-        
+
+
         wasLooked = isLooked;
         isLooked = GameManager.instance.LightDetection(gameObject, true);
+        //if (wasLooked || isLooked) print("rtpc value :" + value);
 
         if (target.GetComponent<SlidingDoor>() != null)
         {
@@ -55,6 +61,7 @@ public class ContiniousLightDetector : Objet
             {
                 firstTimeLook = true;
                 AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
+                //value = 0.0f;
             }
             LookFunction();
         }
@@ -69,12 +76,15 @@ public class ContiniousLightDetector : Objet
             if (timeLooked > 0.0f)
             {
                 AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, chargeTime, 0, 100));
+                //value = timeLooked.Remap(0, chargeTime, 0, 100);
                 timeLooked -= Time.deltaTime;
             }
             else if (chargeSoundPlaying)
             {
                 AkSoundEngine.PostEvent(stopChargingSound, gameObject);
                 chargeSoundPlaying = false;
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
+                //value = 0.0f;
             }
         }
     }
@@ -93,6 +103,7 @@ public class ContiniousLightDetector : Objet
         if (timeLooked < chargeTime)
         {
             AkSoundEngine.SetRTPCValue("Pitch_Load_Light", timeLooked.Remap(0, chargeTime, 0, 100));
+            //value = timeLooked.Remap(0, chargeTime, 0, 100);
             timeLooked += Time.deltaTime;
         }
     }
@@ -103,6 +114,7 @@ public class ContiniousLightDetector : Objet
         base.Fix();
         AkSoundEngine.PostEvent(fixSound, gameObject);
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
+        //value = 0.0f;
         foreach (GameObject g in brokenFeature)
         {
             g.SetActive(false);
@@ -140,6 +152,7 @@ public class ContiniousLightDetector : Objet
         target.Reset();
         firstTimeLook = false;
         AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
+        //value = 0.0f;
         if (isBroken)
         {
             blinkingLight.Break();

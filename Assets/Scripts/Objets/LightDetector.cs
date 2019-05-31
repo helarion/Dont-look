@@ -91,6 +91,7 @@ public class LightDetector : Objet
             {
                 AkSoundEngine.PostEvent(StopChargingSound, gameObject);
                 chargeSoundPlaying = false;
+                AkSoundEngine.SetRTPCValue("Pitch_Load_Light", 0);
             }
         }
     }
