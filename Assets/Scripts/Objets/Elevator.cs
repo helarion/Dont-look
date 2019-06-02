@@ -230,7 +230,7 @@ public class Elevator : Objet
             removedSpatialLine = slSave;
         }
 
-        if(scriptTwoSteps && isBidirectional)
+        if(scriptTwoSteps)
         {
             startPos = endPos.position;
             endPos.position = endPosStep2.position;

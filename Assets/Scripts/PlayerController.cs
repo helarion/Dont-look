@@ -104,7 +104,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Light pointLight;
     [SerializeField] private int flickerPercentage = 10;
     [SerializeField] private int flickeringFrequency = 1;
-    [SerializeField] public float rangeDim;
     [SerializeField] public Animator flashlightAnimator;
     [SerializeField] private float lightTransitionSpeed=0.1f;
     [SerializeField] private float normalCameraFOV;
