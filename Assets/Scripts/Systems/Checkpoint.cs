@@ -23,6 +23,7 @@ public class Checkpoint : MonoBehaviour
     {
         z=0;
         BoxCollider bCollider = GetComponent<BoxCollider>();
+        if (bCollider == null) return;
         Vector3 pos = transform.position + bCollider.center;
         Gizmos.color = new Color(255,165,0); // orange
         float wHalf = (bCollider.size.x * .5f);
