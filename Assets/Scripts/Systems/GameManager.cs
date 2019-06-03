@@ -459,6 +459,10 @@ public class GameManager : MonoBehaviour
     // [ExecuteInEditMode]
     private void TP()
     {
+        if (!Input.GetKey(KeyCode.Tab))
+        {
+            return;
+        }
         int check = -1;
         if (Input.GetKeyDown(KeyCode.F1))
         {
