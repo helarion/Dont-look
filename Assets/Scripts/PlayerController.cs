@@ -907,13 +907,16 @@ public class PlayerController : MonoBehaviour
 
                 int verticalDirection = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
 
-                // on passe automatiquement la vitesse de déplacement vertical à la vitesse de course si on est poursuivi
-                foreach (Enemy enemy in GameManager.instance.listE)
+                // on passe automatiquement la vitesse de déplacement vertical à la vitesse de course si on est poursuivi et qu'on va dans un casier/ascenseur
+                if (needsCentering)
                 {
-                    if (enemy.isChasing)
+                    foreach (Enemy enemy in GameManager.instance.listE)
                     {
-                        moveSpeed = runSpeed;
-                        break;
+                        if (enemy.isChasing)
+                        {
+                            moveSpeed = runSpeed;
+                            break;
+                        }
                     }
                 }
 
