@@ -463,9 +463,6 @@ MonoBehaviour:
   modelTransform: {fileID: 4194574731507233612}
   raycastClimb: {fileID: 554286558}
   animator: {fileID: 312924326}
-  hipPosition: {fileID: 4194574731507233648}
-  headPosition: {fileID: 0}
-  armPosition: {fileID: 0}
   changingCameraBlock: 0
   currentSpatialRoom: {fileID: 0}
   currentSpatialLine:
@@ -590,7 +587,6 @@ MonoBehaviour:
   pointLight: {fileID: 1383931382}
   flickerPercentage: 10
   flickeringFrequency: 4
-  rangeDim: 0
   flashlightAnimator: {fileID: 4194574732569649043}
   lightTransitionSpeed: 0.1
   normalCameraFOV: 60
@@ -605,6 +601,8 @@ MonoBehaviour:
   normalLightAngle: 60
   maxConcentrationTime: 6
   cooldownConcentrationTime: 1.5
+  concentrationShakeTime: 0.3
+  concentrationShakeIntensity: 0.3
   lightOn: 1
   blockLightControl: 0
   flashlightOnSound: Play_Mag_On
@@ -1743,12 +1741,6 @@ PrefabInstance:
 --- !u!4 &4194574731507233612 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400038, guid: 9f72691c01aa9c04d9371acc53982a84,
-    type: 3}
-  m_PrefabInstance: {fileID: 4194574731507624426}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4194574731507233648 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400026, guid: 9f72691c01aa9c04d9371acc53982a84,
     type: 3}
   m_PrefabInstance: {fileID: 4194574731507624426}
   m_PrefabAsset: {fileID: 0}

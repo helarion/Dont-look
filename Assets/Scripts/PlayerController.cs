@@ -13,9 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public Transform modelTransform;
     [SerializeField] private Transform raycastClimb;
     [SerializeField] private Animator animator;
-    [SerializeField] private Transform hipPosition;
-    [SerializeField] private Transform headPosition;
-    [SerializeField] private Transform armPosition;
 
     private CameraBlock currentCameraBlock = null;
     public bool changingCameraBlock = false;
@@ -23,8 +20,6 @@ public class PlayerController : MonoBehaviour
     public SpatialRoom currentSpatialRoom = null;
     SpatialSas currentSpatialSas = null;
     public SpatialLine currentSpatialLine = null;
-    private Rigidbody objectGrabbed = null;
-    private float objectGrabbedWidth = 0;
     private Rigidbody rb;
     private Collider cl;
     private Vector3 lookAtPos;
@@ -35,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     #region JumpVariables
 
-   [Header("Jump")]
+    [Header("Jump")]
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private GroundDetector groundDetector;
 
@@ -102,9 +97,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlightTransform;
     [SerializeField] private Light pointLight;
+
     [SerializeField] private int flickerPercentage = 10;
     [SerializeField] private int flickeringFrequency = 1;
     [SerializeField] public Animator flashlightAnimator;
+
     [SerializeField] private float lightTransitionSpeed=0.1f;
     [SerializeField] private float normalCameraFOV;
     [SerializeField] private float zoomCameraFOV;
@@ -113,12 +110,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float concentratedLightIntensity;
     [SerializeField] private Color concentratedLightColor;
     [SerializeField] private float concentratedLightAngle;
+
+
     [SerializeField] private float normalLightIntensity;
     [SerializeField] private float normalLightRange;
     [SerializeField] private Color normalLightColor;
     [SerializeField] private float normalLightAngle;
+
     [SerializeField] float maxConcentrationTime = 3.0f;
     [SerializeField] float cooldownConcentrationTime = 3.0f;
+    [SerializeField] float concentrationShakeTime = 1;
+    [SerializeField] float concentrationShakeIntensity = 0.3f;
+
     float concentrationTime = 0.0f;
     float concentrationDechargeTime = 0.0f;
     bool concentrationOvercharge = false;
@@ -498,7 +501,7 @@ public class PlayerController : MonoBehaviour
             concentrationDechargeTime = cooldownConcentrationTime;
             concentrationOvercharge = true;
             flashlightAnimator.SetTrigger("Flicker1");
-            GameManager.instance.ShakeScreen(0.1f, 0.8f);
+            GameManager.instance.ShakeScreen(concentrationShakeTime, concentrationShakeIntensity);
         }
 
         if (GameManager.instance.controls.GetButton("Concentrate") && !concentrationOvercharge && !blockLightControl)
