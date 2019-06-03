@@ -909,6 +909,20 @@ public class PlayerController : MonoBehaviour
                 lMovement.z *= moveSpeed;*/
 
                 int verticalDirection = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
+
+                // on passe automatiquement la vitesse de déplacement vertical à la vitesse de course si on est poursuivi et qu'on va dans un casier/ascenseur
+                if (needsCentering)
+                {
+                    foreach (Enemy enemy in GameManager.instance.listE)
+                    {
+                        if (enemy.isChasing)
+                        {
+                            moveSpeed = runSpeed;
+                            break;
+                        }
+                    }
+                }
+
                 Vector3 verticalMove = VerticalMove(verticalDirection);
                 if (verticalDirection == -1)
                 {
