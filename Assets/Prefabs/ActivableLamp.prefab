@@ -65,7 +65,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 1
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -86,9 +86,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Version: 1
-  shadowResolution: 512
-  shadowDimmer: 1
-  volumetricShadowDimmer: 1
+  shadowResolution: 0
+  shadowDimmer: 0
+  volumetricShadowDimmer: 0
   shadowFadeDistance: 10000
   contactShadows: 0
   viewBiasMin: 0.2
@@ -139,7 +139,7 @@ MonoBehaviour:
   luxAtDistance: 1
   m_InnerSpotPercent: 0
   lightDimmer: 1
-  m_VolumetricDimmer: 1
+  m_VolumetricDimmer: 0.7
   lightUnit: 0
   sunDiskSize: 1
   sunHaloSize: 0.1

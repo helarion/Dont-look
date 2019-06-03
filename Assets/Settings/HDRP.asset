@@ -189,18 +189,18 @@ MonoBehaviour:
       maxEnvLightsOnScreen: 64
       maxDecalsOnScreen: 512
     hdShadowInitParams:
-      shadowAtlasResolution: 4096
+      shadowAtlasResolution: 512
       maxShadowRequests: 128
       shadowMapsDepthBits: 32
       useDynamicViewportRescale: 1
-      shadowQuality: 1
+      shadowQuality: 0
     decalSettings:
       drawDistance: 30
       atlasWidth: 4096
       atlasHeight: 4096
       perChannelMask: 0
   allowShaderVariantStripping: 1
-  enableSRPBatcher: 0
+  enableSRPBatcher: 1
   enableVariantStrippingLog: 0
   diffusionProfileSettings: {fileID: 11400000, guid: 6d425e4eade3a894d949ba3d2e6bf24f,
     type: 2}
