@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]public static GameManager instance = null;
     private List<Enemy> enemyList;
-    [SerializeField] Enemy[] listE;
+    [SerializeField] public Enemy[] listE;
 
     [SerializeField] private float cameraSpeed=3;
 
