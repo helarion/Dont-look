@@ -238,7 +238,8 @@ public class Enemy : MonoBehaviour
     public Vector3 RandomSpawn(bool farOfPlayer)
     {
         int max = spawnZones.Length;
-        spawnIndex = Random.Range(0, max);
+        print("max=" + max);
+        spawnIndex = Random.Range(0, max-1);
         if (farOfPlayer)
         {
             while ((spawnZones[spawnIndex].position - player.transform.position).magnitude < spawnDistanceFromPlayer)
@@ -246,6 +247,7 @@ public class Enemy : MonoBehaviour
                 spawnIndex = Random.Range(0, max);
             }
         }
+        print("spawnIndex:" + spawnIndex);
         return (spawnZones[spawnIndex].position);
     }
 

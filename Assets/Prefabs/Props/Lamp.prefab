@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 507054732}
   - component: {fileID: 6869460471047657530}
   - component: {fileID: 3472111968448261180}
+  - component: {fileID: 1017653447635257657}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -205,6 +206,27 @@ MonoBehaviour:
   onSound: Play_Amp_On
   offSound: Play_Amp_Off
   maxPlayerDistance: 0
+--- !u!114 &1017653447635257657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507054730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1598d4d2c0c41d1439e495a4b5587823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  yBonus: 1
+  time_start: 0.3
+  time_end: 0.3
+  current_occlusion: 0
+  max_occlusion: 100
+  layerMaskOcclusion:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1000011376806702
 GameObject:
   m_ObjectHideFlags: 0

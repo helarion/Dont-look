@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
             player.SetCurrentAudioRoom(startRoom);
             PlayCurrentAudioRoom(startRoom);
             ResumeGame();
+            UIManager.instance.isIntro = false;
             UIManager.instance.FadeOutIntro();
         }
         AkSoundEngine.PostEvent(radioPlay, radioObject1);
@@ -148,6 +149,7 @@ public class GameManager : MonoBehaviour
         PlayCurrentAudioRoom(startRoom);
         ResumeGame();
         UIManager.instance.FadeOutIntro();
+        UIManager.instance.isIntro = false;
         yield return null;
     }
 
@@ -310,7 +312,11 @@ public class GameManager : MonoBehaviour
 
         float playerToObjectLength = playerToObjectVec.magnitude;
         Light playerLight = player.getLight();
-        float lightRange = playerLight.range;
+        BoxCollider col = objectPosition.GetComponent<BoxCollider>();
+        if (col == null) col = objectPosition.GetComponentInChildren<BoxCollider>();
+        float bonus=0;
+        if(col != null) bonus = col.size.x;
+        float lightRange = playerLight.range+bonus;
         float lightAngle = playerLight.spotAngle / 2.0f;
 
         if (objectPosition.name == "Bipede")
@@ -401,6 +407,7 @@ public class GameManager : MonoBehaviour
         while (UIManager.instance.isFading)
             yield return new WaitForSeconds(0.1f);
         RespawnEnemies();
+        yield return new WaitForSeconds(0.5f);
         RespawnPlayer();
         PostProcessReset();
         UIManager.instance.FadeDeath(false);

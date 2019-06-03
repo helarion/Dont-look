@@ -22,6 +22,7 @@ public class Occlusion_v2 : MonoBehaviour
         if (origin == null) origin = GameManager.instance.player.gameObject;
         listener = GameManager.instance.mainCamera.gameObject;
         layerMaskOcclusion = GameManager.instance.GetWallsAndMobsLayer();
+        current_occlusion = 100;
     }
 
 	// Update is called once per frame

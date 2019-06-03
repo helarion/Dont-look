@@ -11,7 +11,6 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private Image fadeImg = null;
     [SerializeField] public CinematicBars cinematicBars;
-    [SerializeField] private float fadeTime=0.5f;
     public GameObject pausePanel = null;
     [SerializeField] private Image pauseImg = null;
     [SerializeField] private GameObject ControlPanel=null;
@@ -30,6 +29,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private string sliderSound;
     [SerializeField] private string checkboxSound;
 
+    [HideInInspector] public bool isIntro = true;
     public bool isFading = false;
     private bool isEnding = false;
     public static UIManager instance = null;
@@ -65,6 +65,7 @@ public class UIManager : MonoBehaviour
 
     public void BrightnessValueChangeCheck()
     {
+        if (isIntro) return;
         AkSoundEngine.PostEvent(sliderSound, gameObject);
         PostProcessInstance.instance.colorGrading.enabled.value = true;
         float brightness = brightnessControl.value.Remap(brightnessControl.minValue, brightnessControl.maxValue, brightnessMin, brightnessMax);
@@ -73,6 +74,7 @@ public class UIManager : MonoBehaviour
 
     public void VolumeValueChangeCheck()
     {
+        if (isIntro) return;
         AkSoundEngine.PostEvent(sliderSound, gameObject);
         AkSoundEngine.SetRTPCValue("Master_Volume_Slider", volumeControl.value);
     }

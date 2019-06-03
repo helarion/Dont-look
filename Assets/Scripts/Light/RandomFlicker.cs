@@ -25,7 +25,7 @@ public class RandomFlicker : MonoBehaviour
     {
         if (!isEnabled) return;
         playerDistance = (transform.position - GameManager.instance.player.transform.position).magnitude;
-        if(playerDistance < maxPlayerDistance)// && !animatorOffOnStart)
+        if(playerDistance < maxPlayerDistance)
         {
             animator.enabled = true;
             if (!isFlickering)
