@@ -189,13 +189,16 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         CheckTrackerConnected();
-        if(Input.GetKeyDown(KeyCode.KeypadPlus))
+        if (Input.GetKey(KeyCode.Tab))
         {
-            walkSpeed = debugSpeed;
-        }
-        else if (Input.GetKeyDown(KeyCode.KeypadMinus))
-        {
-            walkSpeed = saveMove;
+            if (Input.GetKeyDown(KeyCode.KeypadPlus))
+            {
+                walkSpeed = debugSpeed;
+            }
+            else if (Input.GetKeyDown(KeyCode.KeypadMinus))
+            {
+                walkSpeed = saveMove;
+            }
         }
         if (!isAlive || GameManager.instance.GetIsPaused()) return;
         LightAim();
@@ -911,15 +914,27 @@ public class PlayerController : MonoBehaviour
                 int verticalDirection = (transform.position.z - currentSpatialLine.begin.position.z) > 0 ? -1 : 1;
 
                 // on passe automatiquement la vitesse de déplacement vertical à la vitesse de course si on est poursuivi et qu'on va dans un casier/ascenseur
-                if (needsCentering)
+                if (needsCentering && !isRunning)
                 {
-                    foreach (Enemy enemy in GameManager.instance.listE)
+                    bool needsToRun = false;
+                    foreach (Enemy enemy in GameManager.instance.enemyList)
                     {
+                        if (enemy == null)
+                        {
+                            continue;
+                        }
                         if (enemy.isChasing)
                         {
+                            print(enemy.name + " is chasing player.");
                             moveSpeed = runSpeed;
+                            animator.SetBool("IsRunning", true);
+                            needsToRun = true;
                             break;
                         }
+                    }
+                    if (!needsToRun)
+                    {
+                        animator.SetBool("IsRunning", false);
                     }
                 }
 

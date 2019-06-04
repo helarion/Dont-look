@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour
     public PlayerController player;
 
     [HideInInspector]public static GameManager instance = null;
-    private List<Enemy> enemyList;
-    [SerializeField] public Enemy[] listE;
+    [HideInInspector] public List<Enemy> enemyList;
+    [SerializeField] public List<Enemy> listE;
 
     [SerializeField] private float cameraSpeed=3;
 
