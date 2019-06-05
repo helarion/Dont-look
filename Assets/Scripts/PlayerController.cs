@@ -321,6 +321,10 @@ public class PlayerController : MonoBehaviour
                 AkSoundEngine.PostEvent(GameManager.instance.triggerBipede1Sound, GameManager.instance.gameObject);
             }
         }
+        else if (other.CompareTag("TriggerPorte"))
+        {
+            other.GetComponent<TriggerPorte>().SetSpeed();
+        }
         else if (other.CompareTag("Metal_Casier"))
         {
             overrideSurface = true;
@@ -603,12 +607,14 @@ public class PlayerController : MonoBehaviour
                 {
                     cursorPos = Input.mousePosition;
                     inputMode = InputMode.PC;
+                    GameManager.instance.CursorIfPc();
                 }
                 else if (Mathf.Abs(xLight) > 0.1f || Mathf.Abs(yLight) > 0.1f)
                 {
                     cursorPos.x = ((xLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelWidth;
                     cursorPos.y = ((yLight * lightSensitivity + 1) / 2) * GameManager.instance.mainCamera.pixelHeight;
                     inputMode = InputMode.Pad;
+                    Cursor.visible = false;
                 }
                 else if (inputMode == InputMode.Pad)
                 {
@@ -641,7 +647,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // APPELER LORSQUE LE JOUEUR FERME LES YEUX
-    private void ClosedEyes(bool isClosed)
+    public void ClosedEyes(bool isClosed)
     {
         if (lightOn != isClosed) return;
 
@@ -1285,6 +1291,11 @@ public class PlayerController : MonoBehaviour
     public bool GetIsHidden()
     {
         return isHidden;
+    }
+
+    public bool GetTobii()
+    {
+        return TobiiAPI.IsConnected;
     }
 
     public bool GetIsMoving()

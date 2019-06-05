@@ -150,7 +150,16 @@ public class GameManager : MonoBehaviour
         ResumeGame();
         UIManager.instance.FadeOutIntro();
         UIManager.instance.isIntro = false;
+        CursorIfPc();
         yield return null;
+    }
+
+    public void CursorIfPc()
+    {
+        if ((!player.GetTobii() || player.GetTobii() && UIManager.instance.GetCheckTracker()) && player.GetInputMode() == PlayerController.InputMode.PC)
+        {
+            Cursor.visible = true;
+        }
     }
 
     private void Update()
@@ -158,7 +167,11 @@ public class GameManager : MonoBehaviour
         // PAUSE HANDLER
         if (controls.GetButtonDown("Pause"))
         {
-            if (isPaused) ResumeGame();
+            if (isPaused)
+            {
+                ResumeGame();
+                CursorIfPc();
+            }
             else PauseGame();
         }
         if (isPaused) return;
@@ -394,6 +407,7 @@ public class GameManager : MonoBehaviour
         AkSoundEngine.PostEvent(stopRandomSounds, gameObject);
         player.Reset();
         player.SetIsAlive(false);
+        player.ClosedEyes(true);
         UIManager.instance.FadeDeath(true);
         StartCoroutine(DeathCoroutine());
         if(source==0)AkSoundEngine.PostEvent(monsterDeathSound, gameObject);
@@ -411,6 +425,7 @@ public class GameManager : MonoBehaviour
         RespawnPlayer();
         PostProcessReset();
         UIManager.instance.FadeDeath(false);
+        player.ClosedEyes(false);
     }
 
     // RESPAWN CHAQUE ENNEMI

@@ -16,6 +16,7 @@ public class Checkpoint : MonoBehaviour
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
         GameManager.instance.SetNewCheckpoint(this);
+        GetComponent<BoxCollider>().enabled = false;
     }
 
     [ExecuteInEditMode]

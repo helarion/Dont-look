@@ -229,4 +229,9 @@ public class SlidingDoor : Objet
         base.Fix();
         broken = false;
     }
+
+    public void SetNewCloseSpeed(float newSpeed)
+    {
+        moveDownSpeed = newSpeed;
+    }
 }

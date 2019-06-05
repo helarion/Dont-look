@@ -49,8 +49,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.2, y: 0.6, z: 0.2}
+  m_Center: {x: -0.1, y: 0, z: 0}
 --- !u!114 &7673007942488257862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +115,7 @@ MonoBehaviour:
   time_start: 0.5
   time_end: 1
   current_occlusion: 0
-  max_occlusion: 100
+  max_occlusion: 30
   layerMaskOcclusion:
     serializedVersion: 2
     m_Bits: 0

@@ -17,6 +17,7 @@ public class BipedeBehavior : Enemy
     private BoxCollider detectZone;
     private bool canSeePlayer = false;
     public bool isStopped = false;
+    public bool isInCorridor = false;
 
     public bool isInCorridorChase = false;
 
@@ -110,7 +111,7 @@ public class BipedeBehavior : Enemy
     public override void IsPathInvalid()
     {
         //print("ispathinvalid");
-        if (canSeePlayer) return;
+        if (canSeePlayer && !isInCorridor) return;
         //print("cannotSeePlayer");
         base.IsPathInvalid();
         //print("ispathinvalid");

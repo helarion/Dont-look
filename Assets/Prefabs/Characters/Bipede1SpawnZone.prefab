@@ -218,13 +218,14 @@ MonoBehaviour:
   rotation: {x: 0, y: 180, z: 0}
   bipedeGameObject: {fileID: 5105161807322348093}
   isStopped: 0
+  isInCorridor: 0
   isInCorridorChase: 0
-  retreatDistance: 1
+  retreatDistance: 1.1
   retreatStepDuration: 1
-  bonusSpeedMinDistance: 1
+  bonusSpeedMinDistance: 10
   bonusSpeedMaxDistance: 20
   bonusSpeedMinRate: 1
-  bonusSpeedMaxRate: 1.8
+  bonusSpeedMaxRate: 2.5
 --- !u!65 &2175598857284857689
 BoxCollider:
   m_ObjectHideFlags: 0

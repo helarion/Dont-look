@@ -27,11 +27,11 @@ Transform:
   m_GameObject: {fileID: 4709919825960942456}
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0.00000028088027}
   m_LocalPosition: {x: 20.5, y: -0.345, z: 3.1200013}
-  m_LocalScale: {x: 0.5, y: 1.2, z: 0.5}
+  m_LocalScale: {x: 3.5, y: 2, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -179.99998, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4709919825960942455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,7 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listObjetsReinitialises: []
-  newZ: -4
+  listWwiseTriggerReinitialises: []
+  sRoom: {fileID: 0}
+  aRoom: {fileID: 0}
 --- !u!65 &4709919825960942453
 BoxCollider:
   m_ObjectHideFlags: 0
