@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3695006473054658851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3695006473054658849}
+  - component: {fileID: 3695006473054658848}
+  - component: {fileID: 2026705480}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3695006473054658849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3695006473054658851}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.7176204, y: -1.6746231, z: 26.371975}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3695006473054658848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3695006473054658851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c26fb84706163654baa72dea21a79993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  listE:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  cameraSpeed: 0.5
+  lastCheckpoint: {fileID: 0}
+  isTesting: 1
+  CheckPointList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  cameraMoveOffset: 40
+  lightVecOffset: 0.3
+  mainCamera: {fileID: 0}
+  shakeRequests: []
+  decreaseFactor: 1
+  camHandler: {fileID: 0}
+  camSpeedModifer: 12
+  dutchAngle: 0
+  contrePlongeeAngle: 25
+  contrePlongeeHauteur: 0.7
+  cameraBlockChangeMalusSpeedTime: 1
+  cameraBlockChangeMalusSpeedRate: 1
+  maxGrain: 0.6
+  maxVignette: 0.9
+  maxTemperature: 100
+  distanceStartVignette: 15
+  distanceStartGrain: 12
+  distanceStartTemperature: 15
+  wallsAndMobsLayer:
+    serializedVersion: 2
+    m_Bits: 15872
+  lookLayer:
+    serializedVersion: 2
+    m_Bits: 10752
+  climbLayer:
+    serializedVersion: 2
+    m_Bits: 8192
+  Intro: Play_Intro_Gamin
+  waitIntroTime: 10
+  ChaseSpiderAmbPlay: Play_Random_CoursePoursuite
+  ChaseSpiderAmbStop: Stop_Random_CoursePoursuite
+  ChaseSpiderKillStop: Stop_Random_CoursePoursuite_01
+  ChaseBipedeAmbPlay: Play_Random_Rythme_Bass
+  ChaseBipedeAmbStop: Stop_Random_Rythme_Bass
+  playRandomSounds: Play_Grince_All
+  stopRandomSounds: Stop_Grince_All
+  pauseGameSounds: Pause_Menu
+  resumeGameSounds: Resume_All
+  triggerBipede1Sound: Play_Explo_Porte_Deb
+  HeartPlay: Play_Random_Heart
+  HeartStop: Stop_Random_Heart
+  radioPlay: Play_Random_Hole_Sound1
+  radioObject1: {fileID: 0}
+  radioObject2: {fileID: 0}
+  monsterDeathSound: Play_Mort_Gamin
+  doorDeathSound: Play_PORTE_MORT_GAMIN
+  startRoom: {fileID: 0}
+  nbAudioRoomId: 11
+  audioFadeSpeed: 30
+  heartVibration: 0.1
+--- !u!114 &2026705480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3695006473054658851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffc3a750a46412e45a142e50e0cd60ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerList: ae8d9d44
+  useOtherObject: 0
+  data:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 63ad9a93685ec5d499b449ca569e4df9,
+      type: 2}
+  decodeBank: 0
+  loadAsynchronous: 0
+  saveDecodedBank: 0
+  unloadTriggerList: 958ca0ea
+  bankNameInternal: 
+  valueGuidInternal: 
