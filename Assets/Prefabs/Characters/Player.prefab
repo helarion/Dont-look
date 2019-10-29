@@ -585,6 +585,7 @@ MonoBehaviour:
   lightSpeed: 0.03
   flashlightTransform: {fileID: 1491706786681059038}
   pointLight: {fileID: 1383931382}
+  lightIntensityDechargeSpeed: 0.1
   flickerPercentage: 10
   flickeringFrequency: 4
   flashlightAnimator: {fileID: 4194574732569649043}
@@ -1857,11 +1858,6 @@ PrefabInstance:
         type: 3}
       propertyPath: maxSmoothness
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
-        type: 3}
-      propertyPath: displayLightIntensity
-      value: 4000
       objectReference: {fileID: 0}
     - target: {fileID: 3990833862365120610, guid: 8574542227f87dd4b92c5ebe482bc9fa,
         type: 3}

@@ -97,6 +97,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lightSpeed = 1;
     [SerializeField] private Transform flashlightTransform;
     [SerializeField] private Light pointLight;
+    private bool hasReachedNewState = false;
+    [SerializeField] private float lightIntensityDechargeSpeed = 0.1f;
 
     [SerializeField] private int flickerPercentage = 10;
     [SerializeField] private int flickeringFrequency = 1;
@@ -500,6 +502,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public static bool FastApproximately(float a, float b, float threshold)
+    {
+        return ((a - b) < 0 ? ((a - b) * -1) : (a - b)) <= threshold;
+    }
+
     private void LightMode()
     {
         if (concentrationTime > maxConcentrationTime)
@@ -514,19 +521,20 @@ public class PlayerController : MonoBehaviour
         if (GameManager.instance.controls.GetButton("Concentrate") && !concentrationOvercharge && !blockLightControl)
         {
             flashlight.enabled = true;
-
             concentrationTime += Time.deltaTime;
-
             isConcentrating = true;
 
-            flashlight.range = Mathf.Lerp(flashlight.range,normalLightRange+concentratedLightRangeBonus,lightTransitionSpeed);
-            flashlight.intensity = Mathf.Lerp(flashlight.intensity,concentratedLightIntensity,lightTransitionSpeed);
+            flashlight.range = Mathf.Lerp(flashlight.range, normalLightRange + concentratedLightRangeBonus, lightTransitionSpeed);
             flashlight.color = Color.Lerp(flashlight.color, concentratedLightColor, lightTransitionSpeed);
             pointLight.color = Color.Lerp(pointLight.color, concentratedLightColor, lightTransitionSpeed);
-            flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle/concentratedLightAngle, lightTransitionSpeed);
+            flashlight.spotAngle = Mathf.Clamp(Mathf.Lerp(flashlight.spotAngle, ((normalLightAngle/concentratedLightAngle)-10), lightTransitionSpeed), normalLightAngle / concentratedLightAngle,normalLightAngle);
             GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, zoomCameraFOV, lightTransitionSpeed);
             GameManager.instance.camHandler.Zoom(true);
             flashlightAnimator.enabled = false;
+
+            flashlight.intensity = ((maxConcentrationTime - concentrationTime) / maxConcentrationTime) * concentratedLightIntensity;
+
+            //print(flashlight.intensity);
         }
         else
         {
@@ -548,14 +556,23 @@ public class PlayerController : MonoBehaviour
             }
 
             isConcentrating = false;
+           
             flashlight.range = Mathf.Lerp(flashlight.range, normalLightRange, lightTransitionSpeed);
-            flashlight.intensity = Mathf.Lerp(flashlight.intensity, normalLightIntensity, lightTransitionSpeed);
             flashlight.color = Color.Lerp(flashlight.color, normalLightColor, lightTransitionSpeed);
             pointLight.color = Color.Lerp(pointLight.color, normalLightColor, lightTransitionSpeed);
-            flashlight.spotAngle = Mathf.Lerp(flashlight.spotAngle, normalLightAngle, lightTransitionSpeed);
+            flashlight.spotAngle = Mathf.Clamp(Mathf.Lerp(flashlight.spotAngle, normalLightAngle + 10, lightTransitionSpeed), normalLightAngle / concentratedLightAngle, normalLightAngle);
+
             GameManager.instance.mainCamera.fieldOfView = Mathf.Lerp(GameManager.instance.mainCamera.fieldOfView, normalCameraFOV, lightTransitionSpeed);
             GameManager.instance.camHandler.Zoom(false);
             if (lightOn) flashlightAnimator.enabled = true;
+            if (!concentrationOvercharge)
+            {
+                flashlight.intensity = ((maxConcentrationTime - concentrationTime) / maxConcentrationTime) * normalLightIntensity;
+            }
+            else
+            {
+                flashlight.intensity = ((cooldownConcentrationTime - concentrationDechargeTime) / cooldownConcentrationTime) * normalLightIntensity;
+            }
         }
     }
 
@@ -1153,6 +1170,7 @@ public class PlayerController : MonoBehaviour
             stopMove = false;
             animator.SetBool("IsFalling", false);
             animator.SetBool("HasLanded", true);
+            print("HasLanded : true");
         }
     }
 
