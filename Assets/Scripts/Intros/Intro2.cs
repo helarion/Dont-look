@@ -36,6 +36,8 @@ public class Intro2 : MonoBehaviour
         if (scene==0)
         {
             AkSoundEngine.PostEvent(playAmbiance, gameObject);
+            //if (GameManager.instance.isPresentationBuild)
+            //    nextScene++;
         }
         if (scene == -1)
         {
@@ -57,6 +59,15 @@ public class Intro2 : MonoBehaviour
             float value = brightness.Remap(brightnessMin, brightnessMax, brightnessControl.minValue, brightnessControl.maxValue);
             brightnessControl.value = value;
             StartCoroutine(BrightnessCoroutine());
+        }
+    }
+
+    private void Update()
+    {
+        if(scene==3 && !isFading && Input.GetButtonDown("Submit"))
+        {
+            ButtonNext();
+            print("test");
         }
     }
 

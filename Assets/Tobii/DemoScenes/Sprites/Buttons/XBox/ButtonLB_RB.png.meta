@@ -1,19 +1,20 @@
 fileFormatVersion: 2
 guid: 85c7e78dc70d2a04b95211ecd6f92c04
-timeCreated: 1460538820
-licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
     21300000: Button_LB
     21300002: Button_RB
-  serializedVersion: 2
+  externalObjects: {}
+  serializedVersion: 9
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -22,37 +23,59 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 7
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: -1
     aniso: 16
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
-  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: Button_LB
+    - serializedVersion: 2
+      name: Button_LB
       rect:
         serializedVersion: 2
         x: 0
@@ -62,29 +85,17 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 143.5, y: 46}
-        - {x: 141.5, y: 49}
-        - {x: 118.5, y: 66}
-        - {x: 76.5, y: 89}
-        - {x: 15.5, y: 104}
-        - {x: -7.5, y: 105}
-        - {x: -60.5, y: 105}
-        - {x: -74.5, y: 101}
-        - {x: -91.5, y: 92}
-        - {x: -114.5, y: 73}
-        - {x: -135.5, y: 52}
-        - {x: -142.5, y: 38}
-        - {x: -142.5, y: 21}
-        - {x: -111.5, y: -72}
-        - {x: -101.5, y: -89}
-        - {x: -90.5, y: -99}
-        - {x: -75.5, y: -105}
-        - {x: 133.5, y: -105}
-        - {x: 137.5, y: -104}
-        - {x: 140.5, y: -103}
-        - {x: 143.5, y: -99}
-    - name: Button_RB
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38394196a8cd5c247bbf2a1a261b4a4a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RB
       rect:
         serializedVersion: 2
         x: 291
@@ -94,30 +105,26 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 122.5, y: -44}
-        - {x: 142.5, y: 24}
-        - {x: 142.5, y: 41}
-        - {x: 137.5, y: 53}
-        - {x: 95.5, y: 90}
-        - {x: 74.5, y: 101}
-        - {x: 55.5, y: 105}
-        - {x: 16.5, y: 105}
-        - {x: -43.5, y: 97}
-        - {x: -76.5, y: 87}
-        - {x: -88.5, y: 82}
-        - {x: -118.5, y: 66}
-        - {x: -137.5, y: 53}
-        - {x: -143.5, y: 46}
-        - {x: -143.5, y: -100}
-        - {x: -141.5, y: -104}
-        - {x: -137.5, y: -105}
-        - {x: 77.5, y: -105}
-        - {x: 95.5, y: -97}
-        - {x: 101.5, y: -89}
-        - {x: 111.5, y: -72}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30d891abe577a4f49999d127f662ffaf
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

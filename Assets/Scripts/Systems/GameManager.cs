@@ -93,6 +93,8 @@ public class GameManager : MonoBehaviour
     private bool isTrackerEnabled = true;
     private bool isPlayingHeart = false;
 
+    //public bool isPresentationBuild = false;
+
     #endregion
 
     #region startupdate
@@ -429,7 +431,7 @@ public class GameManager : MonoBehaviour
     }
 
     // RESPAWN CHAQUE ENNEMI
-    private void RespawnEnemies()
+    public void RespawnEnemies()
     {
         //print("test-1");
         foreach (Enemy e in enemyList)
@@ -479,6 +481,11 @@ public class GameManager : MonoBehaviour
             return;
         }
         int check = -1;
+        //if(Input.GetKeyDown(KeyCode.P))
+        //{
+        //    isPresentationBuild = !isPresentationBuild;
+        //    print("presentation build" + isPresentationBuild);
+        //}
         if (Input.GetKeyDown(KeyCode.F1))
         {
             check = 0;
