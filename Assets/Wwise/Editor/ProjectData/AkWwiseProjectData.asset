@@ -17,13 +17,13 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 0f09be08c67b444d801925df6ed261ab
     GuidInternal: 
-    m_lastTime: -8586478090556059804
+    m_lastTime: -8586332301041687810
     List: []
   - PhysicalPath: Virtual Acoustics\Factory Reflect Acoustic Textures.wwu
     ParentPhysicalPath: 
     guid: 6b663d46a83ca54f8b4a5fef12b883f6
     GuidInternal: 
-    m_lastTime: -8586478090556059804
+    m_lastTime: -8586332301041627959
     List:
     - name: Acoustic_Banner
       guid: f2532d2fccda8e408b8898b1b52a26d6
@@ -184,7 +184,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 000bd2108454674da872242abd3f27b2
     GuidInternal: 
-    m_lastTime: -8586465241070330058
+    m_lastTime: -8586332312498953074
     List:
     - name: Bus_Rvb_Bunker_Court
       guid: 8d0d2cb3c0503b429126676a742c793f
@@ -208,23 +208,23 @@ MonoBehaviour:
       - ElementName: Bus_Rvb_Bunker_Large
         ObjectType: 1
       Path: Default Work Unit\Master Audio Bus\Bus_Rvb_Bunker_Large
-    - name: Bus_Rvb_NoSe
+    - name: Bus_Rvb_Conduit
       guid: 93b26309d4430c4b9503b7cc815a2bbe
-      id: 2627127340
+      id: 290670417
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
       - ElementName: Master Audio Bus
         ObjectType: 2
-      - ElementName: Bus_Rvb_NoSe
+      - ElementName: Bus_Rvb_Conduit
         ObjectType: 1
-      Path: Default Work Unit\Master Audio Bus\Bus_Rvb_NoSe
+      Path: Default Work Unit\Master Audio Bus\Bus_Rvb_Conduit
   BankWwu:
   - PhysicalPath: SoundBanks\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 9be18c9b3e129b45afc5545438e8f095
     GuidInternal: 
-    m_lastTime: -8586478090556259539
+    m_lastTime: -8586332301041986867
     List:
     - name: SoundBank_Ambiance
       guid: 8854f9c61e2d2a4e92003a96c7bdbc2b
@@ -267,161 +267,233 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 32b079668487154b81cd07153da3fac2
     GuidInternal: 
-    m_lastTime: -8586466176607896371
+    m_lastTime: -8586332312537648202
     List:
-    - name: Play_Blend_Dog_Leche
-      guid: f74549ea57eea04cb085e8968b0948c0
-      id: 1770086328
+    - name: Pause_Menu
+      guid: 2d04ea559b390d4982bc993be77411ab
+      id: 3422541661
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Blend_Dog_Leche
+      - ElementName: Pause_Menu
         ObjectType: 3
-      Path: Default Work Unit\Play_Blend_Dog_Leche
+      Path: Default Work Unit\Pause_Menu
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Blend_Dog_Mechant
-      guid: d1a3d833e897144c938fccfe3f0a7e51
-      id: 3169378355
+    - name: Play_AMP_COULOIR_00
+      guid: d44959569e53e74ea78e3a672829fdb2
+      id: 1283346483
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Blend_Dog_Mechant
+      - ElementName: Play_AMP_COULOIR_00
         ObjectType: 3
-      Path: Default Work Unit\Play_Blend_Dog_Mechant
+      Path: Default Work Unit\Play_AMP_COULOIR_00
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Blend_Dog_Respirations
-      guid: d6ee13137dcd194eaf03761d3a773374
-      id: 774611958
+    - name: Play_AMP_COULOIR_01
+      guid: c9561bcfe98f4c41a6b6d60aa439bb60
+      id: 1283346482
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Blend_Dog_Respirations
+      - ElementName: Play_AMP_COULOIR_01
         ObjectType: 3
-      Path: Default Work Unit\Play_Blend_Dog_Respirations
+      Path: Default Work Unit\Play_AMP_COULOIR_01
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_PlaceHolder_Footsteps_Concrete_Run
-      guid: ca1e93539ddb084aa20bc8e4167d688f
-      id: 1642811751
+    - name: Play_AMP_COULOIR_02
+      guid: 74d83aa5389519429e6be444456365c5
+      id: 1283346481
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_PlaceHolder_Footsteps_Concrete_Run
+      - ElementName: Play_AMP_COULOIR_02
         ObjectType: 3
-      Path: Default Work Unit\Play_PlaceHolder_Footsteps_Concrete_Run
+      Path: Default Work Unit\Play_AMP_COULOIR_02
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_PlaceHolder_Footsteps_Concrete_Walk
-      guid: a7d44c1a0609d143a3c9420ddbd0758d
-      id: 2800962443
+    - name: Play_AMP_COULOIR_03
+      guid: 5cadca47c9ae2a4ab94446f9b0b66f5b
+      id: 1283346480
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_PlaceHolder_Footsteps_Concrete_Walk
+      - ElementName: Play_AMP_COULOIR_03
         ObjectType: 3
-      Path: Default Work Unit\Play_PlaceHolder_Footsteps_Concrete_Walk
+      Path: Default Work Unit\Play_AMP_COULOIR_03
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Random_Dog_Grogne
-      guid: 3b8f2e277e923e46866ac212e29fbfd6
-      id: 50062681
+    - name: Play_AMP_COULOIR_04
+      guid: 4395fe144a094e42bf64a6109ebd985c
+      id: 1283346487
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Random_Dog_Grogne
+      - ElementName: Play_AMP_COULOIR_04
         ObjectType: 3
-      Path: Default Work Unit\Play_Random_Dog_Grogne
+      Path: Default Work Unit\Play_AMP_COULOIR_04
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Random_Dog_Loin
-      guid: 0b300fd62a322b41b6485579cad5c896
-      id: 1518046209
+    - name: Play_ELEVATOR_motor
+      guid: 91bada2c90e3034d99e44b6dbce2a2e6
+      id: 41792298
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Random_Dog_Loin
+      - ElementName: Play_ELEVATOR_motor
         ObjectType: 3
-      Path: Default Work Unit\Play_Random_Dog_Loin
+      Path: Default Work Unit\Play_ELEVATOR_motor
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Random_Dog_Pleurs
-      guid: f0acb5ea0e02b3489d987799e96747e0
-      id: 1264377072
+    - name: Play_Intro_Gamin
+      guid: f79f0892e789a0448558b076fa992ef5
+      id: 673245717
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Random_Dog_Pleurs
+      - ElementName: Play_Intro_Gamin
         ObjectType: 3
-      Path: Default Work Unit\Play_Random_Dog_Pleurs
+      Path: Default Work Unit\Play_Intro_Gamin
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Random_Dog_Presence
-      guid: 3bcbff1cd4ab794d963e1bedd5e9bec8
-      id: 976102044
+    - name: Play_Lampe_Couine
+      guid: acd4d5924b01504f8b1dbd9fd1347e39
+      id: 1080047243
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Random_Dog_Presence
+      - ElementName: Play_Lampe_Couine
         ObjectType: 3
-      Path: Default Work Unit\Play_Random_Dog_Presence
+      Path: Default Work Unit\Play_Lampe_Couine
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Random_Dog_Proche
-      guid: aae931524a07e943865b4a1b1effaa2e
-      id: 722217118
+    - name: Play_Led_Casse
+      guid: 67b7a6cf6225f44d8aae40525b95f8c4
+      id: 3464997795
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Random_Dog_Proche
+      - ElementName: Play_Led_Casse
         ObjectType: 3
-      Path: Default Work Unit\Play_Random_Dog_Proche
+      Path: Default Work Unit\Play_Led_Casse
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Random_Dog_Souffle
-      guid: b2438c07a9c243439d134f503a60de45
-      id: 3786730575
+    - name: Play_PORTE_MORT_GAMIN
+      guid: 6549040e8a8c064e941e27e6092e2c4b
+      id: 349354688
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Random_Dog_Souffle
+      - ElementName: Play_PORTE_MORT_GAMIN
         ObjectType: 3
-      Path: Default Work Unit\Play_Random_Dog_Souffle
+      Path: Default Work Unit\Play_PORTE_MORT_GAMIN
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Random_Pleurs_Aboie
-      guid: 508224c6f5d432458c51fbbb7a81b61f
-      id: 1638581206
+    - name: Play_PORTE_TOMBE_SEULE
+      guid: 60cbf36aeee313459b846208bdbbc665
+      id: 224909051
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Random_Pleurs_Aboie
+      - ElementName: Play_PORTE_TOMBE_SEULE
         ObjectType: 3
-      Path: Default Work Unit\Play_Random_Pleurs_Aboie
+      Path: Default Work Unit\Play_PORTE_TOMBE_SEULE
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: Play_Random_Pleurs_Triste
-      guid: e33c6e72b6a4474a8d2515e617147527
-      id: 3184546991
+    - name: Play_Random_Hole_Sound1
+      guid: d0127aaa98432048ae0d0db1406ce8db
+      id: 2283701181
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Random_Pleurs_Triste
+      - ElementName: Play_Random_Hole_Sound1
         ObjectType: 3
-      Path: Default Work Unit\Play_Random_Pleurs_Triste
+      Path: Default Work Unit\Play_Random_Hole_Sound1
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Random_Track2
+      guid: 1c01defe370e0c4594795098f85f2607
+      id: 1782064043
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Random_Track2
+        ObjectType: 3
+      Path: Default Work Unit\Play_Random_Track2
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Slider_Menu
+      guid: f7a849515527cc48a256e178c21bd17a
+      id: 2333168881
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Slider_Menu
+        ObjectType: 3
+      Path: Default Work Unit\Play_Slider_Menu
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Resume_All
+      guid: f5cbc8c34c3af9458936ca818fd1b0fe
+      id: 3679762312
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Resume_All
+        ObjectType: 3
+      Path: Default Work Unit\Resume_All
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_ELEVATOR_motor
+      guid: d08641314628264ba07640288ec297da
+      id: 1715083076
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Stop_ELEVATOR_motor
+        ObjectType: 3
+      Path: Default Work Unit\Stop_ELEVATOR_motor
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Random_Hole_Sound1
+      guid: dc9811e51ab09948b36b4d497c633121
+      id: 2794489655
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Stop_Random_Hole_Sound1
+        ObjectType: 3
+      Path: Default Work Unit\Stop_Random_Hole_Sound1
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Random_Track2
+      guid: 6f186d560ee5f44d85fdce8c940c4d26
+      id: 630505301
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Stop_Random_Track2
+        ObjectType: 3
+      Path: Default Work Unit\Stop_Random_Track2
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
@@ -429,7 +501,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 5ce906706e67d44eb9a503be160051a1
     GuidInternal: 
-    m_lastTime: -8586466894480613640
+    m_lastTime: -8586332312537618277
     List:
     - name: Play_Blend_Amb_Aiki1
       guid: 0ec12d9538abd7489dc12b5a9e185313
@@ -635,31 +707,1156 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
+    - name: Play_Random_Amb_Elec
+      guid: 107a91d945eb434c8e9acd87486812e8
+      id: 4071760066
+      PathAndIcons:
+      - ElementName: Events_Ambiance
+        ObjectType: 12
+      - ElementName: Play_Random_Amb_Elec
+        ObjectType: 3
+      Path: Events_Ambiance\Play_Random_Amb_Elec
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Random_Amb_Piano
+      guid: 9d0f960107cc62419b2436b87bd61067
+      id: 1743601628
+      PathAndIcons:
+      - ElementName: Events_Ambiance
+        ObjectType: 12
+      - ElementName: Play_Random_Amb_Piano
+        ObjectType: 3
+      Path: Events_Ambiance\Play_Random_Amb_Piano
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Random_Track1
+      guid: 22c18e561acdcd49b2b7f66d0567d2a2
+      id: 1782064040
+      PathAndIcons:
+      - ElementName: Events_Ambiance
+        ObjectType: 12
+      - ElementName: Play_Random_Track1
+        ObjectType: 3
+      Path: Events_Ambiance\Play_Random_Track1
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Random_Track1
+      guid: e13d6233abfcf946821ad3d798942ec3
+      id: 630505302
+      PathAndIcons:
+      - ElementName: Events_Ambiance
+        ObjectType: 12
+      - ElementName: Stop_Random_Track1
+        ObjectType: 3
+      Path: Events_Ambiance\Stop_Random_Track1
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+  - PhysicalPath: Events\Events_Dog.wwu
+    ParentPhysicalPath: 
+    guid: 79b495727f99e04ea9d051a65e908e66
+    GuidInternal: 
+    m_lastTime: -8586332312537618277
+    List:
+    - name: Play_Dog_1
+      guid: 72bdaa02e444474ea118374c05ae3d1f
+      id: 2935214688
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_1
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_1
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_10
+      guid: ae287476a06f5a458f675a2c77b9a18f
+      id: 3386125584
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_10
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_10
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_11
+      guid: 5afaeccacb939140acc97f547fc59696
+      id: 3386125585
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_11
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_11
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_12
+      guid: e03def82ed8d494b9bccfbea93f9da98
+      id: 3386125586
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_12
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_12
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_13
+      guid: 673535176c161e47adc4b06fac32c302
+      id: 3386125587
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_13
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_13
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_14
+      guid: c068c230703c1a4389568bdb00598c3d
+      id: 3386125588
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_14
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_14
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_15
+      guid: 7d855b80d7c45841887c5cc87424457e
+      id: 3386125589
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_15
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_15
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_2
+      guid: f1b063c788712140858a377493e5856d
+      id: 2935214691
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_2
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_2
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_3
+      guid: 2fa0979708a3614d9b0bafbae2e6afe4
+      id: 2935214690
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_3
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_3
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_4
+      guid: 7b42e9a8e7c48644967e9ba5e0dd8cd2
+      id: 2935214693
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_4
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_4
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_5
+      guid: 71946cd8134eac4d8564a33e06ef2158
+      id: 2935214692
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_5
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_5
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_6
+      guid: 7f3883a8dd50c742af4822863fbd8341
+      id: 2935214695
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_6
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_6
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_7
+      guid: 82b85d150208dc4698c3509c874b573b
+      id: 2935214694
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_7
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_7
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_8
+      guid: 27296dfd9a500644988fdc56c648bf03
+      id: 2935214697
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_8
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_8
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Dog_9
+      guid: 70bef03ce22da3498d711edc027827b0
+      id: 2935214696
+      PathAndIcons:
+      - ElementName: Events_Dog
+        ObjectType: 12
+      - ElementName: Play_Dog_9
+        ObjectType: 3
+      Path: Events_Dog\Play_Dog_9
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+  - PhysicalPath: Events\Events_Foley.wwu
+    ParentPhysicalPath: 
+    guid: 0fea3bb38d7ac34cabe0ffe0c6e5cd79
+    GuidInternal: 
+    m_lastTime: -8586332312537598335
+    List:
+    - name: Play_Amp_Off
+      guid: 578cd13ff71ee44fb4acd6fef2d9ad9a
+      id: 849396830
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Amp_Off
+        ObjectType: 3
+      Path: Events_Foley\Play_Amp_Off
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Amp_On
+      guid: 6a24c008d9287041a8f671433a1280b6
+      id: 2241179104
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Amp_On
+        ObjectType: 3
+      Path: Events_Foley\Play_Amp_On
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Bipede_Eclaire
+      guid: a09105800a655e42abce39253341a381
+      id: 3463346645
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Bipede_Eclaire
+        ObjectType: 3
+      Path: Events_Foley\Play_Bipede_Eclaire
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Bipede_Footsteps
+      guid: 9f5cb3e7daf702419b9f4965b9781223
+      id: 780232393
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Bipede_Footsteps
+        ObjectType: 3
+      Path: Events_Foley\Play_Bipede_Footsteps
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Bipede_Presence
+      guid: 63659ff722503d4b809ee703250daccf
+      id: 3624899531
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Bipede_Presence
+        ObjectType: 3
+      Path: Events_Foley\Play_Bipede_Presence
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Cri_Araignee
+      guid: 3fdf9edbfead3544b7bc7057fe789518
+      id: 1408263779
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Cri_Araignee
+        ObjectType: 3
+      Path: Events_Foley\Play_Cri_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Explo_Porte_Deb
+      guid: 6b5eca89d845624cb4de46092414b1a3
+      id: 1903348511
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Explo_Porte_Deb
+        ObjectType: 3
+      Path: Events_Foley\Play_Explo_Porte_Deb
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Explo_Porte_Fin
+      guid: e6365488a3cad148b4ad05d03b653bdb
+      id: 1768833497
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Explo_Porte_Fin
+        ObjectType: 3
+      Path: Events_Foley\Play_Explo_Porte_Fin
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Footsteps_All
+      guid: 89bb2e18f72afa409358816d5dafe155
+      id: 2869286335
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Footsteps_All
+        ObjectType: 3
+      Path: Events_Foley\Play_Footsteps_All
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Footsteps_Araignee
+      guid: 10a7c2cc574b97429c74fa9c5ffc5905
+      id: 1438206856
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Footsteps_Araignee
+        ObjectType: 3
+      Path: Events_Foley\Play_Footsteps_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Footsteps_Araignee_Metal
+      guid: 69b3fa8e64ccc549af3ac44b0c01130a
+      id: 1281439284
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Footsteps_Araignee_Metal
+        ObjectType: 3
+      Path: Events_Foley\Play_Footsteps_Araignee_Metal
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Grillage_Fracas
+      guid: 7c342417aa326b498045731fcb2337f9
+      id: 381656526
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Grillage_Fracas
+        ObjectType: 3
+      Path: Events_Foley\Play_Grillage_Fracas
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Grille_Tombe
+      guid: a8f17dad34b2ba4b92fd0272596bc871
+      id: 2711398473
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Grille_Tombe
+        ObjectType: 3
+      Path: Events_Foley\Play_Grille_Tombe
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Grince_All
+      guid: 15def41166f47b4aa53aa2e8b08f4b6d
+      id: 1694328744
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Grince_All
+        ObjectType: 3
+      Path: Events_Foley\Play_Grince_All
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Mag_Off
+      guid: aa892decdbc440429d10f581903e6e11
+      id: 703549513
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Mag_Off
+        ObjectType: 3
+      Path: Events_Foley\Play_Mag_Off
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Mag_On
+      guid: 848963082cd97e4ca62ffcd53c1e510b
+      id: 2362837117
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Mag_On
+        ObjectType: 3
+      Path: Events_Foley\Play_Mag_On
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Mort_Chien
+      guid: 8ff84e64785bc04ba85fffd280204d93
+      id: 3548374506
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Mort_Chien
+        ObjectType: 3
+      Path: Events_Foley\Play_Mort_Chien
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Mort_Gamin
+      guid: 059df3eafd949141a5db15bb0d0af9fe
+      id: 364295649
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Mort_Gamin
+        ObjectType: 3
+      Path: Events_Foley\Play_Mort_Gamin
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Pass_Araignee
+      guid: 80bdd02d18d8324ebfbca15432668e51
+      id: 462547106
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Pass_Araignee
+        ObjectType: 3
+      Path: Events_Foley\Play_Pass_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Porte_Glisse
+      guid: 62e89d96febbbb489f3f7232df70780d
+      id: 734620570
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Porte_Glisse
+        ObjectType: 3
+      Path: Events_Foley\Play_Porte_Glisse
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Presence_Araignee
+      guid: 6b7c3d2aa6f8f74fad5841fc96ca7a04
+      id: 2000978014
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Presence_Araignee
+        ObjectType: 3
+      Path: Events_Foley\Play_Presence_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Projo_Off
+      guid: abba9e806cf9ee40be81b40681c75864
+      id: 1082885504
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Projo_Off
+        ObjectType: 3
+      Path: Events_Foley\Play_Projo_Off
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Projo_On
+      guid: 27b8c6944108bd41bc409faaf58e623f
+      id: 1513302602
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Projo_On
+        ObjectType: 3
+      Path: Events_Foley\Play_Projo_On
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Random_Screamer
+      guid: 586ed3110dee984088b836f31083b1ff
+      id: 207018228
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Random_Screamer
+        ObjectType: 3
+      Path: Events_Foley\Play_Random_Screamer
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Respi_Bipede
+      guid: 3591f9502a918846bb2f901894109f34
+      id: 2446343271
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Respi_Bipede
+        ObjectType: 3
+      Path: Events_Foley\Play_Respi_Bipede
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Reveil_Araignee
+      guid: 69aa6b0717c548489113dce153d8cff0
+      id: 3908284070
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Play_Reveil_Araignee
+        ObjectType: 3
+      Path: Events_Foley\Play_Reveil_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Bipede_Eclaire
+      guid: 1ec4a57c7efd7046adf3d5efe6f90558
+      id: 410329459
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Bipede_Eclaire
+        ObjectType: 3
+      Path: Events_Foley\Stop_Bipede_Eclaire
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Bipede_Footsteps
+      guid: d5bb0ba8f33ed140ac2ff45fab2f17e3
+      id: 333003627
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Bipede_Footsteps
+        ObjectType: 3
+      Path: Events_Foley\Stop_Bipede_Footsteps
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Bipede_Presence
+      guid: f8943cd2996f1842b60cbb5dc2b6eaa8
+      id: 3236908293
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Bipede_Presence
+        ObjectType: 3
+      Path: Events_Foley\Stop_Bipede_Presence
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Footsteps_Araignee
+      guid: 4a86cf37a503554ba9329a036f65d511
+      id: 647600850
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Footsteps_Araignee
+        ObjectType: 3
+      Path: Events_Foley\Stop_Footsteps_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Footsteps_Araignee_Metal
+      guid: 3fae8d1715f74548838c78c9a1dd3a77
+      id: 2625399770
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Footsteps_Araignee_Metal
+        ObjectType: 3
+      Path: Events_Foley\Stop_Footsteps_Araignee_Metal
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Footsteps_Araignee_Metal_Fade
+      guid: f9a9ea9310fe7142bfdd2f7e45d19904
+      id: 208871103
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Footsteps_Araignee_Metal_Fade
+        ObjectType: 3
+      Path: Events_Foley\Stop_Footsteps_Araignee_Metal_Fade
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Grince_All
+      guid: 7395a73cd898cb478388f74367ff0a8f
+      id: 2205434594
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Grince_All
+        ObjectType: 3
+      Path: Events_Foley\Stop_Grince_All
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Porte_Glisse
+      guid: 219838565063ee449d10addc35b377cd
+      id: 160489192
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Porte_Glisse
+        ObjectType: 3
+      Path: Events_Foley\Stop_Porte_Glisse
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Presence_Araignee
+      guid: 0f142c3101d07c458d6a68fe152a0972
+      id: 4233534680
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Presence_Araignee
+        ObjectType: 3
+      Path: Events_Foley\Stop_Presence_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Presence_Araignee_Fade
+      guid: ff5a3487b7df0945b511ece10051fc68
+      id: 1120432081
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Presence_Araignee_Fade
+        ObjectType: 3
+      Path: Events_Foley\Stop_Presence_Araignee_Fade
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Respi_Bipede
+      guid: b00d48496f5fa842ba76b73f7f32c50f
+      id: 2305407205
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Respi_Bipede
+        ObjectType: 3
+      Path: Events_Foley\Stop_Respi_Bipede
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Reveil_Araignee
+      guid: d579285885a2aa40aa7ef5504644e441
+      id: 4122942456
+      PathAndIcons:
+      - ElementName: Events_Foley
+        ObjectType: 12
+      - ElementName: Stop_Reveil_Araignee
+        ObjectType: 3
+      Path: Events_Foley\Stop_Reveil_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+  - PhysicalPath: Events\Events_SD.wwu
+    ParentPhysicalPath: 
+    guid: 670164c78b1ba04f87d36ffcb0d170b2
+    GuidInternal: 
+    m_lastTime: -8586332312537588352
+    List:
+    - name: Play_Blend_Stinger_Araignee
+      guid: f7a12dd2d02dc24db20968033ce11b2d
+      id: 4004713453
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_Blend_Stinger_Araignee
+        ObjectType: 3
+      Path: Events_SD\Play_Blend_Stinger_Araignee
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_CheckBox
+      guid: 8e46837205b7114792da4447afe216d6
+      id: 1216194577
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_CheckBox
+        ObjectType: 3
+      Path: Events_SD\Play_CheckBox
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_LIGHT_CHARGE
+      guid: 81b1e590ed9d4547891f1d2338b583ef
+      id: 2641834437
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_LIGHT_CHARGE
+        ObjectType: 3
+      Path: Events_SD\Play_LIGHT_CHARGE
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_LIGHT_OK
+      guid: 0976e3da062aaf42835e6ba6687954c7
+      id: 816711003
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_LIGHT_OK
+        ObjectType: 3
+      Path: Events_SD\Play_LIGHT_OK
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_LIGHT_OK_ASC
+      guid: 094d9cfc9b09a24681cf10194e8d5ea3
+      id: 2823482581
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_LIGHT_OK_ASC
+        ObjectType: 3
+      Path: Events_SD\Play_LIGHT_OK_ASC
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Random_CoursePoursuite
+      guid: d6c1b31a65c60440a0eb1e3f443ce332
+      id: 429406993
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_Random_CoursePoursuite
+        ObjectType: 3
+      Path: Events_SD\Play_Random_CoursePoursuite
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Random_Heart
+      guid: 2224bbfe95b8eb4a9db713e28d87902c
+      id: 2327416314
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_Random_Heart
+        ObjectType: 3
+      Path: Events_SD\Play_Random_Heart
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Random_Rythme_Bass
+      guid: 8d13b1009bf0db42ac47f9aaf2ede4ae
+      id: 3390956123
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_Random_Rythme_Bass
+        ObjectType: 3
+      Path: Events_SD\Play_Random_Rythme_Bass
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Play_Seq_Motor_Asc
+      guid: f0f85dc470e408438ccb1680faea3328
+      id: 1090000011
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Play_Seq_Motor_Asc
+        ObjectType: 3
+      Path: Events_SD\Play_Seq_Motor_Asc
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_LIGHT_CHARGE
+      guid: 82a62ab9cb5d764da49634c9a737ce5b
+      id: 1553934679
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Stop_LIGHT_CHARGE
+        ObjectType: 3
+      Path: Events_SD\Stop_LIGHT_CHARGE
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Random_CoursePoursuite
+      guid: a2f515584f1f8148ae6030226ddee0e5
+      id: 2019016947
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Stop_Random_CoursePoursuite
+        ObjectType: 3
+      Path: Events_SD\Stop_Random_CoursePoursuite
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Random_CoursePoursuite_01
+      guid: adb5234f4825264ca68c77095f44b738
+      id: 816851111
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Stop_Random_CoursePoursuite_01
+        ObjectType: 3
+      Path: Events_SD\Stop_Random_CoursePoursuite_01
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Random_Heart
+      guid: 6ce86effcc08694d85c320c2957e1608
+      id: 1262701748
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Stop_Random_Heart
+        ObjectType: 3
+      Path: Events_SD\Stop_Random_Heart
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Random_Rythme_Bass
+      guid: 8fa41754c721e644a0bd245b689a4ee3
+      id: 2561089493
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Stop_Random_Rythme_Bass
+        ObjectType: 3
+      Path: Events_SD\Stop_Random_Rythme_Bass
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: Stop_Seq_Motor_Asc
+      guid: e3772cb28274704b8af7f4dec4cd2c34
+      id: 2729810373
+      PathAndIcons:
+      - ElementName: Events_SD
+        ObjectType: 12
+      - ElementName: Stop_Seq_Motor_Asc
+        ObjectType: 3
+      Path: Events_SD\Stop_Seq_Motor_Asc
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 5b5c669b568db84cafc769953c88f146
     GuidInternal: 
-    m_lastTime: -8586467041266215460
+    m_lastTime: -8586332312537568416
     List:
-    - name: position_gd
+    - name: DISTANCE_BIPEDE
+      guid: cc4a8f84c1490b47b93d0ba77a8e4faa
+      id: 3434755080
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: DISTANCE_BIPEDE
+        ObjectType: 13
+      Path: Default Work Unit\DISTANCE_BIPEDE
+    - name: DISTANCE_SPIDER
+      guid: cdf2a96dda1ddf4a85597fceded26cdf
+      id: 3629271448
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: DISTANCE_SPIDER
+        ObjectType: 13
+      Path: Default Work Unit\DISTANCE_SPIDER
+    - name: Lancement_ascenseur
+      guid: 056c812e5ca9cb469b7970b9d7067d8f
+      id: 1140486204
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Lancement_ascenseur
+        ObjectType: 13
+      Path: Default Work Unit\Lancement_ascenseur
+    - name: Pitch_Load_Light
+      guid: 065b00619194cd4fb2a6476e9127373d
+      id: 2090709517
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Pitch_Load_Light
+        ObjectType: 13
+      Path: Default Work Unit\Pitch_Load_Light
+    - name: Porte_RTPC_volume
+      guid: 29813df606c0c44fb3e8c654a21cb555
+      id: 26916778
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Porte_RTPC_volume
+        ObjectType: 13
+      Path: Default Work Unit\Porte_RTPC_volume
+    - name: position_gd_0
       guid: 1e0b22eb8983234698e37944a27d3d68
-      id: 995089118
+      id: 3066694415
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: position_gd
+      - ElementName: position_gd_0
         ObjectType: 13
-      Path: Default Work Unit\position_gd
-    - name: position_relative_volume
+      Path: Default Work Unit\position_gd_0
+    - name: position_gd_1
+      guid: 57263cf81aaabe41a432d1bf470b4a6c
+      id: 3066694414
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_1
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_1
+    - name: position_gd_10
+      guid: 2e6fd86487ed744985cc895f048f3a0f
+      id: 3457115962
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_10
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_10
+    - name: position_gd_11
+      guid: 38627e8665afa941bc015d7a5dbd9137
+      id: 3457115963
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_11
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_11
+    - name: position_gd_2
+      guid: cf5ccada442f1a45b804b65b925a5acb
+      id: 3066694413
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_2
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_2
+    - name: position_gd_3
+      guid: ec94d156fe736d43825a57902a418035
+      id: 3066694412
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_3
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_3
+    - name: position_gd_4
+      guid: ffe28bc9ce35814fab04ecf992914e6d
+      id: 3066694411
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_4
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_4
+    - name: position_gd_5
+      guid: 30012be6a5a67748868453daf77b0561
+      id: 3066694410
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_5
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_5
+    - name: position_gd_6
+      guid: 57198a62b9fd27458ef0914da0feb62e
+      id: 3066694409
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_6
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_6
+    - name: position_gd_7
+      guid: 0e1baee49de323409e477237e6643aa0
+      id: 3066694408
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_7
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_7
+    - name: position_gd_8
+      guid: 8706d905eb02764182b176a5c44a21f1
+      id: 3066694407
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_8
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_8
+    - name: position_gd_9
+      guid: 94f481a3fc94c648833eb7d9464d5620
+      id: 3066694406
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_gd_9
+        ObjectType: 13
+      Path: Default Work Unit\position_gd_9
+    - name: position_relative_volume_0
       guid: 7f655bc07d579b478a860d82f5694dd2
-      id: 2145209116
+      id: 3704061217
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: position_relative_volume
+      - ElementName: position_relative_volume_0
         ObjectType: 13
-      Path: Default Work Unit\position_relative_volume
+      Path: Default Work Unit\position_relative_volume_0
+    - name: position_relative_volume_1
+      guid: c547852588f3b24aa656842f1ccf31d1
+      id: 3704061216
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_1
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_1
+    - name: position_relative_volume_10
+      guid: e8f8a202b303c74296a617de88a5b4e0
+      id: 2919889232
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_10
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_10
+    - name: position_relative_volume_11
+      guid: 85132fce75bb4944a57e612ac2a9221f
+      id: 2919889233
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_11
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_11
+    - name: position_relative_volume_2
+      guid: e07851f7dcd09b4386e67ad13be7fe03
+      id: 3704061219
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_2
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_2
+    - name: position_relative_volume_3
+      guid: 6308bd652509ea4eb2826b1ea6aa4214
+      id: 3704061218
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_3
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_3
+    - name: position_relative_volume_4
+      guid: bad0a04eb677fa449df6f50255458565
+      id: 3704061221
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_4
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_4
+    - name: position_relative_volume_5
+      guid: ab69799320dc454ca4071480be51cf63
+      id: 3704061220
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_5
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_5
+    - name: position_relative_volume_6
+      guid: 3fb3f5a8d266b8429edc7ed32fb7987a
+      id: 3704061223
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_6
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_6
+    - name: position_relative_volume_7
+      guid: 5f46be02a07ae94d978d959505be1443
+      id: 3704061222
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_7
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_7
+    - name: position_relative_volume_8
+      guid: 8c37d2bf2f0e7046b540fddb808c6a35
+      id: 3704061225
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_8
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_8
+    - name: position_relative_volume_9
+      guid: 50ff4cb1f85c8747b3500bafc03c44fa
+      id: 3704061224
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: position_relative_volume_9
+        ObjectType: 13
+      Path: Default Work Unit\position_relative_volume_9
     - name: position_verticale_volume
       guid: 626bb1e8644a154ead0ec9dbfab0c52f
       id: 2731195535
@@ -678,11 +1875,20 @@ MonoBehaviour:
       - ElementName: Walk_Run
         ObjectType: 13
       Path: Default Work Unit\Walk_Run
+    - name: Wet_Rvb_Tuyau
+      guid: cd4f1c86c9d1a247b460990d9af32a01
+      id: 1834530333
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Wet_Rvb_Tuyau
+        ObjectType: 13
+      Path: Default Work Unit\Wet_Rvb_Tuyau
   - PhysicalPath: Game Parameters\Factory SoundSeed Air Game Syncs.wwu
     ParentPhysicalPath: 
     guid: 5577163b42fb8b4598bf96f557afb3b9
     GuidInternal: 
-    m_lastTime: -8586478090750410985
+    m_lastTime: -8586332312537568416
     List:
     - name: SS_Air_Fear
       guid: 59062ef746431c4ea1b1dab46a05101e
@@ -778,7 +1984,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 97bdcb0b5177774a85bb6ac940f8cc3f
     GuidInternal: 
-    m_lastTime: -8586478090750230707
+    m_lastTime: -8586332312537498599
     List:
     - name: Density_FA_SSGrain
       guid: 9ef2b363f3048748ba1a4d7694644b24
@@ -838,7 +2044,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 047b3402d4d8e84c87d260fb49a0b40d
     GuidInternal: 
-    m_lastTime: -8586468782464653474
+    m_lastTime: -8586332312537498599
     List:
     - name: Master_Volume_Slider
       guid: 05c86146263c7844a44e098a680cff74
@@ -863,26 +2069,101 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 6154cb3ef7dd2f4c83e6539fd1edbb6b
     GuidInternal: 
-    m_lastTime: -8586478090556179670
+    m_lastTime: -8586332301041857355
     List: []
   SwitchWwu:
   - PhysicalPath: Switches\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 336370adb250ba4298c51b42efced40a
     GuidInternal: 
-    m_lastTime: -8586478090556139724
-    List: []
+    m_lastTime: -8586332301041777567
+    List:
+    - name: Allure
+      guid: 60c3662c87dfc4459f397e9e1a273996
+      id: 1261041928
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Allure
+        ObjectType: 11
+      Path: Default Work Unit\Allure
+      values:
+      - name: Fall
+        guid: 4623324117f07942922679d726fdc2e9
+        id: 2512384458
+        PathAndIcons:
+        - ElementName: Fall
+          ObjectType: 10
+      - name: Run
+        guid: 387d1394c0f3d34489c9a5ab25d041a4
+        id: 712161704
+        PathAndIcons:
+        - ElementName: Run
+          ObjectType: 10
+      - name: Walk
+        guid: 846976999f7b6a4d8e5bf979e104e5cf
+        id: 2108779966
+        PathAndIcons:
+        - ElementName: Walk
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: Surface
+      guid: c56f428d34692b459315b1e6048eac46
+      id: 1834394558
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Surface
+        ObjectType: 11
+      Path: Default Work Unit\Surface
+      values:
+      - name: Concrete
+        guid: 3663dc134e8b724b9964b9987ba44ab7
+        id: 841620460
+        PathAndIcons:
+        - ElementName: Concrete
+          ObjectType: 10
+      - name: Metal_Ascenseur
+        guid: c9e80199dea58d4480c8eb7b832b6ee0
+        id: 403469204
+        PathAndIcons:
+        - ElementName: Metal_Ascenseur
+          ObjectType: 10
+      - name: Metal_Casier
+        guid: 9d6c681caf30ff4a836269f8ba3fd32e
+        id: 1832732788
+        PathAndIcons:
+        - ElementName: Metal_Casier
+          ObjectType: 10
+      - name: Metal_Conduit
+        guid: 70d44e9c50a0884eadd134367891867d
+        id: 1814516397
+        PathAndIcons:
+        - ElementName: Metal_Conduit
+          ObjectType: 10
+      - name: Water
+        guid: 407399788de2074298e5a9ecd1dfb7c6
+        id: 2654748154
+        PathAndIcons:
+        - ElementName: Water
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
   TriggerWwu:
   - PhysicalPath: Triggers\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: bf10625648dabd4a8eb92e11e351e336
     GuidInternal: 
-    m_lastTime: -8586478090556099779
+    m_lastTime: -8586332301041727678
     List: []
   ExpandedItems:
   - /Wwise_DontLook
-  - /Wwise_DontLook/Auxiliary Busses
-  - /Wwise_DontLook/Auxiliary Busses/Default Work Unit
-  - /Wwise_DontLook/Auxiliary Busses/Default Work Unit/Master Audio Bus
+  - /Wwise_DontLook/Events
+  - /Wwise_DontLook/Events/Default Work Unit
+  - /Wwise_DontLook/Events/Events_Foley
+  - /Wwise_DontLook/Events/Events_SD
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

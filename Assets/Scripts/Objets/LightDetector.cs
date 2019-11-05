@@ -7,16 +7,15 @@ public class LightDetector : Objet
     [SerializeField] public Objet[] targets =null;
     [SerializeField] private float delayActivate = 1.5f;
     [SerializeField] public float dechargeRate = 1.0f;
-    [SerializeField] private BlinkingLight blinkLight = null;
+    [SerializeField] protected BlinkingLight blinkLight = null;
     [SerializeField] private string playChargingSound = null;
     [SerializeField] private string StopChargingSound = null;
     [SerializeField] private string activateSound = null;
     [SerializeField] private bool desactivate = false;
-    [SerializeField] private bool scriptSpider = false;
-    [SerializeField] private GameObject[] brokenFeature;
+    //[SerializeField] private GameObject[] brokenFeature;
     private MeshRenderer model;
 
-    bool broken = false;
+    [HideInInspector] public bool broken = false;
 
     bool wasLooked = false;
     [HideInInspector] public bool isLooked = false;
@@ -74,7 +73,8 @@ public class LightDetector : Objet
                 Activate();
             }
         }
-        else if (!scriptSpider)
+        //else if (!scriptSpider)
+        else
         {
             if (wasLooked)
             {
@@ -105,7 +105,6 @@ public class LightDetector : Objet
     {
         if (isActivated && !desactivate) return;
         base.Activate();
-        if (scriptSpider) 
         if (isBroken)
         {
             blinkLight.enabled = true;
@@ -125,28 +124,6 @@ public class LightDetector : Objet
         }
         isActivated = true;
         //print("Object activated");
-    }
-
-    public override void Break()
-    {
-        broken = true;
-        foreach (GameObject g in brokenFeature)
-        {
-            g.SetActive(true);
-        }
-        blinkLight.Break();
-        base.Break();
-    }
-
-    public override void Fix()
-    {
-        broken = false;
-        foreach (GameObject g in brokenFeature)
-        {
-            g.SetActive(false);
-        }
-        blinkLight.Fix();
-        base.Fix();
     }
 
     public override void Reset()

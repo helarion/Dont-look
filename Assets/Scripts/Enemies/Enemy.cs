@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
     public bool isCountingEndChase = false; //if the monster cannot reach the player anymore
 
     [Header("Sound")]
-    private bool hasPlayedChase = false; //if the chase amb has been played
+    protected bool hasPlayedChase = false; //if the chase amb has been played
     [HideInInspector] public bool hasPlayedLook = false; //if the look sound has been played
     // wwise events
     [SerializeField] public string ChaseSoundPlay; //play monster sounds when chasing
@@ -43,8 +43,8 @@ public class Enemy : MonoBehaviour
 
     [Header("Gamobjects")]
     [SerializeField] public Transform[] spawnZones=null ; //list of spawn zones
-    [SerializeField] private Objet[] scriptedObjectsActivation; //if spider needs to activate objets when start to chase
-    [SerializeField] private LightDetector scriptedLampActivation; //if spider needs to activate lightdetector when start to chase
+    //[SerializeField] private Objet[] scriptedObjectsActivation; //if spider needs to activate objets when start to chase
+   // [SerializeField] private LightDetector scriptedLampActivation; //if spider needs to activate lightdetector when start to chase
     [SerializeField] public float spawnDistanceFromPlayer = 10.0f;
 
     [HideInInspector] public Animator animator;
@@ -133,10 +133,10 @@ public class Enemy : MonoBehaviour
             StopChaseSounds();
             if (delete && player.GetIsHidden())
             {
-                foreach(Objet o in scriptedObjectsActivation)
-                {
-                    o.Activate();
-                }
+                //foreach(Objet o in scriptedObjectsActivation)
+                //{
+                //    o.Activate();
+                //}
                 GameManager.instance.DeleteEnemyFromList(this);
                 Destroy(gameObject);
             }
@@ -166,7 +166,7 @@ public class Enemy : MonoBehaviour
             GameManager.instance.ShakeScreen(lookShakeTime, lookShakeIntensity);
             if (!hasPlayedLook)
             {
-                if (scriptedLampActivation != null) scriptedLampActivation.ForceLit();
+                //if (scriptedLampActivation != null) scriptedLampActivation.ForceLit();
                 AkSoundEngine.PostEvent(LookSound, gameObject);
                 AkSoundEngine.PostEvent(lookSoundScream, gameObject);
                 hasPlayedLook = true;

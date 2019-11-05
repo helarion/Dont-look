@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class SpiderBehavior : Enemy
 {
     [SerializeField] private float delaySpot = 1;
-    [SerializeField] private bool clickToSetDestination = false;
+    //[SerializeField] private bool clickToSetDestination = false;
     [SerializeField] private float malusSpeedStart = 2;
     [SerializeField] private float malusStartDuration = 2;
     [SerializeField] private bool isChangingPlaces = false;
@@ -98,15 +98,15 @@ public class SpiderBehavior : Enemy
         }
     }
 
-    private void DebugPath()
-    {
-        if (Input.GetMouseButtonDown(0) && clickToSetDestination)
-        {
-            Vector3 pos = player.GetLookAt();
-            MoveTo(pos);
-            print(pos);
-        }
-    }
+    //private void DebugPath()
+    //{
+    //    if (Input.GetMouseButtonDown(0) && clickToSetDestination)
+    //    {
+    //        Vector3 pos = player.GetLookAt();
+    //        MoveTo(pos);
+    //        print(pos);
+    //    }
+    //}
 
     public void FinishedTransition()
     {
