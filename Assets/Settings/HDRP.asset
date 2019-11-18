@@ -20,8 +20,8 @@ MonoBehaviour:
     enableShadow: 1
     enableContactShadows: 0
     enableShadowMask: 1
-    enableSSR: 0
-    enableSSAO: 0
+    enableSSR: 1
+    enableSSAO: 1
     enableSubsurfaceScattering: 1
     enableTransmission: 1
     enableAtmosphericScattering: 1
@@ -124,7 +124,7 @@ MonoBehaviour:
     enableMotionVectors: 1
     enableObjectMotionVectors: 1
     enableDecals: 1
-    enableRoughRefraction: 0
+    enableRoughRefraction: 1
     enableTransparentPostpass: 1
     enableDistortion: 0
     enablePostprocess: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
       cookieTexArraySize: 16
       pointCookieSize: 128
       cubeCookieTexArraySize: 16
-      planarReflectionProbeCacheSize: 2
+      planarReflectionProbeCacheSize: 1
       planarReflectionTextureSize: 1024
       reflectionProbeCacheSize: 64
       reflectionCubemapSize: 256
@@ -193,12 +193,12 @@ MonoBehaviour:
       maxShadowRequests: 128
       shadowMapsDepthBits: 32
       useDynamicViewportRescale: 1
-      shadowQuality: 0
+      shadowQuality: 1
     decalSettings:
       drawDistance: 30
       atlasWidth: 4096
       atlasHeight: 4096
-      perChannelMask: 0
+      perChannelMask: 1
   allowShaderVariantStripping: 1
   enableSRPBatcher: 1
   enableVariantStrippingLog: 0

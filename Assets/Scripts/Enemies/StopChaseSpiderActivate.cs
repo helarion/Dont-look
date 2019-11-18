@@ -8,7 +8,7 @@ public class StopChaseSpiderActivate : SpiderBehavior
 
     public override void StopChase()
     {
-        if(hasPlayedChase)
+        if(GameManager.instance.player.getIsAlive() && hasPlayedChase)
         {
             foreach (Objet o in listObjetToActivate)
             {

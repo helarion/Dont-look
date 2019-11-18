@@ -100,7 +100,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 2
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -410,19 +410,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2300004, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}
     - target: {fileID: 2300006, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}
-    - target: {fileID: 2300008, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
+    - target: {fileID: 2300004, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}
     - target: {fileID: 2300010, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}
+    - target: {fileID: 2300008, guid: 5bd151084142dc94ab8948b1fc46f33f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 29815a8093f0fcb4f9b5395e3b24f346, type: 2}

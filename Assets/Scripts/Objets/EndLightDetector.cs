@@ -13,6 +13,13 @@ public class EndLightDetector : ContiniousLightDetector
     [SerializeField] float newZ = 2.0f;
     [SerializeField] float cinematicBarsTime= 1.5f;
     [SerializeField] float cinematicBarsSize = 2;
+    [SerializeField] SpiderBehavior spider5;
+
+    public override void Update()
+    {
+        if (spider5 != null && spider5.isChasing) return;
+        base.Update();
+    }
 
     public override void LookFunction()
     {

@@ -512,6 +512,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4463680673750093304, guid: e8ba25fd81a62d5469ded72c83788a8d,
+        type: 3}
+      propertyPath: data.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 6eabbb689ae694f4095ececbbdb94c8e,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8ba25fd81a62d5469ded72c83788a8d, type: 3}
 --- !u!1 &468664575
@@ -1035,7 +1041,7 @@ MonoBehaviour:
   scene: {fileID: 2106245322}
   logos: {fileID: 1698272753}
   fadeImg: {fileID: 161030004}
-  nextScene: 3
+  nextScene: 2
   playBreathSound: Play_Respi_Bipede
   stopBreathSound: Stop_Respi_Bipede
 --- !u!114 &942638198
