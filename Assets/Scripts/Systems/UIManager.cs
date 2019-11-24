@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider volumeControl;
     [SerializeField] private Slider brightnessControl;
     [SerializeField] private Toggle toggleTracker;
+    [SerializeField] private Toggle toggleCursor;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private float waitBeforeDeath=5;
     [SerializeField] private float brightnessMin = -1.5f;
@@ -79,10 +80,16 @@ public class UIManager : MonoBehaviour
         AkSoundEngine.SetRTPCValue("Master_Volume_Slider", volumeControl.value);
     }
 
-    public void CheckBoxValueChangeCheck()
+    public void TrackerCheckBoxValueChangeCheck()
     {
         AkSoundEngine.PostEvent(checkboxSound, gameObject);
         GameManager.instance.CheckTracker();
+    }
+
+    public void CursorCheckBoxValueChangeCheck()
+    {
+        AkSoundEngine.PostEvent(checkboxSound, gameObject);
+        GameManager.instance.isCursorActivated = toggleCursor.isOn;
     }
 
     IEnumerator StartCoroutine()

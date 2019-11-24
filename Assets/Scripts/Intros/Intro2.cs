@@ -52,6 +52,7 @@ public class Intro2 : MonoBehaviour
         }
         else if(scene ==3)
         {
+            Cursor.visible = true;
             PostProcessInstance.instance.volume.profile.TryGetSettings(out colorGrading);
             PostProcessInstance.instance.volume.profile.TryGetSettings(out bloom);
             bloom.active = false;
@@ -125,7 +126,11 @@ public class Intro2 : MonoBehaviour
         {
             hasEyeTracker.gameObject.SetActive(true);
         }
-        else noEyeTracker.gameObject.SetActive(true);
+        else
+        {
+            noEyeTracker.gameObject.SetActive(true);
+            Cursor.visible = true;
+        }
         StartCoroutine(FadeOutCoroutine());
         while (isFading)
         {
@@ -195,6 +200,7 @@ public class Intro2 : MonoBehaviour
         else if (scene == 0) SceneManager.LoadScene(nextScene);
         else if (isEnding) SceneManager.LoadScene(nextScene);
         isFading = false;
+        Cursor.visible = false;
         yield return null;
     }
 

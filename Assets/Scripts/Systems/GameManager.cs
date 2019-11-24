@@ -88,6 +88,8 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public Player controls; // The Rewired Player
 
+    public bool isCursorActivated = false;
+
     private Vector3 originalPos;
     private bool isPaused = false;
     private bool isTrackerEnabled = true;
@@ -118,7 +120,7 @@ public class GameManager : MonoBehaviour
         camHandler = mainCamera.GetComponent<CameraHandler>();
         controls = ReInput.players.GetPlayer(0);
         originalPos = mainCamera.transform.localPosition;
-        Cursor.visible = false;
+        Cursor.visible = isCursorActivated;
         enemyList = new List<Enemy>();
         foreach (Enemy e in listE)
         {
@@ -126,7 +128,7 @@ public class GameManager : MonoBehaviour
         }
         StartCoroutine(ShakeScreenCoroutine());
 
-        if(!isTesting)
+        if(!isTesting || !Application.isEditor)
         {
             GameManager.instance.SetIsPaused(true);
             StartCoroutine(IntroCoroutine());
@@ -160,7 +162,7 @@ public class GameManager : MonoBehaviour
     {
         if ((!player.GetTobii() || player.GetTobii() && UIManager.instance.GetCheckTracker()) && player.GetInputMode() == PlayerController.InputMode.PC)
         {
-            Cursor.visible = true;
+            Cursor.visible = isCursorActivated;
         }
     }
 
@@ -695,7 +697,7 @@ public void RotateCamera(Quaternion newRotate)
 
     public void ResumeGame()
     {
-        Cursor.visible = false;
+        Cursor.visible = isCursorActivated;
         Time.timeScale = 1;
         isPaused = false;
         AkSoundEngine.PostEvent(resumeGameSounds, gameObject);
